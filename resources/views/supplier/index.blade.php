@@ -19,7 +19,7 @@
                         <h3 class="box-title">Data Supplier</h3>
                     </div>
                     <div class="form-row">
-                        <form role="form" action="/supplier/simpan" method="POST">
+                        <form role="form" action="{{ route('supplier.simpan') }}" method="POST">
                             @csrf
                             <div class="form-group col-md-3">
                                 <input type="text" class="form-control" name="name" id="name"
@@ -36,7 +36,7 @@
                     </div>
                     <div class="col-md-4">
                         <div class="form-group">
-                            <form action="/supplier" method="GET">
+                            <form action="{{ route('supplier.index') }}" method="GET">
                                 <div class="input-group">
                                     <input type="search" class="form-control" name="search" placeholder="Cari Disini"
                                         id="search" value="{{ $search }}" autofocus>
@@ -67,7 +67,8 @@
                                     <td>{{ $item->address }}</td>
 
                                     <td>
-                                        <a href="/supplier/edit/{{ $item->id }}" class="btn btn-warning btn-sm">Edit</a>
+                                        <a href="{{ route('supplier.edit', ['id' => $item->id]) }}"
+                                            class="btn btn-warning btn-sm">Edit</a>
                                         <a href="#" class="btn btn-danger btn-sm deletesupp"
                                             data-idsupp="{{ $item->id }}" data-namasupp="{{ $item->name }}">Hapus</a>
                                     </td>

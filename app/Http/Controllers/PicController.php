@@ -30,7 +30,7 @@ class PicController extends Controller
         Pic::create([
             'name' => $request->name
         ]);
-        return redirect('/pic')->with('success', 'Asik Pic Berhasil Ditambahkan');
+        return redirect(route('pic.index'))->with('success', 'Asik Pic Berhasil Ditambahkan');
     }
 
     function edit($id)
@@ -48,13 +48,13 @@ class PicController extends Controller
         $pics->name = $request->name;
         $pics->save();
 
-        return redirect('/pic')->with('success', 'Asik Pic Berhasil Di Ubah');
+        return redirect(route('pic.index'))->with('success', 'Asik Pic Berhasil Di Ubah');
     }
 
     function delete($id)
     {
         $pics = Pic::find($id);
         $pics->delete();
-        return redirect('/pic')->with('success', 'Asik Pic Berhasil Di apus');
+        return redirect(route('pic.index'))->with('success', 'Asik Pic Berhasil Di apus');
     }
 }

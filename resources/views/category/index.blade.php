@@ -39,7 +39,7 @@
                             </div>
                             <div class="col-md-4">
                                 <div class="form-group">
-                                    <form action="/category" method="GET">
+                                    <form action="{{ route('category.index') }}" method="GET">
                                         <div class="input-group">
                                             <input type="search" class="form-control" name="search"
                                                 placeholder="Cari Disini" id="search" value="{{ $search }}"
@@ -70,7 +70,7 @@
                                         <td> {{ $index + $categories->firstItem() }} </td>
                                         <td>{{ $item->name }}</td>
                                         <td>
-                                            <a href="/category/edit/{{ $item->id }}"
+                                            <a href="{{ route('category.edit', ['id' => $item->id]) }}"
                                                 class="btn btn-warning btn-sm">Edit</a>
                                             <a href="#" class="btn btn-danger btn-sm delete-cate"
                                                 data-idcate="{{ $item->id }}"

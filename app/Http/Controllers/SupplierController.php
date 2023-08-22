@@ -34,7 +34,7 @@ class SupplierController extends Controller
             'name' => $request->name,
             'address' => $request->address
         ]);
-        return redirect('/supplier')->with('success', 'Asik Supplier Berhasil Ditambahkan');
+        return redirect(route('supplier.index'))->with('success', 'Asik Supplier Berhasil Ditambahkan');
     }
 
     function edit($id)
@@ -54,13 +54,13 @@ class SupplierController extends Controller
         $suppliers->address = $request->address;
         $suppliers->save();
 
-        return redirect('/supplier')->with('success', 'Asik Supplier Berhasil Di Ubah');
+        return redirect(route('supplier.index'))->with('success', 'Asik Supplier Berhasil Di Ubah');
     }
 
     function delete($id)
     {
         $suppliers = Supplier::find($id);
         $suppliers->delete();
-        return redirect('/supplier')->with('success', 'Asik suppliers Berhasil Di apus');
+        return redirect(route('supplier.index'))->with('success', 'Asik suppliers Berhasil Di apus');
     }
 }
