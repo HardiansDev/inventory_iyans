@@ -27,7 +27,7 @@ Route::put('/supplier/update/{id}', [SupplierController::class, 'update'])->name
 Route::get('/supplier/hapus/{id}', [SupplierController::class, 'delete'])->name('supplier.hapus');
 
 
-Route::get('/pic', [PicController::class, 'index']);
+Route::get('/pic', [PicController::class, 'index'])->name('pic.index');
 Route::post('/pic/simpan', [PicController::class, 'simpan']);
 Route::get('/pic/edit/{id}', [PicController::class, 'edit']);
 Route::put('/pic/update/{id}', [PicController::class, 'update']);
