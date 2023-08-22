@@ -38,7 +38,7 @@
                             </div>
                             <div class="col-md-4">
                                 <div class="form-group">
-                                    <form action="/pic" method="GET">
+                                    <form action="{{ route('pic.index') }}" method="GET">
                                         <div class="input-group">
                                             <input type="search" class="form-control" name="search"
                                                 placeholder="Cari Disini" id="search" value="{{ $search }}"
@@ -69,7 +69,7 @@
                                         <td> {{ $index + $pics->firstItem() }} </td>
                                         <td>{{ $item->name }}</td>
                                         <td>
-                                            <a href="/pic/edit/{{ $item->id }}" class="btn btn-warning btn-sm">Edit</a>
+                                            <a href="{{ route('pic.edit', ['id' => $item->id ]) }}" class="btn btn-warning btn-sm">Edit</a>
                                             <a href="#" class="btn btn-danger btn-sm deletepic"
                                                 data-idpic="{{ $item->id }}"
                                                 data-namapic="{{ $item->name }}">Hapus</a>

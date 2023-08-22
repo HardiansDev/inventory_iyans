@@ -32,7 +32,7 @@
                                                 name="name" value="{{ $categories->name }}" required>
                                             <span class="input-group-btn">
                                                 <button class="btn btn-info btn-flat" type="submit">Simpan</button>
-                                                <a href="/category" class="btn btn-danger btn-flat">Gajadi</a>
+                                                <a href="{{ route('category.index') }}" class="btn btn-danger btn-flat">Gajadi</a>
                                             </span>
                                         </div>
                                     </form>

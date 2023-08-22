@@ -12,6 +12,7 @@ Route::get('/', function () {
     return view('home');
 });
 
+
 Route::get('/category', [CategoryController::class, 'index'])->name('category.index');
 Route::post('/category/simpan', [CategoryController::class, 'simpan'])->name('category.simpan');
 Route::get('/category/edit/{id}', [CategoryController::class, 'edit'])->name('category.edit');

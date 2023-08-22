@@ -97,7 +97,7 @@
                         <!-- /.box-body -->
                         <div class="box-footer">
                             <button type="submit" class="btn btn-primary btn-sm">Simpan Product</button>
-                            <a href="/product" class="btn btn-danger btn-sm">Ga Jadi</a>
+                            <a href="{{ route('product.index') }}" class="btn btn-danger btn-sm">Ga Jadi</a>
                         </div>
                     </form>
                 </div>

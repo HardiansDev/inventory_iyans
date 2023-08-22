@@ -27,8 +27,8 @@
                     </span>
                 </a>
                 <ul class="treeview-menu">
-                    <li><a href="/product"><i class="fa fa-circle-o"></i> List Data Product</a></li>
-                    <li><a href="/product/tambah"><i class="fa fa-circle-o"></i> Tambah Product</a></li>
+                    <li><a href="{{ route('product.index') }}"><i class="fa fa-circle-o"></i> List Data Product</a></li>
+                    <li><a href="{{ route('product.tambah') }}"><i class="fa fa-circle-o"></i> Tambah Product</a></li>
                 </ul>
             </li>
             <li class="treeview">
@@ -54,7 +54,7 @@
                 </a>
             </li>
             <li>
-                <a href="/pic">
+                <a href="{{ route('pic.index') }}">
                     <i class="fa fa-crosshairs"></i> <span>PIC</span>
                 </a>
             </li>

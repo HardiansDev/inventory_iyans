@@ -23,7 +23,7 @@
                         <div class="row">
                             <div class="col-md-10">
                                 <div class="form-row">
-                                    <form role="form" action="/supplier/update/{{ $suppliers->id }}" method="POST">
+                                    <form role="form" action="{{ route('supplier.update', ['id' => $suppliers->id]) }}" method="POST">
                                         @csrf
                                         {{ method_field('PUT') }}
                                         <div class="form-group col-md-3">
@@ -40,7 +40,7 @@
                                         </div>
                                         <span class="input-group-btn">
                                             <button class="btn btn-info btn-flat" type="submit">Simpan</button>
-                                            <a href="/supplier" class="btn btn-danger btn-flat">Gajadi</a>
+                                            <a href="{{ route('supplier.index') }}" class="btn btn-danger btn-flat">Gajadi</a>
                                         </span>
                                     </form>
                                 </div>

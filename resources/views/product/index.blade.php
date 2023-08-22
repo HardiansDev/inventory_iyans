@@ -22,7 +22,7 @@
                     <div class="box-body">
                         <div class="row">
                             <div class="col-md-8">
-                                <a href="/product/tambah" class="btn btn-success btn-sm">Tambah Product</a>
+                                <a href="{{ route('product.tambah') }}" class="btn btn-success btn-sm">Tambah Product</a>
                             </div>
                             <div class="col-md-4">
                                 <div class="form-group">
@@ -81,9 +81,9 @@
                                         <td> {{ $item->stock }} </td>
                                         <td> {{ $item->quality }} </td>
                                         <td>
-                                            <a href="/product/detail_product/{{ $item->id }}"
+                                            <a href="{{ route('product.detail', ['id' => $item->id]) }}"
                                                 class="btn btn-primary btn-sm">Detail Product</a>
-                                            <a href="/product/edit/{{ $item->id }}"
+                                            <a href="{{ route('product.edit', ['id' => $item->id]) }}"
                                                 class="btn btn-warning btn-sm">Edit</a>
                                             <a href="#" class="btn btn-danger btn-sm delete-prod"
                                                 data-idprod="{{ $item->id }}"

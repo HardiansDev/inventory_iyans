@@ -23,7 +23,7 @@
                         <div class="row">
                             <div class="col-md-8">
                                 <div class="form-group">
-                                    <form action="/pic/update/{{ $pics->id }}" method="POST">
+                                    <form action="{{ route('pic.update', ['id' => $pics->update]) }}" method="POST">
                                         @csrf
                                         {{ method_field('PUT') }}
                                         <div class="input-group">
@@ -32,7 +32,7 @@
                                                 name="name" value="{{ $pics->name }}" required>
                                             <span class="input-group-btn">
                                                 <button class="btn btn-info btn-flat" type="submit">Simpan</button>
-                                                <a href="/pic" class="btn btn-danger btn-flat">Gajadi</a>
+                                                <a href="{{ route('pic.index') }}" class="btn btn-danger btn-flat">Gajadi</a>
                                             </span>
                                         </div>
                                     </form>

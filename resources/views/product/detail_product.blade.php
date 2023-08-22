@@ -101,7 +101,7 @@
                     <br>
                     <div class="row">
                         <div class="col-md-6">
-                            <a href="/product" class="btn btn-danger btn-sm">Kembali</a>
+                            <a href="{{ route('product.index') }}" class="btn btn-danger btn-sm">Kembali</a>
                             <a href="#" class="btn btn-warning btn-sm">Print</a>
                         </div>
 

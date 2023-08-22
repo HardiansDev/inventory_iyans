@@ -19,7 +19,7 @@
                         <h3 class="box-title">Form Edit Product</h3>
                     </div>
                     <!-- form start -->
-                    <form role="form" action="/product/update/{{ $products->id }}" method="POST"
+                    <form role="form" action="{{ route('product.udpdate', ['id' => $products->id]) }}" method="POST"
                         enctype="multipart/form-data">
                         @csrf
                         {{ method_field('PUT') }}
@@ -114,7 +114,7 @@
                         <!-- /.box-body -->
                         <div class="box-footer">
                             <button type="submit" class="btn btn-primary btn-sm">Ubah Product</button>
-                            <a href="/product" class="btn btn-danger btn-sm">Ga Jadi</a>
+                            <a href="{{ route('product.index') }}" class="btn btn-danger btn-sm">Ga Jadi</a>
                         </div>
                     </form>
                 </div>
