@@ -19,7 +19,7 @@
                         <h3 class="box-title">Form Edit Product</h3>
                     </div>
                     <!-- form start -->
-                    <form role="form" action="{{ route('product.udpdate', ['id' => $products->id]) }}" method="POST"
+                    <form role="form" action="{{ route('product.update', ['id' => $products->id]) }}" method="POST"
                         enctype="multipart/form-data">
                         @csrf
                         {{ method_field('PUT') }}

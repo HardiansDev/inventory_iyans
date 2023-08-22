@@ -23,7 +23,7 @@
                         <div class="row">
                             <div class="col-md-8">
                                 <div class="form-group">
-                                    <form action="{{ route('pic.update', ['id' => $pics->update]) }}" method="POST">
+                                    <form action="{{ route('pic.update', ['id' => $pics->id]) }}" method="POST">
                                         @csrf
                                         {{ method_field('PUT') }}
                                         <div class="input-group">

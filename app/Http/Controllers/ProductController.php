@@ -40,18 +40,18 @@ class ProductController extends Controller
     function simpan(Request $request)
     {
         $validator = $this->validate($request, [
+            'category_id' => 'required|integer',
+            'supplier_id' => 'required|integer',
+            'pic_id' => 'required|integer',
             'name' => 'required',
             'code' => 'required',
             'photo' => 'required',
-            'category_id' => 'required',
             'price' => 'required',
             'qty' => 'required',
             'stock' => 'required',
             'quality' => 'required',
             'purchase' => 'required',
             'billnum' => 'required',
-            'supplier_id' => 'required',
-            'pic_id' => 'required',
         ]);
 
 

@@ -75,7 +75,7 @@
                                             <img src="{{ asset('fotoproduct/' . $item->photo) }}"
                                                 alt=""style="width: 60px;">
                                         </td>
-                                        <td> {{ $item->categories->name }} </td>
+                                        <td> {{ $item->categories->name ?? 'Tidak Ada kategory' }} </td>
                                         <td> {{ $item->price }} </td>
                                         <td> {{ $item->qty }} </td>
                                         <td> {{ $item->stock }} </td>

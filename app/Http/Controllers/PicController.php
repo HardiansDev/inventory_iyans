@@ -54,6 +54,14 @@ class PicController extends Controller
     function delete($id)
     {
         $pics = Pic::find($id);
+
+        // check jika pic dengan $id di gunakan di model product
+        if ($pics->produtcs->count() > 0){
+            // gagal delete
+
+            return redirect(route('category.index'))->with('error', 'gagal menghapus PIC karena PIC ini digunakan!!');
+        }
+
         $pics->delete();
         return redirect(route('pic.index'))->with('success', 'Asik Pic Berhasil Di apus');
     }

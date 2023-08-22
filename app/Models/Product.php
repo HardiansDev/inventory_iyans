@@ -16,18 +16,18 @@ class Product extends Model
     protected $guarded = [];
 
     protected $fillable = [
+        'category_id',
+        'supplier_id',
+        'pic_id',
         'name',
         'code',
         'photo',
-        'category_id',
         'price',
         'qty',
         'stock',
         'quality',
         'purchase',
         'billnum',
-        'supplier_id',
-        'pic_id',
     ];
     // protected $dates = ['created_at'];
 

@@ -54,6 +54,13 @@ class CategoryController extends Controller
     function delete($id)
     {
         $categories = Category::find($id);
+
+        if ($categories->produtcs->count() > 0){
+            // gagal delete
+
+            return redirect(route('category.index'))->with('error', 'gagal menghapus kategori karena kategori ini digunakan!!');
+        }
+
         $categories->delete();
         return redirect(route('category.index'))->with('success', 'Asik Category Berhasil Di apus');
     }
