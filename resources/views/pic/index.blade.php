@@ -5,7 +5,7 @@
 @endsection
 
 @section('content')
-    <section class="content-header py-3 bg-light rounded">
+    <section class="content-header py-4 bg-light rounded">
         <div class="container-fluid">
             <div class="row align-items-center justify-content-between">
                 <div class="col-auto">
@@ -19,7 +19,7 @@
                                     <i class="fa fa-dashboard"></i> Dashboard
                                 </a>
                             </li>
-                            <li class="breadcrumb-item active" aria-current="page">Pic</li>
+                            <li class="breadcrumb-item active" aria-current="page">PIC</li>
                         </ol>
                     </nav>
                 </div>

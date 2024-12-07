@@ -6,7 +6,7 @@
 
 @section('content')
     <!-- Content Header -->
-    <section class="content-header py-3 bg-light rounded">
+    <section class="content-header py-4 bg-light rounded">
         <div class="container-fluid">
             <div class="row align-items-center justify-content-between">
                 <div class="col-auto">

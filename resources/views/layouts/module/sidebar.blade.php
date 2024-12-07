@@ -6,9 +6,20 @@
             <div class="pull-left image">
                 <img src="{{ asset('temp/dist/img/user2-160x160.jpg') }} " class="img-circle" alt="User Image">
             </div>
-            <p></p>
             <div class="pull-left info">
-                <p>Hardians</p>
+                <p>{{ Auth::user()->name }}</p>
+                <label
+                    class="
+                    badge
+                    @if (Auth::check()) @if (Auth::user()->role === 'superadmin') bg-success
+                        @elseif(Auth::user()->role === 'admin_gudang') bg-primary
+                        @elseif(Auth::user()->role === 'kasir') bg-warning
+                        @elseif(Auth::user()->role === 'manager') bg-info
+                        @else bg-secondary @endif
+                    @endif
+                    text-white px-2 py-1 rounded">
+                    {{ Auth::check() ? ucfirst(Auth::user()->role) : 'Guest' }}
+                </label>
             </div>
         </div>
         <!-- sidebar menu: : style can be found in sidebar.less -->
