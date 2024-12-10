@@ -46,14 +46,4 @@ class User extends Authenticatable
     /**
      * Boot method to handle model events.
      */
-    protected static function boot()
-    {
-        parent::boot();
-
-        static::saving(function ($user) {
-            if ($user->isDirty('password')) {
-                $user->password = bcrypt($user->password);
-            }
-        });
-    }
 }

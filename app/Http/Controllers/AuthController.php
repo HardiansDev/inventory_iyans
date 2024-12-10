@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use App\Models\User;
 
 class AuthController extends Controller
 {
@@ -16,19 +16,28 @@ class AuthController extends Controller
 
     public function login(Request $request)
     {
-        $credentials = $request->validate([
-            'email' => 'required|email',
-            'password' => 'required',
-        ]);
+        $credentials = $request->only('email', 'password');
 
         if (Auth::attempt($credentials)) {
-            $request->session()->regenerate();
-            return redirect()->intended('/dashboard');
+            $role = Auth::user()->role;
+
+            // Redirect based on user role
+            switch ($role) {
+                case 'superadmin':
+                    return redirect()->route('dashboard'); // Halaman dashboard
+                case 'kasir':
+                    return redirect()->route('customer.index'); // Halaman customer
+                case 'admin_gudang':
+                    return redirect()->route('product.index'); // Halaman produk
+                case 'manager':
+                    return redirect()->route('dashboard'); // Atau halaman lain untuk manager
+                default:
+                    Auth::logout();
+                    return redirect()->route('login')->with('error', 'Role not assigned.');
+            }
         }
 
-        return back()->withErrors([
-            'email' => 'Email atau password salah.',
-        ]);
+        return redirect()->route('login')->with('error', 'Invalid credentials.');
     }
 
     public function showRegister()
@@ -38,22 +47,23 @@ class AuthController extends Controller
 
     public function register(Request $request)
     {
+        // Validasi input
         $validated = $request->validate([
             'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users',
-            'password' => 'required|min:8|confirmed', // Pastikan ada validasi konfirmasi password
+            'email' => 'required|email|unique:users,email', // Pastikan email unik
+            'password' => 'required|min:8|confirmed', // Validasi konfirmasi password
         ]);
 
+        // Membuat user baru dengan password yang di-hash
         User::create([
             'name' => $validated['name'],
             'email' => $validated['email'],
-            'password' => $validated['password'], // Tidak perlu dihash lagi
-            'role' => $request->role ?? 'user',
+            'password' => Hash::make($validated['password']), // Meng-hash password
+            'role' => $request->role ?? 'user', // Default role 'user'
         ]);
 
         return redirect()->route('login')->with('success', 'Registrasi berhasil, silakan login.');
     }
-
 
     public function logout(Request $request)
     {

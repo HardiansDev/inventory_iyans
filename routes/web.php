@@ -11,63 +11,62 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\UserController;
-// use App\Http\Controllers\LogoutController;
-// use App\Models\Category;
 
 Route::get('/', function () {
     return view('welcome');
 });
-// Dashboard Route
-Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
-// Product Routes
-Route::resource('product', ProductController::class);
-Route::post('/product/export', [ProductController::class, 'export'])->name('product.export');
-Route::post('/product/delete-all', [ProductController::class, 'deleteAll'])->name('product.deleteAll');
+// Rute yang membutuhkan login
+Route::middleware(['auth', 'roleBased'])->group(function () {
+
+    // Superadmin: akses penuh
+    Route::middleware('roleBased:superadmin')->group(function () {
+        Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
+        Route::resource('user', UserController::class);
+        Route::resource('product', ProductController::class);
+        Route::post('/product/export', [ProductController::class, 'export'])->name('product.export');
+        Route::post('/product/delete-all', [ProductController::class, 'deleteAll'])->name('product.deleteAll');
+        Route::resource('category', CategoryController::class);
+        Route::resource('supplier', SupplierController::class);
+        Route::resource('pic', PicController::class);
+        Route::prefix('product-in')->group(function () {
+            Route::get('', [ProductInController::class, 'index'])->name('product-in.index');
+        });
+        Route::prefix('product-out')->group(function () {
+            Route::get('', [ProductOutController::class, 'index'])->name('product-out.index');
+        });
+        Route::resource('customer', CustomerController::class);
+    });
 
 
+    // Admin Gudang: akses terbatas ke produk, kategori, supplier, PIC, produk masuk/keluar
+    Route::middleware('roleBased:admin_gudang')->group(function () {
+        Route::resource('product', ProductController::class)->only(['index', 'show', 'create', 'edit', 'update', 'delete']);
+        Route::resource('category', CategoryController::class)->only(['index']);
+        Route::resource('supplier', SupplierController::class)->only(['index']);
+        Route::resource('pic', PicController::class)->only(['index']);
+        Route::prefix('product-in')->group(function () {
+            Route::get('', [ProductInController::class, 'index'])->name('product-in.index');
+        });
+        Route::prefix('product-out')->group(function () {
+            Route::get('', [ProductOutController::class, 'index'])->name('product-out.index');
+        });
+    });
 
+    // Kasir: akses ke menu customer
+    Route::middleware('roleBased:kasir')->group(function () {
+        Route::resource('customer', CustomerController::class)->only(['index', 'create', 'store', 'edit', 'update', 'delete']);
+    });
 
-
-// Customer Routes
-Route::prefix('customer')->name('customer.')->group(function () {
-    Route::get('', [CustomerController::class, 'index'])->name('index');
-    Route::get('create', [CustomerController::class, 'create'])->name('create');
-    Route::post('store', [CustomerController::class, 'store'])->name('store');
+    // Manager: akses ke dashboard saja
+    Route::middleware('roleBased:manager')->group(function () {
+        Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    });
 });
 
-// Product In Routes
-Route::prefix('product-in')->name('product-in.')->group(function () {
-    Route::get('', [ProductInController::class, 'index'])->name('index');
-});
-
-// Product Out Routes
-Route::prefix('product-out')->name('product-out.')->group(function () {
-    Route::get('', [ProductOutController::class, 'index'])->name('index');
-});
-
-// PIC Routes
-Route::resource('pic', PicController::class);
-
-// Category Routes
-Route::resource('category', CategoryController::class);
-
-// Supplier Routes
-Route::resource('supplier', SupplierController::class);
-
-
-// User Routes
-Route::prefix('user')->name('user.')->group(function () {
-    Route::get('', [UserController::class, 'index'])->name('index');
-});
-
-// Rute Login
+// Rute otentikasi
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
 Route::post('/login', [AuthController::class, 'login']);
-
-// Rute Register
 Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
 Route::post('/register', [AuthController::class, 'register']);
-
-// Rute Logout
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
