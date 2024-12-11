@@ -228,86 +228,23 @@
     </script>
 
     <script>
-        // Fungsi untuk format angka ke dalam format rupiah
-        function formatRupiah(angka, prefix) {
-            var number_string = angka.replace(/[^,\d]/g, '').toString(),
-                split = number_string.split(','),
-                sisa = split[0].length % 3,
-                rupiah = split[0].substr(0, sisa),
-                ribuan = split[0].substr(sisa).match(/\d{3}/gi);
-
-            if (ribuan) {
-                separator = sisa ? '.' : '';
-                rupiah += separator + ribuan.join('.');
-            }
-
-            rupiah = split[1] != undefined ? rupiah + ',' + split[1] : rupiah;
-            return prefix == undefined ? rupiah : (rupiah ? 'Rp. ' + rupiah : '');
-        }
-
-        // Fungsi untuk menghapus format rupiah dan mengembalikan nilai sebagai angka
-        function removeRupiah(value) {
-            return value.replace(/[^0-9,-]+/g, '');
-        }
-
-        // Event listener untuk input harga
-        document.getElementById('productPrice').addEventListener('input', function(e) {
-            var price = e.target.value;
-            e.target.value = formatRupiah(price, 'Rp. ');
-        });
-
-        // Untuk mengisi ulang nilai saat halaman dimuat dengan format yang benar
-        window.onload = function() {
-            var priceInput = document.getElementById('productPrice');
-            priceInput.value = formatRupiah(priceInput.value, 'Rp. ');
-        };
-
-        // Pastikan nilai yang dikirimkan adalah angka decimal (sebelum form disubmit)
-        document.querySelector('form').addEventListener('submit', function(e) {
-            var priceInput = document.getElementById('productPrice');
-            // Menghapus format Rupiah sebelum submit
-            priceInput.value = removeRupiah(priceInput.value);
-        });
-    </script>
-    <script>
-        // Fungsi untuk menambahkan "pcs" setelah angka
-        document.getElementById('productQty').addEventListener('input', function(e) {
-            var qty = e.target.value.replace(/[^0-9]/g, ''); // Hanya angka yang diizinkan
-            e.target.value = qty ? qty + ' pcs' : ''; // Menambahkan 'pcs' jika ada nilai
-        });
-
-        // Untuk mengisi ulang nilai saat halaman dimuat
-        window.onload = function() {
-            var qtyInput = document.getElementById('productQty');
-            qtyInput.value = qtyInput.value.replace(/[^0-9]/g, '') + ''; // Memastikan format saat halaman dimuat
-        };
-
-        // Pastikan nilai yang dikirimkan adalah angka integer (sebelum form disubmit)
-        document.querySelector('form').addEventListener('submit', function(e) {
-            var qtyInput = document.getElementById('productQty');
-            // Menghapus 'pcs' dan mengirimkan hanya nilai integer
-            qtyInput.value = qtyInput.value.replace(/[^0-9]/g, '');
-        });
-    </script>
-
-    <script>
         // Fungsi untuk menambahkan "pcs" setelah angka
         document.getElementById('productStock').addEventListener('input', function(e) {
-            var qty = e.target.value.replace(/[^0-9]/g, ''); // Hanya angka yang diizinkan
-            e.target.value = qty ? qty + ' pcs' : ''; // Menambahkan 'pcs' jika ada nilai
+            var stck = e.target.value.replace(/[^0-9]/g, ''); // Hanya angka yang diizinkan
+            e.target.value = stck ? stck + ' pcs' : ''; // Menambahkan 'pcs' jika ada nilai
         });
 
         // Untuk mengisi ulang nilai saat halaman dimuat
         window.onload = function() {
-            var qtyInput = document.getElementById('productStock');
-            qtyInput.value = qtyInput.value.replace(/[^0-9]/g, '') + ''; // Memastikan format saat halaman dimuat
+            var stckInput = document.getElementById('productStock');
+            stckInput.value = stckInput.value.replace(/[^0-9]/g, '') + ''; // Memastikan format saat halaman dimuat
         };
 
         // Pastikan nilai yang dikirimkan adalah angka integer (sebelum form disubmit)
         document.querySelector('form').addEventListener('submit', function(e) {
-            var qtyInput = document.getElementById('productStock');
+            var stckInput = document.getElementById('productStock');
             // Menghapus 'pcs' dan mengirimkan hanya nilai integer
-            qtyInput.value = qtyInput.value.replace(/[^0-9]/g, '');
+            stckInput.value = stckInput.value.replace(/[^0-9]/g, '');
         });
     </script>
 

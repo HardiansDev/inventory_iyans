@@ -98,7 +98,7 @@
                                     <!-- Harga Product -->
                                     <div class="col-md-4 mb-3">
                                         <label for="productPrice" class="form-label">Harga Product</label>
-                                        <input type="text" class="form-control @error('price') is-invalid @enderror"
+                                        <input type="number" class="form-control @error('price') is-invalid @enderror"
                                             name="price" id="productPrice" placeholder="Masukkan Harga Product"
                                             value="{{ old('price') }}">
                                         @error('price')
@@ -106,10 +106,9 @@
                                         @enderror
                                     </div>
 
-                                    <!-- Qty Product -->
                                     <div class="col-md-4 mb-3">
                                         <label for="productQty" class="form-label">Qty Product</label>
-                                        <input type="text" class="form-control @error('qty') is-invalid @enderror"
+                                        <input type="number" class="form-control @error('qty') is-invalid @enderror"
                                             name="qty" id="productQty" placeholder="Masukkan Qty Product"
                                             value="{{ old('qty') }}">
                                         @error('qty')

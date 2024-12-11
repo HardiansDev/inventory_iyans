@@ -27,13 +27,13 @@ class ProductController extends Controller
 
         $products = !empty($search)
             ? Product::where('name', 'LIKE', '%' . $search . '%')
-                ->with('category')
-                ->paginate(5)
-                ->onEachSide(2)
+            ->with('category')
+            ->paginate(5)
+            ->onEachSide(2)
             : Product::with('category')
-                ->orderBy('created_at', 'DESC')
-                ->paginate(5)
-                ->onEachSide(2);
+            ->orderBy('created_at', 'DESC')
+            ->paginate(5)
+            ->onEachSide(2);
 
         return view('product.index', compact('products', 'search', 'datacategory'));
     }
@@ -56,7 +56,7 @@ class ProductController extends Controller
         // Format No Purchase
         $noPurchase = "PO-BKS-{$currentDate}-{$newNumber}";
 
-         // Generate Billing Number otomatis
+        // Generate Billing Number otomatis
         $currentDate = Carbon::now()->format('Ymd'); // Format tanggal: YYYYMMDD
         $lastBilling = \App\Models\Product::whereDate('created_at', Carbon::today())->latest()->first(); // Data terakhir hari ini
         $lastNumber = $lastBilling ? intval(substr($lastBilling->billnum, -3)) : 0; // Ambil 3 digit terakhir (jika ada)
@@ -66,7 +66,7 @@ class ProductController extends Controller
         $billingNumber = "BL-BKS-{$currentDate}-{$newNumber}";
 
 
-        return view('product.create', compact('datacategory', 'datasupplier', 'datapic','noPurchase','billingNumber'));
+        return view('product.create', compact('datacategory', 'datasupplier', 'datapic', 'noPurchase', 'billingNumber'));
     }
 
     /**
@@ -220,13 +220,13 @@ class ProductController extends Controller
         return redirect()->route('product.index')->with('success', 'Product successfully deleted.');
     }
 
-     public function export(Request $request)
+    public function export(Request $request)
     {
         $category = $request->input('category');
         $exportType = $request->input('export_type');
 
         // Ambil data produk, dengan atau tanpa filter kategori
-        $products = $category ? Product::whereHas('category', function($query) use ($category) {
+        $products = $category ? Product::whereHas('category', function ($query) use ($category) {
             $query->where('name', $category);
         })->get() : Product::all();
 

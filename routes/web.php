@@ -17,37 +17,52 @@ Route::get('/', function () {
 });
 
 // Rute dashboard
-Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
+Route::middleware(['auth', 'role:superadmin,manager,kasir,admin_gudang'])->group(function () {
+    Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
+});
 
-// Rute user management
-Route::resource('user', UserController::class);
+// Rute user management (khusus superadmin)
+Route::middleware(['auth', 'role:superadmin'])->group(function () {
+    Route::resource('user', UserController::class);
+});
 
-// Rute produk
-Route::resource('product', ProductController::class);
-Route::post('/product/export', [ProductController::class, 'export'])->name('product.export');
-Route::post('/product/delete-all', [ProductController::class, 'deleteAll'])->name('product.deleteAll');
+// Rute produk (khusus superadmin dan admin_gudang)
+Route::middleware(['auth', 'role:superadmin,admin_gudang'])->group(function () {
+    Route::resource('product', ProductController::class);
+    Route::post('/product/export', [ProductController::class, 'export'])->name('product.export');
+    Route::post('/product/delete-all', [ProductController::class, 'deleteAll'])->name('product.deleteAll');
+});
 
-// Rute kategori
-Route::resource('category', CategoryController::class);
+// Rute kategori (khusus superadmin dan admin_gudang)
+Route::middleware(['auth', 'role:superadmin,admin_gudang'])->group(function () {
+    Route::resource('category', CategoryController::class);
+});
 
-// Rute supplier
-Route::resource('supplier', SupplierController::class);
+// Rute supplier (khusus superadmin dan admin_gudang)
+Route::middleware(['auth', 'role:superadmin,admin_gudang'])->group(function () {
+    Route::resource('supplier', SupplierController::class);
+});
 
-// Rute PIC
-Route::resource('pic', PicController::class);
+// Rute PIC (khusus superadmin dan manager)
+Route::middleware(['auth', 'role:superadmin,admin_gudang'])->group(function () {
+    Route::resource('pic', PicController::class);
+});
 
-// Rute produk masuk
-Route::prefix('product-in')->group(function () {
+// Rute produk masuk (khusus admin_gudang)
+Route::middleware(['auth', 'role:admin_gudang,superadmin'])->prefix('product-in')->group(function () {
     Route::get('', [ProductInController::class, 'index'])->name('product-in.index');
 });
 
-// Rute produk keluar
-Route::prefix('product-out')->group(function () {
+// Rute produk keluar (khusus kasir)
+Route::middleware(['auth', 'role:admin_gudang,superadmin'])->prefix('product-out')->group(function () {
     Route::get('', [ProductOutController::class, 'index'])->name('product-out.index');
 });
 
-// Rute customer
-Route::resource('customer', CustomerController::class);
+// Rute customer (khusus superadmin,kasir)
+Route::middleware(['auth', 'role:superadmin,kasir'])->group(function () {
+    Route::resource('customer', CustomerController::class);
+});
+
 
 // Rute otentikasi
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
