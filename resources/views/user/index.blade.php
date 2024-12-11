@@ -130,7 +130,7 @@
                                         <td>{{ $index + $users->firstItem() }}</td>
                                         <td>{{ $user->email }}</td>
                                         <td>{{ $user->name }}</td>
-                                        <td>{{ ucfirst($user->role) }}</td>
+                                        <td>{{ $user->role }}</td>
                                         <td>
                                             <!-- Tombol Hapus -->
                                             <form action="{{ route('user.destroy', $user->id) }}" method="POST"

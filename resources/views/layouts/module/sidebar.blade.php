@@ -12,7 +12,7 @@
                     @if (Auth::user()->role === 'superadmin') bg-success
                     @elseif(Auth::user()->role === 'admin_gudang') bg-primary
                     @elseif(Auth::user()->role === 'kasir') bg-warning
-                    @elseif(Auth::user()->role === 'manager') bg-info
+                    @elseif(Auth::user()->role === 'manager') bg-danger
                     @else bg-secondary @endif
                     text-white px-2 py-1 rounded">
                     {{ ucfirst(Auth::user()->role) }}

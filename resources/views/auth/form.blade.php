@@ -69,13 +69,9 @@
     <div class="form-container" id="form-login">
         <!-- Login Form -->
         <h3 class="form-title">Login</h3>
-        @if ($errors->any())
+        @if (session('error'))
             <div class="alert alert-danger">
-                <ul>
-                    @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
+                {{ session('error') }}
             </div>
         @endif
         @if (session('success'))

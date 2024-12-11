@@ -18,15 +18,20 @@ class AuthController extends Controller
     // Melakukan login
     public function login(Request $request)
     {
-        $credentials = $request->only('email', 'password');
+        // Validasi input
+        $validated = $request->validate([
+            'email' => 'required|email',
+            'password' => 'required',
+        ]);
 
-        // Cek kredensial dan login
-        if (Auth::attempt($credentials)) {
-            return redirect()->route('dashboard'); // Halaman default setelah login
+        // Coba login
+        if (Auth::attempt(['email' => $validated['email'], 'password' => $validated['password']])) {
+            // Redirect ke halaman dashboard jika berhasil login
+            return redirect()->intended('dashboard');
         }
 
-        // Jika login gagal
-        return redirect()->route('login')->with('error', 'Invalid credentials.');
+        // Jika login gagal, kembali ke halaman login dengan pesan kesalahan
+        return redirect()->route('login')->with('error', 'Email atau password salah, atau belum terdaftar.');
     }
 
     // Menampilkan form registrasi
@@ -43,14 +48,15 @@ class AuthController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email', // Pastikan email unik
             'password' => 'required|min:8|confirmed', // Validasi konfirmasi password
+            'role' => 'required|in:kasir,manager,superadmin,admin_gudang', // Validasi role
         ]);
 
-        // Membuat user baru dengan password yang di-hash
+        // Membuat user baru dengan password yang di-hash dan role yang dipilih
         User::create([
             'name' => $validated['name'],
             'email' => $validated['email'],
             'password' => Hash::make($validated['password']), // Meng-hash password
-            'role' => 'user', // Default role 'user'
+            'role' => $validated['role'], // Role yang dipilih saat registrasi
         ]);
 
         return redirect()->route('login')->with('success', 'Registrasi berhasil, silakan login.');
