@@ -35,25 +35,13 @@
                 <div class="box">
                     <!-- Header -->
                     <div class="box-header d-flex flex-column align-items-start mb-3">
-                        <a href="{{ route('product.create') }}" class="btn btn-success btn-sm">
+                        <a href="{{ route('productin.create') }}" class="btn btn-success btn-sm">
                             <i class="fas fa-plus-circle"></i> Tambah Produk Masuk
                         </a>
                     </div>
                     <!-- /.box-header -->
 
                     <div class="box-body">
-                        <!-- Flash Messages -->
-                        @if (session('success'))
-                            <div class="alert alert-success">
-                                {{ session('success') }}
-                            </div>
-                        @endif
-                        @if (session('error'))
-                            <div class="alert alert-danger">
-                                {{ session('error') }}
-                            </div>
-                        @endif
-
                         <!-- Table -->
                         <div class="table-responsive">
                             <table id="example1" class="table table-hover table-bordered">
@@ -62,12 +50,13 @@
                                         <th>No</th>
                                         <th>Nama Produk</th>
                                         <th>Kode Produk</th>
+                                        <th>Tanggal Masuk</th>
                                         <th>Gambar Produk</th>
                                         <th>Kategori Produk</th>
                                         <th>Harga</th>
                                         <th>Qty</th>
-                                        <th>Stock</th>
                                         <th>Status</th>
+                                        <th>Penerima</th>
                                         <th>Aksi</th>
                                     </tr>
                                 </thead>
@@ -77,6 +66,7 @@
                                             <td>{{ $loop->iteration }}</td>
                                             <td>{{ $productIn->product->name }}</td>
                                             <td>{{ $productIn->product->code }}</td>
+                                            <td>{{ $productIn->date }}</td>
                                             <td>
                                                 @if ($productIn->product->photo)
                                                     <img src="{{ asset('fotoproduct/' . $productIn->product->photo) }}"
@@ -88,27 +78,27 @@
                                             <td>{{ $productIn->product->category->name }}</td>
                                             <td>Rp {{ number_format($productIn->product->price, 0, ',', '.') }}</td>
                                             <td>{{ $productIn->qty }}</td>
-                                            <td>{{ $productIn->product->stock }}</td>
                                             <td>
                                                 @if ($productIn->status === 'menunggu')
-                                                    <span class="badge bg-warning text-dark">Menunggu</span>
+                                                <span class="badge bg-warning text-dark">Menunggu</span>
                                                 @elseif ($productIn->status === 'diterima')
                                                     <span class="badge bg-success">Diterima</span>
                                                 @elseif ($productIn->status === 'ditolak')
                                                     <span class="badge bg-danger">Ditolak</span>
                                                 @endif
                                             </td>
+                                            <td>{{ $productIn->recipient }}</td>
                                             <td>
                                                 <div class="dropdown">
-                                                    <button class="btn btn-primary dropdown-toggle" type="button"
-                                                        id="dropdownMenuButton" data-bs-toggle="dropdown"
-                                                        aria-expanded="false"
-                                                        {{ $productIn->status !== 'menunggu' ? 'disabled' : '' }}>
-                                                        Pilih Aksi
-                                                    </button>
-                                                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                                        <!-- Tombol Terima -->
-                                                        <li>
+                                                    <button class="btn btn-primary btn-sm dropdown-toggle" type="button"
+                                                    id="dropdownMenuButton" data-bs-toggle="dropdown"
+                                                    aria-expanded="false"
+                                                    {{ $productIn->status !== 'menunggu' ? 'disabled' : '' }}>
+                                                    Pilih Aksi
+                                                </button>
+                                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                                    <!-- Tombol Terima -->
+                                                    <li>
                                                             <form
                                                                 action="{{ route('productin.updateStatus', $productIn->id) }}"
                                                                 method="POST">

@@ -29,7 +29,7 @@ class CreateProductInsTable extends Migration
                 ->constrained((new Category())->getTable())
                 ->onDelete('cascade');
 
-            $table->dateTime('date');
+            $table->date('date');
             $table->string('recipient')->comment("penerima");
             $table->integer('qty');
             $table->string('status')->default('menunggu');
