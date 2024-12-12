@@ -86,7 +86,7 @@
                                                 @endif
                                             </td>
                                             <td>{{ $productIn->product->category->name }}</td>
-                                            <td>{{ number_format($productIn->product->price, 2) }}</td>
+                                            <td>Rp {{ number_format($productIn->product->price, 0, ',', '.') }}</td>
                                             <td>{{ $productIn->qty }}</td>
                                             <td>{{ $productIn->product->stock }}</td>
                                             <td>

@@ -1,7 +1,6 @@
 <footer class="main-footer">
     <div class="pull-right hidden-xs">
-        <b>Version</b> 2.4.0
+        <a href="https://hdtech.id" target="_blank">HDTECH.ID</a>
     </div>
-    <strong>Copyright &copy; 2023 <a href="#">Hardians</a>.</strong> All rights
-    reserved.
+    <strong>Copyright &copy; {{ date('Y') }} <a href="#">Hardians</a>.</strong> All rights reserved.
 </footer>
