@@ -16,4 +16,9 @@ class Supplier extends Model
     {
         return $this->hasMany(Product::class, 'supplier_id');
     }
+
+    public function productIns()
+    {
+        return $this->hasManyThrough(ProductIn::class, Product::class);
+    }
 }

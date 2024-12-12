@@ -8,6 +8,7 @@ use Maatwebsite\Excel\Facades\Excel;
 use App\Models\Product;
 use App\Models\Category;
 use App\Models\Supplier;
+use App\Models\ProductIn;
 use App\Models\Pic;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -47,26 +48,7 @@ class ProductController extends Controller
         $datasupplier = Supplier::all();
         $datapic = Pic::all();
 
-        // Generate No Purchase otomatis
-        $currentDate = Carbon::now()->format('Ymd'); // Format tanggal: YYYYMMDD
-        $lastPurchase = \App\Models\Product::whereDate('created_at', Carbon::today())->latest()->first(); // Data terakhir hari ini
-        $lastNumber = $lastPurchase ? intval(substr($lastPurchase->purchase, -3)) : 0; // Ambil 3 digit terakhir
-        $newNumber = str_pad($lastNumber + 1, 3, '0', STR_PAD_LEFT); // Tambahkan nomor urut (3 digit)
-
-        // Format No Purchase
-        $noPurchase = "PO-BKS-{$currentDate}-{$newNumber}";
-
-        // Generate Billing Number otomatis
-        $currentDate = Carbon::now()->format('Ymd'); // Format tanggal: YYYYMMDD
-        $lastBilling = \App\Models\Product::whereDate('created_at', Carbon::today())->latest()->first(); // Data terakhir hari ini
-        $lastNumber = $lastBilling ? intval(substr($lastBilling->billnum, -3)) : 0; // Ambil 3 digit terakhir (jika ada)
-        $newNumber = str_pad($lastNumber + 1, 3, '0', STR_PAD_LEFT); // Nomor urut 3 digit mulai dari 001
-
-        // Format Billing Number
-        $billingNumber = "BL-BKS-{$currentDate}-{$newNumber}";
-
-
-        return view('product.create', compact('datacategory', 'datasupplier', 'datapic', 'noPurchase', 'billingNumber'));
+        return view('product.create', compact('datacategory', 'datasupplier', 'datapic'));
     }
 
     /**
@@ -83,11 +65,8 @@ class ProductController extends Controller
                 'supplier_id' => 'nullable|exists:suppliers,id',
                 'pic_id' => 'nullable|exists:pics,id',
                 'price' => 'required|numeric',
-                'qty' => 'required|integer',
+                // 'status' => 'required|max:50',
                 'stock' => 'required|string|max:50',
-                'quality' => 'required|string|max:50',
-                'purchase' => 'required|string|max:50',
-                'billnum' => 'required|string|max:50',
             ],
             [
                 'name.required' => 'Nama produk wajib diisi.',
@@ -109,24 +88,10 @@ class ProductController extends Controller
                 'price.required' => 'Harga wajib diisi.',
                 'price.numeric' => 'Harga harus berupa angka.',
 
-                'qty.required' => 'Jumlah wajib diisi.',
-                'qty.integer' => 'Jumlah harus berupa angka.',
-
                 'stock.required' => 'Stok wajib diisi.',
                 'stock.string' => 'Stok harus berupa teks.',
                 'stock.max' => 'Stok tidak boleh lebih dari 50 karakter.',
 
-                'quality.required' => 'Kualitas wajib diisi.',
-                'quality.string' => 'Kualitas harus berupa teks.',
-                'quality.max' => 'Kualitas tidak boleh lebih dari 50 karakter.',
-
-                'purchase.required' => 'Harga pembelian wajib diisi.',
-                'purchase.string' => 'Harga pembelian harus berupa teks.',
-                'purchase.max' => 'Harga pembelian tidak boleh lebih dari 50 karakter.',
-
-                'billnum.required' => 'Nomor faktur wajib diisi.',
-                'billnum.string' => 'Nomor faktur harus berupa teks.',
-                'billnum.max' => 'Nomor faktur tidak boleh lebih dari 50 karakter.',
             ]
         );
 
@@ -182,11 +147,7 @@ class ProductController extends Controller
             'supplier_id' => 'nullable|exists:suppliers,id',
             'pic_id' => 'nullable|exists:pics,id',
             'price' => 'required|numeric',
-            'qty' => 'required|integer',
             'stock' => 'required|string|max:50',
-            'quality' => 'required|string|max:50',
-            'purchase' => 'required|string|max:50',
-            'billnum' => 'required|string|max:50',
         ]);
 
         // Find the product by ID

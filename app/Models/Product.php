@@ -20,13 +20,11 @@ class Product extends Model
         'photo',          // Lokasi foto produk
         'category_id',    // ID kategori
         'price',          // Harga produk
-        'qty',            // Kuantitas produk
         'stock',          // Informasi stok
         'quality',        // Kualitas produk
-        'purchase',       // Informasi pembelian
-        'billnum',        // Nomor faktur
         'supplier_id',    // ID supplier
         'pic_id',         // ID PIC (Person in Charge)
+        'status',
     ];
 
     /**
@@ -53,4 +51,8 @@ class Product extends Model
         ]);
     }
 
+    public function productIns()
+    {
+        return $this->hasMany(ProductIn::class);
+    }
 }

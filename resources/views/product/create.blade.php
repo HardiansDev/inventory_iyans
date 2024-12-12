@@ -106,16 +106,6 @@
                                         @enderror
                                     </div>
 
-                                    <div class="col-md-4 mb-3">
-                                        <label for="productQty" class="form-label">Qty Product</label>
-                                        <input type="number" class="form-control @error('qty') is-invalid @enderror"
-                                            name="qty" id="productQty" placeholder="Masukkan Qty Product"
-                                            value="{{ old('qty') }}">
-                                        @error('qty')
-                                            <div class="invalid-feedback">{{ $message }}</div>
-                                        @enderror
-                                    </div>
-
                                     <!-- Stok -->
                                     <div class="col-md-4 mb-3">
                                         <label for="productStock" class="form-label">Stok</label>
@@ -123,45 +113,6 @@
                                             name="stock" id="productStock" placeholder="Masukkan Stok Product"
                                             value="{{ old('stock') }}">
                                         @error('stock')
-                                            <div class="invalid-feedback">{{ $message }}</div>
-                                        @enderror
-                                    </div>
-
-                                    <!-- Quality -->
-                                    <div class="col-md-4 mb-3">
-                                        <label for="productQuality" class="form-label">Quality</label>
-                                        <select class="form-select @error('quality') is-invalid @enderror" name="quality"
-                                            id="productQuality" required>
-                                            <option value="" disabled selected>Pilih Quality</option>
-                                            <option value="Bagus" {{ old('quality') == 'Bagus' ? 'selected' : '' }}>Bagus
-                                            </option>
-                                            <option value="Lumayan" {{ old('quality') == 'Lumayan' ? 'selected' : '' }}>
-                                                Lumayan</option>
-                                            <option value="Kurang" {{ old('quality') == 'Kurang' ? 'selected' : '' }}>
-                                                Kurang
-                                            </option>
-                                        </select>
-                                        @error('quality')
-                                            <div class="invalid-feedback">{{ $message }}</div>
-                                        @enderror
-                                    </div>
-
-                                    <!-- No Purchase -->
-                                    <div class="col-md-4 mb-3">
-                                        <label for="productPurchase" class="form-label">No Purchase</label>
-                                        <input type="text" class="form-control @error('purchase') is-invalid @enderror"
-                                            name="purchase" id="productPurchase" value="{{ $noPurchase }}" readonly>
-                                        @error('purchase')
-                                            <div class="invalid-feedback">{{ $message }}</div>
-                                        @enderror
-                                    </div>
-
-                                    <!-- Billing Number -->
-                                    <div class="col-md-4 mb-3">
-                                        <label for="productBillNum" class="form-label">Billing Number</label>
-                                        <input type="text" class="form-control @error('billnum') is-invalid @enderror"
-                                            name="billnum" id="productBillNum" value="{{ $billingNumber }}" readonly>
-                                        @error('billnum')
                                             <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
                                     </div>

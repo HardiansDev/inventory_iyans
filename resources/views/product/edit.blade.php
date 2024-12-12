@@ -4,27 +4,27 @@
 @endsection
 
 @section('content')
-<section class="content-header py-4 bg-light rounded">
-    <div class="container-fluid">
-        <div class="row align-items-center justify-content-between">
-            <div class="col-auto">
-                <h1 class="mb-0 text-black">Management Produk</h1>
-            </div>
-            <div class="col-auto">
-                <nav aria-label="breadcrumb">
-                    <ol class="breadcrumb mb-0">
-                        <li class="breadcrumb-item">
-                            <a href="{{ route('dashboard') }}" class="text-decoration-none text-secondary">
-                                <i class="fa fa-dashboard"></i> Dashboard
-                            </a>
-                        </li>
-                        <li class="breadcrumb-item active" aria-current="page">Edit Produk</li>
-                    </ol>
-                </nav>
+    <section class="content-header py-4 bg-light rounded">
+        <div class="container-fluid">
+            <div class="row align-items-center justify-content-between">
+                <div class="col-auto">
+                    <h1 class="mb-0 text-black">Management Produk</h1>
+                </div>
+                <div class="col-auto">
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb mb-0">
+                            <li class="breadcrumb-item">
+                                <a href="{{ route('dashboard') }}" class="text-decoration-none text-secondary">
+                                    <i class="fa fa-dashboard"></i> Dashboard
+                                </a>
+                            </li>
+                            <li class="breadcrumb-item active" aria-current="page">Edit Produk</li>
+                        </ol>
+                    </nav>
+                </div>
             </div>
         </div>
-    </div>
-</section>
+    </section>
 
     <section class="content">
         <div class="container">
@@ -91,43 +91,11 @@
                                         @enderror
                                     </div>
 
-                                    <!-- Qty Product -->
-                                    <div class="col-md-4 mb-3">
-                                        <label for="productQty" class="form-label">Qty Product</label>
-                                        <input type="number" class="form-control @error('qty') is-invalid @enderror"
-                                            name="qty" id="productQty" placeholder="Masukkan Qty Product"
-                                            value="{{ $product->qty }}">
-                                        @error('qty')
-                                            <div class="invalid-feedback">{{ $message }}</div>
-                                        @enderror
-                                    </div>
-
                                     <!-- Stok -->
                                     <div class="col-md-4 mb-3">
                                         <label for="productStock" class="form-label">Stok</label>
                                         <input type="text" class="form-control" name="stock" id="productStock"
                                             value="{{ $product->stock }}" required>
-                                    </div>
-
-                                    <!-- Quality -->
-                                    <div class="col-md-4 mb-3">
-                                        <label for="productQuality" class="form-label">Quality</label>
-                                        <input type="text" class="form-control" name="quality" id="productQuality"
-                                            value="{{ $product->quality }}" required>
-                                    </div>
-
-                                    <!-- No Purchase -->
-                                    <div class="col-md-4 mb-3">
-                                        <label for="productPurchase" class="form-label">No Purchase</label>
-                                        <input type="text" class="form-control" name="purchase" id="productPurchase"
-                                            value="{{ $product->purchase }}" required>
-                                    </div>
-
-                                    <!-- Billing Number -->
-                                    <div class="col-md-4 mb-3">
-                                        <label for="productBillNum" class="form-label">Billing Number</label>
-                                        <input type="text" class="form-control" name="billnum" id="productBillNum"
-                                            value="{{ $product->billnum }}" required>
                                     </div>
 
                                     <!-- Supplier -->

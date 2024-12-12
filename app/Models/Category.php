@@ -18,4 +18,9 @@ class Category extends Model
     {
         return $this->hasMany(Product::class, 'category_id'); // Menyatakan bahwa kategori memiliki banyak produk
     }
+
+    public function productIns()
+    {
+        return $this->hasManyThrough(ProductIn::class, Product::class);
+    }
 }

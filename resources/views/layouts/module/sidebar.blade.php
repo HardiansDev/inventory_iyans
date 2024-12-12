@@ -23,12 +23,13 @@
         <!-- Menu Sidebar -->
         <ul class="sidebar-menu" data-widget="tree">
             <li class="header">MENU UTAMA</li>
-
+            @if (in_array(Auth::user()->role, ['superadmin', 'manager']))
             <li>
                 <a href="{{ route('dashboard') }}">
                     <i class="fa fa-dashboard"></i> <span>Dashboard</span>
                 </a>
             </li>
+            @endif
 
             @if (in_array(Auth::user()->role, ['superadmin', 'admin_gudang']))
                 <li class="treeview">
@@ -79,16 +80,16 @@
 
             @if (in_array(Auth::user()->role, ['admin_gudang', 'superadmin']))
                 <li>
-                    <a href="{{ route('product-in.index') }}">
+                    <a href="{{ route('productin.index') }}">
                         <i class="fa fa-sign-in"></i> <span>Produk Masuk</span>
                     </a>
                 </li>
             @endif
 
-            @if (in_array(Auth::user()->role, ['admin_gudang', 'superadmin']))
+            @if (in_array(Auth::user()->role, ['kasir', 'superadmin']))
                 <li>
                     <a href="{{ route('product-out.index') }}">
-                        <i class="fa fa-sign-out"></i> <span>Produk Keluar</span>
+                        <i class="fa fa-sign-out"></i> <span>Penjualan</span>
                     </a>
                 </li>
             @endif

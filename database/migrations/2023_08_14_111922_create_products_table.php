@@ -25,11 +25,11 @@ class CreateProductsTable extends Migration
             $table->foreignId('pic_id')->nullable()->constrained('pics')->onDelete('set null'); // explicitly reference the 'pics' table
 
             $table->decimal('price', 10, 2);
-            $table->integer('qty');
+            // $table->integer('qty');
             $table->string('stock');
-            $table->string('quality');
-            $table->string('purchase');
-            $table->string('billnum');
+            $table->string('status')->default('menunggu');
+            // $table->string('purchase');
+            // $table->string('billnum');
             $table->timestamps();
         });
     }

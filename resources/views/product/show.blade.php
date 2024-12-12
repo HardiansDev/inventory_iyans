@@ -133,11 +133,8 @@
                             <p><span class="label">Kode Produk :</span> {{ $product->code }}</p>
                             <p><span class="label">Kategori :</span> {{ $product->category->name }}</p>
                             <p><span class="label">Harga :</span> Rp. {{ number_format($product->price, 0, ',', '.') }}</p>
-                            <p><span class="label">Qty :</span> {{ $product->qty }}</p>
                             <p><span class="label">Stock :</span> {{ $product->stock }}</p>
-                            <p><span class="label">Quality :</span> {{ $product->quality }}</p>
-                            <p><span class="label">No.Purchase :</span> {{ $product->purchase }}</p>
-                            <p><span class="label">Bill Number :</span> {{ $product->billnum }}</p>
+                            <p><span class="label">Status :</span> {{ $product->status }}</p>
                             <p><span class="label">Supplier :</span> {{ $product->supplier->name }}</p>
                             <p><span class="label">PIC :</span> {{ $product->pic->name }}</p>
                         </div>

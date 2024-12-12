@@ -26,13 +26,29 @@ class AuthController extends Controller
 
         // Coba login
         if (Auth::attempt(['email' => $validated['email'], 'password' => $validated['password']])) {
-            // Redirect ke halaman dashboard jika berhasil login
-            return redirect()->intended('dashboard');
+            // Ambil pengguna yang sedang login
+            $user = Auth::user();
+
+            // Redirect berdasarkan peran pengguna
+            switch ($user->role) {
+                case 'admin_gudang':
+                    return redirect()->route('product.index'); // Ganti dengan route untuk view produk
+                case 'kasir':
+                    return redirect()->route('customer.index'); // Ganti dengan route untuk view customer
+                case 'superadmin':
+                case 'manager':
+                    return redirect()->route('dashboard'); // Ganti dengan route untuk dashboard
+                default:
+                    // Jika peran tidak dikenali, logout pengguna dan kembali ke login dengan pesan error
+                    Auth::logout();
+                    return redirect()->route('login')->with('error', 'Peran tidak dikenali.');
+            }
         }
 
         // Jika login gagal, kembali ke halaman login dengan pesan kesalahan
         return redirect()->route('login')->with('error', 'Email atau password salah, atau belum terdaftar.');
     }
+
 
     // Menampilkan form registrasi
     public function showRegister()

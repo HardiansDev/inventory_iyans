@@ -88,10 +88,10 @@
                                         <th>Gambar Produk</th>
                                         <th>Kategori Produk</th>
                                         <th>Harga</th>
-                                        <th>Qty</th>
                                         <th>Stock</th>
-                                        <th>Quality</th>
+                                        <th>Status</th>
                                         <th>Aksi</th>
+                                        <th>Masukkin</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -109,9 +109,23 @@
                                             </td>
                                             <td>{{ $product->category->name }}</td>
                                             <td>Rp {{ number_format($product->price, 0, ',', '.') }}</td>
-                                            <td>{{ $product->qty }} pcs</td>
-                                            <td>{{ $product->stock }} <label for="">tersedia</label></td>
-                                            <td>{{ $product->quality }}</td>
+
+                                            <td>{{ $product->stock }} pcs</td>
+                                            <td>
+                                                @if ($product->status == 'produk telah dimasukkan')
+                                                    <span class="badge bg-success">
+                                                        {{ ucwords($product->status) }}
+                                                    </span>
+                                                @elseif ($product->status == 'produk dikembalikan')
+                                                    <span class="badge bg-danger">
+                                                        {{ ucwords($product->status) }}
+                                                    </span>
+                                                @else
+                                                    <span class="badge bg-warning text-dark">
+                                                        {{ ucwords($product->status) }}
+                                                    </span>
+                                                @endif
+                                            </td>
                                             <td class="text-nowrap">
                                                 <a href="{{ route('product.show', $product->id) }}"
                                                     class="btn btn-primary btn-sm">
@@ -132,6 +146,13 @@
                                                     </button>
                                                 </form>
                                             </td>
+                                            <td>
+                                                <!-- Button untuk membuka modal -->
+                                                <button class="btn btn-success btn-sm" data-bs-toggle="modal"
+                                                    data-bs-target="#addProductModal">
+                                                    <i class="fas fa-box-open"></i> Masukkan Produk
+                                                </button>
+                                            </td>
                                         </tr>
                                     @endforeach
                                 </tbody>
@@ -142,4 +163,57 @@
             </div>
         </div>
     </section>
+    <!-- Modal untuk menambahkan produk masuk -->
+    <div class="modal fade" id="addProductModal" tabindex="-1" aria-labelledby="addProductModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addProductModalLabel">Tambah Produk Masuk</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form id="addProductForm" action="{{ route('productin.store') }}" method="POST">
+                    @csrf
+                    <div class="modal-body">
+                        <!-- Product Information -->
+                        <div class="form-group">
+                            <label for="product_name">Nama Produk</label>
+                            <input type="text" id="product_name" class="form-control" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label for="product_code">Kode Produk</label>
+                            <input type="text" id="product_code" class="form-control" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label for="supplier">Supplier</label>
+                            <input type="text" id="supplier" class="form-control" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label for="category">Kategori</label>
+                            <input type="text" id="category" class="form-control" readonly>
+                        </div>
+
+                        <!-- Input Fields for Product In -->
+                        <div class="form-group">
+                            <label for="qty">Qty</label>
+                            <input type="number" id="qty" class="form-control" name="qty" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="tanggal">Tanggal Masuk</label>
+                            <input type="date" id="tanggal" class="form-control" name="tanggal" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="recipient">Recipient</label>
+                            <input type="text" id="recipient" class="form-control" name="recipient" required>
+                        </div>
+                        <!-- Hidden Field for Product ID -->
+                        <input type="hidden" id="product_id" name="product_id">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+                        <button type="submit" class="btn btn-success">Simpan</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 @endsection

@@ -17,7 +17,7 @@ Route::get('/', function () {
 });
 
 // Rute dashboard
-Route::middleware(['auth', 'role:superadmin,manager,kasir,admin_gudang'])->group(function () {
+Route::middleware(['auth', 'role:superadmin,manager'])->group(function () {
     Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
 });
 
@@ -31,6 +31,7 @@ Route::middleware(['auth', 'role:superadmin,admin_gudang'])->group(function () {
     Route::resource('product', ProductController::class);
     Route::post('/product/export', [ProductController::class, 'export'])->name('product.export');
     Route::post('/product/delete-all', [ProductController::class, 'deleteAll'])->name('product.deleteAll');
+    Route::resource('productin', ProductInController::class);
 });
 
 // Rute kategori (khusus superadmin dan admin_gudang)
@@ -49,12 +50,12 @@ Route::middleware(['auth', 'role:superadmin,admin_gudang'])->group(function () {
 });
 
 // Rute produk masuk (khusus admin_gudang)
-Route::middleware(['auth', 'role:admin_gudang,superadmin'])->prefix('product-in')->group(function () {
-    Route::get('', [ProductInController::class, 'index'])->name('product-in.index');
-});
+// Route::middleware(['auth', 'role:admin_gudang,superadmin'])->prefix('product-in')->group(function () {
+//     Route::get('', [ProductInController::class, 'index'])->name('product-in.index');
+// });
 
 // Rute produk keluar (khusus kasir)
-Route::middleware(['auth', 'role:admin_gudang,superadmin'])->prefix('product-out')->group(function () {
+Route::middleware(['auth', 'role:kasir,superadmin'])->prefix('product-out')->group(function () {
     Route::get('', [ProductOutController::class, 'index'])->name('product-out.index');
 });
 

@@ -28,14 +28,11 @@ class CreateProductInsTable extends Migration
             $table->foreignIdFor(Category::class, 'category_id')
                 ->constrained((new Category())->getTable())
                 ->onDelete('cascade');
-            $table->foreignIdFor(Pic::class, 'pic_id')
-                ->constrained((new Pic())->getTable())
-                ->onDelete('cascade');
 
             $table->dateTime('date');
             $table->string('recipient')->comment("penerima");
-            $table->string('status'); //verifikasi pic
             $table->string('qty');
+            $table->string('status')->default('menunggu');
             $table->timestamps();
         });
     }

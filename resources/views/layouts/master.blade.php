@@ -231,7 +231,7 @@
         // Fungsi untuk menambahkan "pcs" setelah angka
         document.getElementById('productStock').addEventListener('input', function(e) {
             var stck = e.target.value.replace(/[^0-9]/g, ''); // Hanya angka yang diizinkan
-            e.target.value = stck ? stck + ' pcs' : ''; // Menambahkan 'pcs' jika ada nilai
+            e.target.value = stck ? stck + '' : ''; // Menambahkan 'pcs' jika ada nilai
         });
 
         // Untuk mengisi ulang nilai saat halaman dimuat
@@ -311,6 +311,9 @@
             });
         });
     </script>
+
+
+
 </body>
 
 </html>
