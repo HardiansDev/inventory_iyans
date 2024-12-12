@@ -38,35 +38,21 @@
                         <a href="{{ route('product.create') }}" class="btn btn-success btn-sm">
                             <i class="fas fa-plus-circle"></i> Tambah Produk Masuk
                         </a>
-                        {{-- <button id="deleteAllBtn" class="btn btn-danger btn-sm mt-2" disabled>
-                            <i class="fas fa-trash-alt"></i> Hapus Semua Produk Terpilih
-                        </button> --}}
                     </div>
                     <!-- /.box-header -->
 
                     <div class="box-body">
-                        <!-- Filter and Export -->
-                        <div class="d-flex justify-content-between flex-wrap mb-3 align-items-center">
-                            <!-- Filter Kategori -->
-                            <div class="d-flex align-items-center gap-2">
-                                <label for="filtername" class="form-label mb-0">
-                                    {{-- <i class="fas fa-filter text-muted"></i> --}}
-                                </label>
+                        <!-- Flash Messages -->
+                        @if (session('success'))
+                            <div class="alert alert-success">
+                                {{ session('success') }}
                             </div>
-
-                            <!-- Export -->
-                            <div class="d-flex align-items-center gap-2">
-                                <form action="#" method="POST" class="d-flex gap-2">
-                                    {{-- @csrf --}}
-                                    <button class="btn btn-success btn-sm" type="submit" name="export_type" value="excel">
-                                        <i class="fas fa-file-excel"></i> Export Excel
-                                    </button>
-                                    <button class="btn btn-danger btn-sm" type="submit" name="export_type" value="pdf">
-                                        <i class="fas fa-file-pdf"></i> Export PDF
-                                    </button>
-                                </form>
+                        @endif
+                        @if (session('error'))
+                            <div class="alert alert-danger">
+                                {{ session('error') }}
                             </div>
-                        </div>
+                        @endif
 
                         <!-- Table -->
                         <div class="table-responsive">
@@ -83,7 +69,6 @@
                                         <th>Stock</th>
                                         <th>Status</th>
                                         <th>Aksi</th>
-
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -105,18 +90,20 @@
                                             <td>{{ $productIn->qty }}</td>
                                             <td>{{ $productIn->product->stock }}</td>
                                             <td>
-                                                @if ($productIn->qty <= $productIn->product->stock)
-                                                    <span class="badge bg-success">Tersedia</span>
-                                                @else
-                                                    <span class="badge bg-danger">Stok Habis</span>
+                                                @if ($productIn->status === 'menunggu')
+                                                    <span class="badge bg-warning text-dark">Menunggu</span>
+                                                @elseif ($productIn->status === 'diterima')
+                                                    <span class="badge bg-success">Diterima</span>
+                                                @elseif ($productIn->status === 'ditolak')
+                                                    <span class="badge bg-danger">Ditolak</span>
                                                 @endif
                                             </td>
                                             <td>
-                                                <!-- Dropdown untuk Terima dan Tolak -->
                                                 <div class="dropdown">
                                                     <button class="btn btn-primary dropdown-toggle" type="button"
                                                         id="dropdownMenuButton" data-bs-toggle="dropdown"
-                                                        aria-expanded="false">
+                                                        aria-expanded="false"
+                                                        {{ $productIn->status !== 'menunggu' ? 'disabled' : '' }}>
                                                         Pilih Aksi
                                                     </button>
                                                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
@@ -127,7 +114,7 @@
                                                                 method="POST">
                                                                 @csrf
                                                                 @method('PUT')
-                                                                <input type="hidden" name="status" value="terima">
+                                                                <input type="hidden" name="status" value="diterima">
                                                                 <button type="submit"
                                                                     class="dropdown-item text-success">Terima</button>
                                                             </form>
@@ -139,7 +126,7 @@
                                                                 method="POST">
                                                                 @csrf
                                                                 @method('PUT')
-                                                                <input type="hidden" name="status" value="tolak">
+                                                                <input type="hidden" name="status" value="ditolak">
                                                                 <button type="submit"
                                                                     class="dropdown-item text-danger">Tolak</button>
                                                             </form>
@@ -147,7 +134,6 @@
                                                     </ul>
                                                 </div>
                                             </td>
-
                                         </tr>
                                     @endforeach
                                 </tbody>

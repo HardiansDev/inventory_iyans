@@ -113,27 +113,19 @@
                                             <td>{{ $product->stock }} pcs</td>
                                             <td>
                                                 @if ($product->status == 'produk diterima')
-                                                    <span class="badge bg-success">
-                                                        {{ ucwords($product->status) }}
-                                                    </span>
+                                                    <span class="badge bg-success">{{ ucwords($product->status) }}</span>
                                                 @elseif ($product->status == 'produk ditolak')
-                                                    <span class="badge bg-danger">
-                                                        {{ ucwords($product->status) }}
-                                                    </span>
+                                                    <span class="badge bg-danger">{{ ucwords($product->status) }}</span>
                                                 @elseif ($product->status == 'produk telah dimasukkan')
-                                                    <span class="badge bg-info">
-                                                        {{ ucwords($product->status) }}
-                                                    </span>
+                                                    <span class="badge bg-info">{{ ucwords($product->status) }}</span>
                                                 @elseif ($product->status == 'produk dikembalikan')
-                                                    <span class="badge bg-warning text-dark">
-                                                        {{ ucwords($product->status) }}
-                                                    </span>
+                                                    <span
+                                                        class="badge bg-warning text-dark">{{ ucwords($product->status) }}</span>
                                                 @else
-                                                    <span class="badge bg-secondary">
-                                                        {{ ucwords($product->status) }}
-                                                    </span>
+                                                    <span class="badge bg-secondary">{{ ucwords($product->status) }}</span>
                                                 @endif
                                             </td>
+
 
                                             <td class="text-nowrap">
                                                 <a href="{{ route('product.show', $product->id) }}"

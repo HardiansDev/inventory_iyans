@@ -21,7 +21,6 @@ class Product extends Model
         'category_id',    // ID kategori
         'price',          // Harga produk
         'stock',          // Informasi stok
-        'quality',        // Kualitas produk
         'supplier_id',    // ID supplier
         'pic_id',         // ID PIC (Person in Charge)
         'status',

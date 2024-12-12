@@ -31,7 +31,7 @@ class CreateProductInsTable extends Migration
 
             $table->dateTime('date');
             $table->string('recipient')->comment("penerima");
-            $table->string('qty');
+            $table->integer('qty');
             $table->string('status')->default('menunggu');
             $table->timestamps();
         });

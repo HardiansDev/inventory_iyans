@@ -42,27 +42,13 @@ class ProductInController extends Controller
      */
     public function store(Request $request)
     {
-        // Validasi input dari form
         $validated = $request->validate([
-            'product_id' => 'required|exists:products,id',  // pastikan produk ada
-            'qty' => 'required|numeric|min:1',               // pastikan qty valid
+            'product_id' => 'required|exists:products,id',  // Pastikan produk ada
+            'qty' => 'required|numeric|min:1',             // Pastikan qty valid
             'date' => 'required|date',
             'recipient' => 'required|string',
         ]);
 
-        // Ambil data produk berdasarkan ID yang dipilih
-        $product = Product::findOrFail($request->product_id);
-
-        // Cek apakah stok mencukupi
-        if ($product->stock < $validated['qty']) {
-            return redirect()->back()->with('error', 'Stok tidak mencukupi!');
-        }
-
-        // Kurangi stok berdasarkan qty
-        $product->stock -= $validated['qty'];
-        $product->save();
-
-        // Proses menyimpan data produk masuk
         ProductIn::create([
             'product_id' => $validated['product_id'],
             'supplier_id' => $request->supplier_id,
@@ -70,12 +56,14 @@ class ProductInController extends Controller
             'date' => $validated['date'],
             'recipient' => $validated['recipient'],
             'qty' => $validated['qty'],
-            'status' => 'Produk Masuk',  // Status produk masuk
+            'status' => 'menunggu',  // Status default "menunggu"
         ]);
 
-        // Redirect setelah sukses
-        return redirect()->route('productin.index')->with('success', 'Produk berhasil ditambahkan!');
+        return redirect()->route('productin.index')->with('success', 'Produk berhasil ditambahkan dan sedang menunggu persetujuan.');
     }
+
+
+
 
 
 
@@ -128,32 +116,37 @@ class ProductInController extends Controller
 
     public function updateStatus(Request $request, $id)
     {
-        // Validasi status
-        $validated = $request->validate([
-            'status' => 'required|in:terima,tolak',  // Validasi status yang hanya boleh "terima" atau "tolak"
-        ]);
-
-        // Cari data product_in berdasarkan ID
         $productIn = ProductIn::findOrFail($id);
 
-        // Perbarui status produk masuk
-        $productIn->status = $validated['status'];
-        $productIn->save();
-
-        // Perbarui status produk di tabel product jika diterima
+        // Ambil data produk terkait
         $product = $productIn->product;
 
-        if ($validated['status'] == 'terima') {
-            // Jika diterima, update status produk menjadi "terima"
-            $product->status = 'produk diterima';  // Atur status produk menjadi "produk diterima"
-            $product->save();
-        } elseif ($validated['status'] == 'tolak') {
-            // Jika ditolak, update status produk menjadi "produk ditolak"
-            $product->status = 'produk ditolak';  // Atur status produk menjadi "produk ditolak"
-            $product->save();
+        // Cek status yang diterima dari request
+        $status = $request->input('status');
+
+        if ($status === 'diterima') {
+            // Kurangi stok produk utama berdasarkan qty dari ProductIn
+            $product->stock - $productIn->qty;
+
+            // Pastikan stok tidak menjadi negatif
+            if ($product->stock < 0) {
+                return redirect()->back()->with('error', 'Stok tidak mencukupi!');
+            }
+
+            // Update status di tabel produk
+            $product->status = 'produk diterima';
+        } elseif ($status === 'ditolak') {
+            // Tidak ada perubahan pada stok jika ditolak
+            $product->status = 'produk ditolak';
         }
 
-        // Redirect setelah status diperbarui
-        return redirect()->route('productin.index')->with('success', 'Status produk berhasil diperbarui!');
+        // Simpan perubahan pada produk utama
+        $product->save();
+
+        // Update status di tabel ProductIn
+        $productIn->status = $status;
+        $productIn->save();
+
+        return redirect()->route('productin.index')->with('success', 'Status berhasil diperbarui!');
     }
 }
