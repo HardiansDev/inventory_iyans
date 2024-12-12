@@ -73,9 +73,6 @@
                             <table id="example1" class="table table-hover table-bordered">
                                 <thead class="table-light">
                                     <tr>
-                                        {{-- <th>
-                                            <input type="checkbox" id="selectAll" />
-                                        </th> --}}
                                         <th>No</th>
                                         <th>Nama Produk</th>
                                         <th>Kode Produk</th>
@@ -86,43 +83,73 @@
                                         <th>Stock</th>
                                         <th>Status</th>
                                         <th>Aksi</th>
-                                        <th>Keluarin</th>
+
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        {{-- <td>
-                                                <input type="checkbox" class="select-item" value="{{ $product->id }}" />
-                                            </td> --}}
-                                        <td>1</td>
-                                        <td>nama</td>
-                                        <td>code</td>
-                                        <td>
-                                            <img src="" alt="Gambar Produk"
-                                                style="width: 60px; border-radius: 5px;">
-                                        </td>
-                                        <td>category</td>
-                                        <td>Rp </td>
-                                        <td>qty pcs</td>
-                                        <td>stok</td>
-                                        <td>status</td>
-                                        <td class="text-nowrap">
+                                    @foreach ($productIns as $productIn)
+                                        <tr>
+                                            <td>{{ $loop->iteration }}</td>
+                                            <td>{{ $productIn->product->name }}</td>
+                                            <td>{{ $productIn->product->code }}</td>
+                                            <td>
+                                                @if ($productIn->product->photo)
+                                                    <img src="{{ asset('fotoproduct/' . $productIn->product->photo) }}"
+                                                        alt="Image" width="50">
+                                                @else
+                                                    <span>No Image</span>
+                                                @endif
+                                            </td>
+                                            <td>{{ $productIn->product->category->name }}</td>
+                                            <td>{{ number_format($productIn->product->price, 2) }}</td>
+                                            <td>{{ $productIn->qty }}</td>
+                                            <td>{{ $productIn->product->stock }}</td>
+                                            <td>
+                                                @if ($productIn->qty <= $productIn->product->stock)
+                                                    <span class="badge bg-success">Tersedia</span>
+                                                @else
+                                                    <span class="badge bg-danger">Stok Habis</span>
+                                                @endif
+                                            </td>
+                                            <td>
+                                                <!-- Dropdown untuk Terima dan Tolak -->
+                                                <div class="dropdown">
+                                                    <button class="btn btn-primary dropdown-toggle" type="button"
+                                                        id="dropdownMenuButton" data-bs-toggle="dropdown"
+                                                        aria-expanded="false">
+                                                        Pilih Aksi
+                                                    </button>
+                                                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                                        <!-- Tombol Terima -->
+                                                        <li>
+                                                            <form
+                                                                action="{{ route('productin.updateStatus', $productIn->id) }}"
+                                                                method="POST">
+                                                                @csrf
+                                                                @method('PUT')
+                                                                <input type="hidden" name="status" value="terima">
+                                                                <button type="submit"
+                                                                    class="dropdown-item text-success">Terima</button>
+                                                            </form>
+                                                        </li>
+                                                        <!-- Tombol Tolak -->
+                                                        <li>
+                                                            <form
+                                                                action="{{ route('productin.updateStatus', $productIn->id) }}"
+                                                                method="POST">
+                                                                @csrf
+                                                                @method('PUT')
+                                                                <input type="hidden" name="status" value="tolak">
+                                                                <button type="submit"
+                                                                    class="dropdown-item text-danger">Tolak</button>
+                                                            </form>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </td>
 
-                                            <button type="submit" class="btn btn-danger btn-sm delete-prod" data-idprod=""
-                                                data-namaprod="">
-                                                <i class="fas fa-trash-alt"></i> Hapus
-                                            </button>
-
-                                        </td>
-                                        <td>
-                                            <!-- Button untuk membuka modal -->
-                                            <button class="btn btn-warning btn-sm" data-bs-toggle="modal"
-                                                data-bs-target="#addProductModal">
-                                                <i class="fas fa-box-open"></i> Keluarin Produk
-                                            </button>
-                                        </td>
-                                    </tr>
-
+                                        </tr>
+                                    @endforeach
                                 </tbody>
                             </table>
                         </div>

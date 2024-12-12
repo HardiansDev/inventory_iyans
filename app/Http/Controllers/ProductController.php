@@ -24,6 +24,7 @@ class ProductController extends Controller
     {
         $search = $request->query('search');
         $datacategory = Category::all();
+        $datasupplier = Supplier::all();
 
 
         $products = !empty($search)
@@ -36,7 +37,7 @@ class ProductController extends Controller
             ->paginate(5)
             ->onEachSide(2);
 
-        return view('product.index', compact('products', 'search', 'datacategory'));
+        return view('product.index', compact('products', 'search', 'datacategory', 'datasupplier'));
     }
 
     /**

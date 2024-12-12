@@ -32,6 +32,7 @@ Route::middleware(['auth', 'role:superadmin,admin_gudang'])->group(function () {
     Route::post('/product/export', [ProductController::class, 'export'])->name('product.export');
     Route::post('/product/delete-all', [ProductController::class, 'deleteAll'])->name('product.deleteAll');
     Route::resource('productin', ProductInController::class);
+    Route::put('/productin/update-status/{id}', [ProductInController::class, 'updateStatus'])->name('productin.updateStatus');
 });
 
 // Rute kategori (khusus superadmin dan admin_gudang)

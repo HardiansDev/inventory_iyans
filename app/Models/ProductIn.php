@@ -9,43 +9,28 @@ class ProductIn extends Model
 {
     use HasFactory;
 
-    /**
-     * Table name associated with the model.
-     */
     protected $table = 'product_ins';
 
-    /**
-     * The attributes that are mass assignable.
-     */
     protected $fillable = [
-        'product_id',
-        'supplier_id',
-        'category_id',
-        'date',
-        'recipient',
-        'qty',
-        'status',
+        'product_id',     // ID produk yang dimasukkan
+        'supplier_id',    // ID supplier
+        'category_id',    // ID kategori
+        'date',           // Tanggal masuk
+        'recipient',      // Nama penerima
+        'qty',            // Jumlah produk yang masuk
+        'status',         // Status produk
     ];
 
-    /**
-     * Relationship with the Product model.
-     */
     public function product()
     {
         return $this->belongsTo(Product::class);
     }
 
-    /**
-     * Relationship with the Supplier model.
-     */
     public function supplier()
     {
         return $this->belongsTo(Supplier::class);
     }
 
-    /**
-     * Relationship with the Category model.
-     */
     public function category()
     {
         return $this->belongsTo(Category::class);
