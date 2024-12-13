@@ -17,13 +17,23 @@ class RedirectIfAuthenticated
      * @param  string|null  ...$guards
      * @return \Illuminate\Http\Response|\Illuminate\Http\RedirectResponse
      */
-    public function handle(Request $request, Closure $next, ...$guards)
+    public function handle(Request $request, Closure $next)
     {
-        $guards = empty($guards) ? [null] : $guards;
+        if (Auth::check()) {
+            $user = Auth::user();
 
-        foreach ($guards as $guard) {
-            if (Auth::guard($guard)->check()) {
-                return redirect(RouteServiceProvider::HOME);
+            // Redirect berdasarkan peran pengguna
+            switch ($user->role) {
+                case 'admin_gudang':
+                    return redirect()->route('product.index');
+                case 'kasir':
+                    return redirect()->route('customer.index');
+                case 'superadmin':
+                case 'manager':
+                    return redirect()->route('dashboard');
+                default:
+                    Auth::logout();
+                    return redirect()->route('login')->with('error', 'Peran tidak dikenali.');
             }
         }
 

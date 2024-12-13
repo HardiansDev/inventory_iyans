@@ -45,15 +45,10 @@ Route::middleware(['auth', 'role:superadmin,admin_gudang'])->group(function () {
     Route::resource('supplier', SupplierController::class);
 });
 
-// Rute PIC (khusus superadmin dan manager)
+// Rute PIC (khusus superadmin dan admin gudang)
 Route::middleware(['auth', 'role:superadmin,admin_gudang'])->group(function () {
     Route::resource('pic', PicController::class);
 });
-
-// Rute produk masuk (khusus admin_gudang)
-// Route::middleware(['auth', 'role:admin_gudang,superadmin'])->prefix('product-in')->group(function () {
-//     Route::get('', [ProductInController::class, 'index'])->name('product-in.index');
-// });
 
 // Rute produk keluar (khusus kasir)
 Route::middleware(['auth', 'role:kasir,superadmin'])->prefix('product-out')->group(function () {
@@ -65,10 +60,11 @@ Route::middleware(['auth', 'role:superadmin,kasir'])->group(function () {
     Route::resource('customer', CustomerController::class);
 });
 
-
 // Rute otentikasi
-Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
-Route::post('/login', [AuthController::class, 'login']);
-Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
-Route::post('/register', [AuthController::class, 'register']);
+Route::middleware('guest')->group(function () {
+    Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
+    Route::post('/login', [AuthController::class, 'login']);
+    Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
+    Route::post('/register', [AuthController::class, 'register']);
+});
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
