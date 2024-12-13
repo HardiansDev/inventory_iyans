@@ -35,9 +35,7 @@
                 <div class="box">
                     <!-- Header -->
                     <div class="box-header d-flex flex-column align-items-start mb-3">
-                        <a href="{{ route('productin.create') }}" class="btn btn-success btn-sm">
-                            <i class="fas fa-plus-circle"></i> Tambah Produk Masuk
-                        </a>
+                        
                     </div>
                     <!-- /.box-header -->
 
