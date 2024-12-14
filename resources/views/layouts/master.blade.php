@@ -91,8 +91,8 @@
         <!-- Header -->
         <header class="main-header">
             <a href="/" class="logo">
-                <span class="logo-mini"><b>GD</b>G</span>
-                <span class="logo-lg"><b>Gudang</b>ku</span>
+                <span class="logo-mini"><b>G</b>I</span>
+                <span class="logo-lg"><b>Gudang</b>Iyan</span>
             </a>
             <nav class="navbar navbar-static-top">
                 <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button">
@@ -174,7 +174,6 @@
             setupDeleteConfirmation('.delete-prod', 'Produk', 'idprod', 'namaprod');
             setupDeleteConfirmation('.delete-supp', 'Supplier', 'idsupp', 'namasupp');
             setupDeleteConfirmation('.delete-cate', 'Kategori', 'idcate', 'namacate');
-            setupDeleteConfirmation('.deletepic', 'PIC', 'idpic', 'namapic');
 
         });
     </script>
@@ -225,27 +224,6 @@
         @if (session('warning'))
             toastr.warning("{{ session('warning') }}");
         @endif
-    </script>
-
-    <script>
-        // Fungsi untuk menambahkan "pcs" setelah angka
-        document.getElementById('productStock').addEventListener('input', function(e) {
-            var stck = e.target.value.replace(/[^0-9]/g, ''); // Hanya angka yang diizinkan
-            e.target.value = stck ? stck + '' : ''; // Menambahkan 'pcs' jika ada nilai
-        });
-
-        // Untuk mengisi ulang nilai saat halaman dimuat
-        window.onload = function() {
-            var stckInput = document.getElementById('productStock');
-            stckInput.value = stckInput.value.replace(/[^0-9]/g, '') + ''; // Memastikan format saat halaman dimuat
-        };
-
-        // Pastikan nilai yang dikirimkan adalah angka integer (sebelum form disubmit)
-        document.querySelector('form').addEventListener('submit', function(e) {
-            var stckInput = document.getElementById('productStock');
-            // Menghapus 'pcs' dan mengirimkan hanya nilai integer
-            stckInput.value = stckInput.value.replace(/[^0-9]/g, '');
-        });
     </script>
 
     <script>

@@ -1,7 +1,7 @@
 @extends('layouts.master')
 
 @section('title')
-    <title>Aplikasi Inventory | Tambah Product</title>
+    <title>Sistem Inventory Iyan | Tambah Produk</title>
 @endsection
 
 @section('content')
@@ -9,7 +9,7 @@
         <div class="container-fluid">
             <div class="row align-items-center justify-content-between">
                 <div class="col-auto">
-                    <h1 class="mb-0 text-black">Management Produk</h1>
+                    <h1 class="mb-0 text-black">Manajemen Produk</h1>
                 </div>
                 <div class="col-auto">
                     <nav aria-label="breadcrumb">
@@ -36,24 +36,19 @@
                             <h3 class="card-title"> <i class="fas fa-plus-circle"></i> Produk Baru</h3>
                         </div>
                         <div class="card-body">
-                            {{-- @if ($errors->any())
-                                <div class="alert alert-danger">
-                                    <ul>
-                                        @foreach ($errors->all() as $error)
-                                            <li>{{ $error }}</li>
-                                        @endforeach
-                                    </ul>
-                                </div>
-                            @endif --}}
-
                             <form action="{{ route('product.store') }}" method="POST" enctype="multipart/form-data">
                                 @csrf
                                 <div class="row">
                                     <!-- Nama Product -->
                                     <div class="col-md-4 mb-3">
-                                        <label for="productName" class="form-label">Nama Product</label>
+                                        <label for="productName" class="form-label">
+                                            Nama Produk
+                                            <i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip"
+                                                data-bs-placement="top"
+                                                title="Masukkan nama produk yang akan dijual, maksimal 255 karakter."></i>
+                                        </label>
                                         <input type="text" class="form-control @error('name') is-invalid @enderror"
-                                            name="name" id="productName" placeholder="Masukkan Nama Product"
+                                            name="name" id="productName" placeholder="Masukkan Nama Produk"
                                             value="{{ old('name') }}">
                                         @error('name')
                                             <div class="invalid-feedback">{{ $message }}</div>
@@ -62,14 +57,24 @@
 
                                     <!-- Kode Product -->
                                     <div class="col-md-4 mb-3">
-                                        <label for="productCode" class="form-label">Kode Product</label>
+                                        <label for="productCode" class="form-label">
+                                            Kode Produk
+                                            <i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip"
+                                                data-bs-placement="top"
+                                                title="Kode produk dibuat secara otomatis dan tidak dapat diubah."></i>
+                                        </label>
                                         <input type="text" class="form-control" name="code" id="productCode"
                                             value="{{ 'KD-' . strtoupper(Str::random(6)) . '-' . now()->year }}" readonly>
                                     </div>
 
                                     <!-- Upload Foto -->
                                     <div class="col-md-4 mb-3">
-                                        <label for="productPhoto" class="form-label">Upload Foto</label>
+                                        <label for="productPhoto" class="form-label">
+                                            Upload Foto
+                                            <i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip"
+                                                data-bs-placement="top"
+                                                title="Unggah foto produk dalam format JPG, PNG, atau JPEG. Ukuran maksimal 2MB."></i>
+                                        </label>
                                         <input type="file" class="form-control @error('photo') is-invalid @enderror"
                                             name="photo" id="productPhoto">
                                         @error('photo')
@@ -79,7 +84,12 @@
 
                                     <!-- Kategori -->
                                     <div class="col-md-4 mb-3">
-                                        <label for="categorySelect" class="form-label">Kategori</label>
+                                        <label for="categorySelect" class="form-label">
+                                            Kategori
+                                            <i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip"
+                                                data-bs-placement="top"
+                                                title="Pilih kategori yang sesuai dengan produk Anda."></i>
+                                        </label>
                                         <select class="form-select @error('category_id') is-invalid @enderror"
                                             name="category_id" id="categorySelect">
                                             <option value="" disabled selected>Pilih Kategori</option>
@@ -97,7 +107,12 @@
 
                                     <!-- Harga Product -->
                                     <div class="col-md-4 mb-3">
-                                        <label for="productPrice" class="form-label">Harga Product</label>
+                                        <label for="productPrice" class="form-label">
+                                            Harga Produk
+                                            <i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip"
+                                                data-bs-placement="top"
+                                                title="Masukkan harga produk tanpa tanda koma atau titik."></i>
+                                        </label>
                                         <input type="number" class="form-control @error('price') is-invalid @enderror"
                                             name="price" id="productPrice" placeholder="Masukkan Harga Product"
                                             value="{{ old('price') }}">
@@ -108,7 +123,12 @@
 
                                     <!-- Stok -->
                                     <div class="col-md-4 mb-3">
-                                        <label for="productStock" class="form-label">Stok</label>
+                                        <label for="productStock" class="form-label">
+                                            Stok
+                                            <i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip"
+                                                data-bs-placement="top"
+                                                title="Masukkan jumlah stok produk yang tersedia."></i>
+                                        </label>
                                         <input type="text" class="form-control @error('stock') is-invalid @enderror"
                                             name="stock" id="productStock" placeholder="Masukkan Stok Product"
                                             value="{{ old('stock') }}">
@@ -119,7 +139,12 @@
 
                                     <!-- Supplier -->
                                     <div class="col-md-4 mb-3">
-                                        <label for="supplierSelect" class="form-label">Supplier</label>
+                                        <label for="supplierSelect" class="form-label">
+                                            Supplier
+                                            <i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip"
+                                                data-bs-placement="top"
+                                                title="Pilih supplier yang menyediakan produk ini."></i>
+                                        </label>
                                         <select class="form-select @error('supplier_id') is-invalid @enderror"
                                             name="supplier_id" id="supplierSelect">
                                             <option value="" disabled selected>Pilih Supplier</option>
@@ -134,34 +159,26 @@
                                             <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
                                     </div>
-
-                                    <!-- PIC -->
-                                    <div class="col-md-4 mb-3">
-                                        <label for="picSelect" class="form-label">PIC</label>
-                                        <select class="form-select @error('pic_id') is-invalid @enderror" name="pic_id"
-                                            id="picSelect">
-                                            <option value="" disabled selected>Pilih PIC</option>
-                                            @foreach ($datapic as $pic)
-                                                <option value="{{ $pic->id }}"
-                                                    {{ old('pic_id') == $pic->id ? 'selected' : '' }}>
-                                                    {{ $pic->name }}
-                                                </option>
-                                            @endforeach
-                                        </select>
-                                        @error('pic_id')
-                                            <div class="invalid-feedback">{{ $message }}</div>
-                                        @enderror
-                                    </div>
                                 </div>
                                 <div class="d-flex justify-content-end">
                                     <button type="submit" class="btn btn-primary me-2">
-                                        <i class="fas fa-save"></i> Simpan Product
+                                        <i class="fas fa-save"></i> Simpan Produk
                                     </button>
                                     <a href="{{ route('product.index') }}" class="btn btn-danger">
                                         <i class="fas fa-times"></i> Batal
                                     </a>
                                 </div>
                             </form>
+
+                            <script>
+                                // Inisialisasi Bootstrap Tooltip
+                                document.addEventListener('DOMContentLoaded', function() {
+                                    const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+                                    tooltipTriggerList.map(function(tooltipTriggerEl) {
+                                        return new bootstrap.Tooltip(tooltipTriggerEl);
+                                    });
+                                });
+                            </script>
                         </div>
                     </div>
                 </div>

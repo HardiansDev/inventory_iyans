@@ -1,7 +1,7 @@
 @extends('layouts.master')
 
 @section('title')
-    <title>Aplikasi Inventory | User</title>
+    <title>Sistem Inventory Iyan | Pengguna</title>
 @endsection
 
 @section('content')
@@ -9,7 +9,7 @@
         <div class="container-fluid">
             <div class="row align-items-center justify-content-between">
                 <div class="col-auto">
-                    <h1 class="mb-0 text-black">Management User</h1>
+                    <h1 class="mb-0 text-black">Manajemen Pengguna</h1>
                 </div>
                 <div class="col-auto">
                     <nav aria-label="breadcrumb">
@@ -19,7 +19,7 @@
                                     <i class="fa fa-dashboard"></i> Dashboard
                                 </a>
                             </li>
-                            <li class="breadcrumb-item active" aria-current="page">User</li>
+                            <li class="breadcrumb-item active" aria-current="page">Pengguna</li>
                         </ol>
                     </nav>
                 </div>
@@ -33,7 +33,7 @@
             <div class="col-md-12">
                 <div class="box box-primary">
                     <div class="box-header with-border">
-                        <h3 class="box-title">Form Input User</h3>
+                        <h3 class="box-title">Tambah Pengguna</h3>
                     </div>
 
                     <form action="{{ route('user.store') }}" method="POST" id="userForm">
@@ -50,14 +50,14 @@
                                     placeholder="Masukkan Email" required>
                             </div>
                             <div class="form-group col-md-4">
-                                <label for="password">Password</label>
+                                <label for="password">Kata sandi</label>
                                 <input type="password" class="form-control" name="password" id="password"
                                     placeholder="Masukkan Password" required>
                             </div>
                             <div class="form-group col-md-4">
-                                <label for="role">Role</label>
+                                <label for="role">Peran</label>
                                 <select class="form-control" name="role" id="role" required>
-                                    <option value="" selected disabled>Pilih Role</option>
+                                    <option value="" selected disabled>Pilih Peran</option>
                                     <option value="superadmin">Super Admin</option>
                                     <option value="admin_gudang">Admin Gudang</option>
                                     <option value="kasir">Kasir</option>
@@ -69,7 +69,7 @@
                             <div class="btn-group" role="group" aria-label="User Actions">
                                 <!-- Tombol Tambah User -->
                                 <button type="submit" class="btn btn-primary btn-sm">
-                                    <i class="fa fa-plus me-1"></i>Tambah User
+                                    <i class="fa fa-plus me-1"></i>Tambah Pengguna
                                 </button>
                                 <!-- Tombol Reset -->
                                 <button type="button" class="btn btn-danger btn-sm" id="resetButton">
@@ -95,7 +95,7 @@
             <div class="col-md-12">
                 <div class="box box-primary">
                     <div class="box-header with-border">
-                        <h3 class="box-title">Data User</h3>
+                        <h3 class="box-title">Data Pengguna</h3>
                         <div class="box-tools pull-right">
                             <form action="{{ route('user.index') }}" method="GET" class="form-inline">
                                 <div class="input-group input-group-sm">
@@ -117,7 +117,7 @@
                                     <th>No</th>
                                     <th>Email</th>
                                     <th>Username</th>
-                                    <th>Role</th>
+                                    <th>Peran</th>
                                     <th>Aksi</th>
                                 </tr>
                             </thead>
@@ -146,7 +146,7 @@
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="5" class="text-center">Data User Tidak Ada</td>
+                                        <td colspan="5" class="text-center">User Tidak Ada</td>
                                     </tr>
                                 @endforelse
                             </tbody>

@@ -38,15 +38,6 @@ class ParameterSeeder extends Seeder
             Supplier::create($supplier);
         }
 
-        // Seed PICs
-        $pics = [
-            ['name' => 'PIC A'],
-            ['name' => 'PIC B'],
-            ['name' => 'PIC C'],
-        ];
-
-        foreach ($pics as $pic) {
-            Pic::create($pic);
-        }
+        
     }
 }

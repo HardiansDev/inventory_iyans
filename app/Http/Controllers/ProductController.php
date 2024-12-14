@@ -2,17 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Support\Carbon;
 use App\Exports\ProductsExport;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Models\Product;
 use App\Models\Category;
 use App\Models\Supplier;
-use App\Models\ProductIn;
-use App\Models\Pic;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
-// use Barryvdh\DomPDF\Facade as PDF;
 
 
 class ProductController extends Controller
@@ -47,9 +43,8 @@ class ProductController extends Controller
     {
         $datacategory = Category::all();
         $datasupplier = Supplier::all();
-        $datapic = Pic::all();
 
-        return view('product.create', compact('datacategory', 'datasupplier', 'datapic'));
+        return view('product.create', compact('datacategory', 'datasupplier'));
     }
 
     /**
@@ -64,9 +59,7 @@ class ProductController extends Controller
                 'photo' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
                 'category_id' => 'nullable|exists:categories,id',
                 'supplier_id' => 'nullable|exists:suppliers,id',
-                'pic_id' => 'nullable|exists:pics,id',
                 'price' => 'required|numeric',
-                // 'status' => 'required|max:50',
                 'stock' => 'required|string|max:50',
             ],
             [
@@ -84,7 +77,6 @@ class ProductController extends Controller
 
                 'category_id.exists' => 'Kategori yang dipilih tidak valid.',
                 'supplier_id.exists' => 'Supplier yang dipilih tidak valid.',
-                'pic_id.exists' => 'PIC yang dipilih tidak valid.',
 
                 'price.required' => 'Harga wajib diisi.',
                 'price.numeric' => 'Harga harus berupa angka.',
@@ -106,7 +98,7 @@ class ProductController extends Controller
         // Create product with validated data
         Product::create($validatedData);
 
-        return redirect()->route('product.index')->with('success', 'Product added successfully!');
+        return redirect()->route('product.index')->with('success', 'Produk ditambahkan!');
     }
 
 
@@ -115,7 +107,7 @@ class ProductController extends Controller
      */
     public function show($id)
     {
-        $product = Product::with(['category', 'supplier', 'pic'])->findOrFail($id);
+        $product = Product::with(['category', 'supplier'])->findOrFail($id);
 
         return view('product.show', compact('product'));
     }
@@ -128,9 +120,8 @@ class ProductController extends Controller
         $product = Product::findOrFail($id);
         $datacategory = Category::all();
         $datasupplier = Supplier::all();
-        $datapic = Pic::all();
 
-        return view('product.edit', compact('product', 'datacategory', 'datasupplier', 'datapic'));
+        return view('product.edit', compact('product', 'datacategory', 'datasupplier'));
     }
 
     /**
@@ -141,19 +132,16 @@ class ProductController extends Controller
         // Validasi input
         $validatedData = $request->validate([
             'name' => 'required|string|max:50',
-            // Ensure unique code, except for the current product
             'code' => 'required|string|max:50|unique:products,code,' . $id,
             'photo' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
             'category_id' => 'nullable|exists:categories,id',
             'supplier_id' => 'nullable|exists:suppliers,id',
-            'pic_id' => 'nullable|exists:pics,id',
             'price' => 'required|numeric',
             'stock' => 'required|string|max:50',
         ]);
 
         // Find the product by ID
         $product = Product::findOrFail($id);
-
         // Handle photo upload (if present)
         if ($request->hasFile('photo')) {
             // Delete old photo if it exists
@@ -171,7 +159,7 @@ class ProductController extends Controller
         $product->update($validatedData);
 
         // Redirect with success message
-        return redirect()->route('product.index')->with('success', 'Product successfully updated.');
+        return redirect()->route('product.index')->with('success', 'Produk Telah di Update.');
     }
 
     public function destroy($id)
@@ -179,7 +167,7 @@ class ProductController extends Controller
         $product = Product::findOrFail($id);
         $product->delete();
 
-        return redirect()->route('product.index')->with('success', 'Product successfully deleted.');
+        return redirect()->route('product.index')->with('success', 'Produk Telah di Hapus.');
     }
 
     public function export(Request $request)

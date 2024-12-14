@@ -1,6 +1,6 @@
 @extends('layouts.master')
 @section('title')
-    <title>Aplikasi Inventory | Category</title>
+    <title>Sistem Inventory Iyan | Kategori</title>
 @endsection
 
 @section('content')
@@ -8,7 +8,7 @@
         <div class="container-fluid">
             <div class="row align-items-center justify-content-between">
                 <div class="col-auto">
-                    <h1 class="mb-0 text-black">Management Category</h1>
+                    <h1 class="mb-0 text-black">Manajemen Kategori</h1>
                 </div>
                 <div class="col-auto">
                     <nav aria-label="breadcrumb">
@@ -18,7 +18,7 @@
                                     <i class="fa fa-dashboard"></i> Dashboard
                                 </a>
                             </li>
-                            <li class="breadcrumb-item active" aria-current="page">Category</li>
+                            <li class="breadcrumb-item active" aria-current="page">Kategori</li>
                         </ol>
                     </nav>
                 </div>
@@ -31,7 +31,7 @@
             <div class="col-md-12">
                 <div class="box">
                     <div class="box-header">
-                        <h3 class="box-title">Data Category</h3>
+                        <h3 class="box-title">Data Kategori</h3>
                     </div>
                     <!-- /.box-header -->
                     <div class="box-body">
@@ -43,10 +43,10 @@
                                         <div class="input-group">
                                             <input type="text"
                                                 class="form-control {{ $errors->has('name') ? 'is-invalid' : '' }}"
-                                                name="name" placeholder="Input Category Disini.." id="name"
+                                                name="name" placeholder="Masukkan Kategori Disini.." id="name"
                                                 required>
                                             <span class="input-group-btn">
-                                                <button class="btn btn-info btn-flat">Tambah Category</button>
+                                                <button class="btn btn-info btn-flat">Tambah Kategori</button>
                                             </span>
                                         </div>
                                     </form>
@@ -72,8 +72,8 @@
                             <thead>
                                 <tr>
                                     <th>No</th>
-                                    <th>Nama Category</th>
-                                    <th>Action</th>
+                                    <th>Nama Kategori</th>
+                                    <th>Aksi</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -90,7 +90,6 @@
                                                 class="btn btn-warning btn-sm">
                                                 <i class="fas fa-edit"></i> Edit
                                             </a>
-
                                             <!-- Tombol Hapus -->
                                             <form action="{{ route('category.destroy', ['category' => $item->id]) }}"
                                                 method="POST" style="display:inline;">
@@ -101,13 +100,11 @@
                                                     <i class="fas fa-trash-alt"></i> Hapus
                                                 </button>
                                             </form>
-
                                         </td>
-
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="4" class="text-center">Sayang Banget Data nya Gaada</td>
+                                        <td colspan="4" class="text-center">Kategori Tidak Ada</td>
                                     </tr>
                                 @endforelse
                             </tbody>

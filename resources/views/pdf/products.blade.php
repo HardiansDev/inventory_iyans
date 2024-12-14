@@ -47,7 +47,7 @@
     <div class="header">
         <div class="company-info">
             <p style="font-size: 24px; font-weight: bold; color: rgb(24, 24, 163); margin: 0;">HDTECH.ID</p>
-            <p style="font-size: 14px; margin-top: 5px;">Jl. Kemajuan No. 123, Jakarta Selatan, Indonesia</p>
+            <p style="font-size: 11px; margin-top: 5px;">Bekasi, Jawa Barat</p>
         </div>
         <div class="date">
             <p><strong>Tanggal:</strong> {{ date('d M Y') }}</p>
@@ -69,9 +69,7 @@
                 <th>Kategori</th>
                 <th>Harga</th>
                 <th>Stok</th>
-                <th>Quality</th>
                 <th>Supplier</th>
-                <th>PIC</th>
             </tr>
         </thead>
         <tbody>
@@ -83,9 +81,7 @@
                 <td>{{ $product->category->name }}</td>
                 <td>Rp. {{ number_format($product->price, 0, ',', '.') }}</td>
                 <td>{{ $product->stock }}</td>
-                <td>{{ $product->quality }}</td>
                 <td>{{ $product->supplier->name }}</td>
-                <td>{{ $product->pic->name }}</td>
             </tr>
             @endforeach
         </tbody>

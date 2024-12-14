@@ -22,18 +22,14 @@ class CreateProductOutsTable extends Migration
                 ->constrained((new Product())->getTable())
                 ->onDelete('cascade');
 
-            $table->foreignIdFor(Pic::class, 'pic_id')
-                ->constrained((new Pic())->getTable())
-                ->onDelete('cascade');
 
             $table->foreignIdFor(ProductIn::class, 'product_ins_id')
                 ->constrained((new ProductIn())->getTable())
                 ->onDelete('cascade');
 
-            $table->dateTime('dateout');
+            $table->date('dateout');
             $table->string('nameout');
             $table->string('status'); //verifikasi pic
-            $table->string('bukti');
             $table->integer('qty');
             $table->timestamps();
         });

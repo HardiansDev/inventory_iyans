@@ -1,6 +1,6 @@
 @extends('layouts.master')
 @section('title')
-    <title>Aplikasi Inventory | Product</title>
+    <title>Sistem Inventory Iyan | Produk</title>
 @endsection
 
 @section('styles')
@@ -112,8 +112,7 @@
 @section('content')
     <section class="content-header">
         <h1>
-            Page Details Product
-            <small>Gudangku</small>
+            Halaman Detail Produk
         </h1>
     </section>
 
@@ -121,7 +120,7 @@
         <div class="row">
             <div class="box">
                 <div class="box-header">
-                    <h3 class="box-title">Detail Product {{ $product->name }}</h3>
+                    <h3 class="box-title">Detail Produk {{ $product->name }}</h3>
                     <hr>
                 </div>
 
@@ -133,10 +132,9 @@
                             <p><span class="label">Kode Produk :</span> {{ $product->code }}</p>
                             <p><span class="label">Kategori :</span> {{ $product->category->name }}</p>
                             <p><span class="label">Harga :</span> Rp. {{ number_format($product->price, 0, ',', '.') }}</p>
-                            <p><span class="label">Stock :</span> {{ $product->stock }}</p>
+                            <p><span class="label">Stok :</span> {{ $product->stock }}</p>
                             <p><span class="label">Status :</span> {{ $product->status }}</p>
                             <p><span class="label">Supplier :</span> {{ $product->supplier->name }}</p>
-                            <p><span class="label">PIC :</span> {{ $product->pic->name }}</p>
                         </div>
 
                         <!-- Gambar Produk (sebelah kanan) -->
@@ -160,7 +158,4 @@
             </div>
         </div>
     </section>
-
-    <!-- Script untuk Print PDF -->
-    {{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.js"></script> --}}
 @endsection

@@ -1,7 +1,7 @@
 @extends('layouts.master')
 
 @section('title')
-    <title>Aplikasi Inventory | Supplier</title>
+    <title>Sistem Inventory Iyan | Supplier</title>
 @endsection
 
 @section('content')
@@ -9,7 +9,7 @@
     <div class="container-fluid">
         <div class="row align-items-center justify-content-between">
             <div class="col-auto">
-                <h1 class="mb-0 text-black">Management Supplier</h1>
+                <h1 class="mb-0 text-black">Data Supplier</h1>
             </div>
             <div class="col-auto">
                 <nav aria-label="breadcrumb">
@@ -32,7 +32,7 @@
             <div class="col-md-12">
                 <div class="box box-primary">
                     <div class="box-header with-border">
-                        <h3 class="box-title">Form Input Supplier</h3>
+                        <h3 class="box-title">Tambah Supplier</h3>
                     </div>
 
                     <!-- Form Input Supplier -->
@@ -118,7 +118,7 @@
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="4" class="text-center">Data Supplier Tidak Ada</td>
+                                        <td colspan="4" class="text-center">Supplier Tidak Ada</td>
                                     </tr>
                                 @endforelse
                             </tbody>

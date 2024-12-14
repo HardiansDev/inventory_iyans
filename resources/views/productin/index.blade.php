@@ -1,7 +1,7 @@
 @extends('layouts.master')
 
 @section('title')
-    <title>Aplikasi Inventory | Data Produk Masuk</title>
+    <title>Sistem Inventory Iyan | Manajemen Produk Masuk</title>
 @endsection
 
 @section('content')
@@ -10,7 +10,7 @@
         <div class="container-fluid">
             <div class="row align-items-center justify-content-between">
                 <div class="col-auto">
-                    <h1 class="mb-0 text-black">Management Produk Masuk</h1>
+                    <h1 class="mb-0 text-black">Data Produk Masuk</h1>
                 </div>
                 <div class="col-auto">
                     <nav aria-label="breadcrumb">
@@ -35,7 +35,7 @@
                 <div class="box">
                     <!-- Header -->
                     <div class="box-header d-flex flex-column align-items-start mb-3">
-                        
+
                     </div>
                     <!-- /.box-header -->
 
@@ -53,8 +53,8 @@
                                         <th>Kategori Produk</th>
                                         <th>Harga</th>
                                         <th>Qty</th>
-                                        <th>Status</th>
                                         <th>Penerima</th>
+                                        <th>Status</th>
                                         <th>Aksi</th>
                                     </tr>
                                 </thead>
@@ -76,6 +76,7 @@
                                             <td>{{ $productIn->product->category->name }}</td>
                                             <td>Rp {{ number_format($productIn->product->price, 0, ',', '.') }}</td>
                                             <td>{{ $productIn->qty }}</td>
+                                            <td>{{ $productIn->recipient }}</td>
                                             <td>
                                                 @if ($productIn->status === 'menunggu')
                                                 <span class="badge bg-warning text-dark">Menunggu</span>
@@ -85,7 +86,6 @@
                                                     <span class="badge bg-danger">Ditolak</span>
                                                 @endif
                                             </td>
-                                            <td>{{ $productIn->recipient }}</td>
                                             <td>
                                                 <div class="dropdown">
                                                     <button class="btn btn-primary btn-sm dropdown-toggle" type="button"

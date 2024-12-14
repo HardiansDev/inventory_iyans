@@ -24,11 +24,11 @@
         <ul class="sidebar-menu" data-widget="tree">
             <li class="header">MENU UTAMA</li>
             @if (in_array(Auth::user()->role, ['superadmin', 'manager']))
-            <li>
-                <a href="{{ route('dashboard') }}">
-                    <i class="fa fa-dashboard"></i> <span>Dashboard</span>
-                </a>
-            </li>
+                <li>
+                    <a href="{{ route('dashboard') }}">
+                        <i class="fa fa-dashboard"></i> <span>Dashboard</span>
+                    </a>
+                </li>
             @endif
 
             @if (in_array(Auth::user()->role, ['superadmin', 'admin_gudang']))
@@ -70,14 +70,6 @@
                 </li>
             @endif
 
-            @if (in_array(Auth::user()->role, ['superadmin', 'admin_gudang']))
-                <li>
-                    <a href="{{ route('pic.index') }}">
-                        <i class="fa fa-crosshairs"></i> <span>PIC</span>
-                    </a>
-                </li>
-            @endif
-
             @if (in_array(Auth::user()->role, ['admin_gudang', 'superadmin']))
                 <li>
                     <a href="{{ route('productin.index') }}">
@@ -91,23 +83,6 @@
                     <a href="{{ route('product-out.index') }}">
                         <i class="fa fa-sign-out"></i> <span>Penjualan</span>
                     </a>
-                </li>
-            @endif
-
-            @if (in_array(Auth::user()->role, ['superadmin', 'kasir']))
-                <li class="treeview">
-                    <a href="#">
-                        <i class="fa fa-users"></i> <span>Pelanggan</span>
-                        <span class="pull-right-container">
-                            <i class="fa fa-angle-left pull-right"></i>
-                        </span>
-                    </a>
-                    <ul class="treeview-menu">
-                        <li><a href="{{ route('customer.index') }}"><i class="fa fa-circle-o"></i> Daftar Data
-                                Pelanggan</a></li>
-                        <li><a href="{{ route('customer.create') }}"><i class="fa fa-circle-o"></i> Tambah
-                                Pelanggan</a></li>
-                    </ul>
                 </li>
             @endif
 

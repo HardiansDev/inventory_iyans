@@ -40,7 +40,7 @@ class CategoryController extends Controller
             'name' => $request->name
         ]);
 
-        return redirect()->route('category.index')->with('success', 'Category successfully added');
+        return redirect()->route('category.index')->with('success', 'Kategori Telah ditambah!');
     }
 
     // Display the specified resource
@@ -68,7 +68,7 @@ class CategoryController extends Controller
         $category->name = $request->name;
         $category->save();
 
-        return redirect()->route('category.index')->with('success', 'Category successfully updated');
+        return redirect()->route('category.index')->with('success', 'Kategori Telah diupdate!');
     }
 
     // Remove the specified resource from storage
@@ -82,6 +82,6 @@ class CategoryController extends Controller
         // Delete the pic
         $category->delete();
 
-        return redirect(route('category.index'))->with('success', 'Category successfully deleted.');
+        return redirect(route('category.index'))->with('success', 'Kategori Telah dihapus!.');
     }
 }

@@ -42,7 +42,7 @@ class SupplierController extends Controller
             'name' => $request->name,
             'address' => $request->address
         ]);
-        return redirect(route('supplier.index'))->with('success', 'Supplier successfully added');
+        return redirect(route('supplier.index'))->with('success', 'Supplier ditambah!');
     }
 
     // Display the specified resource
@@ -72,7 +72,7 @@ class SupplierController extends Controller
         $supplier->address = $request->address;
         $supplier->save();
 
-        return redirect(route('supplier.index'))->with('success', 'Supplier successfully updated');
+        return redirect(route('supplier.index'))->with('success', 'Supplier Telah diupdate!');
     }
 
     // Remove the specified resource from storage
@@ -86,7 +86,6 @@ class SupplierController extends Controller
         // Delete the pic
         $supplier->delete();
 
-        return redirect(route('supplier.index'))->with('success', 'Supplier successfully deleted.');
+        return redirect(route('supplier.index'))->with('success', 'Supplier Telah dihapus!.');
     }
-
 }

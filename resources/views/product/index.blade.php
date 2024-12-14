@@ -1,7 +1,7 @@
 @extends('layouts.master')
 
 @section('title')
-    <title>Aplikasi Inventory | Product</title>
+    <title>Sistem Inventory Iyan | Produk</title>
 @endsection
 
 @section('content')
@@ -10,7 +10,7 @@
         <div class="container-fluid">
             <div class="row align-items-center justify-content-between">
                 <div class="col-auto">
-                    <h1 class="mb-0 text-black">Management Produk</h1>
+                    <h1 class="mb-0 text-black">Manajemen Produk</h1>
                 </div>
                 <div class="col-auto">
                     <nav aria-label="breadcrumb">
@@ -39,7 +39,7 @@
                             <i class="fas fa-plus-circle"></i> Tambah Produk
                         </a>
                         <button id="deleteAllBtn" class="btn btn-danger btn-sm mt-2" disabled>
-                            <i class="fas fa-trash-alt"></i> Hapus Semua Produk Terpilih
+                            <i class="fas fa-trash-alt"></i> Hapus Semua
                         </button>
                     </div>
                     <!-- /.box-header -->
@@ -65,10 +65,10 @@
                                 <form action="{{ route('product.export') }}" method="POST" class="d-flex gap-2">
                                     @csrf
                                     <button class="btn btn-success btn-sm" type="submit" name="export_type" value="excel">
-                                        <i class="fas fa-file-excel"></i> Export Excel
+                                        <i class="fas fa-file-excel"></i> Unduh Excel
                                     </button>
                                     <button class="btn btn-danger btn-sm" type="submit" name="export_type" value="pdf">
-                                        <i class="fas fa-file-pdf"></i> Export PDF
+                                        <i class="fas fa-file-pdf"></i> Unduh PDF
                                     </button>
                                 </form>
                             </div>
@@ -88,7 +88,7 @@
                                         <th>Gambar Produk</th>
                                         <th>Kategori Produk</th>
                                         <th>Harga</th>
-                                        <th>Stock</th>
+                                        <th>Stok</th>
                                         <th>Status</th>
                                         <th>Aksi</th>
                                         <th>Masukkin</th>
@@ -182,7 +182,11 @@
                         <div class="modal-body">
                             <!-- Nama Produk (Readonly) -->
                             <div class="form-group">
-                                <label for="product_name">Nama Produk</label>
+                                <label for="product_name">
+                                    Nama Produk
+                                    <i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip"
+                                        data-bs-placement="top" title="Nama produk ini tidak dapat diubah."></i>
+                                </label>
                                 <input type="text" class="form-control" name="product_name"
                                     value="{{ $product->name }}" required readonly>
                             </div>
@@ -192,7 +196,11 @@
 
                             <!-- Supplier (Readonly) -->
                             <div class="form-group">
-                                <label for="supplier_name">Supplier</label>
+                                <label for="supplier_name">
+                                    Supplier
+                                    <i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip"
+                                        data-bs-placement="top" title="Supplier dari produk ini tidak dapat diubah."></i>
+                                </label>
                                 <input type="text" class="form-control" value="{{ $product->supplier->name }}"
                                     readonly>
                             </div>
@@ -202,7 +210,11 @@
 
                             <!-- Kategori (Readonly) -->
                             <div class="form-group">
-                                <label for="category_name">Kategori</label>
+                                <label for="category_name">
+                                    Kategori
+                                    <i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip"
+                                        data-bs-placement="top" title="Kategori produk ini tidak dapat diubah."></i>
+                                </label>
                                 <input type="text" class="form-control" value="{{ $product->category->name }}"
                                     readonly>
                             </div>
@@ -212,22 +224,35 @@
 
                             <!-- Input Qty -->
                             <div class="form-group">
-                                <label for="qty">Qty</label>
-                                <input type="number" id="qty" class="form-control" name="qty" required
+                                <label for="qty">
+                                    Qty
+                                    <i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip"
+                                        data-bs-placement="top"
+                                        title="Masukkan jumlah barang yang akan ditambahkan list produk masuk. Maksimal sesuai stok yang tersedia."></i>
+                                </label>
+                                <input type="number" id="qty" class="form-control" name="qty" placeholder="Masukkan Qty" required
                                     min="1" max="{{ $product->stock }}">
                                 <small>Stok Tersedia: {{ $product->stock }}</small>
                             </div>
 
                             <!-- Tanggal Masuk -->
                             <div class="form-group">
-                                <label for="tanggal">Tanggal Masuk</label>
+                                <label for="tanggal">
+                                    Tanggal Masuk
+                                    <i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip"
+                                        data-bs-placement="top" title="Pilih tanggal barang masuk ke dalam list produk masuk."></i>
+                                </label>
                                 <input type="date" id="tanggal" class="form-control" name="date" required>
                             </div>
 
                             <!-- Recipient -->
                             <div class="form-group">
-                                <label for="recipient">Recipient</label>
-                                <input type="text" id="recipient" class="form-control" name="recipient" required>
+                                <label for="recipient">
+                                    Penerima
+                                    <i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip"
+                                        data-bs-placement="top" title="Masukkan nama penerima barang."></i>
+                                </label>
+                                <input type="text" id="recipient" class="form-control" name="recipient" placeholder="Masukkan Nama Penerima" required>
                             </div>
                         </div>
 
@@ -236,6 +261,16 @@
                             <button type="submit" class="btn btn-success">Simpan</button>
                         </div>
                     </form>
+
+                    <script>
+                        // Inisialisasi Bootstrap Tooltip
+                        document.addEventListener('DOMContentLoaded', function() {
+                            const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+                            tooltipTriggerList.map(function(tooltipTriggerEl) {
+                                return new bootstrap.Tooltip(tooltipTriggerEl);
+                            });
+                        });
+                    </script>
                 </div>
             </div>
         </div>

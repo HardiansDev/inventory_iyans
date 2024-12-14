@@ -18,13 +18,13 @@ class UserRoleSeeder extends Seeder
         $users = [
             [
                 'name' => 'Super Admin',
-                'email' => 'superadmin@mail.com',
+                'email' => 'super@mail.com',
                 'password' => Hash::make('admin123'),
                 'role' => 'superadmin',
             ],
             [
                 'name' => 'Admin Gudang',
-                'email' => 'admingudang@mail.com',
+                'email' => 'gudang@mail.com',
                 'password' => Hash::make('admin123'),
                 'role' => 'admin_gudang',
             ],

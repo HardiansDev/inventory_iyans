@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login & Register</title>
+    <title>Sistem Inventory Iyan | Masuk & Daftar</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         body {
@@ -68,7 +68,7 @@
 <body>
     <div class="form-container" id="form-login">
         <!-- Login Form -->
-        <h3 class="form-title">Login</h3>
+        <h3 class="form-title">Masuk</h3>
         @if (session('error'))
             <div class="alert alert-danger">
                 {{ session('error') }}
@@ -87,20 +87,20 @@
                     required>
             </div>
             <div class="mb-3">
-                <label for="password" class="form-label">Password</label>
+                <label for="password" class="form-label">Kata sandi</label>
                 <input type="password" class="form-control" id="password" name="password"
                     placeholder="Masukkan Password" required>
             </div>
-            <button type="submit" class="btn btn-primary w-100">Login</button>
+            <button type="submit" class="btn btn-primary w-100">Masuk</button>
         </form>
         <p class="switch-link">
-            Belum punya akun? <a href="#" id="to-register">Register</a>
+            Belum punya akun? <a href="#" id="to-register">Daftar Yuk</a>
         </p>
     </div>
 
     <div class="form-container d-none" id="form-register">
         <!-- Register Form -->
-        <h3 class="form-title">Register</h3>
+        <h3 class="form-title">Daftar</h3>
         @if ($errors->any())
             <div class="alert alert-danger">
                 <ul>
@@ -123,9 +123,9 @@
                     placeholder="Masukkan Email" required>
             </div>
             <div class="mb-3">
-                <label for="role-register" class="form-label">Role</label>
+                <label for="role-register" class="form-label">Peran</label>
                 <select class="form-select" id="role-register" name="role" required>
-                    <option value="" selected disabled>Pilih Role</option>
+                    <option value="" selected disabled>Pilih Peran</option>
                     <option value="superadmin">Super Admin</option>
                     <option value="admin_gudang">Admin Gudang</option>
                     <option value="kasir">Kasir</option>
@@ -133,19 +133,19 @@
                 </select>
             </div>
             <div class="mb-3">
-                <label for="password-register" class="form-label">Password</label>
+                <label for="password-register" class="form-label">Kata sandi</label>
                 <input type="password" class="form-control" id="password-register" name="password"
                     placeholder="Masukkan Password" required>
             </div>
             <div class="mb-3">
-                <label for="password_confirmation" class="form-label">Konfirmasi Password</label>
+                <label for="password_confirmation" class="form-label">Konfirmasi Kata sandi</label>
                 <input type="password" class="form-control" id="password_confirmation" name="password_confirmation"
                     placeholder="Masukkan Konfirmasi Password" required>
             </div>
-            <button type="submit" class="btn btn-primary w-100">Register</button>
+            <button type="submit" class="btn btn-primary w-100">Silahkan Daftar</button>
         </form>
         <p class="switch-link">
-            Sudah punya akun? <a href="#" id="to-login">Login</a>
+            Sudah punya akun? <a href="#" id="to-login">Masuk yuk</a>
         </p>
     </div>
 

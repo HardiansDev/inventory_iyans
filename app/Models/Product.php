@@ -22,7 +22,6 @@ class Product extends Model
         'price',          // Harga produk
         'stock',          // Informasi stok
         'supplier_id',    // ID supplier
-        'pic_id',         // ID PIC (Person in Charge)
         'status',
     ];
 
@@ -40,13 +39,6 @@ class Product extends Model
     {
         return $this->belongsTo(Supplier::class)->withDefault([
             'name' => 'No Supplier',
-        ]);
-    }
-
-    public function pic()
-    {
-        return $this->belongsTo(Pic::class, 'pic_id')->withDefault([
-            'name' => 'No PIC Assigned',
         ]);
     }
 

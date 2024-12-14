@@ -22,14 +22,10 @@ class CreateProductsTable extends Migration
             // Foreign keys with SET NULL
             $table->foreignId('category_id')->nullable()->constrained()->onDelete('set null');
             $table->foreignId('supplier_id')->nullable()->constrained()->onDelete('set null');
-            $table->foreignId('pic_id')->nullable()->constrained('pics')->onDelete('set null'); // explicitly reference the 'pics' table
 
             $table->decimal('price', 10, 2);
-            // $table->integer('qty');
             $table->string('stock');
             $table->string('status')->default('menunggu');
-            // $table->string('purchase');
-            // $table->string('billnum');
             $table->timestamps();
         });
     }
@@ -44,7 +40,6 @@ class CreateProductsTable extends Migration
         Schema::table('products', function (Blueprint $table) {
             $table->dropForeign(['category_id']);
             $table->dropForeign(['supplier_id']);
-            $table->dropForeign(['pic_id']);
         });
         Schema::dropIfExists('products');
     }

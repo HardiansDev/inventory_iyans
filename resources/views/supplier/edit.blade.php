@@ -1,23 +1,38 @@
 @extends('layouts.master')
 
 @section('title')
-    <title>Aplikasi Inventory | Supplier</title>
+    <title>Sistem Inventory Iyan | Supplier</title>
 @endsection
 
 @section('content')
-    <section class="content-header">
-        <h1>
-            Management Supplier
-            <small>Gudangku </small>
-        </h1>
-    </section>
+<section class="content-header py-4 bg-light rounded">
+    <div class="container-fluid">
+        <div class="row align-items-center justify-content-between">
+            <div class="col-auto">
+                <h1 class="mb-0 text-black">Data Supplier</h1>
+            </div>
+            <div class="col-auto">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb mb-0">
+                        <li class="breadcrumb-item">
+                            <a href="{{ route('dashboard') }}" class="text-decoration-none text-secondary">
+                                <i class="fa fa-dashboard"></i> Dashboard
+                            </a>
+                        </li>
+                        <li class="breadcrumb-item active" aria-current="page">Edit Supplier</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </div>
+</section>
 
     <section class="content">
         <div class="row">
             <div class="col-md-12">
                 <div class="box">
                     <div class="box-header">
-                        <h3 class="box-title">Form Edit Supplier</h3>
+                        <h3 class="box-title">Edit Supplier</h3>
                     </div>
                     <!-- /.box-header -->
                     <div class="box-body">
@@ -68,12 +83,8 @@
                                                     </div>
                                                 </div>
                                             </div>
-
-
                                         </div>
                                     </form>
-
-
                                 </div>
                             </div>
                         </div>

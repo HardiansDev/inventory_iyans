@@ -1,6 +1,6 @@
 @extends('layouts.master')
 @section('title')
-    <title>Aplikasi Inventory | Dashboard</title>
+    <title>Sistem Inventory Iyan | Dashboard</title>
 @endsection
 
 @section('content')
@@ -36,27 +36,18 @@
                 <div class="small-box bg-blue">
                     <div class="inner">
                         <h3>0</h3>
-                        <p>Data Product</p>
+                        <p>Data Produk</p>
                     </div>
                 </div>
             </div>
             <!-- ./col -->
-            <div class="col-lg-3 col-xs-6">
-                <!-- small box -->
-                <div class="small-box bg-navy">
-                    <div class="inner">
-                        <h3>0</h3>
-                        <p>Data Customer</p>
-                    </div>
-                </div>
-            </div>
             <!-- ./col -->
             <div class="col-lg-3 col-xs-6">
                 <!-- small box -->
                 <div class="small-box bg-orange">
                     <div class="inner">
                         <h3>0</h3>
-                        <p>Product In</p>
+                        <p>Produk Masuk</p>
                     </div>
                 </div>
             </div>
@@ -66,11 +57,20 @@
                 <div class="small-box bg-red">
                     <div class="inner">
                         <h3>0</h3>
-                        <p>Product Out</p>
+                        <p>Produk Keluar</p>
                     </div>
                 </div>
             </div>
             <!-- ./col -->
+            <div class="col-lg-3 col-xs-6">
+                <!-- small box -->
+                <div class="small-box bg-green">
+                    <div class="inner">
+                        <h3>0</h3>
+                        <p>Pengguna</p>
+                    </div>
+                </div>
+            </div>
         </div>
         <!-- /.row -->
 
@@ -79,19 +79,19 @@
             <!-- Left col -->
             <section class="col-lg-7 connectedSortable">
                 <!-- Customer Graph -->
-                <div class="box">
+                {{-- <div class="box">
                     <div class="box-header with-border">
                         <h3 class="box-title">Customer Growth</h3>
                     </div>
                     <div class="box-body">
                         <canvas id="customerGrowthChart" height="300"></canvas>
                     </div>
-                </div>
+                </div> --}}
 
                 <!-- Sales Graph per Week -->
                 <div class="box">
                     <div class="box-header with-border">
-                        <h3 class="box-title">Sales per Week</h3>
+                        <h3 class="box-title">Penjualan per Minggu</h3>
                     </div>
                     <div class="box-body">
                         <canvas id="salesWeekChart" height="300"></canvas>
@@ -101,7 +101,7 @@
                 <!-- Sales Graph per 6 Months -->
                 <div class="box">
                     <div class="box-header with-border">
-                        <h3 class="box-title">Sales per 6 Months</h3>
+                        <h3 class="box-title">Penjualan per Bulan</h3>
                     </div>
                     <div class="box-body">
                         <canvas id="sales6MonthsChart" height="300"></canvas>
@@ -111,7 +111,7 @@
                 <!-- Sales Graph per Year -->
                 <div class="box">
                     <div class="box-header with-border">
-                        <h3 class="box-title">Sales per Year</h3>
+                        <h3 class="box-title">Penjualan per Tahun</h3>
                     </div>
                     <div class="box-body">
                         <canvas id="salesYearChart" height="300"></canvas>
@@ -125,7 +125,7 @@
                 <!-- Product Graph -->
                 <div class="box">
                     <div class="box-header with-border">
-                        <h3 class="box-title">Product Data</h3>
+                        <h3 class="box-title">Data Produk</h3>
                     </div>
                     <div class="box-body">
                         <canvas id="productChart" height="300"></canvas>
@@ -135,7 +135,7 @@
                 <!-- Product In Graph -->
                 <div class="box">
                     <div class="box-header with-border">
-                        <h3 class="box-title">Product In</h3>
+                        <h3 class="box-title">Produk Masuk</h3>
                     </div>
                     <div class="box-body">
                         <canvas id="productInChart" height="300"></canvas>
@@ -145,7 +145,7 @@
                 <!-- Product Out Graph -->
                 <div class="box">
                     <div class="box-header with-border">
-                        <h3 class="box-title">Product Out</h3>
+                        <h3 class="box-title">Produk Keluar</h3>
                     </div>
                     <div class="box-body">
                         <canvas id="productOutChart" height="300"></canvas>

@@ -2,10 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Support\Facades\DB;
-use App\Models\Product;
-use App\Models\Category;
-use App\Models\Supplier;
+
 use App\Models\ProductIn;
 use Illuminate\Http\Request;
 
@@ -30,16 +27,6 @@ class ProductInController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-
-
-
-
-
-
-
-
-
-
 
     /**
      * Store a newly created resource in storage.
