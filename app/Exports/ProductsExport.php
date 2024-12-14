@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Exports;
 
 use Maatwebsite\Excel\Concerns\FromCollection;
@@ -26,13 +27,8 @@ class ProductsExport implements FromCollection, WithHeadings, WithColumnFormatti
                 'code' => $product->code,
                 'category' => $product->category->name ?? 'No Category',
                 'supplier' => $product->supplier->name ?? 'No Supplier',
-                'pic' => $product->pic->name ?? 'No PIC Assigned',
-                'price' => $product->price,
-                'qty' => $product->qty,
-                'stock' => $product->stock,
-                'quality' => $product->quality,
-                'purchase' => $product->purchase,
-                'billnum' => $product->billnum,
+                'price' => number_format($product->price, 2), // Format price as decimal with two decimal places
+                'stock' => (string) $product->stock, // Ensure stock is treated as a string
             ];
         });
     }
@@ -41,17 +37,12 @@ class ProductsExport implements FromCollection, WithHeadings, WithColumnFormatti
     public function headings(): array
     {
         return [
-            'Product Name',
-            'Product Code',
-            'Category',
+            'Nama Produk',
+            'Kode Produk',
+            'Kategori',
             'Supplier',
-            'PIC',
-            'Price',
-            'Quantity',
-            'Stock',
-            'Quality',
-            'Purchase',
-            'Billing Number',
+            'Harga',
+            'Stok',
         ];
     }
 
@@ -59,8 +50,8 @@ class ProductsExport implements FromCollection, WithHeadings, WithColumnFormatti
     public function columnFormats(): array
     {
         return [
-            'F' => NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1,  // Apply formatting to 'Price' column
-
+            'E' => NumberFormat::FORMAT_NUMBER_00,  // Apply decimal format (2 decimal places) to 'Harga' column
+            'F' => '@',  // Treat 'Stok' as string (no numeric formatting)
         ];
     }
 }
