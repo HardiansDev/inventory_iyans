@@ -38,8 +38,18 @@
                         <a href="{{ route('product.create') }}" class="btn btn-success btn-sm">
                             <i class="fas fa-plus-circle"></i> Tambah Produk
                         </a>
+                        {{-- <div class="dropdown ms-2">
+                            <button class="btn btn-primary btn-sm dropdown-toggle" type="button" id="dropdownMenuButton"
+                                data-bs-toggle="dropdown" aria-expanded="false">
+                                Unduh Data
+                            </button>
+                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                <li><a class="dropdown-item" href="">Unduh PDF</a></li>
+                                <li><a class="dropdown-item" href="">Unduh Excel</a></li>
+                            </ul>
+                        </div> --}}
                         <button id="deleteAllBtn" class="btn btn-danger btn-sm ms-auto" disabled>
-                            <i class="fas fa-trash-alt"></i> Hapus Yang Dipilih
+                            <i class="fas fa-trash-alt"></i> Hapus Terpilih
                         </button>
                     </div>
 
@@ -63,16 +73,37 @@
 
                             <!-- Export -->
                             <div class="d-flex align-items-center gap-2">
-                                <form action="{{ route('product.export') }}" method="POST" class="d-flex gap-2">
-                                    @csrf
-                                    <button class="btn btn-success btn-sm" type="submit" name="export_type" value="excel">
-                                        <i class="fas fa-file-excel"></i> Unduh Excel
+                                <!-- Dropdown Export -->
+                                <div class="dropdown">
+                                    <button class="btn btn-primary btn-sm dropdown-toggle" type="button"
+                                        id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <i class="fas fa-download"></i> Unduh
                                     </button>
-                                    <button class="btn btn-danger btn-sm" type="submit" name="export_type" value="pdf">
-                                        <i class="fas fa-file-pdf"></i> Unduh PDF
-                                    </button>
-                                </form>
+                                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                        <!-- Tombol Unduh Excel -->
+                                        <li>
+                                            <form action="{{ route('product.export') }}" method="POST" class="d-inline">
+                                                @csrf
+                                                <button class="dropdown-item" type="submit" name="export_type"
+                                                    value="excel">
+                                                    <i class="fas fa-file-excel text-success"></i> Unduh Excel
+                                                </button>
+                                            </form>
+                                        </li>
+                                        <!-- Tombol Unduh PDF -->
+                                        <li>
+                                            <form action="{{ route('product.export') }}" method="POST" class="d-inline">
+                                                @csrf
+                                                <button class="dropdown-item" type="submit" name="export_type"
+                                                    value="pdf">
+                                                    <i class="fas fa-file-pdf text-danger"></i> Unduh PDF
+                                                </button>
+                                            </form>
+                                        </li>
+                                    </ul>
+                                </div>
                             </div>
+
                         </div>
 
                         <!-- Table -->

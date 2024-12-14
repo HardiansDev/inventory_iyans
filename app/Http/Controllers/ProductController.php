@@ -7,6 +7,9 @@ use Maatwebsite\Excel\Facades\Excel;
 use App\Models\Product;
 use App\Models\Category;
 use App\Models\Supplier;
+use TCPDF;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
 
@@ -198,4 +201,9 @@ class ProductController extends Controller
         }
         return response()->json(['success' => false, 'message' => 'Tidak ada produk yang dipilih.']);
     }
+
+
+    
+
+
 }
