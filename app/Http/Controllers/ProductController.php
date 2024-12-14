@@ -22,19 +22,17 @@ class ProductController extends Controller
         $datacategory = Category::all();
         $datasupplier = Supplier::all();
 
-
         $products = !empty($search)
-            ? Product::where('name', 'LIKE', '%' . $search . '%')
-            ->with('category')
-            ->paginate(5)
-            ->onEachSide(2)
-            : Product::with('category')
-            ->orderBy('created_at', 'DESC')
-            ->paginate(5)
-            ->onEachSide(2);
+            ? Product::where('name', 'LIKE', '%' . $search . '%')->with('category')->get()
+            : Product::with('category')->orderBy('created_at', 'DESC')->get();
 
         return view('product.index', compact('products', 'search', 'datacategory', 'datasupplier'));
     }
+
+
+
+
+
 
     /**
      * Show the form for creating a new resource.

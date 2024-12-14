@@ -17,7 +17,6 @@ class DatabaseSeeder extends Seeder
 
         $this->call(UserRoleSeeder::class);
         $this->call(ParameterSeeder::class);
-
-
+        $this->call(ProductSeeder::class);
     }
 }

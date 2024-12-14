@@ -34,14 +34,15 @@
             <div class="col-md-12">
                 <div class="box">
                     <!-- Header -->
-                    <div class="box-header d-flex flex-column align-items-start mb-3">
+                    <div class="box-header d-flex justify-content-between align-items-center">
                         <a href="{{ route('product.create') }}" class="btn btn-success btn-sm">
                             <i class="fas fa-plus-circle"></i> Tambah Produk
                         </a>
-                        <button id="deleteAllBtn" class="btn btn-danger btn-sm mt-2" disabled>
-                            <i class="fas fa-trash-alt"></i> Hapus Semua
+                        <button id="deleteAllBtn" class="btn btn-danger btn-sm ms-auto" disabled>
+                            <i class="fas fa-trash-alt"></i> Hapus Yang Dipilih
                         </button>
                     </div>
+
                     <!-- /.box-header -->
 
                     <div class="box-body">
@@ -82,7 +83,7 @@
                                         <th>
                                             <input type="checkbox" id="selectAll" />
                                         </th>
-                                        <th>No</th>
+                                        {{-- <th>No</th> --}}
                                         <th>Nama Produk</th>
                                         <th>Kode Produk</th>
                                         <th>Gambar Produk</th>
@@ -100,7 +101,6 @@
                                             <td>
                                                 <input type="checkbox" class="select-item" value="{{ $product->id }}" />
                                             </td>
-                                            <td>{{ $loop->iteration }}</td>
                                             <td>{{ $product->name }}</td>
                                             <td>{{ $product->code }}</td>
                                             <td>
@@ -159,6 +159,7 @@
                                     @endforeach
                                 </tbody>
                             </table>
+                            {{-- {{ $products->links() }} --}}
                         </div>
                     </div>
                 </div>
@@ -230,8 +231,8 @@
                                         data-bs-placement="top"
                                         title="Masukkan jumlah barang yang akan ditambahkan list produk masuk. Maksimal sesuai stok yang tersedia."></i>
                                 </label>
-                                <input type="number" id="qty" class="form-control" name="qty" placeholder="Masukkan Qty" required
-                                    min="1" max="{{ $product->stock }}">
+                                <input type="number" id="qty" class="form-control" name="qty"
+                                    placeholder="Masukkan Qty" required min="1" max="{{ $product->stock }}">
                                 <small>Stok Tersedia: {{ $product->stock }}</small>
                             </div>
 
@@ -240,7 +241,8 @@
                                 <label for="tanggal">
                                     Tanggal Masuk
                                     <i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip"
-                                        data-bs-placement="top" title="Pilih tanggal barang masuk ke dalam list produk masuk."></i>
+                                        data-bs-placement="top"
+                                        title="Pilih tanggal barang masuk ke dalam list produk masuk."></i>
                                 </label>
                                 <input type="date" id="tanggal" class="form-control" name="date" required>
                             </div>
@@ -252,7 +254,8 @@
                                     <i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip"
                                         data-bs-placement="top" title="Masukkan nama penerima barang."></i>
                                 </label>
-                                <input type="text" id="recipient" class="form-control" name="recipient" placeholder="Masukkan Nama Penerima" required>
+                                <input type="text" id="recipient" class="form-control" name="recipient"
+                                    placeholder="Masukkan Nama Penerima" required>
                             </div>
                         </div>
 

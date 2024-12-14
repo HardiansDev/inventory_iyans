@@ -23,7 +23,7 @@ class CreateProductsTable extends Migration
             $table->foreignId('category_id')->nullable()->constrained()->onDelete('set null');
             $table->foreignId('supplier_id')->nullable()->constrained()->onDelete('set null');
 
-            $table->decimal('price', 10, 2);
+            $table->integer('price');
             $table->string('stock');
             $table->string('status')->default('menunggu');
             $table->timestamps();

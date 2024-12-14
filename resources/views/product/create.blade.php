@@ -111,11 +111,12 @@
                                             Harga Produk
                                             <i class="fas fa-info-circle text-primary" data-bs-toggle="tooltip"
                                                 data-bs-placement="top"
-                                                title="Masukkan harga produk tanpa tanda koma atau titik."></i>
+                                                title="Masukkan harga produk, otomatis akan diformat dengan pemisah ribuan."></i>
                                         </label>
-                                        <input type="number" class="form-control @error('price') is-invalid @enderror"
-                                            name="price" id="productPrice" placeholder="Masukkan Harga Product"
-                                            value="{{ old('price') }}">
+                                        <input type="text" class="form-control @error('price') is-invalid @enderror"
+                                            name="price_display" id="productPrice" placeholder="Masukkan Harga Produk"
+                                            value="{{ old('price') }}" oninput="formatPriceDisplay(this)">
+                                        <input type="hidden" name="price" id="priceHidden" value="{{ old('price') }}">
                                         @error('price')
                                             <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
@@ -162,7 +163,7 @@
                                 </div>
                                 <div class="d-flex justify-content-end">
                                     <button type="submit" class="btn btn-primary me-2">
-                                        <i class="fas fa-save"></i> Simpan Produk
+                                        <i class="fas fa-save"></i> Tambah Produk
                                     </button>
                                     <a href="{{ route('product.index') }}" class="btn btn-danger">
                                         <i class="fas fa-times"></i> Batal

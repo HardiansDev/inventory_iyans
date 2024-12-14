@@ -6,7 +6,6 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     @yield('title')
     @yield('styles')
-    <link rel="icon" href="{{ asset('temp/dist/img/favicon.ico') }}">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <style>
         /* PDF Styling */
@@ -117,7 +116,6 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
-    <!-- Include jsPDF dan html2pdf library -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/toastr@2.1.4/build/toastr.min.js"></script>
@@ -131,15 +129,30 @@
         $(document).ready(function() {
             var table = $('#example1').DataTable({
                 "language": {
-                    "emptyTable": "Data produk tidak ditemukan." // Pesan jika tabel kosong
-                }
+                    "emptyTable": "Data produk tidak ditemukan.", // Pesan jika tabel kosong
+                    "zeroRecords": "Data tidak ditemukan",
+                    "lengthMenu": [10, 25, 50, 100], // Dropdown "Show Entries"
+                    "pageLength": 10, // Default tampil 10 baris
+                    "paging": true,
+                    "lengthMenu": "Tampilkan _MENU_ data per halaman",
+                    "paginate": {
+                        "first": "Pertama",
+                        "last": "Terakhir",
+                        "next": "Berikutnya",
+                        "previous": "Sebelumnya"
+                    },
+                    "search": "Cari:",
+                    "info": "Menampilkan _START_ sampai _END_ dari _TOTAL_ data",
+                    "infoEmpty": "Tidak ada data tersedia",
+                },
+
             });
 
             // Filter berdasarkan kategori
             $('#filtername').on('change', function() {
                 var selectedValue = $(this).val();
                 // Filter berdasarkan kategori di kolom ke-4 (kategori produk)
-                table.columns(5).search(selectedValue).draw(); // Kolom ke-5 adalah kolom kategori
+                table.columns(4).search(selectedValue).draw(); // Kolom ke-5 adalah kolom kategori
             });
 
             // Fungsi umum untuk menghapus dengan SweetAlert
@@ -290,7 +303,32 @@
         });
     </script>
 
-    
+    {{-- nominal otomatis --}}
+    <script>
+        function formatPriceDisplay(input) {
+            // Ambil nilai asli (tanpa pemisah ribuan)
+            let rawValue = input.value.replace(/,/g, ''); // Hapus koma
+            if (!/^\d*$/.test(rawValue)) {
+                rawValue = rawValue.replace(/[^\d]/g, ''); // Hapus karakter non-digit
+            }
+
+            // Update elemen hidden dengan nilai asli (tanpa koma)
+            document.getElementById('priceHidden').value = rawValue;
+
+            // Format nilai dengan pemisah ribuan untuk ditampilkan
+            const formattedValue = new Intl.NumberFormat('en-US').format(rawValue);
+            input.value = formattedValue;
+        }
+
+        // Pastikan hidden input memiliki nilai asli saat form dikirim
+        document.querySelector('form').addEventListener('submit', function() {
+            const displayInput = document.getElementById('productPrice');
+            const rawValue = displayInput.value.replace(/,/g, ''); // Hapus semua koma
+            document.getElementById('priceHidden').value = rawValue; // Set nilai asli ke hidden input
+        });
+    </script>
+
+
 </body>
 
 </html>
