@@ -56,7 +56,7 @@
                                 </li>
                             </ul>
                         </div>
-                        
+
                         <button id="deleteAllBtn" class="btn btn-danger btn-sm ms-auto" disabled>
                             <i class="fas fa-trash-alt"></i> Hapus Terpilih
                         </button>
@@ -122,7 +122,6 @@
                                         <th>
                                             <input type="checkbox" id="selectAll" />
                                         </th>
-                                        {{-- <th>No</th> --}}
                                         <th>Nama Produk</th>
                                         <th>Kode Produk</th>
                                         <th>Gambar Produk</th>

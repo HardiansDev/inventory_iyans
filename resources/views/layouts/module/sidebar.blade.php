@@ -30,9 +30,9 @@
                     </a>
                 </li>
             @endif
-
+            
             @if (in_array(Auth::user()->role, ['superadmin', 'admin_gudang']))
-                <li class="treeview {{ Request::is('product*') ? 'active' : '' }}">
+                <li class="treeview {{ Request::is('product') || Request::is('product/create') ? 'active' : '' }}">
                     <a href="#">
                         <i class="fa fa-product-hunt"></i> <span>Produk</span>
                         <span class="pull-right-container">
