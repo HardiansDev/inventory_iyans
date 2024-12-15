@@ -253,19 +253,21 @@
             const deleteAllBtn = document.getElementById('deleteAllBtn');
             let selectedIds = [];
 
-            // Toggle all checkboxes
+            // Toggle all checkboxes for visible entries
             selectAll.addEventListener('change', function() {
                 selectedIds = [];
                 selectItems.forEach(item => {
-                    item.checked = this.checked;
-                    if (this.checked) {
-                        selectedIds.push(item.value);
+                    if (item.closest('tr').offsetParent !== null) { // Only visible rows
+                        item.checked = this.checked;
+                        if (this.checked) {
+                            selectedIds.push(item.value);
+                        }
                     }
                 });
                 toggleDeleteAllBtn();
             });
 
-            // Handle individual checkboxes
+            // Handle individual checkbox changes
             selectItems.forEach(item => {
                 item.addEventListener('change', function() {
                     if (this.checked) {
@@ -309,6 +311,101 @@
             });
         });
     </script>
+
+    {{-- unduh pdf by showing data entries --}}
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const downloadPdfBtn = document.getElementById('downloadPdfBtn');
+            const visibleItems = document.querySelectorAll('.select-item');
+
+            downloadPdfBtn.addEventListener('click', function() {
+                const displayedIds = Array.from(visibleItems)
+                    .filter(item => item.closest('tr').offsetParent !== null) // Hanya baris yang terlihat
+                    .map(item => item.dataset.entryId);
+
+                if (displayedIds.length === 0) {
+                    alert('Tidak ada data yang dapat diunduh.');
+                    return;
+                }
+
+                // Kirim data ke server untuk menghasilkan PDF
+                fetch('{{ route('product.downloadPdf') }}', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                        },
+                        body: JSON.stringify({
+                            ids: displayedIds
+                        })
+                    })
+                    .then(response => response.blob())
+                    .then(blob => {
+                        // Buat link download untuk file PDF
+                        const url = window.URL.createObjectURL(blob);
+                        const a = document.createElement('a');
+                        a.style.display = 'none';
+                        a.href = url;
+                        a.download = 'Produk_Terpilih.pdf';
+                        document.body.appendChild(a);
+                        a.click();
+                        window.URL.revokeObjectURL(url);
+                    })
+                    .catch(error => {
+                        console.error('Terjadi kesalahan:', error);
+                        alert('Gagal mengunduh PDF.');
+                    });
+            });
+        });
+    </script>
+
+    {{-- unduh excel by showing data entries --}}
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const downloadExcelBtn = document.getElementById('downloadExcelBtn');
+            const visibleItems = document.querySelectorAll('.select-item');
+
+            downloadExcelBtn.addEventListener('click', function() {
+                const displayedIds = Array.from(visibleItems)
+                    .filter(item => item.closest('tr').offsetParent !== null) // Hanya baris yang terlihat
+                    .map(item => item.dataset.entryId);
+
+                if (displayedIds.length === 0) {
+                    alert('Tidak ada data yang dapat diunduh.');
+                    return;
+                }
+
+                // Kirim data ke server untuk menghasilkan Excel
+                fetch('{{ route('product.downloadExcel') }}', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                        },
+                        body: JSON.stringify({
+                            ids: displayedIds
+                        })
+                    })
+                    .then(response => response.blob())
+                    .then(blob => {
+                        // Buat link download untuk file Excel
+                        const url = window.URL.createObjectURL(blob);
+                        const a = document.createElement('a');
+                        a.style.display = 'none';
+                        a.href = url;
+                        a.download = 'Produk_Terpilih.xlsx';
+                        document.body.appendChild(a);
+                        a.click();
+                        window.URL.revokeObjectURL(url);
+                    })
+                    .catch(error => {
+                        console.error('Terjadi kesalahan:', error);
+                        alert('Gagal mengunduh Excel.');
+                    });
+            });
+        });
+    </script>
+
 
     {{-- nominal otomatis --}}
     <script>

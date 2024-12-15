@@ -29,6 +29,8 @@ Route::middleware(['auth', 'role:superadmin,admin_gudang'])->group(function () {
     Route::resource('product', ProductController::class);
     Route::post('/product/export', [ProductController::class, 'export'])->name('product.export');
     Route::post('/product/delete-all', [ProductController::class, 'deleteAll'])->name('product.deleteAll');
+    Route::post('/product/download-pdf', [ProductController::class, 'downloadPdf'])->name('product.downloadPdf');
+    Route::post('/product/download-excel', [ProductController::class, 'downloadExcel'])->name('product.downloadExcel');
     Route::resource('productin', ProductInController::class);
     Route::put('/productin/update-status/{id}', [ProductInController::class, 'updateStatus'])->name('productin.updateStatus');
 });

@@ -2,16 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\Exports\ProductsExport;
-use Maatwebsite\Excel\Facades\Excel;
+
 use App\Models\Product;
 use App\Models\Category;
 use App\Models\Supplier;
-use TCPDF;
-use PhpOffice\PhpSpreadsheet\Spreadsheet;
-use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use Illuminate\Http\Request;
+use App\Exports\ProductsExport;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Maatwebsite\Excel\Facades\Excel;
+
 
 
 class ProductController extends Controller
@@ -202,8 +201,38 @@ class ProductController extends Controller
         return response()->json(['success' => false, 'message' => 'Tidak ada produk yang dipilih.']);
     }
 
+    // ini pdf per showing data
+    public function downloadPdf(Request $request)
+    {
+        // Validasi input
+        $ids = $request->input('ids');
+        if (empty($ids)) {
+            return response()->json(['success' => false, 'message' => 'Tidak ada data terpilih.'], 400);
+        }
 
-    
+        // Ambil data berdasarkan ID yang dikirim
+        $products = Product::whereIn('id', $ids)->get();
 
+        // Render PDF menggunakan view
+        $pdf = PDF::loadView('pdf.products', ['products' => $products]);
 
+        // Kirim file PDF ke browser
+        return $pdf->download('Produk_Terpilih.pdf');
+    }
+
+    // ini excel per showing data
+    public function downloadExcel(Request $request)
+    {
+        // Validasi input
+        $ids = $request->input('ids');
+        if (empty($ids)) {
+            return response()->json(['success' => false, 'message' => 'Tidak ada data terpilih.'], 400);
+        }
+
+        // Ambil data berdasarkan ID yang dikirim
+        $products = Product::whereIn('id', $ids)->get();
+
+        // Gunakan Export untuk membuat file Excel
+        return Excel::download(new ProductsExport($products), 'Produk_Terpilih.xlsx');
+    }
 }

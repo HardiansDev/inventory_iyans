@@ -24,7 +24,7 @@
         <ul class="sidebar-menu" data-widget="tree">
             <li class="header">MENU UTAMA</li>
             @if (in_array(Auth::user()->role, ['superadmin', 'manager']))
-                <li>
+                <li class="{{ Request::is('dashboard') ? 'active' : '' }}">
                     <a href="{{ route('dashboard') }}">
                         <i class="fa fa-dashboard"></i> <span>Dashboard</span>
                     </a>
@@ -32,7 +32,7 @@
             @endif
 
             @if (in_array(Auth::user()->role, ['superadmin', 'admin_gudang']))
-                <li class="treeview">
+                <li class="treeview {{ Request::is('product*') ? 'active' : '' }}">
                     <a href="#">
                         <i class="fa fa-product-hunt"></i> <span>Produk</span>
                         <span class="pull-right-container">
@@ -40,16 +40,18 @@
                         </span>
                     </a>
                     <ul class="treeview-menu">
-                        <li><a href="{{ route('product.index') }}"><i class="fa fa-circle-o"></i> Daftar Data Produk</a>
+                        <li class="{{ Request::is('product') ? 'active' : '' }}">
+                            <a href="{{ route('product.index') }}"><i class="fa fa-circle-o"></i> Daftar Data Produk</a>
                         </li>
-                        <li><a href="{{ route('product.create') }}"><i class="fa fa-circle-o"></i> Tambah Produk</a>
+                        <li class="{{ Request::is('product/create') ? 'active' : '' }}">
+                            <a href="{{ route('product.create') }}"><i class="fa fa-circle-o"></i> Tambah Produk</a>
                         </li>
                     </ul>
                 </li>
             @endif
 
             @if (Auth::user()->role === 'superadmin')
-                <li>
+                <li class="{{ Request::is('user') ? 'active' : '' }}">
                     <a href="{{ route('user.index') }}">
                         <i class="fa fa-user"></i> <span>Pengguna</span>
                     </a>
@@ -57,13 +59,13 @@
             @endif
 
             @if (in_array(Auth::user()->role, ['superadmin', 'admin_gudang']))
-                <li>
+                <li class="{{ Request::is('category') ? 'active' : '' }}">
                     <a href="{{ route('category.index') }}">
                         <i class="fa fa-tags"></i> <span>Kategori</span>
                     </a>
                 </li>
 
-                <li>
+                <li class="{{ Request::is('supplier') ? 'active' : '' }}">
                     <a href="{{ route('supplier.index') }}">
                         <i class="fa fa-truck"></i> <span>Pemasok</span>
                     </a>
@@ -71,7 +73,7 @@
             @endif
 
             @if (in_array(Auth::user()->role, ['admin_gudang', 'superadmin']))
-                <li>
+                <li class="{{ Request::is('productin') ? 'active' : '' }}">
                     <a href="{{ route('productin.index') }}">
                         <i class="fa fa-sign-in"></i> <span>Produk Masuk</span>
                     </a>
@@ -79,7 +81,7 @@
             @endif
 
             @if (in_array(Auth::user()->role, ['kasir', 'superadmin']))
-                <li>
+                <li class="{{ Request::is('product-out') ? 'active' : '' }}">
                     <a href="{{ route('product-out.index') }}">
                         <i class="fa fa-sign-out"></i> <span>Penjualan</span>
                     </a>

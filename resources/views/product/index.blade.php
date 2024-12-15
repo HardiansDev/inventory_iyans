@@ -38,23 +38,31 @@
                         <a href="{{ route('product.create') }}" class="btn btn-success btn-sm">
                             <i class="fas fa-plus-circle"></i> Tambah Produk
                         </a>
-                        {{-- <div class="dropdown ms-2">
-                            <button class="btn btn-primary btn-sm dropdown-toggle" type="button" id="dropdownMenuButton"
+                        <div class="dropdown d-inline">
+                            <button class="btn btn-warning btn-sm ms-2 dropdown-toggle" type="button" id="downloadDropdown"
                                 data-bs-toggle="dropdown" aria-expanded="false">
-                                Unduh Data
+                                <i class="fa fa-download"></i> Unduh Data Terlihat
                             </button>
-                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                <li><a class="dropdown-item" href="">Unduh PDF</a></li>
-                                <li><a class="dropdown-item" href="">Unduh Excel</a></li>
+                            <ul class="dropdown-menu" aria-labelledby="downloadDropdown">
+                                <li>
+                                    <a id="downloadPdfBtn" class="dropdown-item" href="#">
+                                        <i class="fa fa-file-pdf-o text-danger"></i> Unduh PDF
+                                    </a>
+                                </li>
+                                <li>
+                                    <a id="downloadExcelBtn" class="dropdown-item" href="#">
+                                        <i class="fa fa-file-excel-o text-success"></i> Unduh Excel
+                                    </a>
+                                </li>
                             </ul>
-                        </div> --}}
+                        </div>
+                        
                         <button id="deleteAllBtn" class="btn btn-danger btn-sm ms-auto" disabled>
                             <i class="fas fa-trash-alt"></i> Hapus Terpilih
                         </button>
                     </div>
 
                     <!-- /.box-header -->
-
                     <div class="box-body">
                         <!-- Filter and Export -->
                         <div class="d-flex justify-content-between flex-wrap mb-3 align-items-center">
@@ -75,9 +83,9 @@
                             <div class="d-flex align-items-center gap-2">
                                 <!-- Dropdown Export -->
                                 <div class="dropdown">
-                                    <button class="btn btn-primary btn-sm dropdown-toggle" type="button"
+                                    <button class="btn btn-secondary btn-sm dropdown-toggle" type="button"
                                         id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
-                                        <i class="fas fa-download"></i> Unduh
+                                        <i class="fas fa-download"></i> Unduh Semua Data
                                     </button>
                                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                                         <!-- Tombol Unduh Excel -->
@@ -130,13 +138,14 @@
                                     @foreach ($products as $product)
                                         <tr>
                                             <td>
-                                                <input type="checkbox" class="select-item" value="{{ $product->id }}" />
+                                                <input type="checkbox" class="select-item" value="{{ $product->id }}"
+                                                    data-entry-id="{{ $product->id }}" />
                                             </td>
                                             <td>{{ $product->name }}</td>
                                             <td>{{ $product->code }}</td>
                                             <td>
-                                                <img src="{{ asset('fotoproduct/' . $product->photo) }}" alt="Gambar Produk"
-                                                    style="width: 60px; border-radius: 5px;">
+                                                <img src="{{ asset('fotoproduct/' . $product->photo) }}"
+                                                    alt="Gambar Produk" style="width: 60px; border-radius: 5px;">
                                             </td>
                                             <td>{{ $product->category->name }}</td>
                                             <td>Rp {{ number_format($product->price, 0, ',', '.') }}</td>
@@ -167,8 +176,8 @@
                                                     class="btn btn-warning btn-sm">
                                                     <i class="fas fa-edit"></i> Edit
                                                 </a>
-                                                <form action="{{ route('product.destroy', $product->id) }}" method="POST"
-                                                    style="display:inline;">
+                                                <form action="{{ route('product.destroy', $product->id) }}"
+                                                    method="POST" style="display:inline;">
                                                     @csrf
                                                     @method('DELETE')
                                                     <button type="submit" class="btn btn-danger btn-sm delete-prod"
