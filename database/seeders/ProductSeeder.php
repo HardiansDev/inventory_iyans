@@ -16,7 +16,7 @@ class ProductSeeder extends Seeder
         $products = [];
         $uniqueCodes = [];
 
-        for ($i = 1; $i <= 50; $i++) {
+        for ($i = 1; $i <= 25; $i++) {
             // Pastikan kode unik
             do {
                 $code = 'P-' . strtoupper(Str::random(8));

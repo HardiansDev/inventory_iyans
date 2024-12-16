@@ -110,6 +110,7 @@ class ProductInController extends Controller
 
     public function updateStatus(Request $request, $id)
     {
+        // Cari ProductIn berdasarkan ID
         $productIn = ProductIn::findOrFail($id);
 
         // Ambil data produk terkait
@@ -118,24 +119,38 @@ class ProductInController extends Controller
         // Cek status yang diterima dari request
         $status = $request->input('status');
 
+        // Update status berdasarkan status yang diterima
         if ($status === 'diterima') {
             // Kurangi stok produk utama berdasarkan qty dari ProductIn
-            $product->stock - $productIn->qty;
+            $product->stock -= $productIn->qty;
 
             // Pastikan stok tidak menjadi negatif
             if ($product->stock < 0) {
                 return redirect()->back()->with('error', 'Stok tidak mencukupi!');
             }
 
-            // Update status di tabel produk
+            // Update status produk menjadi 'produk diterima'
             $product->status = 'produk diterima';
         } elseif ($status === 'ditolak') {
             // Tidak ada perubahan pada stok jika ditolak
             $product->status = 'produk ditolak';
         }
 
+        // Jika stok produk sudah habis, ubah status produk menjadi 'semua produk telah diterima'
+        if ($product->stock == 0) {
+            $product->status = 'semua produk telah diterima';
+        }
+        
         // Simpan perubahan pada produk utama
         $product->save();
+        
+        // Refresh produk untuk memastikan data terbaru
+        $product->refresh();
+        
+
+        // Debugging: Tampilkan data produk setelah status diubah
+        // dd($product);
+        // dd($product);
 
         // Update status di tabel ProductIn
         $productIn->status = $status;

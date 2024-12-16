@@ -18,18 +18,39 @@ class ProductController extends Controller
     /**
      * Display a listing of the resource.
      */
+
     public function index(Request $request)
     {
         $search = $request->query('search');
         $datacategory = Category::all();
         $datasupplier = Supplier::all();
 
+        // Ambil data produk berdasarkan pencarian atau semua data
         $products = !empty($search)
-            ? Product::where('name', 'LIKE', '%' . $search . '%')->with('category')->get()
-            : Product::with('category')->orderBy('created_at', 'DESC')->get();
+            ? Product::where('name', 'LIKE', '%' . $search . '%')->with(['category', 'productins'])->get()
+            : Product::with(['category', 'productins'])->orderBy('created_at', 'DESC')->get();
+
+        // Hitung qty diterima dan ditolak untuk setiap produk
+        $products = $products->map(function ($product) {
+            // Perbaiki status yang sesuai dengan yang ada di database
+            $product->qty_diterima = $product->productins->where('status', 'diterima')->sum('qty');
+            $product->qty_ditolak = $product->productins->where('status', 'ditolak')->sum('qty');
+            
+
+            return $product;
+        });
 
         return view('product.index', compact('products', 'search', 'datacategory', 'datasupplier'));
     }
+
+
+
+
+
+
+
+
+
 
 
 

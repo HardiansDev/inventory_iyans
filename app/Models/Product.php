@@ -44,6 +44,6 @@ class Product extends Model
 
     public function productIns()
     {
-        return $this->hasMany(ProductIn::class);
+        return $this->hasMany(ProductIn::class, 'product_id','id');
     }
 }
