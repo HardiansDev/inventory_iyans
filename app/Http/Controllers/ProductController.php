@@ -35,7 +35,7 @@ class ProductController extends Controller
             // Perbaiki status yang sesuai dengan yang ada di database
             $product->qty_diterima = $product->productins->where('status', 'diterima')->sum('qty');
             $product->qty_ditolak = $product->productins->where('status', 'ditolak')->sum('qty');
-            
+
 
             return $product;
         });
@@ -52,6 +52,17 @@ class ProductController extends Controller
 
 
 
+    public function getProductDetails($productId)
+    {
+        // Ambil data produk berdasarkan ID
+        $product = Product::findOrFail($productId);
+
+        // Kirimkan data supplier_id dan category_id sebagai response JSON
+        return response()->json([
+            'supplier_id' => $product->supplier_id,
+            'category_id' => $product->category_id,
+        ]);
+    }
 
 
 

@@ -81,8 +81,8 @@
             @endif
 
             @if (in_array(Auth::user()->role, ['kasir', 'superadmin']))
-                <li class="{{ Request::is('product-out') ? 'active' : '' }}">
-                    <a href="{{ route('product-out.index') }}">
+                <li class="{{ Request::is('productout') ? 'active' : '' }}">
+                    <a href="{{ route('productout.index') }}">
                         <i class="fa fa-sign-out"></i> <span>Penjualan</span>
                     </a>
                 </li>

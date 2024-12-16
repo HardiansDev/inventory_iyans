@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 
 use App\Models\ProductIn;
+use App\Models\Product;
 use Illuminate\Http\Request;
 
 class ProductInController extends Controller
@@ -22,18 +23,35 @@ class ProductInController extends Controller
         return view('productin.index', compact('productIns'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
+    public function storeProductIn(Request $request)
+    {
+        $data = $request->all();
+
+        // Pastikan supplier_id dan category_id adalah array, bukan string
+        foreach ($data['supplier_id'] as $key => $value) {
+            // Jika menggunakan Eloquent atau DB Query untuk insert, pastikan field menerima array
+            ProductIn::create([
+                'product_id' => $data['product_id'][$key],
+                'supplier_id' => $value,  // Gunakan $value untuk setiap elemen dalam array
+                'category_id' => $data['category_id'][$key],  // Sama untuk category_id
+                'date' => $data['date'][$key],
+                'qty' => $data['qty'][$key],
+                'recipient' => $data['recipient'][$key],
+            ]);
+        }
+
+        return redirect()->route('productin.index')->with('success', 'Produk Masuk Berhasil Disimpan!');
+    }
+
+    public function create()
+    {
+        $products = Product::all();
+
+        // Kirim data produk ke view
+        return view('productin.create', compact('products'));
+    }
+
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -140,13 +158,13 @@ class ProductInController extends Controller
         if ($product->stock == 0) {
             $product->status = 'semua produk telah diterima';
         }
-        
+
         // Simpan perubahan pada produk utama
         $product->save();
-        
+
         // Refresh produk untuk memastikan data terbaru
         $product->refresh();
-        
+
 
         // Debugging: Tampilkan data produk setelah status diubah
         // dd($product);

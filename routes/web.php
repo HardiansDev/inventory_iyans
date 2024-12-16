@@ -31,7 +31,9 @@ Route::middleware(['auth', 'role:superadmin,admin_gudang'])->group(function () {
     Route::post('/product/delete-all', [ProductController::class, 'deleteAll'])->name('product.deleteAll');
     Route::post('/product/download-pdf', [ProductController::class, 'downloadPdf'])->name('product.downloadPdf');
     Route::post('/product/download-excel', [ProductController::class, 'downloadExcel'])->name('product.downloadExcel');
+    Route::get('/get-product-details/{productId}', [ProductController::class, 'getProductDetails']);
     Route::resource('productin', ProductInController::class);
+    Route::post('/productin/store', [ProductInController::class, 'storeProductIn'])->name('productin.storeProductIn');
     Route::put('/productin/update-status/{id}', [ProductInController::class, 'updateStatus'])->name('productin.updateStatus');
 });
 
@@ -49,7 +51,7 @@ Route::middleware(['auth', 'role:superadmin,admin_gudang'])->group(function () {
 
 // Rute produk keluar (khusus kasir)
 Route::middleware(['auth', 'role:kasir,superadmin'])->prefix('product-out')->group(function () {
-    Route::get('', [ProductOutController::class, 'index'])->name('product-out.index');
+    Route::resource('productout', ProductOutController::class);
 });
 
 
