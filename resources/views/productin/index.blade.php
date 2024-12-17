@@ -56,7 +56,6 @@
                                         <th>Penerima</th>
                                         <th>Status</th>
                                         <th>Terima / Tolak</th>
-                                        {{-- <th>Masuk Toko</th> --}}
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -133,41 +132,4 @@
             </div>
         </div>
     </section>
-
-    <!-- Modal -->
-    {{-- <div class="modal fade" id="sellProductModal" tabindex="-1" aria-labelledby="sellProductModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="sellProductModalLabel">Keluarkan Produk ke Toko</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <form action="{{ route('productout.store') }}" method="POST">
-                    @csrf
-                    <div class="modal-body">
-                        <div class="mb-3">
-                            <label for="product_id" class="form-label">Pilih Produk</label>
-                            <select name="product_id" class="form-select" required>
-                                <option selected disabled>Pilih Produk</option>
-                                @foreach ($productIns as $productIn)
-                                    <option value="{{ $productIn->product_id }}">
-                                        {{ $productIn->product->name }} 
-                                    </option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div class="mb-3">
-                            <label for="qty" class="form-label">Jumlah</label>
-                            <input type="number" name="qty" id="qty" class="form-control" min="1"
-                                required>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                        <button type="submit" class="btn btn-primary">Keluarkan Produk</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div> --}}
 @endsection

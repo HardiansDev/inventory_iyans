@@ -1,10 +1,35 @@
 @extends('layouts.master')
 
+@section('title')
+    <title>Sistem Inventory Iyan | Tambah Produk Masuk</title>
+@endsection
+
 @section('content')
+    <section class="content-header py-4 bg-light rounded">
+        <div class="container-fluid">
+            <div class="row align-items-center justify-content-between">
+                <div class="col-auto">
+                    <h1 class="mb-0 text-black">Tambah Data Produk Masuk</h1>
+                </div>
+                <div class="col-auto">
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb mb-0">
+                            <li class="breadcrumb-item">
+                                <a href="{{ route('productin.index') }}" class="text-decoration-none text-secondary">
+                                    <i class="fa fa-dashboard"></i> Produk Masuk
+                                </a>
+                            </li>
+                            <li class="breadcrumb-item active" aria-current="page">Tambah Produk Masuk</li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </section>
     <div class="container mt-4">
         <div class="card shadow-sm">
             <div class="card-header bg-primary text-white">
-                <h5 class="mb-0">Tambah Produk Masuk (Banyak Data)</h5>
+                <h5 class="mb-0">Tambah Produk Masuk </h5>
             </div>
             <div class="card-body">
                 <form action="{{ route('productin.storeProductIn') }}" method="POST">
