@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProductInController;
-use App\Http\Controllers\ProductOutController;
+use App\Http\Controllers\SalesController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\SupplierController;
@@ -50,8 +50,8 @@ Route::middleware(['auth', 'role:superadmin,admin_gudang'])->group(function () {
 
 
 // Rute produk keluar (khusus kasir)
-Route::middleware(['auth', 'role:kasir,superadmin'])->prefix('product-out')->group(function () {
-    Route::resource('productout', ProductOutController::class);
+Route::middleware(['auth', 'role:kasir,superadmin'])->group(function () {
+    Route::resource('sales', SalesController::class);
 });
 
 

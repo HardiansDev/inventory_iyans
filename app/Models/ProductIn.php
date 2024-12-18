@@ -14,8 +14,6 @@ class ProductIn extends Model
 
     protected $fillable = [
         'product_id',     // ID produk yang dimasukkan
-        'supplier_id',    // ID supplier
-        'category_id',    // ID kategori
         'date',           // Tanggal masuk
         'recipient',      // Nama penerima
         'qty',            // Jumlah produk yang masuk

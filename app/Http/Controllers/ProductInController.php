@@ -33,8 +33,6 @@ class ProductInController extends Controller
             // Jika menggunakan Eloquent atau DB Query untuk insert, pastikan field menerima array
             ProductIn::create([
                 'product_id' => $data['product_id'][$key],
-                'supplier_id' => $value,  // Gunakan $value untuk setiap elemen dalam array
-                'category_id' => $data['category_id'][$key],  // Sama untuk category_id
                 'date' => $data['date'][$key],
                 'qty' => $data['qty'][$key],
                 'recipient' => $data['recipient'][$key],
@@ -63,8 +61,6 @@ class ProductInController extends Controller
 
         ProductIn::create([
             'product_id' => $validated['product_id'],
-            'supplier_id' => $request->supplier_id,
-            'category_id' => $request->category_id,
             'date' => $validated['date'],
             'recipient' => $validated['recipient'],
             'qty' => $validated['qty'],

@@ -113,10 +113,6 @@
                     @endforeach
                 </select>
             </div>
-
-            <input type="hidden" name="supplier_id[]" class="hidden-supplier">
-            <input type="hidden" name="category_id[]" class="hidden-category">
-
             <div class="col-md-2">
                 <input type="date" name="date[]" class="form-control" required>
             </div>
@@ -143,8 +139,8 @@
                             .then(response => response.json())
                             .then(data => {
                                 // Mengisi nilai ke input hidden
-                                row.querySelector('.hidden-supplier').value = data.supplier_id;
-                                row.querySelector('.hidden-category').value = data.category_id;
+                                // row.querySelector('.hidden-supplier').value = data.supplier_id;
+                                // row.querySelector('.hidden-category').value = data.category_id;
                             })
                             .catch(error => console.error('Error:', error));
                     }
@@ -174,8 +170,8 @@
                         .then(response => response.json())
                         .then(data => {
                             // Update input supplier_id dan category_id di baris yang sama
-                            row.querySelector('input[name="supplier_id[]"]').value = data.supplier_id;
-                            row.querySelector('input[name="category_id[]"]').value = data.category_id;
+                            // row.querySelector('input[name="supplier_id[]"]').value = data.supplier_id;
+                            // row.querySelector('input[name="category_id[]"]').value = data.category_id;
                         })
                         .catch(error => console.error('Error:', error));
                 }

@@ -22,13 +22,6 @@ class CreateProductInsTable extends Migration
             $table->foreignIdFor(Product::class, 'product_id')
                 ->constrained((new Product())->getTable())
                 ->onDelete('cascade');
-            $table->foreignIdFor(Supplier::class, 'supplier_id')
-                ->constrained((new Supplier())->getTable())
-                ->onDelete('cascade');
-            $table->foreignIdFor(Category::class, 'category_id')
-                ->constrained((new Category())->getTable())
-                ->onDelete('cascade');
-
             $table->date('date');
             $table->string('recipient')->comment("penerima");
             $table->integer('qty');
