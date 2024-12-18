@@ -143,7 +143,7 @@
                                             <td>{{ $product->name }}</td>
                                             <td>{{ $product->code }}</td>
                                             <td>
-                                                <img src="{{ asset('fotoproduct/' . $product->photo) }}"
+                                                <img src="{{ asset('storage/fotoproduct/' . $product->photo) }}"
                                                     alt="Gambar Produk" style="width: 60px; border-radius: 5px;">
                                             </td>
                                             <td>{{ $product->category->name }}</td>

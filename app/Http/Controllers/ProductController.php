@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use App\Exports\ProductsExport;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Support\Facades\Storage;
 
 
 
@@ -123,11 +124,10 @@ class ProductController extends Controller
         // Handle photo upload (if any)
         if ($request->hasFile('photo')) {
             $filename = time() . '_' . $request->file('photo')->getClientOriginalName();
-            $request->file('photo')->move(public_path('fotoproduct'), $filename);
+            $request->file('photo')->storeAs('fotoproduct', $filename, 'public');
             $validatedData['photo'] = $filename;
         }
 
-        // Create product with validated data
         Product::create($validatedData);
 
         return redirect()->route('product.index')->with('success', 'Produk ditambahkan!');
@@ -178,12 +178,15 @@ class ProductController extends Controller
         if ($request->hasFile('photo')) {
             // Delete old photo if it exists
             if ($product->photo) {
-                unlink(public_path('fotoproduct/' . $product->photo));  // Delete the old photo
+                $oldPhotoPath = 'fotoproduct/' . $product->photo;
+                if (Storage::exists($oldPhotoPath)) {
+                    Storage::delete($oldPhotoPath);
+                }
             }
 
             // Upload new photo
             $filename = time() . '_' . $request->file('photo')->getClientOriginalName();
-            $request->file('photo')->move(public_path('fotoproduct'), $filename);
+            $request->file('photo')->storeAs('fotoproduct', $filename, 'public');
             $validatedData['photo'] = $filename;
         }
 
