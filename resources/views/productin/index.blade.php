@@ -67,7 +67,7 @@
                                             <td>{{ $productIn->date }}</td>
                                             <td>
                                                 @if ($productIn->product->photo)
-                                                    <img src="{{ asset('fotoproduct/' . $productIn->product->photo) }}"
+                                                    <img src="{{ asset('storage/fotoproduct/' . $productIn->product->photo) }}"
                                                         alt="Image" width="50">
                                                 @else
                                                     <span>No Image</span>
@@ -91,34 +91,51 @@
                                                     <button class="btn btn-primary btn-sm dropdown-toggle" type="button"
                                                         id="dropdownMenuButton" data-bs-toggle="dropdown"
                                                         aria-expanded="false"
-                                                        {{ $productIn->status !== 'menunggu' ? 'disabled' : '' }}>
+                                                        {{ $productIn->status === 'ditolak' ? 'disabled' : '' }}>
                                                         Pilih Aksi
                                                     </button>
                                                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                                        <!-- Tombol Terima -->
-                                                        <li>
-                                                            <form
-                                                                action="{{ route('productin.updateStatus', $productIn->id) }}"
-                                                                method="POST">
-                                                                @csrf
-                                                                @method('PUT')
-                                                                <input type="hidden" name="status" value="diterima">
-                                                                <button type="submit"
-                                                                    class="dropdown-item text-success">Terima</button>
-                                                            </form>
-                                                        </li>
-                                                        <!-- Tombol Tolak -->
-                                                        <li>
-                                                            <form
-                                                                action="{{ route('productin.updateStatus', $productIn->id) }}"
-                                                                method="POST">
-                                                                @csrf
-                                                                @method('PUT')
-                                                                <input type="hidden" name="status" value="ditolak">
-                                                                <button type="submit"
-                                                                    class="dropdown-item text-danger">Tolak</button>
-                                                            </form>
-                                                        </li>
+                                                        <!-- Tampilkan tombol Terima hanya jika status = menunggu -->
+                                                        @if ($productIn->status === 'menunggu')
+                                                            <li>
+                                                                <form
+                                                                    action="{{ route('productin.updateStatus', $productIn->id) }}"
+                                                                    method="POST">
+                                                                    @csrf
+                                                                    @method('PUT')
+                                                                    <input type="hidden" name="status" value="diterima">
+                                                                    <button type="submit"
+                                                                        class="dropdown-item text-success">Terima</button>
+                                                                </form>
+                                                            </li>
+                                                        @endif
+
+                                                        <!-- Tampilkan tombol Tolak hanya jika status = menunggu -->
+                                                        @if ($productIn->status === 'menunggu')
+                                                            <li>
+                                                                <form
+                                                                    action="{{ route('productin.updateStatus', $productIn->id) }}"
+                                                                    method="POST">
+                                                                    @csrf
+                                                                    @method('PUT')
+                                                                    <input type="hidden" name="status" value="ditolak">
+                                                                    <button type="submit"
+                                                                        class="dropdown-item text-danger">Tolak</button>
+                                                                </form>
+                                                            </li>
+                                                        @endif
+
+                                                        <!-- Tampilkan tombol Jual di Toko hanya jika status = diterima -->
+                                                        @if ($productIn->status === 'diterima' || session('status') === 'produk diterima')
+                                                            <li>
+                                                                <button class="dropdown-item text-info open-sale-form"
+                                                                    data-product-id="{{ $productIn->id }}"
+                                                                    data-product-name="{{ $productIn->name }}">
+                                                                    Jual di Toko
+                                                                </button>
+                                                            </li>
+                                                        @endif
+
                                                     </ul>
                                                 </div>
                                             </td>
@@ -132,4 +149,30 @@
             </div>
         </div>
     </section>
+    <!-- Modal -->
+    <div class="modal fade" id="saleModal" tabindex="-1" aria-labelledby="saleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form id="saleForm" action="{{ route('sales.store') }}" method="POST">
+                    @csrf
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="saleModalLabel">Jual Produk</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <input type="hidden" name="product_ins_id" id="product_ins_id">
+                        <div class="mb-3">
+                            <label for="qty" class="form-label">Jumlah (Qty)</label>
+                            <input type="number" name="qty" id="qty" class="form-control" min="1"
+                                required>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                        <button type="submit" class="btn btn-primary">Simpan</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 @endsection

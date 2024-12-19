@@ -151,8 +151,12 @@ class ProductInController extends Controller
 
         // Update status berdasarkan status yang diterima
         if ($status === 'diterima') {
-            // Kurangi stok produk utama berdasarkan qty dari ProductIn
-            $product->stock -= $productIn->qty;
+            if ($product->stock >= $productIn->qty) {
+                $product->stock -= $productIn->qty;
+
+                // Update status di tabel ProductIn menjadi 'diterima'
+                $productIn->status = 'diterima';
+            }
 
             // Pastikan stok tidak menjadi negatif
             if ($product->stock < 0) {
@@ -177,15 +181,14 @@ class ProductInController extends Controller
         // Refresh produk untuk memastikan data terbaru
         $product->refresh();
 
-
-        // Debugging: Tampilkan data produk setelah status diubah
-        // dd($product);
-        // dd($product);
-
         // Update status di tabel ProductIn
         $productIn->status = $status;
         $productIn->save();
 
-        return redirect()->route('productin.index')->with('success', 'Status berhasil diperbarui!');
+        // Kirim status produk yang sudah diperbarui ke view
+        $statusDitanya = $product->status;
+
+        return redirect()->route('productin.index')->with('success', 'Status berhasil diperbarui!')
+            ->with('status', $statusDitanya); // Mengirim status produk yang diperbarui ke view
     }
 }

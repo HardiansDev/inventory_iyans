@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+
 class Sales extends Model
 {
     use HasFactory;
@@ -17,7 +18,7 @@ class Sales extends Model
      * Relasi ke model ProductIns
      * Setiap transaksi penjualan terkait dengan satu produk yang masuk.
      */
-    public function productIns()
+    public function productIn()
     {
         return $this->belongsTo(ProductIn::class, 'product_ins_id');
     }

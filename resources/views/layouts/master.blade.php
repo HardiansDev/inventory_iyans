@@ -7,6 +7,7 @@
     @yield('title')
     @yield('styles')
     <meta name="viewport" content="width=device-width, initial-scale=1">
+
     <style>
         /* PDF Styling */
         .pdf-container {
@@ -432,6 +433,151 @@
         });
     </script>
 
+    {{-- tabel wishlist --}}
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Wishlist array to hold product objects
+            let wishlist = [];
+
+            // Function to update the wishlist table and calculate total price
+            function updateWishlist() {
+                let tableBody = document.getElementById('wishlist-table-body');
+                tableBody.innerHTML = ''; // Clear previous wishlist data
+
+                let totalPrice = 0;
+                wishlist.forEach((item, index) => {
+                    let row = document.createElement('tr');
+                    row.innerHTML = `
+                <td>${item.name}</td>
+                <td>
+                    <div class="d-flex align-items-center">
+                        <button class="btn btn-secondary btn-sm adjust-qty-wishlist" data-index="${index}" data-adjust="-1" style="background-color: #ff6f61; color: white; border-radius: 50%; width: 25px; height: 25px; display: flex; justify-content: center; align-items: center; font-size: 14px; padding: 0; border: none; cursor: pointer;">-</button>
+                        <span class="mx-2" id="wishlist-qty-${index}">${item.qty}</span>
+                        <button class="btn btn-secondary btn-sm adjust-qty-wishlist" data-index="${index}" data-adjust="1" style="background-color: #28a745; color: white; border-radius: 50%; width: 25px; height: 25px; display: flex; justify-content: center; align-items: center; font-size: 14px; padding: 0; border: none; cursor: pointer;">+</button>
+                    </div>
+                </td>
+                <td>Rp ${item.price.toLocaleString()}</td>
+                <td><button class="btn btn-danger remove-from-wishlist" data-index="${index}">X</button></td>
+            `;
+                    tableBody.appendChild(row);
+
+                    totalPrice += item.price * item.qty; // Accumulate the total price
+                });
+
+                // Update total price display
+                document.getElementById('total-price').textContent = `Rp ${totalPrice.toLocaleString()}`;
+
+                // Show or hide the checkout button
+                const checkoutButton = document.getElementById('checkout-button');
+                checkoutButton.style.display = wishlist.length > 0 ? 'block' : 'none';
+            }
+
+            // Event listener for all 'Pesan' buttons
+            document.querySelectorAll('.add-to-wishlist').forEach(button => {
+                button.addEventListener('click', function() {
+                    // Get product data from button attributes
+                    let name = this.getAttribute('data-product-name'); // Fixed here
+                    let price = parseInt(this.getAttribute('data-price'));
+                    let qtyInput = this.closest('.card-body').querySelector('.qty-input');
+                    let qty = parseInt(qtyInput.value);
+
+                    // Check if product name exists
+                    if (!name) {
+                        alert('Nama produk tidak ditemukan!');
+                        return;
+                    }
+
+                    // Add item to wishlist
+                    wishlist.push({
+                        name,
+                        price,
+                        qty
+                    });
+
+                    // Update the wishlist table
+                    updateWishlist();
+
+                    // Reset qty input to 1
+                    qtyInput.value = 1;
+                });
+            });
+
+            // Event listener for all quantity adjust buttons (+ and -) in the wishlist
+            document.getElementById('wishlist-table-body').addEventListener('click', function(e) {
+                if (e.target.classList.contains('adjust-qty-wishlist')) {
+                    let index = parseInt(e.target.getAttribute('data-index'));
+                    let adjust = parseInt(e.target.getAttribute('data-adjust'));
+
+                    // Adjust the qty in the wishlist array
+                    wishlist[index].qty += adjust;
+                    if (wishlist[index].qty < 1) wishlist[index].qty = 1; // Prevent qty from going below 1
+
+                    // Update the wishlist table
+                    updateWishlist();
+                } else if (e.target.classList.contains('remove-from-wishlist')) {
+                    let index = parseInt(e.target.getAttribute('data-index'));
+                    wishlist.splice(index, 1); // Remove the item from wishlist
+
+                    // Update the wishlist table
+                    updateWishlist();
+                }
+            });
+
+            // Event listener for checkout button
+            document.getElementById('checkout-button').addEventListener('click', function() {
+                if (wishlist.length > 0) {
+                    let totalAmount = wishlist.reduce((total, item) => total + item.price * item.qty, 0);
+                    alert(`Checkout berhasil! Total harga: Rp ${totalAmount.toLocaleString()}`);
+
+                    // Clear the wishlist after checkout
+                    wishlist = [];
+                    updateWishlist();
+                } else {
+                    alert('Wishlist kosong!');
+                }
+            });
+
+            // Event listener for quantity buttons (+ and -) in product cards
+            document.querySelectorAll('.adjust-qty').forEach(button => {
+                button.addEventListener('click', function() {
+                    let qtyInput = this.closest('.card-body').querySelector('.qty-input');
+                    let currentQty = parseInt(qtyInput.value);
+                    let adjust = parseInt(this.getAttribute('data-adjust'));
+
+                    let newQty = currentQty + adjust;
+                    if (newQty < 1) newQty = 1;
+                    qtyInput.value = newQty;
+                });
+            });
+        });
+    </script>
+
+    {{-- modal masukiin produk ke toko --}}
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Ambil semua tombol 'Jual di Toko'
+            const saleButtons = document.querySelectorAll('.open-sale-form');
+
+            // Tambahkan event listener untuk setiap tombol
+            saleButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const productId = this.getAttribute('data-product-id');
+                    const productName = this.getAttribute('data-product-name');
+
+                    // Set value ke input hidden
+                    document.getElementById('product_ins_id').value = productId;
+
+                    // Bisa juga menampilkan nama produk di modal jika diperlukan
+                    document.getElementById('saleModalLabel').textContent =
+                        `Jual Produk: ${productName}`;
+
+                    // Tampilkan modal
+                    var myModal = new bootstrap.Modal(document.getElementById('saleModal'));
+                    myModal.show();
+                });
+            });
+        });
+    </script>
 
 </body>
 

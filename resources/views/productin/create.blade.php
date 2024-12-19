@@ -32,7 +32,7 @@
                 <h5 class="mb-0">Tambah Produk Masuk </h5>
             </div>
             <div class="card-body">
-                <form action="{{ route('productin.storeProductIn') }}" method="POST">
+                <form action="{{ route('productin.storeProductIn') }}" method="POST" enctype="multipart/form-data">
                     @csrf
 
                     <!-- Dynamic Form Container -->

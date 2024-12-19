@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Sales;
+use App\Models\ProductIn;
 use Illuminate\Http\Request;
 
 class SalesController extends Controller
@@ -13,8 +15,42 @@ class SalesController extends Controller
      */
     public function index()
     {
-        return view('productout.index');
+        // Ambil semua produk yang sudah dijual
+        $sales = Sales::with('productIn')->get(); // Pastikan relasi sudah ada
+
+        return view('sales.index', compact('sales'));
     }
+
+
+    public function store(Request $request)
+    {
+        // Validasi input
+        $validatedData = $request->validate([
+            'product_ins_id' => 'required|exists:product_ins,id',
+            'qty' => 'required|integer|min:1',
+        ]);
+
+        // Mendapatkan produk yang bersangkutan dari tabel productin
+        $productIn = ProductIn::find($validatedData['product_ins_id']);
+
+        // Mengurangi stok produk
+        if ($productIn->qty >= $validatedData['qty']) {
+            // Simpan data penjualan ke tabel sales
+            Sales::create([
+                'product_ins_id' => $validatedData['product_ins_id'],
+                'qty' => $validatedData['qty'],
+            ]);
+
+            // Kurangi stok produk di tabel productin
+            $productIn->qty -= $validatedData['qty'];
+            $productIn->save();
+
+            return redirect()->route('sales.index')->with('success', 'Penjualan berhasil ditambahkan.');
+        } else {
+            return redirect()->back()->with('error', 'Stok produk tidak cukup.');
+        }
+    }
+
 
     /**
      * Show the form for creating a new resource.
@@ -32,7 +68,7 @@ class SalesController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function s(Request $request)
     {
         //
     }

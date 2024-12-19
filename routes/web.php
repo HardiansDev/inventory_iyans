@@ -52,6 +52,7 @@ Route::middleware(['auth', 'role:superadmin,admin_gudang'])->group(function () {
 // Rute produk keluar (khusus kasir)
 Route::middleware(['auth', 'role:kasir,superadmin'])->group(function () {
     Route::resource('sales', SalesController::class);
+    // Route::post('/sales/{id}/sell', [SalesController::class, 'sellInStore'])->name('sales.sellInStore');
 });
 
 
