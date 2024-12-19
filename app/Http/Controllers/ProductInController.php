@@ -26,21 +26,37 @@ class ProductInController extends Controller
 
     public function storeProductIn(Request $request)
     {
-        $data = $request->all();
+        // Validasi input
+        $validated = $request->validate([
+            'product_id' => 'required|array',
+            'product_id.*' => 'exists:products,id',
+            'supplier_id' => 'required|array',
+            'supplier_id.*' => 'nullable|exists:suppliers,id',
+            'category_id' => 'required|array',
+            'category_id.*' => 'nullable|exists:categories,id',
+            'date' => 'required|array',
+            'date.*' => 'date',
+            'qty' => 'required|array',
+            'qty.*' => 'integer|min:1',
+            'recipient' => 'required|array',
+            'recipient.*' => 'string|max:255',
+        ]);
 
-        // Pastikan supplier_id dan category_id adalah array, bukan string
-        foreach ($data['supplier_id'] as $key => $value) {
-            // Jika menggunakan Eloquent atau DB Query untuk insert, pastikan field menerima array
-            ProductIn::create([
-                'product_id' => $data['product_id'][$key],
-                'date' => $data['date'][$key],
-                'qty' => $data['qty'][$key],
-                'recipient' => $data['recipient'][$key],
+        // Loop data untuk menyimpan ke database
+        foreach ($request->product_id as $key => $productId) {
+            \App\Models\ProductIn::create([
+                'product_id' => $productId,
+                'supplier_id' => $request->supplier_id[$key],
+                'category_id' => $request->category_id[$key],
+                'date' => $request->date[$key],
+                'qty' => $request->qty[$key],
+                'recipient' => $request->recipient[$key],
             ]);
         }
 
-        return redirect()->route('productin.index')->with('success', 'Produk Masuk Berhasil Disimpan!');
+        return redirect()->route('productin.index')->with('success', 'Data produk masuk berhasil ditambahkan!');
     }
+
 
     public function create()
     {
