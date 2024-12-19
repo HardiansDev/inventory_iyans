@@ -28,6 +28,11 @@ class ProductIn extends Model
         return $this->belongsTo(Product::class, 'product_id','id');
     }
 
+    public function sales()
+    {
+        return $this->hasMany(Sales::class, 'product_ins_id');
+    }
+
     /**
      * Event boot model untuk menangani perubahan status.
      */
