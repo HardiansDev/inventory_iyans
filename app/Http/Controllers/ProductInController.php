@@ -149,33 +149,31 @@ class ProductInController extends Controller
         // Cek status yang diterima dari request
         $status = $request->input('status');
 
-        // Update status berdasarkan status yang diterima
         if ($status === 'diterima') {
-            // Cek apakah stok cukup
-            if ($product->stock >= $productIn->qty) {
-                // Kurangi stok produk sesuai dengan qty yang diterima
-                $product->stock -= $productIn->qty;
-
-                // Update status di tabel ProductIn menjadi 'diterima'
-                $productIn->status = 'diterima';
-            } else {
-                // Jika stok tidak mencukupi
-                return redirect()->back()->with('error', 'Stok tidak mencukupi!');
+            // Pastikan hanya memperbarui stok jika status sebelumnya adalah 'menunggu'
+            if ($productIn->status === 'menunggu') {
+                if ($product->stock >= $productIn->qty) {
+                    // Kurangi stok produk sesuai dengan qty yang diterima
+                    $product->stock -= $productIn->qty;
+                    $productIn->status = 'diterima'; // Update status di ProductIn
+                    $product->status = 'produk diterima'; // Update status di Product
+                    $product->save(); // Simpan perubahan stok dan status produk
+                } else {
+                    return redirect()->back()->with('error', 'Stok tidak mencukupi!');
+                }
             }
-
-            // Tetap set status produk menjadi 'produk diterima'
-            $product->status = 'produk diterima';
         } elseif ($status === 'ditolak') {
-            // Jika ditolak, hapus data ProductIn dan tidak ada perubahan pada stok
-            $productIn->delete();
-            // Jika diperlukan, ubah status produk menjadi 'produk ditolak'
-            $product->status = 'produk ditolak';
+            if ($productIn->status === 'menunggu') {
+                $productIn->status = 'ditolak'; // Update status di ProductIn
+                $product->status = 'produk ditolak'; // Update status di Product
+                $product->save(); // Simpan perubahan status produk
+            }
         }
 
-        // Simpan perubahan pada produk utama
-        $product->save();
+        // Simpan perubahan pada ProductIn
+        $productIn->save();
 
-        // Redirect kembali ke halaman productin dengan refresh
+        // Redirect kembali dengan pesan sukses
         return redirect()->route('productin.index')->with('success', 'Status berhasil diperbarui!');
     }
 }

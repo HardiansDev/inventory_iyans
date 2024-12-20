@@ -160,6 +160,7 @@
                                             </td>
 
 
+
                                             <td class="text-nowrap">
                                                 <a href="{{ route('product.show', $product->id) }}"
                                                     class="btn btn-primary btn-sm">

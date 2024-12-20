@@ -97,7 +97,7 @@
     <div class="wrapper">
         <!-- Header -->
         <header class="main-header">
-            <a href="/" class="logo">
+            <a href="#" class="logo">
                 <span class="logo-mini"><b>G</b>I</span>
                 <span class="logo-lg"><b>Gudang</b>Iyan</span>
             </a>
