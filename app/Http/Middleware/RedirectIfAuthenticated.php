@@ -27,7 +27,7 @@ class RedirectIfAuthenticated
                 case 'admin_gudang':
                     return redirect()->route('product.index');
                 case 'kasir':
-                    return redirect()->route('product-out.index');
+                    return redirect()->route('sales.index');
                 case 'superadmin':
                 case 'manager':
                     return redirect()->route('dashboard');

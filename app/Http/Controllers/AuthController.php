@@ -28,7 +28,7 @@ class AuthController extends Controller
                 case 'admin_gudang':
                     return redirect()->route('product.index'); // Ganti dengan route untuk view produk
                 case 'kasir':
-                    return redirect()->route('product-out.index'); // Ganti dengan route untuk view customer
+                    return redirect()->route('sales.index'); // Ganti dengan route untuk view customer
                 case 'superadmin':
                 case 'manager':
                     return redirect()->route('dashboard'); // Ganti dengan route untuk dashboard
@@ -55,7 +55,7 @@ class AuthController extends Controller
                 case 'admin_gudang':
                     return redirect()->route('product.index'); // Ganti dengan route untuk view produk
                 case 'kasir':
-                    return redirect()->route('product-out.index'); // Ganti dengan route untuk view customer
+                    return redirect()->route('sales.index'); // Ganti dengan route untuk view customer
                 case 'superadmin':
                 case 'manager':
                     return redirect()->route('dashboard'); // Ganti dengan route untuk dashboard

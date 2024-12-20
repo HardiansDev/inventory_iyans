@@ -139,7 +139,7 @@
 
                         <!-- Gambar Produk (sebelah kanan) -->
                         <div class="product-image">
-                            <img src="{{ asset('fotoproduct/' . $product->photo) }}" alt="Product Image">
+                            <img src="{{ asset('/storage/fotoproduct/' . $product->photo) }}" alt="Product Image">
                         </div>
                     </div>
 
