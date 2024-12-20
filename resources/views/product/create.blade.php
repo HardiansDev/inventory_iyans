@@ -130,7 +130,7 @@
                                                 data-bs-placement="top"
                                                 title="Masukkan jumlah stok produk yang tersedia."></i>
                                         </label>
-                                        <input type="text" class="form-control @error('stock') is-invalid @enderror"
+                                        <input type="number" class="form-control @error('stock') is-invalid @enderror"
                                             name="stock" id="productStock" placeholder="Masukkan Stok Product"
                                             value="{{ old('stock') }}">
                                         @error('stock')

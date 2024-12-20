@@ -151,20 +151,12 @@
                                             <td>{{ $product->stock }} pcs</td>
                                             <td>
                                                 @if ($product->status == 'produk diterima')
-                                                    <span class="badge bg-success">{{ ucwords($product->status) }}
-                                                        {{ $product->qty_diterima }}</span>
+                                                    <span class="badge bg-success">{{ ucwords($product->status) }}</span>
                                                 @elseif ($product->status == 'produk ditolak')
-                                                    <span class="badge bg-danger">
-                                                        {{ ucwords($product->status) }}
-                                                    </span>
-                                                @elseif ($product->status == 'semua produk telah diterima')
-                                                    <span class="badge bg-warning">
-                                                        {{ ucwords($product->status) }}
-                                                    </span>
+                                                    <span class="badge bg-danger">{{ ucwords($product->status) }}</span>
                                                 @else
                                                     <span class="badge bg-secondary">{{ ucwords($product->status) }}</span>
                                                 @endif
-
                                             </td>
 
 

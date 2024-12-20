@@ -25,7 +25,7 @@ class ProductIn extends Model
      */
     public function product()
     {
-        return $this->belongsTo(Product::class, 'product_id','id');
+        return $this->belongsTo(Product::class, 'product_id', 'id');
     }
 
     public function sales()
@@ -36,6 +36,7 @@ class ProductIn extends Model
     /**
      * Event boot model untuk menangani perubahan status.
      */
+
     public static function boot()
     {
         parent::boot();
@@ -44,19 +45,14 @@ class ProductIn extends Model
             $previousStatus = $productIn->getOriginal('status');
             $currentStatus = $productIn->status;
 
+            // Menangani pengurangan stok hanya jika status berubah menjadi diterima
             if ($currentStatus === 'diterima' && $previousStatus !== 'diterima') {
-                // Status berubah menjadi diterima
+                // Status berubah menjadi diterima, proses pengurangan stok
                 static::handleAcceptedStatus($productIn);
-            } elseif ($currentStatus === 'ditolak' && $previousStatus !== 'ditolak') {
-                // Status berubah menjadi ditolak
-                static::handleRejectedStatus($productIn);
             }
         });
     }
 
-    /**
-     * Handle status diterima: Kurangi stok produk.
-     */
     private static function handleAcceptedStatus($productIn)
     {
         $product = $productIn->product;
@@ -76,15 +72,5 @@ class ProductIn extends Model
                 );
             }
         }
-    }
-
-
-
-    /**
-     * Handle status ditolak: Kembalikan stok produk dan hapus data dari product_in.
-     */
-    private static function handleRejectedStatus($productIn)
-    {
-        $productIn->delete(); // Hapus data product_in
     }
 }

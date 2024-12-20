@@ -123,7 +123,7 @@
                                                 data-bs-placement="top"
                                                 title="Masukkan jumlah stok produk yang tersedia."></i>
                                         </label>
-                                        <input type="text" class="form-control" name="stock" id="productStock"
+                                        <input type="number" class="form-control" name="stock" id="productStock"
                                             value="{{ $product->stock }}" required>
                                     </div>
 
@@ -147,8 +147,10 @@
                                     </div>
                                 </div>
                                 <div class="d-flex justify-content-end">
-                                    <button type="submit" class="btn btn-primary me-2"><i class="fas fa-save"></i> Ubah Produk</button>
-                                    <a href="{{ route('product.index') }}" class="btn btn-danger"><i class="fas fa-times"></i> Batal</a>
+                                    <button type="submit" class="btn btn-primary me-2"><i class="fas fa-save"></i> Ubah
+                                        Produk</button>
+                                    <a href="{{ route('product.index') }}" class="btn btn-danger"><i
+                                            class="fas fa-times"></i> Batal</a>
                                 </div>
                             </form>
 

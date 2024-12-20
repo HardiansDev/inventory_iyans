@@ -151,44 +151,31 @@ class ProductInController extends Controller
 
         // Update status berdasarkan status yang diterima
         if ($status === 'diterima') {
+            // Cek apakah stok cukup
             if ($product->stock >= $productIn->qty) {
+                // Kurangi stok produk sesuai dengan qty yang diterima
                 $product->stock -= $productIn->qty;
 
                 // Update status di tabel ProductIn menjadi 'diterima'
                 $productIn->status = 'diterima';
-            }
-
-            // Pastikan stok tidak menjadi negatif
-            if ($product->stock < 0) {
+            } else {
+                // Jika stok tidak mencukupi
                 return redirect()->back()->with('error', 'Stok tidak mencukupi!');
             }
 
-            // Update status produk menjadi 'produk diterima'
+            // Tetap set status produk menjadi 'produk diterima'
             $product->status = 'produk diterima';
         } elseif ($status === 'ditolak') {
-            // Tidak ada perubahan pada stok jika ditolak
+            // Jika ditolak, hapus data ProductIn dan tidak ada perubahan pada stok
+            $productIn->delete();
+            // Jika diperlukan, ubah status produk menjadi 'produk ditolak'
             $product->status = 'produk ditolak';
-        }
-
-        // Jika stok produk sudah habis, ubah status produk menjadi 'semua produk telah diterima'
-        if ($product->stock == 0) {
-            $product->status = 'semua produk telah diterima';
         }
 
         // Simpan perubahan pada produk utama
         $product->save();
 
-        // Refresh produk untuk memastikan data terbaru
-        $product->refresh();
-
-        // Update status di tabel ProductIn
-        $productIn->status = $status;
-        $productIn->save();
-
-        // Kirim status produk yang sudah diperbarui ke view
-        $statusDitanya = $product->status;
-
-        return redirect()->route('productin.index')->with('success', 'Status berhasil diperbarui!')
-            ->with('status', $statusDitanya); // Mengirim status produk yang diperbarui ke view
+        // Redirect kembali ke halaman productin dengan refresh
+        return redirect()->route('productin.index')->with('success', 'Status berhasil diperbarui!');
     }
 }
