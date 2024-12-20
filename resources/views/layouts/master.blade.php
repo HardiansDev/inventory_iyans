@@ -526,16 +526,16 @@
             // Event listener for checkout button
             document.getElementById('checkout-button').addEventListener('click', function() {
                 if (wishlist.length > 0) {
-                    let totalAmount = wishlist.reduce((total, item) => total + item.price * item.qty, 0);
-                    alert(`Checkout berhasil! Total harga: Rp ${totalAmount.toLocaleString()}`);
+                    // Serialize wishlist items to JSON string
+                    let wishlistData = encodeURIComponent(JSON.stringify(wishlist));
 
-                    // Clear the wishlist after checkout
-                    wishlist = [];
-                    updateWishlist();
+                    // Redirect to the checkout page with wishlist data in query parameters
+                    window.location.href = `/detail-cekout?wishlist=${wishlistData}`;
                 } else {
                     alert('Wishlist kosong!');
                 }
             });
+
 
             // Event listener for quantity buttons (+ and -) in product cards
             document.querySelectorAll('.adjust-qty').forEach(button => {
