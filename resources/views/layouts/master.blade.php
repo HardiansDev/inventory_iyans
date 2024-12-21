@@ -4,6 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     @yield('title')
     @yield('styles')
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -436,122 +437,113 @@
     {{-- tabel wishlist --}}
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Wishlist array to hold product objects
             let wishlist = [];
+            const cartBadge = document.getElementById('cart-badge');
+            const cartIcon = document.getElementById('cart-icon');
 
-            // Function to update the wishlist table and calculate total price
+            // Function untuk memperbarui tabel wishlist dan badge cart
             function updateWishlist() {
                 let tableBody = document.getElementById('wishlist-table-body');
-                tableBody.innerHTML = ''; // Clear previous wishlist data
-
+                tableBody.innerHTML = '';
                 let totalPrice = 0;
+
                 wishlist.forEach((item, index) => {
                     let row = document.createElement('tr');
                     row.innerHTML = `
                 <td>${item.name}</td>
                 <td>
                     <div class="d-flex align-items-center">
-                        <button class="btn btn-secondary btn-sm adjust-qty-wishlist" data-index="${index}" data-adjust="-1" style="background-color: #ff6f61; color: white; border-radius: 50%; width: 25px; height: 25px; display: flex; justify-content: center; align-items: center; font-size: 14px; padding: 0; border: none; cursor: pointer;">-</button>
+                        <button class="btn btn-secondary btn-sm adjust-qty-wishlist" data-index="${index}" data-adjust="-1">-</button>
                         <span class="mx-2" id="wishlist-qty-${index}">${item.qty}</span>
-                        <button class="btn btn-secondary btn-sm adjust-qty-wishlist" data-index="${index}" data-adjust="1" style="background-color: #28a745; color: white; border-radius: 50%; width: 25px; height: 25px; display: flex; justify-content: center; align-items: center; font-size: 14px; padding: 0; border: none; cursor: pointer;">+</button>
+                        <button class="btn btn-secondary btn-sm adjust-qty-wishlist" data-index="${index}" data-adjust="1">+</button>
                     </div>
                 </td>
                 <td>Rp ${item.price.toLocaleString()}</td>
                 <td><button class="btn btn-danger remove-from-wishlist" data-index="${index}">X</button></td>
             `;
                     tableBody.appendChild(row);
-
-                    totalPrice += item.price * item.qty; // Accumulate the total price
+                    totalPrice += item.price * item.qty;
                 });
 
-                // Update total price display
                 document.getElementById('total-price').textContent = `Rp ${totalPrice.toLocaleString()}`;
+                cartBadge.textContent = wishlist.length;
+                cartBadge.style.display = wishlist.length > 0 ? 'inline-block' : 'none';
 
-                // Show or hide the checkout button
                 const checkoutButton = document.getElementById('checkout-button');
                 checkoutButton.style.display = wishlist.length > 0 ? 'block' : 'none';
             }
 
-            // Event listener for all 'Pesan' buttons
+            // Event listener untuk tombol 'Pesan' pada produk
             document.querySelectorAll('.add-to-wishlist').forEach(button => {
                 button.addEventListener('click', function() {
-                    // Get product data from button attributes
-                    let name = this.getAttribute('data-product-name'); // Fixed here
+                    let name = this.getAttribute('data-product-name');
                     let price = parseInt(this.getAttribute('data-price'));
                     let qtyInput = this.closest('.card-body').querySelector('.qty-input');
                     let qty = parseInt(qtyInput.value);
 
-                    // Check if product name exists
-                    if (!name) {
-                        alert('Nama produk tidak ditemukan!');
-                        return;
-                    }
-
-                    // Add item to wishlist
                     wishlist.push({
                         name,
                         price,
                         qty
                     });
-
-                    // Update the wishlist table
                     updateWishlist();
-
-                    // Reset qty input to 1
                     qtyInput.value = 1;
                 });
             });
 
-            // Event listener for all quantity adjust buttons (+ and -) in the wishlist
+            // Event listener untuk tabel wishlist (adjust qty dan remove)
             document.getElementById('wishlist-table-body').addEventListener('click', function(e) {
                 if (e.target.classList.contains('adjust-qty-wishlist')) {
                     let index = parseInt(e.target.getAttribute('data-index'));
                     let adjust = parseInt(e.target.getAttribute('data-adjust'));
-
-                    // Adjust the qty in the wishlist array
                     wishlist[index].qty += adjust;
-                    if (wishlist[index].qty < 1) wishlist[index].qty = 1; // Prevent qty from going below 1
-
-                    // Update the wishlist table
+                    if (wishlist[index].qty < 1) wishlist[index].qty = 1;
                     updateWishlist();
                 } else if (e.target.classList.contains('remove-from-wishlist')) {
                     let index = parseInt(e.target.getAttribute('data-index'));
-                    wishlist.splice(index, 1); // Remove the item from wishlist
-
-                    // Update the wishlist table
+                    wishlist.splice(index, 1);
                     updateWishlist();
                 }
             });
 
-            // Event listener for checkout button
+            // Event listener untuk tombol checkout
             document.getElementById('checkout-button').addEventListener('click', function() {
                 if (wishlist.length > 0) {
-                    // Serialize wishlist items to JSON string
                     let wishlistData = encodeURIComponent(JSON.stringify(wishlist));
-
-                    // Redirect to the checkout page with wishlist data in query parameters
                     window.location.href = `/detail-cekout?wishlist=${wishlistData}`;
                 } else {
                     alert('Wishlist kosong!');
                 }
             });
 
+            // Event listener untuk ikon cart
+            cartIcon.addEventListener('click', function() {
+                const wishlistModal = new bootstrap.Modal(document.getElementById('wishlistModal'));
+                wishlistModal.show();
+            });
 
-            // Event listener for quantity buttons (+ and -) in product cards
-            document.querySelectorAll('.adjust-qty').forEach(button => {
-                button.addEventListener('click', function() {
-                    let qtyInput = this.closest('.card-body').querySelector('.qty-input');
+            // Event listener untuk tombol adjust (+/-) pada produk
+            document.addEventListener('click', function(e) {
+                if (e.target.classList.contains('adjust-qty')) {
+                    let qtyInput = e.target.closest('.d-flex').querySelector('.qty-input');
                     let currentQty = parseInt(qtyInput.value);
-                    let adjust = parseInt(this.getAttribute('data-adjust'));
-
+                    let adjust = parseInt(e.target.getAttribute('data-adjust'));
                     let newQty = currentQty + adjust;
                     if (newQty < 1) newQty = 1;
                     qtyInput.value = newQty;
+                }
+            });
+
+            // Event listener untuk input qty langsung
+            document.querySelectorAll('.qty-input').forEach(input => {
+                input.addEventListener('change', function() {
+                    if (this.value < 1) {
+                        this.value = 1;
+                    }
                 });
             });
         });
     </script>
-
     {{-- modal masukiin produk ke toko --}}
     <script>
         document.addEventListener('DOMContentLoaded', function() {

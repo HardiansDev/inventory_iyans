@@ -1,15 +1,18 @@
 <?php
 
+use App\Models\Sales;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\SalesController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CategoryController;
+// use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProductInController;
+use App\Http\Controllers\SalesDetailController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -34,7 +37,7 @@ Route::middleware(['auth', 'role:superadmin,admin_gudang'])->group(function () {
     Route::post('/product/download-excel', [ProductController::class, 'downloadExcel'])->name('product.downloadExcel');
     Route::get('/get-product-details/{productId}', [ProductController::class, 'getProductDetails']);
     Route::resource('productin', ProductInController::class);
-    Route::get('/detail-cekout', [CheckoutController::class, 'showCheckout'])->name('detail-cekout');
+    // Route::get('/detail-cekout', [CheckoutController::class, 'showCheckout'])->name('detail-cekout');
     Route::post('/productin/store', [ProductInController::class, 'storeProductIn'])->name('productin.storeProductIn');
     Route::put('/productin/update-status/{id}', [ProductInController::class, 'updateStatus'])->name('productin.updateStatus');
 });
@@ -55,6 +58,9 @@ Route::middleware(['auth', 'role:superadmin,admin_gudang'])->group(function () {
 Route::middleware(['auth', 'role:kasir,superadmin'])->group(function () {
     Route::resource('sales', SalesController::class);
     Route::get('/detail-cekout', [CheckoutController::class, 'showCheckout'])->name('detail-cekout');
+    Route::post('/proses-pembayaran', [SalesDetailController::class, 'processPayment'])->name('process.payment');
+    Route::get('/print-struk', [SalesDetailController::class, 'printStruk'])->name('print.struk');
+
 });
 
 

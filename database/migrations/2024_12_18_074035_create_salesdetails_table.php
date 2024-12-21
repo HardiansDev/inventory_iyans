@@ -16,18 +16,18 @@ class CreateSalesdetailsTable extends Migration
     {
         Schema::create('salesdetails', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(Sales::class, 'sales_id')
-                ->constrained((new Sales())->getTable())
-                ->onDelete('cascade');
+            $table->foreignId('sales_id')->constrained('sales')->onDelete('cascade'); // Foreign key ke tabel sales
             $table->dateTime('date_order');
-            $table->unsignedBigInteger('discount_id')->nullable();
-            $table->decimal('amount', 15, 2);    // Nilai untuk jumlah item
-            $table->decimal('total', 15, 2);     // Total transaksi
-            $table->decimal('subtotal', 15, 2);  // Subtotal transaksi
-            $table->decimal('change', 15, 2);    // Kembalian
-            $table->string('transaction_number', 50)->unique(); // Nomor transaksi
-            $table->string('invoice_number', 50)->unique();    // Nomor faktur
-            $table->foreign('discount_id')->references('id')->on('discounts')->onDelete('set null');
+            $table->foreignId('discount_id')->nullable()->constrained('discounts')->onDelete('set null'); // Foreign key ke tabel discounts, nullable
+            $table->decimal('amount', 15, 2)->nullable();
+            $table->decimal('total', 15, 2);
+            $table->decimal('subtotal', 15, 2);
+            $table->decimal('change', 15, 2)->nullable();
+            $table->string('transaction_number');
+            $table->string('invoice_number');
+            $table->string('name');
+            $table->integer('qty');
+            $table->decimal('price', 15, 2);
             $table->timestamps();
         });
     }
