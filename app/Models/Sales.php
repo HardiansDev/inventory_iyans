@@ -29,6 +29,6 @@ class Sales extends Model
      */
     public function salesDetails()
     {
-        return $this->hasMany(SalesDetail::class, 'sales_id');
+        return $this->hasMany(SalesDetail::class);
     }
 }

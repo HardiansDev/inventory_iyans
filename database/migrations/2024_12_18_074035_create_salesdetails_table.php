@@ -25,9 +25,6 @@ class CreateSalesdetailsTable extends Migration
             $table->decimal('change', 15, 2)->nullable();
             $table->string('transaction_number');
             $table->string('invoice_number');
-            $table->string('name');
-            $table->integer('qty');
-            $table->decimal('price', 15, 2);
             $table->timestamps();
         });
     }

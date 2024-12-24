@@ -476,16 +476,24 @@
             // Event listener untuk tombol 'Pesan' pada produk
             document.querySelectorAll('.add-to-wishlist').forEach(button => {
                 button.addEventListener('click', function() {
+                    let id = parseInt(this.getAttribute('data-product-id')); // Ambil ID
                     let name = this.getAttribute('data-product-name');
                     let price = parseInt(this.getAttribute('data-price'));
                     let qtyInput = this.closest('.card-body').querySelector('.qty-input');
                     let qty = parseInt(qtyInput.value);
 
-                    wishlist.push({
-                        name,
-                        price,
-                        qty
-                    });
+                    let existingItemIndex = wishlist.findIndex(item => item.id === id);
+
+                    if (existingItemIndex !== -1) {
+                        wishlist[existingItemIndex].qty += qty;
+                    } else {
+                        wishlist.push({
+                            id: id, // Ini krusial!
+                            name: name,
+                            price: price,
+                            qty: qty
+                        });
+                    }
                     updateWishlist();
                     qtyInput.value = 1;
                 });
@@ -509,8 +517,29 @@
             // Event listener untuk tombol checkout
             document.getElementById('checkout-button').addEventListener('click', function() {
                 if (wishlist.length > 0) {
-                    let wishlistData = encodeURIComponent(JSON.stringify(wishlist));
-                    window.location.href = `/detail-cekout?wishlist=${wishlistData}`;
+                    // Kirim data wishlist ke server menggunakan AJAX
+                    fetch('/set-wishlist', { // Route untuk menyimpan wishlist ke session
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')
+                                    .getAttribute('content') // Penting untuk proteksi CSRF
+                            },
+                            body: JSON.stringify(wishlist)
+                        })
+                        .then(response => {
+                            if (response.ok) {
+                                window.location.href =
+                                    '/detail-cekout'; // Redirect setelah data disimpan
+                            } else {
+                                console.error("Gagal menyimpan wishlist ke session.");
+                                alert("Terjadi kesalahan, coba lagi nanti.");
+                            }
+                        })
+                        .catch(error => {
+                            console.error("Error:", error);
+                            alert("Terjadi kesalahan, coba lagi nanti.");
+                        });
                 } else {
                     alert('Wishlist kosong!');
                 }
@@ -544,6 +573,7 @@
             });
         });
     </script>
+
     {{-- modal masukiin produk ke toko --}}
     <script>
         document.addEventListener('DOMContentLoaded', function() {

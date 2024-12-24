@@ -57,10 +57,12 @@ Route::middleware(['auth', 'role:superadmin,admin_gudang'])->group(function () {
 // Rute produk keluar (khusus kasir)
 Route::middleware(['auth', 'role:kasir,superadmin'])->group(function () {
     Route::resource('sales', SalesController::class);
+    Route::post('/set-wishlist', [CheckoutController::class, 'setWishlist'])->name('set.wishlist');
     Route::get('/detail-cekout', [CheckoutController::class, 'showCheckout'])->name('detail-cekout');
     Route::post('/proses-pembayaran', [SalesDetailController::class, 'processPayment'])->name('process.payment');
-    Route::get('/print-struk', [SalesDetailController::class, 'printStruk'])->name('print.struk');
+    Route::get('/print-receipt/{transaction_number}', [SalesController::class, 'printReceipt'])->name('print.receipt');
 
+    // Route::get('/print-struk', [SalesDetailController::class, 'printStruk'])->name('print.struk');
 });
 
 

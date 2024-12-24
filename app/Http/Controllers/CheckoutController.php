@@ -3,20 +3,29 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use App\Models\Discount;
 
 class CheckoutController extends Controller
 {
+    public function setWishlist(Request $request)
+    {
+        $request->session()->put('wishlist', $request->json()->all());
+        return response()->json(['success' => true]);
+    }
+
     public function showCheckout(Request $request)
     {
-        // Decode wishlist data from query string
-        $wishlist = json_decode($request->get('wishlist', '[]'), true);
-
-        // Check if wishlist is valid
-        if (empty($wishlist)) {
-            return redirect('/')->with('error', 'Wishlist kosong!');
+        $change = 0;
+        // dd($request->session()->get('wishlist'));
+        $wishlist = $request->session()->get('wishlist');
+        if ($wishlist) {
+            $wishlist = $wishlist; // Tidak perlu decode lagi karena sudah berupa array saat disimpan
+        } else {
+            $wishlist = [];
         }
 
-        // Pass wishlist data to the view
-        return view('sales.detail-cekout', ['wishlist' => $wishlist]);
+        $discounts = Discount::all();
+        return view('sales.detail-cekout', compact('wishlist', 'discounts', 'change'));
     }
 }

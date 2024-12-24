@@ -9,10 +9,18 @@ class SalesDetail extends Model
 {
     use HasFactory;
 
+    protected $table = 'salesdetails'; // Sesuaikan nama tabel
+
     protected $fillable = [
-        'sales_id', 'date_order', 'discount_id',
-        'amount', 'total', 'subtotal', 'change',
-        'transaction_number', 'invoice_number'
+        'sales_id',
+        'date_order',
+        'discount_id', //nullable
+        'amount',
+        'total',
+        'subtotal',
+        'change',
+        'transaction_number',
+        'invoice_number',
     ];
 
     /**
@@ -21,7 +29,7 @@ class SalesDetail extends Model
      */
     public function sales()
     {
-        return $this->belongsTo(Sales::class, 'sales_id');
+        return $this->belongsTo(Sales::class);
     }
 
     /**
@@ -30,6 +38,6 @@ class SalesDetail extends Model
      */
     public function discount()
     {
-        return $this->belongsTo(Discount::class, 'discount_id');
+        return $this->belongsTo(Discount::class);
     }
 }

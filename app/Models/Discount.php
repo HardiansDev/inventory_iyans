@@ -19,6 +19,6 @@ class Discount extends Model
      */
     public function salesDetails()
     {
-        return $this->hasMany(SalesDetail::class, 'discount_id');
+        return $this->hasMany(SalesDetail::class);
     }
 }
