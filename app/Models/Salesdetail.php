@@ -21,6 +21,8 @@ class SalesDetail extends Model
         'change',
         'transaction_number',
         'invoice_number',
+        'qty',
+        'price',
     ];
 
     /**

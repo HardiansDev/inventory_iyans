@@ -78,12 +78,14 @@
                                     </button>
                                 </div>
 
-                                <!-- Pesan Button -->
-                                <button class="btn btn-primary add-to-wishlist" data-product-id="{{ $productIn->id }}"
-                                    data-product-name="{{ $productIn->product->name }}"
-                                    data-price="{{ $productIn->product->price }}" data-qty="1">
+                                <button class="add-to-wishlist btn btn-warning btn-lg" data-sales-id="{{ $sale->id }}"
+                                    data-product-name="{{ $sale->productIn->product->name }}"
+                                    data-price="{{ $sale->productIn->product->price }}" data-stock="{{ $sale->qty }}">
                                     Pesan
                                 </button>
+
+
+
 
                             </div>
                         </div>

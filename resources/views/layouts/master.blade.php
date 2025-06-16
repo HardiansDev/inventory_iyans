@@ -428,29 +428,48 @@
 
             // Event listener untuk tombol 'Pesan' pada produk
             document.querySelectorAll('.add-to-wishlist').forEach(button => {
-                button.addEventListener('click', function() {
-                    let id = parseInt(this.getAttribute('data-product-id')); // Ambil ID
-                    let name = this.getAttribute('data-product-name');
-                    let price = parseInt(this.getAttribute('data-price'));
-                    let qtyInput = this.closest('.card-body').querySelector('.qty-input');
-                    let qty = parseInt(qtyInput.value);
+                const stock = parseInt(button.getAttribute('data-stock'));
 
-                    let existingItemIndex = wishlist.findIndex(item => item.id === id);
+                // Otomatis disable jika stok habis
+                if (stock <= 0) {
+                    button.setAttribute('disabled', true);
+                    button.setAttribute('title', 'Stok habis');
+                    return; // Skip addEventListener kalau tombol disable
+                }
+
+                // ✅ Event listener untuk tombol aktif
+                button.addEventListener('click', function() {
+                    const id = parseInt(this.getAttribute('data-sales-id'));
+                    const name = this.getAttribute('data-product-name');
+                    const price = parseInt(this.getAttribute('data-price'));
+                    const qtyInput = this.closest('.card-body').querySelector('.qty-input');
+                    const qty = parseInt(qtyInput.value);
+
+                    if (qty > stock) {
+                        toastr.warning(`Jumlah melebihi stok. Stok tersedia: ${stock}`);
+                        return;
+                    }
+
+                    const existingItemIndex = wishlist.findIndex(item => item.id === id);
 
                     if (existingItemIndex !== -1) {
                         wishlist[existingItemIndex].qty += qty;
                     } else {
                         wishlist.push({
-                            id: id, // Ini krusial!
+                            id: id,
                             name: name,
                             price: price,
                             qty: qty
                         });
                     }
+
                     updateWishlist();
                     qtyInput.value = 1;
                 });
             });
+
+
+
 
             // Event listener untuk tabel wishlist (adjust qty dan remove)
             document.getElementById('wishlist-table-body').addEventListener('click', function(e) {

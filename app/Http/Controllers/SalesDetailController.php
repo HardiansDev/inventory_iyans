@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Product;
-use App\Models\ProductIn;
 use App\Models\Sales;
 use App\Models\SalesDetail;
 use Illuminate\Http\Request;
@@ -14,9 +12,9 @@ class SalesDetailController extends Controller
 {
     public function processPayment(Request $request)
     {
-        $request->validate([
+        $validated = $request->validate([
             'sales' => 'required|array',
-            'sales.*.id' => 'required|exists:sales,id', // karena stok ambil dari sales
+            'sales.*.id' => 'required|exists:sales,id',
             'sales.*.qty' => 'required|integer|min:1',
             'date_order' => 'required|date',
             'discount_id' => 'nullable|exists:discounts,id',
@@ -31,9 +29,9 @@ class SalesDetailController extends Controller
         try {
             DB::beginTransaction();
 
-            // Validasi stok semua produk dulu
             $stokKurang = [];
-            foreach ($request->sales as $item) {
+
+            foreach ($validated['sales'] as $item) {
                 $sales = Sales::with('productIn.product')->findOrFail($item['id']);
                 if ($sales->qty < $item['qty']) {
                     $stokKurang[] = $sales->productIn->product->name ?? 'Produk ID: ' . $sales->product_ins_id;
@@ -41,49 +39,61 @@ class SalesDetailController extends Controller
             }
 
             if (!empty($stokKurang)) {
-                return back()->with('error', 'Stok tidak mencukupi untuk produk: ' . implode(', ', $stokKurang));
+                DB::rollBack();
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Stok tidak mencukupi untuk: ' . implode(', ', $stokKurang),
+                ], 422);
             }
 
-            // Jika stok cukup, proses simpan
-            foreach ($request->sales as $item) {
+            foreach ($validated['sales'] as $item) {
                 $sales = Sales::with('productIn.product')->findOrFail($item['id']);
-                $product = $sales->productIn->product; // ← tambahkan ini
-
-                // Kurangi stok penjualan
                 $sales->qty -= $item['qty'];
                 $sales->save();
 
-                // Simpan detail transaksi
-                $salesDetail = new SalesDetail();
-                $salesDetail->sales_id = $sales->id;
-                $salesDetail->transaction_number = $request->transaction_number;
-                $salesDetail->invoice_number = $request->invoice_number;
-                $salesDetail->date_order = $request->date_order;
-                $salesDetail->discount_id = $request->discount_id;
-                $salesDetail->amount = $request->amount;
-                $salesDetail->total = $request->total;
-                $salesDetail->subtotal = $request->subtotal;
-                $salesDetail->change = $request->change;
-                $salesDetail->qty = $item['qty'];
-                $salesDetail->price = $sales->productIn->product->price;
-                $salesDetail->save();
+                $product = $sales->productIn->product;
+
+                SalesDetail::create([
+                    'sales_id' => $sales->id,
+                    'transaction_number' => $validated['transaction_number'],
+                    'invoice_number' => $validated['invoice_number'],
+                    'date_order' => $validated['date_order'],
+                    'discount_id' => $validated['discount_id'],
+                    'amount' => $validated['amount'],
+                    'total' => $validated['total'],
+                    'subtotal' => $validated['subtotal'],
+                    'change' => $validated['change'],
+                    'qty' => $item['qty'],
+                    'price' => $product->price,
+                ]);
             }
 
             DB::commit();
 
-            return redirect()->route('print.receipt', ['transaction_number' => $request->transaction_number])
-                ->with('success', 'Pembayaran berhasil diproses!');
-        } catch (\Exception $e) {
-            DB::rollback();
-            Log::error('Error saat proses pembayaran: ' . $e->getMessage());
-            return back()->with('error', 'Terjadi kesalahan dalam proses pembayaran.');
+            $url = route('print.receipt', ['transaction_number' => $validated['transaction_number']]);
+
+            return response()->json([
+                'success' => true,
+                'transaction_url' => $url,
+            ]);
+        } catch (\Throwable $e) {
+            DB::rollBack();
+            Log::error('Pembayaran gagal: ' . $e->getMessage(), [
+                'request' => $request->all(),
+                'trace' => $e->getTraceAsString(),
+            ]);
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Terjadi kesalahan saat memproses pembayaran. Silakan coba lagi.',
+            ], 500);
         }
     }
 
     public function printReceipt($transaction_number)
     {
         $salesDetails = SalesDetail::where('transaction_number', $transaction_number)
-            ->with('sales.productIn.product') // Relasi salesdetail -> sales -> product_in -> product
+            ->with('sales.productIn.product')
             ->get();
 
         if ($salesDetails->isEmpty()) {

@@ -68,6 +68,7 @@ Route::middleware(['auth', 'role:kasir,superadmin'])->group(function () {
     Route::post('/proses-pembayaran', [SalesDetailController::class, 'processPayment'])->name('process.payment');
     Route::get('/print-receipt/{transaction_number}', [SalesDetailController::class, 'printReceipt'])->name('print.receipt');
 
+
     // Route::get('/print-struk', [SalesDetailController::class, 'printStruk'])->name('print.struk');
 });
 
