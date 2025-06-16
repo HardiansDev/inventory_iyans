@@ -32,4 +32,11 @@ class ProductIn extends Model
     {
         return $this->hasMany(Sales::class, 'product_ins_id');
     }
+
+    public function getRemainingStock()
+    {
+        // Total terjual dari salesdetails
+        $used = $this->sales()->sum('qty');
+        return $this->qty - $used;
+    }
 }

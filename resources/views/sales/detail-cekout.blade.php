@@ -64,7 +64,7 @@
                                     placeholder="Masukkan jumlah pembayaran">
                                 <input type="hidden" name="amount" id="amount">
                             </div>
-                            <h4 class="text-success">Kembalian: Rp <span id="change-display">0</span></h4>
+                            <h4 class="text-success">Kembalian: <span id="change-display">0</span></h4>
                             <input type="hidden" name="change" id="change-input">
                         </div>
                         <div class="col-md-3">

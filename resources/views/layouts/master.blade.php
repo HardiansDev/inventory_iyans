@@ -562,8 +562,7 @@
                     document.getElementById('product_ins_id').value = productId;
 
                     // Bisa juga menampilkan nama produk di modal jika diperlukan
-                    document.getElementById('saleModalLabel').textContent =
-                        `Jual Produk: ${productName}`;
+                    document.getElementById('saleModalLabel').textContent = productName;
 
                     // Tampilkan modal
                     var myModal = new bootstrap.Modal(document.getElementById('saleModal'));

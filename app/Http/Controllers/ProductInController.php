@@ -5,7 +5,10 @@ namespace App\Http\Controllers;
 
 use App\Models\ProductIn;
 use App\Models\Product;
+use App\Models\Sales;
 use Illuminate\Http\Request;
+// use Illuminate\Support\Facades\Log;
+
 
 class ProductInController extends Controller
 {
@@ -175,5 +178,73 @@ class ProductInController extends Controller
 
         // Redirect kembali dengan pesan sukses
         return redirect()->route('productin.index')->with('success', 'Status berhasil diperbarui!');
+    }
+
+    public function addStock(Request $request, $id)
+    {
+        $productIn = ProductIn::with('product')->findOrFail($id);
+        $product = $productIn->product;
+
+        $qtyTambah = (int) $request->input('tambah_qty', 1);
+
+        if ($product->stock < $qtyTambah) {
+            // ⛔ RETURN ERROR JSON untuk AJAX
+            return response()->json([
+                'success' => false,
+                'message' => 'Stok utama produk tidak mencukupi.'
+            ], 400);
+        }
+
+        $productIn->qty += $qtyTambah;
+        $productIn->save();
+
+        $product->stock -= $qtyTambah;
+        $product->save();
+
+        // ✅ SELALU RETURN JSON, jangan cek $request->ajax()
+        return response()->json([
+            'success' => true,
+            'message' => 'Stok berhasil ditambahkan ke gudang.'
+        ]);
+    }
+
+    public function addStockKeToko(Request $request, $productInId)
+    {
+        $productIn = ProductIn::with('product')->findOrFail($productInId);
+        $qty = (int) $request->input('qty', 1);
+
+        if ($productIn->qty < $qty) {
+            $msg = 'Stok di gudang tidak mencukupi!';
+            return $request->ajax()
+                ? response()->json(['success' => false, 'message' => $msg])
+                : back()->with('error', $msg);
+        }
+
+        $existingSales = Sales::where('product_ins_id', $productIn->id)->first();
+
+        if ($existingSales) {
+            $existingSales->qty += $qty;
+            $existingSales->save();
+        } else {
+            Sales::create([
+                'product_ins_id' => $productIn->id,
+                'qty' => $qty,
+            ]);
+        }
+
+        $productIn->qty -= $qty;
+        $productIn->save();
+
+        if ($request->ajax()) {
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Stok berhasil ditambahkan ke toko.',
+                'redirect_url' => route('productin.index')
+            ]);
+        }
+
+
+        return back()->with('success', 'Stok berhasil ditambahkan ke toko.');
     }
 }

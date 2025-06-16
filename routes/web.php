@@ -43,8 +43,11 @@ Route::middleware(['auth', 'role:superadmin,admin_gudang'])->group(function () {
 
     Route::get('/get-product-details/{productId}', [ProductController::class, 'getProductDetails']);
     Route::resource('productin', ProductInController::class);
-    // Route::get('/detail-cekout', [CheckoutController::class, 'showCheckout'])->name('detail-cekout');
     Route::post('/productin/store', [ProductInController::class, 'storeProductIn'])->name('productin.storeProductIn');
+    Route::post('/productin/add-stock/{id}', [ProductInController::class, 'addStock'])->name('productin.addStock');
+    Route::post('/productin/add-stock-toko/{id}', [ProductInController::class, 'addStockKeToko'])->name('productin.addStockKeToko');
+
+
     Route::put('/productin/update-status/{id}', [ProductInController::class, 'updateStatus'])->name('productin.updateStatus');
 });
 
@@ -67,9 +70,6 @@ Route::middleware(['auth', 'role:kasir,superadmin'])->group(function () {
     Route::get('/detail-cekout', [CheckoutController::class, 'showCheckout'])->name('detail-cekout');
     Route::post('/proses-pembayaran', [SalesDetailController::class, 'processPayment'])->name('process.payment');
     Route::get('/print-receipt/{transaction_number}', [SalesDetailController::class, 'printReceipt'])->name('print.receipt');
-
-
-    // Route::get('/print-struk', [SalesDetailController::class, 'printStruk'])->name('print.struk');
 });
 
 
