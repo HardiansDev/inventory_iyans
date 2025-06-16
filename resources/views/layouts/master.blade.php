@@ -92,6 +92,7 @@
     <!-- Font -->
     <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic"
         rel="stylesheet">
+
 </head>
 
 <body class="hold-transition skin-green sidebar-mini fixed">
@@ -129,6 +130,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/toastr@2.1.4/build/toastr.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    @yield('scripts')
+
 
     <!-- AdminLTE -->
     <script src="{{ asset('temp/dist/js/adminlte.min.js') }}"></script>
@@ -201,33 +204,35 @@
     </script>
 
     <script>
-        document.getElementById('print-btn').addEventListener('click', function() {
-            const element = document.querySelector('.product-details-container');
+        const printBtn = document.getElementById('print-btn');
+        if (printBtn) {
+            printBtn.addEventListener('click', function() {
+                const element = document.querySelector('.product-details-container');
+                if (element) {
+                    const options = {
+                        margin: 10,
+                        filename: 'Detail_Produk.pdf',
+                        html2canvas: {
+                            scale: 2
+                        },
+                        jsPDF: {
+                            unit: 'mm',
+                            format: 'a4',
+                            orientation: 'portrait'
+                        },
+                    };
 
-            if (element) {
-                const options = {
-                    margin: 10,
-                    filename: 'Detail_Produk.pdf',
-                    html2canvas: {
-                        scale: 2
-                    },
-                    jsPDF: {
-                        unit: 'mm',
-                        format: 'a4',
-                        orientation: 'portrait'
-                    },
-                };
-
-                html2pdf().set(options).from(element).toPdf().output('datauristring').then(function(pdfDataUri) {
-                    // Buka PDF di tab baru
-                    const pdfWindow = window.open('');
-                    pdfWindow.document.write('<iframe src="' + pdfDataUri +
-                        '" frameborder="0" style="width:100%;height:100%;"></iframe>');
-                });
-            } else {
-                console.error('Element not found for PDF generation');
-            }
-        });
+                    html2pdf().set(options).from(element).toPdf().output('datauristring').then(function(
+                        pdfDataUri) {
+                        const pdfWindow = window.open('');
+                        pdfWindow.document.write('<iframe src="' + pdfDataUri +
+                            '" frameborder="0" style="width:100%;height:100%;"></iframe>');
+                    });
+                } else {
+                    console.error('Element not found for PDF generation');
+                }
+            });
+        }
     </script>
 
     <script>

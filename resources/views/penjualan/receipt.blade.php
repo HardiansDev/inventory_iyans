@@ -5,6 +5,10 @@
     <meta charset="UTF-8">
     <title>Struk Pembayaran</title>
     <style>
+        @page {
+            margin: 0;
+        }
+
         body {
             font-family: 'Courier New', monospace;
             font-size: 13px;

@@ -35,7 +35,7 @@
                 <!-- small box -->
                 <div class="small-box bg-blue">
                     <div class="inner">
-                        <h3>0</h3>
+                        <h3>{{ $totalProduk }}</h3>
                         <p>Data Produk</p>
                     </div>
                 </div>
@@ -46,7 +46,7 @@
                 <!-- small box -->
                 <div class="small-box bg-orange">
                     <div class="inner">
-                        <h3>0</h3>
+                        <h3>{{ $produkMasuk }}</h3>
                         <p>Produk Masuk</p>
                     </div>
                 </div>
@@ -56,7 +56,7 @@
                 <!-- small box -->
                 <div class="small-box bg-red">
                     <div class="inner">
-                        <h3>0</h3>
+                        <h3>{{ $produkKeluar }}</h3>
                         <p>Produk Keluar</p>
                     </div>
                 </div>
@@ -66,7 +66,7 @@
                 <!-- small box -->
                 <div class="small-box bg-green">
                     <div class="inner">
-                        <h3>0</h3>
+                        <h3>{{ $totalUser }}</h3>
                         <p>Pengguna</p>
                     </div>
                 </div>
@@ -159,149 +159,58 @@
     <!-- /.content -->
 @endsection
 
+
 @section('scripts')
-    <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
     <script>
-        // Data for Customer Growth (Example)
-        var customerGrowthData = {
-            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-            datasets: [{
-                label: 'Customer Growth',
-                data: [12, 19, 3, 5, 2, 3, 15, 20, 25, 30, 35, 40],
-                backgroundColor: 'rgba(54, 162, 235, 0.2)',
-                borderColor: 'rgba(54, 162, 235, 1)',
-                borderWidth: 1
-            }]
-        };
+        const productNames = @json($productNames ?? []);
+        const productStocks = @json($productStocks ?? []);
+        const inLabels = @json($inLabels ?? []);
+        const inQtys = @json($inQtys ?? []);
+        const outLabels = @json($outLabels ?? []);
+        const outQtys = @json($outQtys ?? []);
+    </script>
 
-        // Customer Growth Chart
-        var ctx = document.getElementById('customerGrowthChart').getContext('2d');
-        new Chart(ctx, {
-            type: 'line',
-            data: customerGrowthData,
-            options: {
-                responsive: true,
-                scales: {
-                    y: {
-                        beginAtZero: true
-                    }
-                }
-            }
-        });
-
-        // Sales per Week Chart
-        var salesWeekData = {
-            labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
-            datasets: [{
-                label: 'Sales per Week',
-                data: [20, 30, 15, 25],
-                backgroundColor: 'rgba(255, 99, 132, 0.2)',
-                borderColor: 'rgba(255, 99, 132, 1)',
-                borderWidth: 1
-            }]
-        };
-
-        var ctx2 = document.getElementById('salesWeekChart').getContext('2d');
-        new Chart(ctx2, {
-            type: 'bar',
-            data: salesWeekData,
-            options: {
-                responsive: true,
-                scales: {
-                    y: {
-                        beginAtZero: true
-                    }
-                }
-            }
-        });
-
-        // Sales per 6 Months Chart
-        var sales6MonthsData = {
-            labels: ['Jan-Jun', 'Jul-Dec'],
-            datasets: [{
-                label: 'Sales per 6 Months',
-                data: [150, 300],
-                backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                borderColor: 'rgba(75, 192, 192, 1)',
-                borderWidth: 1
-            }]
-        };
-
-        var ctx3 = document.getElementById('sales6MonthsChart').getContext('2d');
-        new Chart(ctx3, {
-            type: 'line',
-            data: sales6MonthsData,
-            options: {
-                responsive: true,
-                scales: {
-                    y: {
-                        beginAtZero: true
-                    }
-                }
-            }
-        });
-
-        // Sales per Year Chart
-        var salesYearData = {
-            labels: ['2021', '2022', '2023'],
-            datasets: [{
-                label: 'Sales per Year',
-                data: [1000, 2000, 3000],
-                backgroundColor: 'rgba(153, 102, 255, 0.2)',
-                borderColor: 'rgba(153, 102, 255, 1)',
-                borderWidth: 1
-            }]
-        };
-
-        var ctx4 = document.getElementById('salesYearChart').getContext('2d');
-        new Chart(ctx4, {
-            type: 'bar',
-            data: salesYearData,
-            options: {
-                responsive: true,
-                scales: {
-                    y: {
-                        beginAtZero: true
-                    }
-                }
-            }
-        });
-
-        // Product Data Chart
-        var productData = {
-            labels: ['Product A', 'Product B', 'Product C'],
-            datasets: [{
-                label: 'Products',
-                data: [10, 20, 30],
-                backgroundColor: 'rgba(255, 159, 64, 0.2)',
-                borderColor: 'rgba(255, 159, 64, 1)',
-                borderWidth: 1
-            }]
-        };
-
+    <script>
+        // Product Chart
         var ctx5 = document.getElementById('productChart').getContext('2d');
         new Chart(ctx5, {
-            type: 'pie',
-            data: productData
+            type: 'bar',
+            data: {
+                labels: productNames,
+                datasets: [{
+                    label: 'Stok Produk',
+                    data: productStocks,
+                    backgroundColor: 'rgba(54, 162, 235, 0.6)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
         });
 
-        // Product In Chart
-        var productInData = {
-            labels: ['Jan', 'Feb', 'Mar'],
-            datasets: [{
-                label: 'Product In',
-                data: [10, 20, 30],
-                backgroundColor: 'rgba(255, 206, 86, 0.2)',
-                borderColor: 'rgba(255, 206, 86, 1)',
-                borderWidth: 1
-            }]
-        };
-
+        // Produk Masuk Chart
         var ctx6 = document.getElementById('productInChart').getContext('2d');
         new Chart(ctx6, {
             type: 'line',
-            data: productInData,
+            data: {
+                labels: inLabels,
+                datasets: [{
+                    label: 'Produk Masuk',
+                    data: inQtys,
+                    backgroundColor: 'rgba(255, 206, 86, 0.5)',
+                    borderColor: 'rgba(255, 206, 86, 1)',
+                    borderWidth: 2
+                }]
+            },
             options: {
                 responsive: true,
                 scales: {
@@ -312,22 +221,20 @@
             }
         });
 
-        // Product Out Chart
-        var productOutData = {
-            labels: ['Jan', 'Feb', 'Mar'],
-            datasets: [{
-                label: 'Product Out',
-                data: [5, 15, 10],
-                backgroundColor: 'rgba(255, 99, 132, 0.2)',
-                borderColor: 'rgba(255, 99, 132, 1)',
-                borderWidth: 1
-            }]
-        };
-
+        // Produk Keluar Chart
         var ctx7 = document.getElementById('productOutChart').getContext('2d');
         new Chart(ctx7, {
             type: 'bar',
-            data: productOutData,
+            data: {
+                labels: outLabels,
+                datasets: [{
+                    label: 'Produk Keluar',
+                    data: outQtys,
+                    backgroundColor: 'rgba(255, 99, 132, 0.6)',
+                    borderColor: 'rgba(255, 99, 132, 1)',
+                    borderWidth: 1
+                }]
+            },
             options: {
                 responsive: true,
                 scales: {
