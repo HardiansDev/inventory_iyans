@@ -1,7 +1,7 @@
 @extends('layouts.master')
 
 @section('title')
-    <title>Sistem Inventory Iyan | Manajemen Produk Masuk</title>
+    <title>Sistem Inventory Iyan | Produk Masuk</title>
 @endsection
 
 @section('content')
@@ -35,10 +35,10 @@
                 <div class="box">
                     <!-- Header -->
                     <div class="box-header d-flex flex-column align-items-start mb-3">
-                        <a href="{{ route('productin.create') }}" class="btn btn-warning btn-sm">Tambah Produk</a>
+                        <a href="{{ route('productin.create') }}" class="btn btn-warning btn-sm"><i
+                                class="fas fa-plus-circle"></i> Tambah Produk</a>
                     </div>
                     <!-- /.box-header -->
-
                     <div class="box-body">
                         <!-- Table -->
                         <div class="table-responsive">
@@ -127,30 +127,38 @@
 
                                                         <!-- Tampilkan tombol Jual di Toko hanya jika status = diterima -->
                                                         @if ($productIn->status === 'diterima' || session('status') === 'produk diterima')
-                                                            <li>
-                                                                <button class="dropdown-item text-info open-sale-form"
-                                                                    data-product-id="{{ $productIn->id }}"
-                                                                    data-product-name="{{ $productIn->product->name }}">
-                                                                    Jual di Toko
-                                                                </button>
-                                                            </li>
-                                                            <li>
-                                                                <button class="dropdown-item text-warning btn-add-stock"
-                                                                    data-productin-id="{{ $productIn->id }}"
-                                                                    data-product-name="{{ $productIn->product->name }}">
-                                                                    Tambah Stok ke Gudang
-                                                                </button>
-                                                            </li>
-                                                            <li>
-                                                                <button
-                                                                    class="dropdown-item text-warning btn-add-stock-toko"
-                                                                    data-productin-id="{{ $productIn->id }}"
-                                                                    data-product-name="{{ $productIn->product->name }}"
-                                                                    data-max-stok="{{ $productIn->qty }}">
-                                                                    Tambah Stok ke Toko
-                                                                </button>
-                                                            </li>
+                                                            @if ($productIn->sales->isEmpty())
+                                                                {{-- BELUM ADA DI SALES: tampilkan tombol "Jual di Toko" --}}
+                                                                <li>
+                                                                    <button
+                                                                        class="dropdown-item text-secondary open-sale-form"
+                                                                        data-product-id="{{ $productIn->id }}"
+                                                                        data-product-name="{{ $productIn->product->name }}">
+                                                                        Jual di Toko
+                                                                    </button>
+                                                                </li>
+                                                            @else
+                                                                {{-- SUDAH ADA DI SALES: tampilkan tombol stok --}}
+                                                                <li>
+                                                                    <button
+                                                                        class="dropdown-item text-secondary btn-add-stock"
+                                                                        data-productin-id="{{ $productIn->id }}"
+                                                                        data-product-name="{{ $productIn->product->name }}">
+                                                                        Tambah Stok Produk
+                                                                    </button>
+                                                                </li>
+                                                                <li>
+                                                                    <button
+                                                                        class="dropdown-item text-secondary btn-add-stock-toko"
+                                                                        data-productin-id="{{ $productIn->id }}"
+                                                                        data-product-name="{{ $productIn->product->name }}"
+                                                                        data-max-stok="{{ $productIn->qty }}">
+                                                                        Tambah Stok ke Toko
+                                                                    </button>
+                                                                </li>
+                                                            @endif
                                                         @endif
+
 
                                                     </ul>
                                                 </div>
@@ -388,9 +396,6 @@
                     console.error('Catch error:', err);
                     toastr.error(err.message || 'Gagal terhubung ke server.');
                 });
-
-
-
 
         });
     });

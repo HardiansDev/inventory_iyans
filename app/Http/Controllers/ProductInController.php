@@ -20,10 +20,10 @@ class ProductInController extends Controller
     public function index()
     {
         // Ambil semua data produk masuk, dengan data produk yang terkait
-        $productIns = ProductIn::with(['product', 'product.category'])->get();
-
+        $productIns = ProductIn::with(['product', 'product.category', 'sales'])->orderBy('date', 'asc')->get();
+        $categories = \App\Models\Category::all();
         // Kirim data ke view
-        return view('productin.index', compact('productIns'));
+        return view('productin.index', compact('productIns', 'categories'));
     }
 
 
