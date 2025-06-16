@@ -41,7 +41,7 @@
                         <div class="dropdown d-inline">
                             <button class="btn btn-warning btn-sm ms-2 dropdown-toggle" type="button" id="downloadDropdown"
                                 data-bs-toggle="dropdown" aria-expanded="false">
-                                <i class="fa fa-download"></i> Unduh Data Terlihat
+                                <i class="fa fa-download"></i> Unduh Data Terpilih
                             </button>
                             <ul class="dropdown-menu" aria-labelledby="downloadDropdown">
                                 <li>

@@ -253,42 +253,61 @@
             const selectAll = document.getElementById('selectAll');
             const selectItems = document.querySelectorAll('.select-item');
             const deleteAllBtn = document.getElementById('deleteAllBtn');
+            const downloadBtn = document.getElementById('downloadDropdown');
+            const downloadPdfBtn = document.getElementById('downloadPdfBtn');
+            const downloadExcelBtn = document.getElementById('downloadExcelBtn');
+
             let selectedIds = [];
 
-            // Toggle all checkboxes for visible entries
-            selectAll.addEventListener('change', function() {
+            // Update selectedIds berdasarkan checkbox yang dicentang
+            function updateSelectedIds() {
                 selectedIds = [];
                 selectItems.forEach(item => {
-                    if (item.closest('tr').offsetParent !== null) { // Only visible rows
-                        item.checked = this.checked;
-                        if (this.checked) {
-                            selectedIds.push(item.value);
-                        }
+                    if (item.checked && item.closest('tr').offsetParent !== null) {
+                        selectedIds.push(item.value);
                     }
                 });
-                toggleDeleteAllBtn();
-            });
-
-            // Handle individual checkbox changes
-            selectItems.forEach(item => {
-                item.addEventListener('change', function() {
-                    if (this.checked) {
-                        selectedIds.push(this.value);
-                    } else {
-                        selectedIds = selectedIds.filter(id => id !== this.value);
-                        selectAll.checked = false;
-                    }
-                    toggleDeleteAllBtn();
-                });
-            });
-
-            // Enable/Disable Delete All button
-            function toggleDeleteAllBtn() {
-                deleteAllBtn.disabled = selectedIds.length === 0;
             }
 
-            // Handle Delete All button click
+            // Enable/Disable tombol
+            function toggleActionButtons() {
+                const hasSelected = selectedIds.length > 0;
+                deleteAllBtn.disabled = !hasSelected;
+                downloadBtn.disabled = !hasSelected;
+            }
+
+            // Toggle Select All
+            selectAll.addEventListener('change', function() {
+                selectItems.forEach(item => {
+                    if (item.closest('tr').offsetParent !== null) {
+                        item.checked = this.checked;
+                    }
+                });
+                updateSelectedIds();
+                toggleActionButtons();
+            });
+
+            // Checkbox per item
+            selectItems.forEach(item => {
+                item.addEventListener('change', function() {
+                    updateSelectedIds();
+
+                    // Uncheck Select All jika ada satu yang uncheck
+                    if (!this.checked) {
+                        selectAll.checked = false;
+                    } else if ([...selectItems].every(cb => cb.checked || cb.closest('tr')
+                            .offsetParent === null)) {
+                        selectAll.checked = true;
+                    }
+
+                    toggleActionButtons();
+                });
+            });
+
+            // Hapus data terpilih
             deleteAllBtn.addEventListener('click', function() {
+                if (selectedIds.length === 0) return;
+
                 if (confirm('Apakah Anda yakin ingin menghapus semua produk terpilih?')) {
                     fetch('{{ route('product.deleteAll') }}', {
                             method: 'POST',
@@ -311,102 +330,31 @@
                         });
                 }
             });
-        });
-    </script>
 
-    {{-- unduh pdf by showing data entries --}}
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const downloadPdfBtn = document.getElementById('downloadPdfBtn');
-            const visibleItems = document.querySelectorAll('.select-item');
-
-            downloadPdfBtn.addEventListener('click', function() {
-                const displayedIds = Array.from(visibleItems)
-                    .filter(item => item.closest('tr').offsetParent !== null) // Hanya baris yang terlihat
-                    .map(item => item.dataset.entryId);
-
-                if (displayedIds.length === 0) {
-                    alert('Tidak ada data yang dapat diunduh.');
-                    return;
-                }
-
-                // Kirim data ke server untuk menghasilkan PDF
-                fetch('{{ route('product.downloadPdf') }}', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                        },
-                        body: JSON.stringify({
-                            ids: displayedIds
-                        })
-                    })
-                    .then(response => response.blob())
-                    .then(blob => {
-                        // Buat link download untuk file PDF
-                        const url = window.URL.createObjectURL(blob);
-                        const a = document.createElement('a');
-                        a.style.display = 'none';
-                        a.href = url;
-                        a.download = 'Produk_Terpilih.pdf';
-                        document.body.appendChild(a);
-                        a.click();
-                        window.URL.revokeObjectURL(url);
-                    })
-                    .catch(error => {
-                        console.error('Terjadi kesalahan:', error);
-                        alert('Gagal mengunduh PDF.');
-                    });
+            // Download PDF
+            downloadPdfBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                if (selectedIds.length === 0) return;
+                window.location.href = `/export/pdf?ids=${selectedIds.join(',')}`;
             });
-        });
-    </script>
 
-    {{-- unduh excel by showing data entries --}}
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const downloadExcelBtn = document.getElementById('downloadExcelBtn');
-            const visibleItems = document.querySelectorAll('.select-item');
-
-            downloadExcelBtn.addEventListener('click', function() {
-                const displayedIds = Array.from(visibleItems)
-                    .filter(item => item.closest('tr').offsetParent !== null) // Hanya baris yang terlihat
-                    .map(item => item.dataset.entryId);
-
-                if (displayedIds.length === 0) {
-                    alert('Tidak ada data yang dapat diunduh.');
-                    return;
-                }
-
-                // Kirim data ke server untuk menghasilkan Excel
-                fetch('{{ route('product.downloadExcel') }}', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                        },
-                        body: JSON.stringify({
-                            ids: displayedIds
-                        })
-                    })
-                    .then(response => response.blob())
-                    .then(blob => {
-                        // Buat link download untuk file Excel
-                        const url = window.URL.createObjectURL(blob);
-                        const a = document.createElement('a');
-                        a.style.display = 'none';
-                        a.href = url;
-                        a.download = 'Produk_Terpilih.xlsx';
-                        document.body.appendChild(a);
-                        a.click();
-                        window.URL.revokeObjectURL(url);
-                    })
-                    .catch(error => {
-                        console.error('Terjadi kesalahan:', error);
-                        alert('Gagal mengunduh Excel.');
-                    });
+            // Download Excel
+            downloadExcelBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                if (selectedIds.length === 0) return;
+                window.location.href = `/export/excel?ids=${selectedIds.join(',')}`;
             });
+
+            // Inisialisasi
+            updateSelectedIds();
+            toggleActionButtons();
         });
     </script>
+
+
+
+
+
 
 
     {{-- nominal otomatis --}}

@@ -13,6 +13,8 @@ use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProductInController;
 use App\Http\Controllers\SalesDetailController;
+use App\Http\Controllers\ExportController;
+
 
 Route::get('/', function () {
     return view('welcome');
@@ -35,6 +37,10 @@ Route::middleware(['auth', 'role:superadmin,admin_gudang'])->group(function () {
     Route::post('/product/delete-all', [ProductController::class, 'deleteAll'])->name('product.deleteAll');
     Route::post('/product/download-pdf', [ProductController::class, 'downloadPdf'])->name('product.downloadPdf');
     Route::post('/product/download-excel', [ProductController::class, 'downloadExcel'])->name('product.downloadExcel');
+
+    Route::get('/export/pdf', [ExportController::class, 'pdf'])->name('export.pdf');
+    Route::get('/export/excel', [ExportController::class, 'excel'])->name('export.excel');
+
     Route::get('/get-product-details/{productId}', [ProductController::class, 'getProductDetails']);
     Route::resource('productin', ProductInController::class);
     // Route::get('/detail-cekout', [CheckoutController::class, 'showCheckout'])->name('detail-cekout');
