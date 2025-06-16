@@ -32,6 +32,24 @@ class SalesDetail extends Model
         return $this->belongsTo(Sales::class);
     }
 
+    public function product()
+    {
+        return $this->belongsTo(\App\Models\ProductIn::class, 'sales_id');
+    }
+
+    public function productin()
+    {
+        return $this->belongsTo(\App\Models\ProductIn::class, 'sales_id');
+    }
+
+    // public function productin()
+    // {
+    //     return $this->belongsTo(ProductIn::class, 'sales_id');
+    // }
+
+
+
+
     /**
      * Relasi ke model Discount
      * Setiap detail penjualan dapat memiliki satu diskon.

@@ -52,18 +52,7 @@ class SalesController extends Controller
         }
     }
 
-    public function printReceipt($transaction_number)
-    {
-        // Ambil data transaksi berdasarkan transaction_number
-        $salesDetail = SalesDetail::where('transaction_number', $transaction_number)->get();
 
-        if ($salesDetail->isEmpty()) {
-            return back()->with('error', 'Data transaksi tidak ditemukan!');
-        }
-
-        // Kirim data ke view untuk menampilkan struk
-        return view('receipt', compact('salesDetail'));
-    }
 
 
 

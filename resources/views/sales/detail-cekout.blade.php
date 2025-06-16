@@ -50,25 +50,17 @@
                                 @php $totalPrice = 0; @endphp
                                 @if ($wishlist && is_array($wishlist) && count($wishlist) > 0)
                                     @foreach ($wishlist as $index => $item)
-                                        @if (isset($item['id']) && isset($item['name']) && isset($item['price']) && isset($item['qty']))
-                                            <tr>
-                                                <td>{{ $item['name'] }}</td>
-                                                <td>{{ $item['qty'] }}</td>
-                                                <td>Rp {{ number_format($item['price'], 0, ',', '.') }}</td>
-                                                <td>Rp {{ number_format($item['price'] * $item['qty'], 0, ',', '.') }}</td>
-                                            </tr>
-                                            <input type="hidden" name="sales[{{ $index }}][id]"
-                                                value="{{ $item['id'] }}">
-                                            <input type="hidden" name="sales[{{ $index }}][qty]"
-                                                value="{{ $item['qty'] }}">
-                                            @php $totalPrice += $item['price'] * $item['qty']; @endphp
-                                        @else
-                                            {{-- Debugging: Tampilkan item yang bermasalah --}}
-                                            <tr>
-                                                <td colspan="4" style="color: red;">Error: Item wishlist tidak valid:
-                                                    {{ json_encode($item) }}</td>
-                                            </tr>
-                                        @endif
+                                        <tr>
+                                            <td>{{ $item['name'] }}</td>
+                                            <td>{{ $item['qty'] }}</td>
+                                            <td>Rp {{ number_format($item['price'], 0, ',', '.') }}</td>
+                                            <td>Rp {{ number_format($item['price'] * $item['qty'], 0, ',', '.') }}</td>
+                                        </tr>
+                                        <input type="hidden" name="sales[{{ $index }}][id]"
+                                            value="{{ $item['id'] }}">
+                                        <input type="hidden" name="sales[{{ $index }}][qty]"
+                                            value="{{ $item['qty'] }}">
+                                        @php $totalPrice += $item['price'] * $item['qty']; @endphp
                                     @endforeach
                                 @else
                                     <tr>
@@ -79,23 +71,16 @@
                         </table>
                     </div>
 
-                    {{-- Subtotal --}}
-                    {{-- <div class="form-group">
-                        <label for="subtotal">Subtotal</label>
-                        <input type="number" class="form-control" id="subtotal" name="subtotal"
-                            value="{{ $totalPrice ?? 0 }}" readonly required>
-                    </div> --}}
-
                     <div class="row">
                         <div class="col-md-6">
                             <div class="mb-3">
-                                <label for="amount" class="font-weight-bold">Jumlah Pembayaran:</label>
-                                <input type="text" id="amount" class="form-control" name="amount"
+                                <label for="amount_formatted" class="font-weight-bold">Jumlah Pembayaran:</label>
+                                <input type="text" id="amount_formatted" class="form-control"
                                     placeholder="Masukkan jumlah pembayaran">
+                                <input type="hidden" name="amount" id="amount" value="">
                             </div>
                             <h4 class="text-success">Kembalian: Rp <span id="change-display">0</span></h4>
-                            <input type="hidden" id="change-input" name="change"
-                                value="{{ old('change', $change ?? 0) }}">
+                            <input type="hidden" id="change-input" name="change" value="0">
                         </div>
 
                         <div class="col-md-3">
@@ -137,107 +122,91 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            const transactionNumberSpan = document.getElementById('order-number');
-            const transactionNumberInput = document.getElementById('transaction_number');
-            const invoiceNumberSpan = document.getElementById('invoice-number');
-            const invoiceNumberInput = document.getElementById('invoice_number_input');
-            const amountInput = document.getElementById('amount');
-            const changeSpan = document.getElementById('change');
-            const totalInput = document.getElementById('total');
-            const discountedTotalDisplay = document.getElementById('discounted-total');
-            const discountSelect = document.getElementById('discount_id');
+            // Generate no transaksi & invoice
+            const transactionNumber = 'TRX' + Date.now();
+            const invoiceNumber = 'INV-' + Date.now();
+
+            document.getElementById('order-number').textContent = transactionNumber;
+            document.getElementById('transaction_number').value = transactionNumber;
+            document.getElementById('invoice-number').textContent = invoiceNumber;
+            document.getElementById('invoice_number_input').value = invoiceNumber;
+
+            const amountInputFormatted = document.getElementById('amount_formatted');
+            const amountInputRaw = document.getElementById('amount');
+            const changeDisplay = document.getElementById('change-display');
+            const changeInput = document.getElementById('change-input');
             const subtotalInput = document.getElementById('subtotal_input');
-            const checkoutForm = document.getElementById('checkout-form'); // Simpan referensi form
+            const discountSelect = document.getElementById('discount_id');
+            const discountedTotalDisplay = document.getElementById('discounted-total');
+            const totalInput = document.getElementById('total');
+            const checkoutForm = document.getElementById('checkout-form');
 
-            const timestamp = new Date().getTime();
-            const random = Math.floor(Math.random() * 1000);
-
-            const transactionNumber = 'TRX' + timestamp + random;
-            const invoiceNumber = 'INV-' + timestamp;
-
-            transactionNumberSpan.textContent = transactionNumber;
-            transactionNumberInput.value = transactionNumber;
-            invoiceNumberSpan.textContent = invoiceNumber;
-            invoiceNumberInput.value = invoiceNumber;
-
-            function calculateTotal() {
-                let totalPrice = parseFloat(totalInput.value) || 0;
-                let discount = parseFloat(discountSelect.value) || 0;
-                let discountedTotal = totalPrice;
-
-                if (discount > 0) {
-                    discountedTotal = totalPrice - (totalPrice * (discount / 100));
-                }
-
-                discountedTotalDisplay.innerText = new Intl.NumberFormat('id-ID').format(discountedTotal);
-                subtotalInput.value = discountedTotal;
-            }
-
-            function calculateChange() {
-                const amount = parseFloat(amountInput.value.replace(/\D/g, '')) || 0;
-                const total = parseFloat(subtotalInput.value) || 0; // Menggunakan subtotal yang sudah didiskon
-                const change = amount - total;
-                // Perbarui tampilan kembalian
-                const changeDisplay = document.getElementById('change-display');
-                changeDisplay.textContent = new Intl.NumberFormat('id-ID').format(change);
-
-                // Perbarui nilai input hidden
-                const changeInput = document.getElementById('change-input');
-                changeInput.value = change; // Simpan nilai kembalian tanpa format
-            }
-
-            discountSelect.addEventListener('change', calculateTotal);
-
-            amountInput.addEventListener('input', function() {
-                this.value = new Intl.NumberFormat('id-ID').format(this.value.replace(/\D/g, ''));
+            // Format input jumlah pembayaran
+            amountInputFormatted.addEventListener('input', function() {
+                let raw = this.value.replace(/[^\d]/g, '');
+                this.value = new Intl.NumberFormat('id-ID').format(raw);
+                amountInputRaw.value = raw;
                 calculateChange();
             });
 
-            calculateTotal(); // Panggil saat DOMContentLoaded untuk inisialisasi
+            // Hitung diskon saat diskon berubah
+            discountSelect.addEventListener('change', calculateTotal);
 
-            checkoutForm.addEventListener('submit', function(event) { // Event listener di form
-                let sales = [];
-                let hasError = false;
+            // Hitung total harga diskon
+            function calculateTotal() {
+                let totalPrice = parseFloat(totalInput.value) || 0;
+                let discountId = parseInt(discountSelect.value) || 0;
+                let discountPercent = 0;
 
-                document.querySelectorAll('.sale-item').forEach(item => {
-                    let qtyInput = item.querySelector('.qty-input');
-                    let qty = parseInt(qtyInput.value) || 0;
+                // Ambil diskon dari server-side via Blade
+                @if (isset($discounts))
+                    let discountMap = {
+                        @foreach ($discounts as $d)
+                            {{ $d->id }}: {{ $d->percentage }},
+                        @endforeach
+                    };
+                    discountPercent = discountMap[discountId] || 0;
+                @endif
 
-                    if (qty <= 0) {
-                        alert("Kuantitas harus lebih dari 0 untuk " + item.dataset.productName);
-                        qtyInput.focus();
-                        hasError = true;
-                        event.preventDefault(); // Prevent default form submission
-                        return; // Exit forEach loop
-                    }
+                let discounted = totalPrice - (totalPrice * discountPercent / 100);
+                discountedTotalDisplay.textContent = 'Rp ' + new Intl.NumberFormat('id-ID').format(discounted);
+                subtotalInput.value = discounted;
 
-                    sales.push({
-                        id: parseInt(item.dataset.saleId),
-                        qty: qty
-                    });
-                });
+                calculateChange();
+            }
 
-                if (hasError) {
-                    return; // Stop processing if there are quantity errors
-                }
+            // Hitung kembalian
+            function calculateChange() {
+                const pay = parseInt(amountInputRaw.value) || 0;
+                const subtotal = parseInt(subtotalInput.value) || 0;
+                const change = pay - subtotal;
+                changeDisplay.textContent = 'Rp ' + new Intl.NumberFormat('id-ID').format(change);
+                changeInput.value = change;
+            }
 
-                const amount = parseFloat(amountInput.value.replace(/\D/g, '')) || 0;
-                const discountedTotal = parseFloat(subtotalInput.value) || 0;
+            // Validasi submit form
+            checkoutForm.addEventListener('submit', function(e) {
+                const pay = parseInt(amountInputRaw.value || 0);
+                const subtotal = parseInt(subtotalInput.value || 0);
 
-                if (amount < discountedTotal) {
-                    alert("Jumlah pembayaran kurang! Silakan masukkan jumlah yang cukup.");
-                    amountInput.focus();
-                    event.preventDefault(); // Prevent default form submission
+                if (!pay || isNaN(pay)) {
+                    alert('Jumlah pembayaran harus diisi!');
+                    amountInputFormatted.focus();
+                    e.preventDefault();
                     return;
                 }
-                const amountInputHidden = document.createElement('input');
-                amountInputHidden.type = 'hidden';
-                amountInputHidden.name = 'amount'; // Sesuaikan dengan nama field yang diinginkan
-                amountInputHidden.value = amount; // Nilai integer
-                checkoutForm.appendChild(amountInputHidden);
 
-                document.getElementById('sales').value = JSON.stringify(sales);
+                if (pay < subtotal) {
+                    alert('Jumlah pembayaran kurang dari total belanja!');
+                    amountInputFormatted.focus();
+                    e.preventDefault();
+                    return;
+                }
             });
+
+            // Inisialisasi perhitungan pertama
+            calculateTotal();
         });
     </script>
+
 @endsection

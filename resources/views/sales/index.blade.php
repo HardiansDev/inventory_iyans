@@ -36,7 +36,7 @@
                         $product = $productIn->product; // Ambil produk terkait
                     @endphp
                     <div class="col-md-3 mb-4">
-                        <div class="card h-100 shadow-sm" 
+                        <div class="card h-100 shadow-sm"
                             style="border-radius: 10px; overflow: hidden; transition: transform 0.3s, box-shadow 0.3s; background: #fdfdfd;">
                             <div class="position-relative">
                                 {{-- <span class="badge bg-danger position-absolute top-0 end-0 m-2"
@@ -79,12 +79,12 @@
                                 </div>
 
                                 <!-- Pesan Button -->
-                                <button class="btn btn-primary add-to-wishlist" data-product-id="{{ $product->id }}"
-                                    data-product-name="{{ $product->name }}" data-price="{{ $product->price }}"
-                                    data-qty="1"
-                                    style="background-color: #007bff; color: white; font-size: 16px; border-radius: 5px; padding: 10px 20px; cursor: pointer; transition: background-color 0.3s;">
+                                <button class="btn btn-primary add-to-wishlist" data-product-id="{{ $productIn->id }}"
+                                    data-product-name="{{ $productIn->product->name }}"
+                                    data-price="{{ $productIn->product->price }}" data-qty="1">
                                     Pesan
                                 </button>
+
                             </div>
                         </div>
                     </div>

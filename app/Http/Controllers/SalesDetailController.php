@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Product;
 use App\Models\ProductIn;
-use App\Models\Sales; // Import model Sales
+use App\Models\Sales;
 use App\Models\SalesDetail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -15,7 +16,7 @@ class SalesDetailController extends Controller
     {
         $request->validate([
             'sales' => 'required|array',
-            'sales.*.id' => 'required|exists:product_ins,id',
+            'sales.*.id' => 'required|exists:sales,id', // karena stok ambil dari sales
             'sales.*.qty' => 'required|integer|min:1',
             'date_order' => 'required|date',
             'discount_id' => 'nullable|exists:discounts,id',
@@ -30,16 +31,31 @@ class SalesDetailController extends Controller
         try {
             DB::beginTransaction();
 
-            // Simpan data produk di tabel `sales` terlebih dahulu
-            foreach ($request->sales as $saleData) {
-                $sale = new Sales();
-                $sale->product_ins_id = $saleData['id'];
-                $sale->qty = $saleData['qty'];
-                $sale->save();
+            // Validasi stok semua produk dulu
+            $stokKurang = [];
+            foreach ($request->sales as $item) {
+                $sales = Sales::with('productIn.product')->findOrFail($item['id']);
+                if ($sales->qty < $item['qty']) {
+                    $stokKurang[] = $sales->productIn->product->name ?? 'Produk ID: ' . $sales->product_ins_id;
+                }
+            }
 
-                // Simpan data di tabel `salesdetails` dengan sales_id
+            if (!empty($stokKurang)) {
+                return back()->with('error', 'Stok tidak mencukupi untuk produk: ' . implode(', ', $stokKurang));
+            }
+
+            // Jika stok cukup, proses simpan
+            foreach ($request->sales as $item) {
+                $sales = Sales::with('productIn.product')->findOrFail($item['id']);
+                $product = $sales->productIn->product; // ← tambahkan ini
+
+                // Kurangi stok penjualan
+                $sales->qty -= $item['qty'];
+                $sales->save();
+
+                // Simpan detail transaksi
                 $salesDetail = new SalesDetail();
-                $salesDetail->sales_id = $sale->id; // Gunakan ID dari tabel sales
+                $salesDetail->sales_id = $sales->id;
                 $salesDetail->transaction_number = $request->transaction_number;
                 $salesDetail->invoice_number = $request->invoice_number;
                 $salesDetail->date_order = $request->date_order;
@@ -48,6 +64,8 @@ class SalesDetailController extends Controller
                 $salesDetail->total = $request->total;
                 $salesDetail->subtotal = $request->subtotal;
                 $salesDetail->change = $request->change;
+                $salesDetail->qty = $item['qty'];
+                $salesDetail->price = $sales->productIn->product->price;
                 $salesDetail->save();
             }
 
@@ -57,8 +75,23 @@ class SalesDetailController extends Controller
                 ->with('success', 'Pembayaran berhasil diproses!');
         } catch (\Exception $e) {
             DB::rollback();
-            Log::error('Error saat memproses pembayaran:', ['error' => $e->getMessage()]);
-            return back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
+            Log::error('Error saat proses pembayaran: ' . $e->getMessage());
+            return back()->with('error', 'Terjadi kesalahan dalam proses pembayaran.');
         }
+    }
+
+    public function printReceipt($transaction_number)
+    {
+        $salesDetails = SalesDetail::where('transaction_number', $transaction_number)
+            ->with('sales.productIn.product') // Relasi salesdetail -> sales -> product_in -> product
+            ->get();
+
+        if ($salesDetails->isEmpty()) {
+            return redirect()->route('sales.index')->with('error', 'Struk tidak ditemukan.');
+        }
+
+        $invoice = $salesDetails->first();
+
+        return view('penjualan.receipt', compact('salesDetails', 'invoice'));
     }
 }

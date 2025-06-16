@@ -30,18 +30,18 @@
                     </a>
                 </li>
             @endif
-            
+
             @if (in_array(Auth::user()->role, ['superadmin', 'admin_gudang']))
                 <li class="treeview {{ Request::is('product') || Request::is('product/create') ? 'active' : '' }}">
                     <a href="#">
-                        <i class="fa fa-product-hunt"></i> <span>Produk</span>
+                        <i class="fa fa-product-hunt"></i> <span>Master Data</span>
                         <span class="pull-right-container">
                             <i class="fa fa-angle-left pull-right"></i>
                         </span>
                     </a>
                     <ul class="treeview-menu">
                         <li class="{{ Request::is('product') ? 'active' : '' }}">
-                            <a href="{{ route('product.index') }}"><i class="fa fa-circle-o"></i> Daftar Data Produk</a>
+                            <a href="{{ route('product.index') }}"><i class="fa fa-circle-o"></i> Data Produk</a>
                         </li>
                         <li class="{{ Request::is('product/create') ? 'active' : '' }}">
                             <a href="{{ route('product.create') }}"><i class="fa fa-circle-o"></i> Tambah Produk</a>
