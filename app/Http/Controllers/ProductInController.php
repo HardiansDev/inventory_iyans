@@ -12,11 +12,6 @@ use Illuminate\Http\Request;
 
 class ProductInController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
         $query = ProductIn::with(['product.category', 'sales'])->orderBy('date', 'desc');
@@ -62,10 +57,6 @@ class ProductInController extends Controller
         return view('productin.index', compact('productIns', 'categories'));
     }
 
-
-
-
-
     public function storeProductIn(Request $request)
     {
         // Validasi input
@@ -99,7 +90,6 @@ class ProductInController extends Controller
         return redirect()->route('productin.index')->with('success', 'Data produk masuk berhasil ditambahkan!');
     }
 
-
     public function create()
     {
         $products = Product::all();
@@ -128,46 +118,21 @@ class ProductInController extends Controller
         return redirect()->route('productin.index')->with('success', 'Produk berhasil ditambahkan dan sedang menunggu persetujuan.');
     }
 
-
-
-
-
-
-
     public function show($id)
     {
         //
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function edit($id)
     {
         //
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, $id)
     {
         //
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function destroy($id)
     {
         $productIn = ProductIn::with('sales.salesDetails')->findOrFail($id);
@@ -195,11 +160,6 @@ class ProductInController extends Controller
             'message' => 'Produk berhasil dihapus karena stok di toko sudah habis.'
         ]);
     }
-
-
-
-
-
 
     public function updateStatus(Request $request, $id)
     {
@@ -239,7 +199,7 @@ class ProductInController extends Controller
         }
 
         $productIn->save();
-        $this->updateStatusPenjualan($productIn);
+        // $this->updateStatusPenjualan($productIn);
 
         if ($request->expectsJson()) {
             return response()->json([
@@ -250,8 +210,6 @@ class ProductInController extends Controller
 
         return redirect()->route('productin.index')->with('success', 'Status berhasil diperbarui!');
     }
-
-
 
     public function addStock(Request $request, $id)
     {
@@ -274,7 +232,7 @@ class ProductInController extends Controller
         $product->stock -= $qtyTambah;
         $product->save();
 
-        $this->updateStatusPenjualan($productIn);
+        // $this->updateStatusPenjualan($productIn);
 
         // ✅ SELALU RETURN JSON, jangan cek $request->ajax()
         return response()->json([
@@ -309,7 +267,8 @@ class ProductInController extends Controller
 
         $productIn->qty -= $qty;
         $productIn->save();
-        $this->updateStatusPenjualan($productIn); // ← Tambahkan di sini
+        $this->updateStatusPenjualan($productIn);
+
 
 
         if ($request->ajax()) {
@@ -352,15 +311,19 @@ class ProductInController extends Controller
         return response()->json(['success' => true, 'message' => 'Produk terpilih berhasil dihapus!']);
     }
 
-    // Di dalam ProductInController
     public function updateStatusPenjualan(ProductIn $productIn)
     {
-        if ($productIn->qty == 0) {
-            $productIn->status_penjualan = 'stok habis terjual';
-        } elseif ($productIn->qty < 10) {
-            $productIn->status_penjualan = 'stok tinggal dikit';
-        } elseif ($productIn->sales()->exists()) {
-            $productIn->status_penjualan = 'sedang dijual';
+        $sales = $productIn->sales()->first();
+
+        if ($sales) {
+            $stokToko = $productIn->sales()->sum('qty'); // Pastikan pakai sum()
+            if ($stokToko == 0) {
+                $productIn->status_penjualan = 'stok habis terjual';
+            } elseif ($stokToko < 10) {
+                $productIn->status_penjualan = 'stok tinggal dikit';
+            } else {
+                $productIn->status_penjualan = 'sedang dijual';
+            }
         } else {
             $productIn->status_penjualan = 'belum dijual';
         }

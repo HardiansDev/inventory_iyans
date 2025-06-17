@@ -50,6 +50,8 @@ class SalesDetailController extends Controller
                 $sales = Sales::with('productIn.product')->findOrFail($item['id']);
                 $sales->qty -= $item['qty'];
                 $sales->save();
+                app(\App\Http\Controllers\ProductInController::class)->updateStatusPenjualan($sales->productIn);
+
 
                 $product = $sales->productIn->product;
 

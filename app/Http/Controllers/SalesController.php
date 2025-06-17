@@ -45,8 +45,8 @@ class SalesController extends Controller
             // Kurangi stok produk di tabel productin
             $productIn->qty -= $validatedData['qty'];
             $productIn->save();
-            app(\App\Http\Controllers\ProductInController::class)->updateStatusPenjualan($productIn);
-
+            app(\App\Http\Controllers\ProductInController::class)
+                ->updateStatusPenjualan($productIn);
 
             return redirect()->route('sales.index')->with('success', 'Penjualan berhasil ditambahkan.');
         } else {

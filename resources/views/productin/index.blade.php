@@ -209,12 +209,13 @@
                                             <td>
                                                 @php
                                                     $statusPenjualan = $productIn->status_penjualan;
+                                                    $stokToko = $productIn->sales->sum('qty'); // Total qty tersedia di view sales
                                                 @endphp
 
                                                 @if ($statusPenjualan === 'sedang dijual')
                                                     <span class="badge bg-teal">Sedang Dijual</span>
                                                 @elseif ($statusPenjualan === 'stok habis terjual')
-                                                    <span class="badge bg-red">Stok Habis</span>
+                                                    <span class="badge bg-danger">Stok Habis</span>
                                                 @elseif ($statusPenjualan === 'stok tinggal dikit')
                                                     <span class="badge bg-warning text-dark">Stok Tinggal Dikit</span>
                                                 @elseif ($statusPenjualan === 'belum dijual')
@@ -222,7 +223,15 @@
                                                 @else
                                                     <span class="badge bg-light text-muted">-</span>
                                                 @endif
+
+                                                {{-- Note kecil sisa stok --}}
+                                                @if ($statusPenjualan !== 'belum dijual')
+                                                    <div style="font-size: 12px;" class="text-muted mt-1">
+                                                        <i class="fas fa-box me-1"></i> Sisa Stok: {{ $stokToko }}
+                                                    </div>
+                                                @endif
                                             </td>
+
 
                                             <td>
                                                 <div class="dropdown">
@@ -270,8 +279,10 @@
                                                                     <button
                                                                         class="dropdown-item text-secondary btn-add-stock"
                                                                         data-productin-id="{{ $productIn->id }}"
-                                                                        data-product-name="{{ $productIn->product->name }}">
-                                                                        Tambah Stok Produk
+                                                                        data-product-name="{{ $productIn->product->name }}"
+                                                                        data-stock="{{ $productIn->product->stock }}">
+                                                                        Tambah Stok ke Gudang
+
                                                                     </button>
                                                                 </li>
                                                                 <li>
@@ -348,7 +359,12 @@
                         <p><strong id="modal-product-name"></strong></p>
                         <input type="number" class="form-control" name="tambah_qty" id="tambah_qty_input"
                             min="1" required placeholder="Jumlah yang ditambahkan">
+                        <p class="text-muted" style="font-size: 14px;">
+                            Stok saat ini di gudang: <strong id="modal-stock-now"></strong>
+                        </p>
                     </div>
+
+
                     <div class="modal-footer">
                         <input type="hidden" id="modal-productin-id">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
@@ -401,9 +417,11 @@
             btn.addEventListener('click', function() {
                 const productInId = this.getAttribute('data-productin-id');
                 const productName = this.getAttribute('data-product-name');
+                const currentStock = this.dataset.stock;
 
                 document.getElementById('modal-productin-id').value = productInId;
                 document.getElementById('modal-product-name').innerText = productName;
+                document.getElementById('modal-stock-now').innerText = currentStock;
                 document.getElementById('tambah_qty_input').value = '';
                 modal.show();
             });
