@@ -7,7 +7,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\SalesController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CategoryController;
-// use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\DiscountController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\DashboardController;
@@ -72,6 +72,10 @@ Route::middleware(['auth', 'role:kasir,superadmin'])->group(function () {
     Route::get('/detail-cekout', [CheckoutController::class, 'showCheckout'])->name('detail-cekout');
     Route::post('/proses-pembayaran', [SalesDetailController::class, 'processPayment'])->name('process.payment');
     Route::get('/print-receipt/{transaction_number}', [SalesDetailController::class, 'printReceipt'])->name('print.receipt');
+});
+
+Route::middleware(['auth', 'role:kasir,superadmin'])->group(function () {
+    Route::resource('discounts', DiscountController::class);
 });
 
 

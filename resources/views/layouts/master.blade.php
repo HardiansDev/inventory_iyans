@@ -622,6 +622,7 @@
 
 
 
+    @stack('scripts')
 
 
 </body>

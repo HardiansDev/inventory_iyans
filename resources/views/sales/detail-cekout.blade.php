@@ -74,7 +74,7 @@
                                     <option value="">Tanpa Diskon</option>
                                     @foreach ($discounts ?? [] as $discount)
                                         <option value="{{ $discount->id }}">{{ $discount->name }}
-                                            ({{ $discount->percentage }}%)
+                                            ({{ $discount->nilai }}%)
                                         </option>
                                     @endforeach
                                 </select>
@@ -104,117 +104,119 @@
     </div>
 @endsection
 
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const transactionNumber = 'TRX' + Date.now();
-        const invoiceNumber = 'INV-' + Date.now();
+@push('scripts')
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const transactionNumber = 'TRX' + Date.now();
+            const invoiceNumber = 'INV-' + Date.now();
 
-        document.getElementById('order-number').textContent = transactionNumber;
-        document.getElementById('invoice-number').textContent = invoiceNumber;
-        document.getElementById('transaction_number').value = transactionNumber;
-        document.getElementById('invoice_number_input').value = invoiceNumber;
+            document.getElementById('order-number').textContent = transactionNumber;
+            document.getElementById('invoice-number').textContent = invoiceNumber;
+            document.getElementById('transaction_number').value = transactionNumber;
+            document.getElementById('invoice_number_input').value = invoiceNumber;
 
-        const amountInputFormatted = document.getElementById('amount_formatted');
-        const amountInputRaw = document.getElementById('amount');
-        const changeDisplay = document.getElementById('change-display');
-        const changeInput = document.getElementById('change-input');
-        const subtotalInput = document.getElementById('subtotal_input');
-        const discountSelect = document.getElementById('discount_id');
-        const discountedTotalDisplay = document.getElementById('discounted-total');
-        const totalInput = document.getElementById('total');
+            const amountFormattedInput = document.getElementById('amount_formatted');
+            const amountHiddenInput = document.getElementById('amount');
+            const changeDisplay = document.getElementById('change-display');
+            const changeInput = document.getElementById('change-input');
+            const subtotalInput = document.getElementById('subtotal_input');
+            const discountSelect = document.getElementById('discount_id');
+            const discountedTotalDisplay = document.getElementById('discounted-total');
+            const totalInput = document.getElementById('total');
 
-        function calculateTotal() {
-            let totalPrice = parseFloat(totalInput.value) || 0;
-            let discountId = parseInt(discountSelect.value) || 0;
-            let discountPercent = 0;
+            // Diskon map untuk lookup % dari ID
+            const discountMap = {
+                @foreach ($discounts ?? [] as $discount)
+                    {{ $discount->id }}: {{ $discount->nilai }},
+                @endforeach
+            };
 
-            @if (isset($discounts))
-                const discountMap = {
-                    @foreach ($discounts as $d)
-                        {{ $d->id }}: {{ $d->percentage }},
-                    @endforeach
-                };
-                discountPercent = discountMap[discountId] || 0;
-            @endif
-
-            const discounted = Math.floor(totalPrice - (totalPrice * discountPercent / 100));
-            discountedTotalDisplay.textContent = 'Rp ' + new Intl.NumberFormat('id-ID').format(discounted);
-            subtotalInput.value = discounted;
-
-            calculateChange();
-        }
-
-        function calculateChange() {
-            const pay = parseInt(amountInputRaw.value) || 0;
-            const subtotal = parseInt(subtotalInput.value) || 0;
-            const change = pay - subtotal;
-            changeDisplay.textContent = 'Rp ' + new Intl.NumberFormat('id-ID').format(change);
-            changeInput.value = change;
-        }
-
-        amountInputFormatted.addEventListener('input', function() {
-            let raw = this.value.replace(/[^\d]/g, '');
-            this.value = new Intl.NumberFormat('id-ID').format(raw);
-            amountInputRaw.value = raw;
-            calculateChange();
-        });
-
-        discountSelect.addEventListener('change', calculateTotal);
-        calculateTotal();
-
-        const btn = document.getElementById('confirm-payment-btn');
-        const btnText = document.getElementById('btn-text');
-        const btnLoading = document.getElementById('btn-loading');
-        const form = document.getElementById('checkout-form');
-
-        btn.addEventListener('click', function() {
-            const amount = parseInt(amountInputRaw.value) || 0;
-            const subtotal = parseInt(subtotalInput.value) || 0;
-
-            if (amount < subtotal) {
-                toastr.error('Jumlah pembayaran kurang dari total belanja.');
-                return;
+            function formatRupiah(number) {
+                return 'Rp ' + new Intl.NumberFormat('id-ID').format(number);
             }
 
-            btn.disabled = true;
-            btnText.classList.add('d-none');
-            btnLoading.classList.remove('d-none');
+            function parseRupiah(str) {
+                return parseInt(str.replace(/[^\d]/g, '')) || 0;
+            }
 
-            const formData = new FormData(form);
+            function calculateTotal() {
+                const baseTotal = parseInt(totalInput.value) || 0;
+                const selectedDiscountId = parseInt(discountSelect.value);
+                const discountPercent = discountMap[selectedDiscountId] || 0;
+                const discountedAmount = Math.floor(baseTotal - (baseTotal * discountPercent / 100));
 
-            fetch(form.action, {
-                    method: 'POST',
-                    headers: {
-                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
-                    },
-                    body: formData
-                })
-                .then(res => {
-                    if (!res.ok) {
-                        return res.text().then(text => {
-                            console.error("Raw server response:", text);
-                            throw new Error('Server response not OK');
-                        });
-                    }
-                    return res.json();
-                })
-                .then(data => {
-                    if (data.success && data.transaction_url) {
-                        window.open(data.transaction_url, '_blank');
-                        window.location.href = "{{ route('sales.index') }}";
-                    } else {
-                        toastr.error(data.message || 'Gagal memproses pembayaran.');
-                    }
-                })
-                .catch(err => {
-                    console.error('AJAX Error:', err);
-                    toastr.error('Terjadi kesalahan saat menghubungi server.');
-                })
-                .finally(() => {
-                    btn.disabled = false;
-                    btnText.classList.remove('d-none');
-                    btnLoading.classList.add('d-none');
-                });
+                discountedTotalDisplay.textContent = formatRupiah(discountedAmount);
+                subtotalInput.value = discountedAmount;
+
+                calculateChange();
+            }
+
+            function calculateChange() {
+                const amount = parseInt(amountHiddenInput.value) || 0;
+                const subtotal = parseInt(subtotalInput.value) || 0;
+                const change = amount - subtotal;
+
+                changeDisplay.textContent = formatRupiah(change);
+                changeInput.value = change;
+            }
+
+            // Format input pembayaran dengan titik
+            amountFormattedInput.addEventListener('input', function() {
+                let raw = this.value.replace(/[^\d]/g, '');
+                this.value = new Intl.NumberFormat('id-ID').format(raw);
+                amountHiddenInput.value = raw;
+                calculateChange();
+            });
+
+            discountSelect.addEventListener('change', calculateTotal);
+            calculateTotal();
+
+            const btn = document.getElementById('confirm-payment-btn');
+            const btnText = document.getElementById('btn-text');
+            const btnLoading = document.getElementById('btn-loading');
+            const form = document.getElementById('checkout-form');
+
+            btn.addEventListener('click', function() {
+                const amount = parseInt(amountHiddenInput.value) || 0;
+                const subtotal = parseInt(subtotalInput.value) || 0;
+
+                if (amount < subtotal) {
+                    toastr.error('Jumlah pembayaran kurang dari total belanja.');
+                    return;
+                }
+
+                btn.disabled = true;
+                btnText.classList.add('d-none');
+                btnLoading.classList.remove('d-none');
+
+                const formData = new FormData(form);
+
+                fetch(form.action, {
+                        method: 'POST',
+                        headers: {
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+                        },
+                        body: formData
+                    })
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data.success && data.transaction_url) {
+                            window.open(data.transaction_url, '_blank');
+                            window.location.href = "{{ route('sales.index') }}";
+                        } else {
+                            toastr.error(data.message || 'Gagal memproses pembayaran.');
+                        }
+                    })
+                    .catch(err => {
+                        console.error('AJAX Error:', err);
+                        toastr.error('Terjadi kesalahan saat menghubungi server.');
+                    })
+                    .finally(() => {
+                        btn.disabled = false;
+                        btnText.classList.remove('d-none');
+                        btnLoading.classList.add('d-none');
+                    });
+            });
         });
-    });
-</script>
+    </script>
+@endpush

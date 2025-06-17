@@ -86,6 +86,12 @@
                         <i class="fas fa-store"></i> <span>Penjualan</span>
                     </a>
                 </li>
+                <li class="{{ Request::is('discount') ? 'active' : '' }}">
+                    <a href="{{ route('discounts.index') }}" class="nav-link">
+                        <i class="fas fa-tags"></i>
+                        <span>Manajemen Diskon</span>
+                    </a>
+                </li>
             @endif
 
             <li class="header">PENGATURAN</li>

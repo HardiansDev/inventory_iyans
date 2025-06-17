@@ -44,13 +44,6 @@ class SalesDetail extends Model
         return $this->belongsTo(\App\Models\ProductIn::class, 'sales_id');
     }
 
-    // public function productin()
-    // {
-    //     return $this->belongsTo(ProductIn::class, 'sales_id');
-    // }
-
-
-
 
     /**
      * Relasi ke model Discount
