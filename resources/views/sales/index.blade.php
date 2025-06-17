@@ -41,26 +41,38 @@
                             <div class="position-relative">
                                 {{-- <span class="badge bg-danger position-absolute top-0 end-0 m-2"
                                     style="font-size: 12px; padding: 5px 10px; border-radius: 5px;">Diskon</span> --}}
-                                <img src="{{ asset('storage/fotoproduct/' . $productIn->product->photo) }}"
-                                    class="card-img-top" alt="Product Image" style="height: 150px; object-fit: cover;">
+                                @if ($sale->productIn && $sale->productIn->product)
+                                    <img src="{{ asset('storage/fotoproduct/' . $sale->productIn->product->photo) }}"
+                                        width="50">
+                                @else
+                                    <span class="text-danger">Data Produk Dihapus</span>
+                                @endif
                             </div>
                             <div class="card-body" style="padding: 15px;">
                                 <h5 class="card-title" style="font-size: 18px; font-weight: bold; color: #333;">
-                                    {{ $product->name }}</h5>
+                                    {{ $sale->productIn->product->name ?? 'Produk telah dihapus' }}</h5>
 
-                                <!-- Menampilkan kategori produk -->
-                                @if ($product->category)
+                                @php
+                                    $productIn = $sale->productIn ?? null;
+                                    $product = $productIn?->product ?? null;
+                                    $category = $product?->category ?? null;
+                                @endphp
+
+                                @if ($category)
                                     <p class="text-muted small mb-1" style="font-size: 14px; color: #777;">
-                                        {{ $product->category->name }}</p>
+                                        {{ $category->name }}</p>
                                 @else
-                                    <p class="text-muted small mb-1" style="font-size: 14px; color: #777;">Kategori tidak
-                                        tersedia</p>
+                                    <p class="text-muted small mb-1" style="font-size: 14px; color: #777;">
+                                        Kategori tidak tersedia</p>
                                 @endif
+
                                 <p class="text-muted small mb-1" style="font-size: 14px; color: #777;">{{ $sale->qty }}
                                     StokTersedia</p>
                                 <!-- Menampilkan harga produk -->
-                                <p class="card-text text-success fw-bold" style="font-size: 20px; margin-bottom: 10px;">Rp
-                                    {{ number_format($product->price, 0, ',', '.') }}</p>
+                                <p class="card-text fw-bold" style="font-size: 20px; margin-bottom: 10px;">
+                                    Rp {{ number_format($sale->productIn?->product?->price ?? 0, 0, ',', '.') }}
+                                </p>
+
 
                                 <!-- Quantity Control -->
                                 <div class="d-flex align-items-center mb-3">
@@ -79,9 +91,10 @@
                                 </div>
 
                                 <button class="add-to-wishlist btn btn-warning btn-lg" data-sales-id="{{ $sale->id }}"
-                                    data-product-name="{{ $sale->productIn->product->name }}"
-                                    data-price="{{ $sale->productIn->product->price }}" data-stock="{{ $sale->qty }}">
-                                    Pesan
+                                    data-product-name="{{ $product->name ?? 'Tidak Tersedia' }}"
+                                    data-price="{{ $product->price ?? 0 }}" data-stock="{{ $sale->qty }}"
+                                    {{ $product ? '' : 'disabled' }}>
+                                    {{ $product ? 'Pesan' : 'Produk Tidak Tersedia' }}
                                 </button>
 
 

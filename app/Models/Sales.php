@@ -11,7 +11,8 @@ class Sales extends Model
     use HasFactory;
 
     protected $fillable = [
-        'qty', 'product_ins_id'
+        'qty',
+        'product_ins_id'
     ];
 
     /**
@@ -20,7 +21,7 @@ class Sales extends Model
      */
     public function productIn()
     {
-        return $this->belongsTo(ProductIn::class, 'product_ins_id');
+        return $this->belongsTo(ProductIn::class, 'product_ins_id')->withDefault();
     }
 
     /**

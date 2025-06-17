@@ -43,6 +43,8 @@ Route::middleware(['auth', 'role:superadmin,admin_gudang'])->group(function () {
 
     Route::get('/get-product-details/{productId}', [ProductController::class, 'getProductDetails']);
     Route::resource('productin', ProductInController::class);
+    Route::post('/productin/delete-selected', [ProductInController::class, 'deleteSelected'])->name('productin.deleteSelected');
+
     Route::post('/productin/store', [ProductInController::class, 'storeProductIn'])->name('productin.storeProductIn');
     Route::post('/productin/add-stock/{id}', [ProductInController::class, 'addStock'])->name('productin.addStock');
     Route::post('/productin/add-stock-toko/{id}', [ProductInController::class, 'addStockKeToko'])->name('productin.addStockKeToko');

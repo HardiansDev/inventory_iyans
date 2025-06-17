@@ -137,11 +137,34 @@ class ProductInController extends Controller
      */
     public function destroy($id)
     {
-        $productIn = ProductIn::findOrFail($id);
-        $productIn->delete();
+        $productIn = ProductIn::with('sales.salesDetails')->findOrFail($id);
 
-        return response()->json(['success' => true, 'message' => 'Produk berhasil dihapus.']);
+        //  Cek stok toko dari semua relasi sales
+        $stokToko = $productIn->sales->sum('qty'); // Jumlahkan seluruh qty di sales
+
+        if ($stokToko > 0) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Produk tidak bisa dihapus karena masih memiliki stok di toko (' . $stokToko . ' tersedia).'
+            ], 400);
+        }
+
+        //  Putuskan relasi salesDetails dan hapus sales
+        foreach ($productIn->sales as $sale) {
+            $sale->salesDetails()->update(['sales_id' => null]);
+            $sale->delete();
+        }
+
+        $productIn->delete(); // Hapus data produk masuk
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Produk berhasil dihapus karena stok di toko sudah habis.'
+        ]);
     }
+
+
+
 
 
 
@@ -262,5 +285,34 @@ class ProductInController extends Controller
 
 
         return back()->with('success', 'Stok berhasil ditambahkan ke toko.');
+    }
+
+
+    public function deleteSelected(Request $request)
+    {
+        $ids = $request->input('ids');
+
+        if (!$ids || !is_array($ids)) {
+            return response()->json(['success' => false, 'message' => 'Tidak ada produk yang dipilih.']);
+        }
+
+        $blocked = [];
+        foreach ($ids as $id) {
+            $productIn = ProductIn::with('sales')->find($id);
+            if ($productIn && $productIn->sales->isNotEmpty()) {
+                $blocked[] = $productIn->product->name ?? 'Produk Tanpa Nama';
+            }
+        }
+
+        if (!empty($blocked)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Tidak bisa menghapus produk berikut karena sudah ada data penjualan: ' . implode(', ', $blocked)
+            ]);
+        }
+
+        ProductIn::whereIn('id', $ids)->delete();
+
+        return response()->json(['success' => true, 'message' => 'Produk terpilih berhasil dihapus!']);
     }
 }

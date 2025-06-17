@@ -37,6 +37,9 @@
                     <div class="box-header d-flex flex-column align-items-start mb-3">
                         <a href="{{ route('productin.create') }}" class="btn btn-warning btn-sm"><i
                                 class="fas fa-plus-circle"></i> Tambah Produk</a>
+                        <button id="BtnDeleteSelected" class="btn btn-danger btn-sm ms-auto" disabled>
+                            <i class="fas fa-trash-alt"></i> Hapus Terpilih
+                        </button>
                     </div>
                     <!-- /.box-header -->
                     <div class="box-body">
@@ -45,7 +48,10 @@
                             <table id="example1" class="table table-hover table-bordered">
                                 <thead class="table-light">
                                     <tr>
-                                        <th>No</th>
+                                        <th>
+                                            <input type="checkbox" id="selectAll" />
+                                        </th>
+                                        {{-- <th>No</th> --}}
                                         <th>Nama Produk</th>
                                         <th>Kode Produk</th>
                                         <th>Tanggal Masuk</th>
@@ -61,7 +67,11 @@
                                 <tbody>
                                     @foreach ($productIns as $productIn)
                                         <tr>
-                                            <td>{{ $loop->iteration }}</td>
+                                            <td>
+                                                <input type="checkbox" class="select-item" value="{{ $productIn->id }}"
+                                                    data-entry-id="{{ $productIn->id }}" />
+                                            </td>
+                                            {{-- <td>{{ $loop->iteration }}</td> --}}
                                             <td>{{ $productIn->product->name }}</td>
                                             <td>{{ $productIn->product->code }}</td>
                                             <td>{{ $productIn->date }}</td>
@@ -88,7 +98,7 @@
 
                                                         @if ($productIn->catatan)
                                                             <div class="mt-1 ms-1 text-muted" style="font-size: 12px;">
-                                                                <i class="fa fa-info-circle me-1 text-secondary"></i>
+                                                                <i class="fa fa-info-circle me-1 text-secondary"></i> Note :
                                                                 {{ $productIn->catatan }}
                                                             </div>
                                                         @endif
@@ -486,5 +496,106 @@
         tooltipTriggerList.map(function(tooltipTriggerEl) {
             return new bootstrap.Tooltip(tooltipTriggerEl)
         })
+    });
+</script>
+
+{{-- Selectall delete --}}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const selectAll = document.getElementById('selectAll');
+        const selectItems = document.querySelectorAll('.select-item');
+        const BtnDeleteSelected = document.getElementById('BtnDeleteSelected');
+
+        let selectedIds = [];
+
+        // Update selectedIds berdasarkan checkbox yang dicentang
+        function updateSelectedIds() {
+            selectedIds = [];
+            selectItems.forEach(item => {
+                if (item.checked && item.closest('tr').offsetParent !== null) {
+                    selectedIds.push(item.value);
+                }
+            });
+        }
+
+        // Enable/Disable tombol
+        function toggleActionButtons() {
+            const hasSelected = selectedIds.length > 0;
+            BtnDeleteSelected.disabled = !hasSelected;
+            downloadBtn.disabled = !hasSelected;
+        }
+
+        // Toggle Select All
+        selectAll.addEventListener('change', function() {
+            selectItems.forEach(item => {
+                if (item.closest('tr').offsetParent !== null) {
+                    item.checked = this.checked;
+                }
+            });
+            updateSelectedIds();
+            toggleActionButtons();
+        });
+
+        // Checkbox per item
+        selectItems.forEach(item => {
+            item.addEventListener('change', function() {
+                updateSelectedIds();
+
+                // Uncheck Select All jika ada satu yang uncheck
+                if (!this.checked) {
+                    selectAll.checked = false;
+                } else if ([...selectItems].every(cb => cb.checked || cb.closest('tr')
+                        .offsetParent === null)) {
+                    selectAll.checked = true;
+                }
+
+                toggleActionButtons();
+            });
+        });
+
+        // Hapus data terpilih
+        BtnDeleteSelected.addEventListener('click', function() {
+            if (selectedIds.length === 0) return;
+
+            Swal.fire({
+                title: 'Hapus Produk Terpilih?',
+                text: 'Data yang dihapus tidak bisa dikembalikan.',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Ya, Hapus!',
+                cancelButtonText: 'Batal'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    fetch('/productin/delete-selected', {
+                            method: 'POST',
+                            headers: {
+                                'X-Requested-With': 'XMLHttpRequest',
+                                'Content-Type': 'application/json',
+                                'X-CSRF-TOKEN': document.querySelector(
+                                    'meta[name="csrf-token"]').content
+                            },
+                            body: JSON.stringify({
+                                ids: selectedIds
+                            })
+                        })
+                        .then(res => res.json())
+                        .then(data => {
+                            if (data.success) {
+                                Swal.fire('Berhasil', data.message, 'success');
+                                setTimeout(() => window.location.reload(), 1000);
+                            } else {
+                                Swal.fire('Gagal', data.message, 'error');
+                            }
+                        })
+                        .catch(err => {
+                            console.error(err);
+                            Swal.fire('Error', 'Gagal menghubungi server.', 'error');
+                        });
+                }
+            });
+        });
+
+        updateSelectedIds();
+        toggleActionButtons();
     });
 </script>

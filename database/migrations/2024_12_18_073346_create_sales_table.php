@@ -17,9 +17,10 @@ class CreateSalesTable extends Migration
         Schema::create('sales', function (Blueprint $table) {
             $table->id();
             $table->integer('qty');
-            $table->foreignIdFor(ProductIn::class, 'product_ins_id')
-                ->constrained((new ProductIn())->getTable())
-                ->onDelete('cascade');
+            $table->foreignId('product_ins_id')
+                ->nullable()
+                ->constrained('product_ins')
+                ->nullOnDelete();
             $table->timestamps();
         });
     }

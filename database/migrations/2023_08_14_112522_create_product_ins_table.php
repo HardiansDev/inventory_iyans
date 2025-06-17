@@ -20,8 +20,9 @@ class CreateProductInsTable extends Migration
         Schema::create('product_ins', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(Product::class, 'product_id')
+                ->nullable()
                 ->constrained((new Product())->getTable())
-                ->onDelete('cascade');
+                ->nullOnDelete();
             $table->date('date');
             $table->string('recipient')->comment("penerima");
             $table->integer('qty');

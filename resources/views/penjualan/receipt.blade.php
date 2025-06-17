@@ -47,7 +47,7 @@
 <body onload="window.print()">
 
     <div class="center">
-        <h3>SISTEM INVENTORY IYAN</h3>
+        <h3>KASIRIN.ID</h3>
         <p>Jl. Contoh Alamat No. 123<br>Telp: 0812-3456-7890</p>
     </div>
 
