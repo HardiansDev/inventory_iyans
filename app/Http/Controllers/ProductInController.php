@@ -137,48 +137,64 @@ class ProductInController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $productIn = ProductIn::findOrFail($id);
+        $productIn->delete();
+
+        return response()->json(['success' => true, 'message' => 'Produk berhasil dihapus.']);
     }
+
 
 
     public function updateStatus(Request $request, $id)
     {
-        // Cari ProductIn berdasarkan ID
+        $request->validate([
+            'status' => 'required|in:diterima,ditolak',
+            'catatan' => 'required_if:status,ditolak'
+        ], [
+            'catatan.required_if' => 'Catatan wajib diisi jika produk ditolak.'
+        ]);
+
         $productIn = ProductIn::findOrFail($id);
-
-        // Ambil data produk terkait
         $product = $productIn->product;
-
-        // Cek status yang diterima dari request
         $status = $request->input('status');
 
         if ($status === 'diterima') {
-            // Pastikan hanya memperbarui stok jika status sebelumnya adalah 'menunggu'
             if ($productIn->status === 'menunggu') {
                 if ($product->stock >= $productIn->qty) {
-                    // Kurangi stok produk sesuai dengan qty yang diterima
                     $product->stock -= $productIn->qty;
-                    $productIn->status = 'diterima'; // Update status di ProductIn
-                    $product->status = 'produk diterima'; // Update status di Product
-                    $product->save(); // Simpan perubahan stok dan status produk
+                    $product->status = 'produk diterima';
+                    $productIn->status = 'diterima';
+                    $product->save();
                 } else {
-                    return redirect()->back()->with('error', 'Stok tidak mencukupi!');
+                    $msg = 'Stok tidak mencukupi!';
+                    return $request->expectsJson()
+                        ? response()->json(['success' => false, 'message' => $msg])
+                        : back()->with('error', $msg);
                 }
             }
+            $productIn->catatan = null;
         } elseif ($status === 'ditolak') {
             if ($productIn->status === 'menunggu') {
-                $productIn->status = 'ditolak'; // Update status di ProductIn
-                $product->status = 'produk ditolak'; // Update status di Product
-                $product->save(); // Simpan perubahan status produk
+                $product->status = 'produk ditolak';
+                $productIn->status = 'ditolak';
+                $productIn->catatan = $request->input('catatan');
+                $product->save();
             }
         }
 
-        // Simpan perubahan pada ProductIn
         $productIn->save();
 
-        // Redirect kembali dengan pesan sukses
+        if ($request->expectsJson()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Status berhasil diperbarui!',
+            ]);
+        }
+
         return redirect()->route('productin.index')->with('success', 'Status berhasil diperbarui!');
     }
+
+
 
     public function addStock(Request $request, $id)
     {

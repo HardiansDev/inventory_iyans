@@ -55,7 +55,7 @@
                                         <th>Qty</th>
                                         <th>Penerima</th>
                                         <th>Status</th>
-                                        <th>Terima / Tolak</th>
+                                        <th>Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -83,19 +83,26 @@
                                                 @elseif ($productIn->status === 'diterima')
                                                     <span class="badge bg-success">Diterima</span>
                                                 @elseif ($productIn->status === 'ditolak')
-                                                    <span class="badge bg-danger">Ditolak</span>
+                                                    <div class="d-flex flex-column align-items-start">
+                                                        <span class="badge bg-danger">Ditolak</span>
+
+                                                        @if ($productIn->catatan)
+                                                            <div class="mt-1 ms-1 text-muted" style="font-size: 12px;">
+                                                                <i class="fa fa-info-circle me-1 text-secondary"></i>
+                                                                {{ $productIn->catatan }}
+                                                            </div>
+                                                        @endif
+                                                    </div>
                                                 @endif
                                             </td>
                                             <td>
                                                 <div class="dropdown">
-                                                    <button class="btn btn-primary btn-sm dropdown-toggle" type="button"
+                                                    <button class="btn btn-info btn-sm dropdown-toggle" type="button"
                                                         id="dropdownMenuButton" data-bs-toggle="dropdown"
-                                                        aria-expanded="false"
-                                                        {{ $productIn->status === 'ditolak' ? 'disabled' : '' }}>
+                                                        aria-expanded="false">
                                                         Pilih Aksi
                                                     </button>
                                                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                                        <!-- Tampilkan tombol Terima hanya jika status = menunggu -->
                                                         @if ($productIn->status === 'menunggu')
                                                             <li>
                                                                 <form
@@ -108,27 +115,18 @@
                                                                         class="dropdown-item text-success">Terima</button>
                                                                 </form>
                                                             </li>
-                                                        @endif
-
-                                                        <!-- Tampilkan tombol Tolak hanya jika status = menunggu -->
-                                                        @if ($productIn->status === 'menunggu')
                                                             <li>
-                                                                <form
-                                                                    action="{{ route('productin.updateStatus', $productIn->id) }}"
-                                                                    method="POST">
-                                                                    @csrf
-                                                                    @method('PUT')
-                                                                    <input type="hidden" name="status" value="ditolak">
-                                                                    <button type="submit"
-                                                                        class="dropdown-item text-danger">Tolak</button>
-                                                                </form>
+                                                                <button type="button"
+                                                                    class="dropdown-item text-danger btn-tolak-dengan-catatan"
+                                                                    data-productin-id="{{ $productIn->id }}"
+                                                                    data-product-name="{{ $productIn->product->name }}">
+                                                                    Tolak dengan Catatan
+                                                                </button>
                                                             </li>
                                                         @endif
 
-                                                        <!-- Tampilkan tombol Jual di Toko hanya jika status = diterima -->
                                                         @if ($productIn->status === 'diterima' || session('status') === 'produk diterima')
                                                             @if ($productIn->sales->isEmpty())
-                                                                {{-- BELUM ADA DI SALES: tampilkan tombol "Jual di Toko" --}}
                                                                 <li>
                                                                     <button
                                                                         class="dropdown-item text-secondary open-sale-form"
@@ -138,7 +136,6 @@
                                                                     </button>
                                                                 </li>
                                                             @else
-                                                                {{-- SUDAH ADA DI SALES: tampilkan tombol stok --}}
                                                                 <li>
                                                                     <button
                                                                         class="dropdown-item text-secondary btn-add-stock"
@@ -159,7 +156,13 @@
                                                             @endif
                                                         @endif
 
-
+                                                        <li>
+                                                            <button class="dropdown-item text-danger btn-delete-stock"
+                                                                data-productin-id="{{ $productIn->id }}"
+                                                                data-product-name="{{ $productIn->product->name }}">
+                                                                Hapus Produk Masuk
+                                                            </button>
+                                                        </li>
                                                     </ul>
                                                 </div>
                                             </td>
@@ -398,5 +401,90 @@
                 });
 
         });
+    });
+</script>
+
+
+{{-- Catatan Penolakan Produk --}}
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        document.querySelectorAll('.btn-tolak-dengan-catatan').forEach(button => {
+            button.addEventListener('click', function() {
+                const productInId = this.dataset.productinId;
+                const productName = this.dataset.productName;
+
+                Swal.fire({
+                    title: `Tolak Produk: ${productName}`,
+                    input: 'textarea',
+                    inputLabel: 'Alasan Penolakan',
+                    inputPlaceholder: 'Tulis alasan penolakan di sini...',
+                    inputAttributes: {
+                        'aria-label': 'Alasan penolakan'
+                    },
+                    showCancelButton: true,
+                    confirmButtonText: 'Tolak Produk',
+                    cancelButtonText: 'Batal',
+                    inputValidator: (value) => {
+                        if (!value) {
+                            return 'Catatan tidak boleh kosong!';
+                        }
+                    }
+                }).then(result => {
+                    if (result.isConfirmed) {
+                        fetch(`/productin/update-status/${productInId}`, {
+                                method: 'PUT',
+                                headers: {
+                                    'X-Requested-With': 'XMLHttpRequest',
+                                    'X-CSRF-TOKEN': document.querySelector(
+                                        'meta[name="csrf-token"]').content,
+                                    'Content-Type': 'application/json'
+                                },
+                                body: JSON.stringify({
+                                    status: 'ditolak',
+                                    catatan: result.value
+                                })
+                            })
+                            .then(async res => {
+                                const contentType = res.headers.get(
+                                    "content-type");
+                                if (!res.ok || !contentType.includes(
+                                        "application/json")) {
+                                    const text = await res.text();
+                                    throw new Error(text ||
+                                        'Terjadi kesalahan dari server.');
+                                }
+                                return res.json();
+                            })
+                            .then(data => {
+                                if (data.success) {
+                                    toastr.success(data.message);
+                                    setTimeout(() => window.location.reload(),
+                                        1000);
+                                } else {
+                                    toastr.error(data.message ||
+                                        'Gagal memperbarui status.');
+                                }
+                            })
+                            .catch(err => {
+                                console.error(err);
+                                toastr.error('Gagal menghubungi server.');
+                            });
+                    }
+                });
+            });
+        });
+    });
+</script>
+
+
+
+{{-- toltip pesan tolak --}}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+        tooltipTriggerList.map(function(tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl)
+        })
     });
 </script>

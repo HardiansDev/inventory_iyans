@@ -572,6 +572,58 @@
         });
     </script>
 
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('.btn-delete-stock').forEach(button => {
+                button.addEventListener('click', function() {
+                    const id = this.dataset.productinId;
+                    const name = this.dataset.productName;
+
+                    Swal.fire({
+                        title: `Hapus Produk "${name}"?`,
+                        text: "Data akan dihapus permanen!",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonText: 'Ya, Hapus!',
+                        cancelButtonText: 'Batal',
+                        confirmButtonColor: '#e3342f'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            fetch(`/productin/${id}`, {
+                                    method: 'DELETE',
+                                    headers: {
+                                        'X-CSRF-TOKEN': document.querySelector(
+                                            'meta[name="csrf-token"]').content
+                                    }
+                                })
+                                .then(res => res.json())
+                                .then(data => {
+                                    if (data.success) {
+                                        Swal.fire('Berhasil!', data.message, 'success');
+                                        setTimeout(() => location.reload(), 1000);
+                                    } else {
+                                        Swal.fire('Gagal', data.message ||
+                                            'Gagal menghapus data.', 'error');
+                                    }
+                                })
+                                .catch(error => {
+                                    console.error('Error:', error);
+                                    Swal.fire('Error', 'Terjadi kesalahan server.',
+                                        'error');
+                                });
+                        }
+                    });
+                });
+            });
+        });
+    </script>
+
+
+
+
+
 </body>
 
 </html>
