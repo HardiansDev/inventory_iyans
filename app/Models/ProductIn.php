@@ -18,6 +18,7 @@ class ProductIn extends Model
         'recipient',      // Nama penerima
         'qty',            // Jumlah produk yang masuk
         'status',         // Status produk
+        'status_penjualan',
         'catatan',         // Notes Jika Penolakan
     ];
 

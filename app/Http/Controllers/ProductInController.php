@@ -19,12 +19,51 @@ class ProductInController extends Controller
      */
     public function index()
     {
-        // Ambil semua data produk masuk, dengan data produk yang terkait
-        $productIns = ProductIn::with(['product', 'product.category', 'sales'])->orderBy('date', 'asc')->get();
+        $query = ProductIn::with(['product.category', 'sales'])->orderBy('date', 'desc');
+
+        // Filter Kategori
+        if (request()->filled('category')) {
+            $query->whereHas('product', function ($q) {
+                $q->where('category_id', request('category'));
+            });
+        }
+
+        // Filter Status Produk (diterima, ditolak, menunggu)
+        if (request()->filled('status_produk')) {
+            $query->where('status', request('status_produk'));
+        }
+
+        // Filter Status Penjualan (habis, jual)
+        if (request()->filled('status_penjualan')) {
+            $query->where('status_penjualan', request('status_penjualan'));
+        }
+
+        // Filter Harga
+        if (request()->filled('min_price') || request()->filled('max_price')) {
+            $min = request('min_price') ?? 0;
+            $max = request('max_price') ?? 999999999;
+
+            $query->whereHas('product', function ($q) use ($min, $max) {
+                $q->whereBetween('price', [$min, $max]);
+            });
+        }
+
+        // Filter Qty
+        if (request()->filled('min_qty') || request()->filled('max_qty')) {
+            $min = request('min_qty') ?? 0;
+            $max = request('max_qty') ?? 999999;
+
+            $query->whereBetween('qty', [$min, $max]);
+        }
+
+        $productIns = $query->get();
         $categories = \App\Models\Category::all();
-        // Kirim data ke view
+
         return view('productin.index', compact('productIns', 'categories'));
     }
+
+
+
 
 
     public function storeProductIn(Request $request)
@@ -95,12 +134,6 @@ class ProductInController extends Controller
 
 
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function show($id)
     {
         //
@@ -206,6 +239,7 @@ class ProductInController extends Controller
         }
 
         $productIn->save();
+        $this->updateStatusPenjualan($productIn);
 
         if ($request->expectsJson()) {
             return response()->json([
@@ -240,6 +274,8 @@ class ProductInController extends Controller
         $product->stock -= $qtyTambah;
         $product->save();
 
+        $this->updateStatusPenjualan($productIn);
+
         // ✅ SELALU RETURN JSON, jangan cek $request->ajax()
         return response()->json([
             'success' => true,
@@ -273,6 +309,8 @@ class ProductInController extends Controller
 
         $productIn->qty -= $qty;
         $productIn->save();
+        $this->updateStatusPenjualan($productIn); // ← Tambahkan di sini
+
 
         if ($request->ajax()) {
 
@@ -282,8 +320,6 @@ class ProductInController extends Controller
                 'redirect_url' => route('productin.index')
             ]);
         }
-
-
         return back()->with('success', 'Stok berhasil ditambahkan ke toko.');
     }
 
@@ -314,5 +350,21 @@ class ProductInController extends Controller
         ProductIn::whereIn('id', $ids)->delete();
 
         return response()->json(['success' => true, 'message' => 'Produk terpilih berhasil dihapus!']);
+    }
+
+    // Di dalam ProductInController
+    public function updateStatusPenjualan(ProductIn $productIn)
+    {
+        if ($productIn->qty == 0) {
+            $productIn->status_penjualan = 'stok habis terjual';
+        } elseif ($productIn->qty < 10) {
+            $productIn->status_penjualan = 'stok tinggal dikit';
+        } elseif ($productIn->sales()->exists()) {
+            $productIn->status_penjualan = 'sedang dijual';
+        } else {
+            $productIn->status_penjualan = 'belum dijual';
+        }
+
+        $productIn->save();
     }
 }

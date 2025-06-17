@@ -1,7 +1,7 @@
 @extends('layouts.master')
 
 @section('title')
-    <title>Sistem Inventory Iyan | Tambah Produk Masuk</title>
+    <title>Sistem Inventory Iyan | Produk Masuk</title>
 @endsection
 
 @section('content')
@@ -29,7 +29,7 @@
     <div class="container mt-4">
         <div class="card shadow-sm">
             <div class="card-header bg-primary text-white">
-                <h5 class="mb-0">Tambah Produk Masuk </h5>
+                <h5 class="mb-0">Form Tambah Produk Masuk </h5>
             </div>
             <div class="card-body">
                 <form action="{{ route('productin.storeProductIn') }}" method="POST" enctype="multipart/form-data">

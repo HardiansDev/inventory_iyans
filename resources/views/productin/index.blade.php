@@ -43,6 +43,105 @@
                     </div>
                     <!-- /.box-header -->
                     <div class="box-body">
+                        <!-- Tombol Filter -->
+                        <div class="dropdown mb-3">
+                            <button class="btn btn-outline-primary dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                                aria-expanded="false">
+                                <i class="fas fa-filter"></i> Filter Data
+                            </button>
+
+                            <div class="dropdown-menu p-4" style="min-width: 300px;">
+                                <form action="{{ route('productin.index') }}" method="GET">
+
+                                    <!-- Filter Kategori -->
+                                    <div class="mb-2">
+                                        <label>Kategori</label>
+                                        <select name="category" class="form-control">
+                                            <option value="">-- Semua Kategori --</option>
+                                            @foreach ($categories as $category)
+                                                <option value="{{ $category->id }}"
+                                                    {{ request('category') == $category->id ? 'selected' : '' }}>
+                                                    {{ $category->name }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+
+                                    <!-- Filter Status Produk -->
+                                    <div class="mb-2">
+                                        <label>Status Produk</label>
+                                        <select name="status_produk" class="form-control">
+                                            <option value="">-- Semua --</option>
+                                            <option value="menunggu"
+                                                {{ request('status_produk') == 'menunggu' ? 'selected' : '' }}>Menunggu
+                                            </option>
+                                            <option value="diterima"
+                                                {{ request('status_produk') == 'diterima' ? 'selected' : '' }}>Diterima
+                                            </option>
+                                            <option value="ditolak"
+                                                {{ request('status_produk') == 'ditolak' ? 'selected' : '' }}>Ditolak
+                                            </option>
+                                        </select>
+                                    </div>
+
+                                    <!-- Filter Status Penjualan -->
+                                    <div class="mb-2">
+                                        <label>Status Penjualan</label>
+                                        <select name="status_penjualan" class="form-control">
+                                            <option value="">-- Semua --</option>
+                                            <option value="belum dijual"
+                                                {{ request('status_penjualan') == 'belum dijual' ? 'selected' : '' }}>Belum
+                                                Dijual</option>
+                                            <option value="sedang dijual"
+                                                {{ request('status_penjualan') == 'sedang dijual' ? 'selected' : '' }}>
+                                                Sedang Dijual</option>
+                                            <option value="stok tinggal dikit"
+                                                {{ request('status_penjualan') == 'stok tinggal dikit' ? 'selected' : '' }}>
+                                                Stok Tinggal Dikit</option>
+                                            <option value="stok habis terjual"
+                                                {{ request('status_penjualan') == 'stok habis terjual' ? 'selected' : '' }}>
+                                                Stok Habis Terjual</option>
+                                        </select>
+                                    </div>
+
+                                    <!-- Filter Harga -->
+                                    <div class="mb-2">
+                                        <label>Harga (Min - Max)</label>
+                                        <div class="d-flex gap-1">
+                                            <input type="number" name="min_price" class="form-control" placeholder="Min"
+                                                value="{{ request('min_price') }}">
+                                            <input type="number" name="max_price" class="form-control" placeholder="Max"
+                                                value="{{ request('max_price') }}">
+                                        </div>
+                                    </div>
+
+                                    <!-- Filter Qty -->
+                                    <div class="mb-3">
+                                        <label>Qty (Min - Max)</label>
+                                        <div class="d-flex gap-1">
+                                            <input type="number" name="min_qty" class="form-control" placeholder="Min"
+                                                value="{{ request('min_qty') }}">
+                                            <input type="number" name="max_qty" class="form-control" placeholder="Max"
+                                                value="{{ request('max_qty') }}">
+                                        </div>
+                                    </div>
+
+                                    <div class="text-end d-flex justify-content-between">
+                                        <a href="{{ route('productin.index') }}" class="btn btn-secondary btn-sm">
+                                            <i class="fas fa-undo"></i> Reset Filter
+                                        </a>
+                                        <button type="submit" class="btn btn-primary btn-sm">
+                                            <i class="fas fa-search"></i> Terapkan Filter
+                                        </button>
+                                    </div>
+
+                                </form>
+                            </div>
+                        </div>
+
+
+
+
                         <!-- Table -->
                         <div class="table-responsive">
                             <table id="example1" class="table table-hover table-bordered">
@@ -61,6 +160,7 @@
                                         <th>Qty</th>
                                         <th>Penerima</th>
                                         <th>Status</th>
+                                        <th>Status Penjualan</th>
                                         <th>Aksi</th>
                                     </tr>
                                 </thead>
@@ -98,13 +198,32 @@
 
                                                         @if ($productIn->catatan)
                                                             <div class="mt-1 ms-1 text-muted" style="font-size: 12px;">
-                                                                <i class="fa fa-info-circle me-1 text-secondary"></i> Note :
+                                                                <i class="fa fa-info-circle me-1 text-secondary"></i> Note
+                                                                :
                                                                 {{ $productIn->catatan }}
                                                             </div>
                                                         @endif
                                                     </div>
                                                 @endif
                                             </td>
+                                            <td>
+                                                @php
+                                                    $statusPenjualan = $productIn->status_penjualan;
+                                                @endphp
+
+                                                @if ($statusPenjualan === 'sedang dijual')
+                                                    <span class="badge bg-teal">Sedang Dijual</span>
+                                                @elseif ($statusPenjualan === 'stok habis terjual')
+                                                    <span class="badge bg-red">Stok Habis</span>
+                                                @elseif ($statusPenjualan === 'stok tinggal dikit')
+                                                    <span class="badge bg-warning text-dark">Stok Tinggal Dikit</span>
+                                                @elseif ($statusPenjualan === 'belum dijual')
+                                                    <span class="badge bg-secondary">Belum Dijual</span>
+                                                @else
+                                                    <span class="badge bg-light text-muted">-</span>
+                                                @endif
+                                            </td>
+
                                             <td>
                                                 <div class="dropdown">
                                                     <button class="btn btn-info btn-sm dropdown-toggle" type="button"
@@ -120,7 +239,8 @@
                                                                     method="POST">
                                                                     @csrf
                                                                     @method('PUT')
-                                                                    <input type="hidden" name="status" value="diterima">
+                                                                    <input type="hidden" name="status"
+                                                                        value="diterima">
                                                                     <button type="submit"
                                                                         class="dropdown-item text-success">Terima</button>
                                                                 </form>
