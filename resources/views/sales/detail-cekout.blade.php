@@ -57,7 +57,7 @@
                     </div>
 
                     <div class="row">
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                             <div class="mb-3">
                                 <label for="amount_formatted" class="font-weight-bold">Jumlah Pembayaran:</label>
                                 <input type="text" id="amount_formatted" class="form-control"
@@ -80,7 +80,17 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="col-md-3 text-end">
+                        <div class="col-md-3">
+                            <div class="mb-3">
+                                <label for="metode_pembayaran">Metode Pembayaran:</label>
+                                <select name="metode_pembayaran" id="metode_pembayaran" class="form-control" required>
+                                    <option value="">-- Pilih --</option>
+                                    <option value="cash">Cash</option>
+                                    <option value="qris">QRIS</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-2 text-end">
                             <h4 class="text-success">Total Harga: <span id="total-price-display">Rp
                                     {{ number_format($totalPrice, 0, ',', '.') }}</span></h4>
                             <input type="hidden" name="total" id="total" value="{{ $totalPrice }}">
@@ -99,6 +109,23 @@
                         </button>
                     </div>
                 </form>
+                <!-- Modal QRIS -->
+                <div class="modal fade" id="qrisModal" tabindex="-1" aria-labelledby="qrisModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content text-center p-4">
+                            <h5 id="qrisModalLabel" class="mb-3">Scan QR Code Pembayaran</h5>
+                            <img src="{{ asset('qrr.png') }}" alt="QRIS" style="width: 200px; height: auto;">
+
+                            <p class="fw-bold text-primary">Total Bayar: <span id="qris-total-amount">Rp 0</span></p>
+
+                            <p class="text-muted mt-2">Gunakan aplikasi e-wallet untuk scan QR.</p>
+                            <button class="btn btn-success mt-3" id="btn-simulate-success">Simulasikan Pembayaran
+                                Sukses</button>
+                        </div>
+                    </div>
+                </div>
+
+
             </div>
         </div>
     </div>
@@ -152,13 +179,15 @@
             }
 
             function calculateChange() {
-                const amount = parseInt(amountHiddenInput.value) || 0;
-                const subtotal = parseInt(subtotalInput.value) || 0;
+                const amount = parseInt(document.getElementById('amount').value) || 0;
+                const subtotal = parseInt(document.getElementById('subtotal_input').value) || 0;
                 const change = amount - subtotal;
 
-                changeDisplay.textContent = formatRupiah(change);
-                changeInput.value = change;
+                document.getElementById('change-display').textContent = 'Rp ' + new Intl.NumberFormat('id-ID')
+                    .format(change);
+                document.getElementById('change-input').value = change;
             }
+
 
             // Format input pembayaran dengan titik
             amountFormattedInput.addEventListener('input', function() {
@@ -179,12 +208,73 @@
             btn.addEventListener('click', function() {
                 const amount = parseInt(amountHiddenInput.value) || 0;
                 const subtotal = parseInt(subtotalInput.value) || 0;
+                const metodePembayaran = document.getElementById('metode_pembayaran')?.value || 'cash';
 
-                if (amount < subtotal) {
-                    toastr.error('Jumlah pembayaran kurang dari total belanja.');
-                    return;
+                if (metodePembayaran === 'qris') {
+                    const qrisModal = new bootstrap.Modal(document.getElementById('qrisModal'));
+                    document.getElementById('qris-total-amount').textContent = new Intl.NumberFormat(
+                        'id-ID', {
+                            style: 'currency',
+                            currency: 'IDR'
+                        }).format(subtotal);
+
+                    qrisModal.show();
+
+                    document.getElementById('btn-simulate-success').onclick = function() {
+                        qrisModal.hide();
+
+                        Swal.fire({
+                            title: 'Input Jumlah Pembayaran',
+                            input: 'text',
+                            inputLabel: 'Masukkan nominal pembayaran dari user',
+                            inputPlaceholder: 'Contoh: 10000',
+                            inputAttributes: {
+                                autocapitalize: 'off'
+                            },
+                            showCancelButton: true,
+                            confirmButtonText: 'Konfirmasi',
+                            cancelButtonText: 'Batal',
+                            showLoaderOnConfirm: true,
+                            inputValidator: (value) => {
+                                if (!value || isNaN(value) || parseInt(value) <= 0) {
+                                    return 'Masukkan jumlah pembayaran yang valid';
+                                }
+                            }
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                const amountBayar = parseInt(result.value.replace(/[^\d]/g,
+                                    '')) || 0;
+                                document.getElementById('amount').value = amountBayar;
+                                document.getElementById('amount_formatted').value = new Intl
+                                    .NumberFormat('id-ID').format(amountBayar);
+                                calculateChange();
+
+                                Swal.fire({
+                                    title: 'Pembayaran Berhasil!',
+                                    text: 'QRIS telah dikonfirmasi.',
+                                    icon: 'success',
+                                    showConfirmButton: false,
+                                    timer: 1500
+                                });
+
+                                setTimeout(() => {
+                                    processFinalPayment(); // 🚀 trigger proses submit
+                                }, 1600);
+                            }
+                        });
+                    };
+                } else {
+                    if (amount < subtotal) {
+                        toastr.error('Jumlah pembayaran kurang dari total belanja.');
+                        return;
+                    }
+                    processFinalPayment(); // 🚀 langsung proses cash
                 }
+            });
 
+
+            // ✅ Taruh di luar event listener agar bisa diakses di atas
+            function processFinalPayment() {
                 btn.disabled = true;
                 btnText.classList.add('d-none');
                 btnLoading.classList.remove('d-none');
@@ -216,7 +306,8 @@
                         btnText.classList.remove('d-none');
                         btnLoading.classList.add('d-none');
                     });
-            });
+            }
+
         });
     </script>
 @endpush

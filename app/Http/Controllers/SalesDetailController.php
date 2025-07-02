@@ -24,6 +24,7 @@ class SalesDetailController extends Controller
             'change' => 'required|numeric|min:0',
             'transaction_number' => 'required',
             'invoice_number' => 'required',
+            'metode_pembayaran' => 'required|in:cash,qris',
         ]);
 
         try {
@@ -67,6 +68,7 @@ class SalesDetailController extends Controller
                     'change' => $validated['change'],
                     'qty' => $item['qty'],
                     'price' => $product->price,
+                    'metode_pembayaran' => $validated['metode_pembayaran'],
                 ]);
             }
 

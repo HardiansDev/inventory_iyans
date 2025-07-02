@@ -19,6 +19,7 @@ class SalesDetail extends Model
         'total',
         'subtotal',
         'change',
+        'metode_pembayaran',
         'transaction_number',
         'invoice_number',
         'qty',
