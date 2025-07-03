@@ -16,11 +16,16 @@ class SalesController extends Controller
      */
     public function index()
     {
-        // Ambil semua produk yang sudah dijual
-        $sales = Sales::with('productIn')->get(); // Pastikan relasi sudah ada
+        // Ambil hanya produk yang belum dihapus (softdelete) dari product_in
+        $sales = Sales::with(['productIn' => function ($query) {
+            $query->whereNull('deleted_at'); // Ambil product_in yang belum di-soft-delete
+        }])->whereHas('productIn', function ($query) {
+            $query->whereNull('deleted_at');
+        })->get();
 
         return view('sales.index', compact('sales'));
     }
+
 
 
     public function store(Request $request)

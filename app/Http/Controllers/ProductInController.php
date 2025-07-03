@@ -291,21 +291,6 @@ class ProductInController extends Controller
             return response()->json(['success' => false, 'message' => 'Tidak ada produk yang dipilih.']);
         }
 
-        $blocked = [];
-        foreach ($ids as $id) {
-            $productIn = ProductIn::with('sales')->find($id);
-            if ($productIn && $productIn->sales->isNotEmpty()) {
-                $blocked[] = $productIn->product->name ?? 'Produk Tanpa Nama';
-            }
-        }
-
-        if (!empty($blocked)) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Tidak bisa menghapus produk berikut karena sudah ada data penjualan: ' . implode(', ', $blocked)
-            ]);
-        }
-
         ProductIn::whereIn('id', $ids)->delete();
 
         return response()->json(['success' => true, 'message' => 'Produk terpilih berhasil dihapus!']);

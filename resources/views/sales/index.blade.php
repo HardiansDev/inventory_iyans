@@ -33,7 +33,7 @@
                 @foreach ($sales as $sale)
                     @php
                         $productIn = $sale->productIn; // Mengambil data produk melalui relasi productIn
-                        $product = $productIn->product; // Ambil produk terkait
+                        $product = $productIn?->product; // Ambil produk terkait
                     @endphp
                     <div class="col-md-3 mb-4">
                         <div class="card h-100 shadow-sm"
