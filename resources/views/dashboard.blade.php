@@ -308,7 +308,7 @@
 
 
     <script>
-        // === 🎨 Generate Dynamic Warna Berdasarkan Index ===
+        // === Generate Dynamic Warna Berdasarkan Index ===
         function generateColors(count, alpha = 0.6) {
             const colors = [];
             for (let i = 0; i < count; i++) {
@@ -318,7 +318,7 @@
             return colors;
         }
 
-        // === 📊 Chart Config Helper ===
+        // === Chart Config Helper ===
         function createBarChart(ctxId, labels, datasets) {
             const ctx = document.getElementById(ctxId).getContext('2d');
             new Chart(ctx, {
@@ -386,7 +386,7 @@
         const yearLabels = @json($yearLabels ?? []);
         const yearValues = @json($yearValues ?? []);
 
-        // === 📈 Render All Charts ===
+        // === Render All Charts ===
 
         // 1. Donut Chart - Stok Produk
         createDonutChart('productChart', productNames, productStocks);
