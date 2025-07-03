@@ -91,9 +91,9 @@
                             PDF</button>
                         <button type="button" onclick="downloadChartAsExcel()" class="btn btn-sm btn-success">Download
                             Excel</button>
-                        <button type="button" onclick="downloadAllAsPDF()" class="btn btn-sm btn-primary">
-                            Download Semua (PDF)
-                        </button>
+                        <button type="button" onclick="downloadAllCharts()" class="btn btn-sm btn-primary">Download Semua
+                            (PDF)</button>
+
 
                     </div>
                 </form>
@@ -176,6 +176,99 @@
                 </div>
             </div>
 
+            <!-- Export Semua Grafik & Data -->
+            <div id="pdfExportAll" style="display:none; padding: 20px; font-family: Arial, sans-serif; font-size: 11px;">
+                <h2 style="text-align:center; margin-bottom: 20px;">Laporan Lengkap - Sistem Inventory</h2>
+
+                {{-- === Data Produk === --}}
+                <h4>Stok Produk</h4>
+                <table border="1" cellpadding="5" cellspacing="0" style="width:100%; margin-bottom: 20px;">
+                    <thead style="background:#f2f2f2;">
+                        <tr>
+                            <th>Produk</th>
+                            <th>Stok</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($productNames as $i => $name)
+                            <tr>
+                                <td>{{ $name }}</td>
+                                <td>{{ $productStocks[$i] }}</td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+
+                {{-- === Produk Masuk === --}}
+                <h4>Produk Masuk</h4>
+                <table border="1" cellpadding="5" cellspacing="0" style="width:100%; margin-bottom: 20px;">
+                    <thead style="background:#f2f2f2;">
+                        <tr>
+                            <th>Produk</th>
+                            <th>Jumlah Masuk</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($inLabels as $i => $name)
+                            <tr>
+                                <td>{{ $name }}</td>
+                                <td>{{ $inQtys[$i] }}</td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+
+                {{-- === Produk Keluar === --}}
+                <h4>Produk Keluar</h4>
+                <table border="1" cellpadding="5" cellspacing="0" style="width:100%; margin-bottom: 20px;">
+                    <thead style="background:#f2f2f2;">
+                        <tr>
+                            <th>Produk</th>
+                            <th>Jumlah Keluar</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($outLabels as $i => $name)
+                            <tr>
+                                <td>{{ $name }}</td>
+                                <td>{{ $outQtys[$i] }}</td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+
+                {{-- === Penjualan Harian - Chart + Tabel === --}}
+                <h4>Penjualan per Hari</h4>
+                @include('partials.export-section', [
+                    'labels' => $dailyLabels,
+                    'values' => $dailyValues,
+                    'chartId' => 'chartExportDaily',
+                ])
+
+                {{-- === Penjualan Mingguan - Chart + Tabel === --}}
+                <h4>Penjualan per Minggu</h4>
+                @include('partials.export-section', [
+                    'labels' => $weekLabels,
+                    'values' => $weekValues,
+                    'chartId' => 'chartExportWeek',
+                ])
+
+                {{-- === Penjualan Bulanan - Chart + Tabel === --}}
+                <h4>Penjualan per Bulan</h4>
+                @include('partials.export-section', [
+                    'labels' => $monthLabels,
+                    'values' => $monthValues,
+                    'chartId' => 'chartExportMonth',
+                ])
+
+                {{-- === Penjualan Tahunan - Chart + Tabel === --}}
+                <h4>Penjualan per Tahun</h4>
+                @include('partials.export-section', [
+                    'labels' => $yearLabels,
+                    'values' => $yearValues,
+                    'chartId' => 'chartExportYear',
+                ])
+            </div>
 
 
 
@@ -224,7 +317,78 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
 
+    <script>
+        function downloadAllCharts() {
+            const chartConfigs = [{
+                    id: 'chartExportDaily',
+                    labels: @json($dailyLabels),
+                    datasets: @json($dailyValues)
+                },
+                {
+                    id: 'chartExportWeek',
+                    labels: @json($weekLabels),
+                    datasets: @json($weekValues)
+                },
+                {
+                    id: 'chartExportMonth',
+                    labels: @json($monthLabels),
+                    datasets: @json($monthValues)
+                },
+                {
+                    id: 'chartExportYear',
+                    labels: @json($yearLabels),
+                    datasets: @json($yearValues)
+                },
+            ];
 
+            chartConfigs.forEach(cfg => {
+                const ctx = document.getElementById(cfg.id).getContext('2d');
+                new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: cfg.labels,
+                        datasets: cfg.datasets.map((d, i) => ({
+                            ...d,
+                            backgroundColor: generateColors(cfg.datasets.length)[i]
+                        }))
+                    },
+                    options: {
+                        responsive: false,
+                        plugins: {
+                            legend: {
+                                position: 'bottom'
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true
+                            }
+                        }
+                    }
+                });
+            });
+
+            setTimeout(() => {
+                const element = document.getElementById('pdfExportAll');
+                element.style.display = 'block';
+                html2pdf().from(element).set({
+                    margin: 0.4,
+                    filename: 'Laporan-Sistem-Inventory.pdf',
+                    html2canvas: {
+                        scale: 2
+                        // useCORS: true
+                    },
+                    jsPDF: {
+                        orientation: 'landscape',
+                        unit: 'cm',
+                        format: 'A3'
+                    }
+                }).save().then(() => {
+                    element.style.display = 'none';
+                });
+            }, 800); // beri delay agar chart sempat render
+        }
+    </script>
     <script>
         function downloadChartAsPDF() {
             const labels = @json($labels);
