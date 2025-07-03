@@ -91,6 +91,10 @@
                             PDF</button>
                         <button type="button" onclick="downloadChartAsExcel()" class="btn btn-sm btn-success">Download
                             Excel</button>
+                        <button type="button" onclick="downloadAllAsPDF()" class="btn btn-sm btn-primary">
+                            Download Semua (PDF)
+                        </button>
+
                     </div>
                 </form>
 
@@ -171,6 +175,8 @@
                     </div>
                 </div>
             </div>
+
+
 
 
             <!-- Right col (Products, Product In, Product Out) -->
