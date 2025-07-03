@@ -1,161 +1,70 @@
 @extends('layouts.master')
+
 @section('title')
-    <title>Sistem Inventory Iyan | Produk</title>
-@endsection
-
-@section('styles')
-    <style>
-        /* Wrapper untuk detail produk */
-        .product-details-container {
-            display: flex;
-            justify-content: space-between;
-            gap: 30px;
-            margin-bottom: 20px;
-            align-items: flex-start;
-            flex-wrap: wrap;
-        }
-
-        /* Gambar produk (sebelah kanan) */
-        .product-image {
-            flex: 1;
-            max-width: 100%;
-            height: auto;
-            padding: 10px;
-            border-radius: 10px;
-            overflow: hidden;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            margin-bottom: 20px;
-        }
-
-        /* Gambar dengan properti responsive */
-        .product-image img {
-            width: 100%;
-            height: auto;
-            object-fit: cover;
-        }
-
-        /* Detail produk (sebelah kiri) */
-        .product-info {
-            flex: 2;
-            max-width: 700px;
-            padding: 20px;
-            background-color: #e9e9e9;
-            border-radius: 10px;
-            color: rgb(37, 37, 37);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            margin-bottom: 20px;
-        }
-
-        /* Styling untuk paragraf informasi */
-        .product-info p {
-            margin-bottom: 15px;
-            font-size: 16px;
-            line-height: 1.5;
-        }
-
-        /* Styling untuk label */
-        .label {
-            font-weight: bold;
-            color: #0e0e0e;
-        }
-
-        /* Tombol kembali dan print */
-        .btn-container {
-            margin-top: 30px;
-            display: flex;
-            gap: 10px;
-            justify-content: center;
-        }
-
-        /* Tombol dengan gaya */
-        .btn-container .btn {
-            padding: 10px 20px;
-            border-radius: 5px;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-
-        /* Responsif untuk tampilan mobile */
-        @media (max-width: 768px) {
-            .product-details-container {
-                flex-direction: column;
-                align-items: center;
-                gap: 20px;
-            }
-
-            .product-info {
-                max-width: 100%;
-                padding: 15px;
-            }
-
-            .product-image {
-                max-width: 90%;
-                margin-bottom: 10px;
-            }
-
-            .btn-container {
-                flex-direction: column;
-            }
-
-            .btn-container .btn {
-                width: 100%;
-                margin-bottom: 10px;
-            }
-        }
-    </style>
+    <title>Detail Produk | Sistem Inventory Iyan</title>
 @endsection
 
 @section('content')
-    <section class="content-header">
-        <h1>
-            Halaman Detail Produk
-        </h1>
-    </section>
+    <div class="container mt-4">
+        <div class="card shadow-sm border-0">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0">Detail Produk: {{ $product->name }}</h4>
+            </div>
 
-    <section class="content">
-        <div class="row">
-            <div class="box">
-                <div class="box-header">
-                    <h3 class="box-title">Detail Produk {{ $product->name }}</h3>
-                    <hr>
-                </div>
-
-                <div class="box-body">
-                    <div class="product-details-container">
-                        <!-- Informasi Produk (sebelah kiri) -->
-                        <div class="product-info">
-                            <p><span class="label">Nama :</span> {{ $product->name }}</p>
-                            <p><span class="label">Kode Produk :</span> {{ $product->code }}</p>
-                            <p><span class="label">Kategori :</span> {{ $product->category->name }}</p>
-                            <p><span class="label">Harga :</span> Rp. {{ number_format($product->price, 0, ',', '.') }}</p>
-                            <p><span class="label">Stok :</span> {{ $product->stock }}</p>
-                            <p><span class="label">Status :</span> {{ $product->status }}</p>
-                            <p><span class="label">Supplier :</span> {{ $product->supplier->name }}</p>
-                        </div>
-
-                        <!-- Gambar Produk (sebelah kanan) -->
-                        <div class="product-image">
-                            <img src="{{ asset('/storage/fotoproduct/' . $product->photo) }}" alt="Product Image">
-                        </div>
+            <div class="card-body">
+                <div class="row g-4 align-items-start">
+                    <!-- Gambar Produk -->
+                    <div class="col-md-5 text-center">
+                        <img src="{{ asset('/storage/fotoproduct/' . $product->photo) }}" alt="Foto Produk"
+                            class="img-fluid rounded shadow-sm" style="max-height: 300px; object-fit: cover;">
                     </div>
 
-                    <div class="btn-container">
-                        <!-- Tombol Kembali dengan Ikon -->
-                        <a href="{{ route('product.index') }}" class="btn btn-danger btn-sm">
-                            <i class="fas fa-arrow-left"></i> Kembali
-                        </a>
-
-                        <!-- Tombol Print dengan Ikon -->
-                        <a id="print-btn" class="btn btn-warning btn-sm">
-                            <i class="fas fa-print"></i> Print
-                        </a>
+                    <!-- Informasi Produk -->
+                    <div class="col-md-7">
+                        <table class="table table-borderless">
+                            <tr>
+                                <th style="width: 150px;">Nama</th>
+                                <td>: {{ $product->name }}</td>
+                            </tr>
+                            <tr>
+                                <th>Kode Produk</th>
+                                <td>: {{ $product->code }}</td>
+                            </tr>
+                            <tr>
+                                <th>Kategori</th>
+                                <td>: {{ $product->category->name }}</td>
+                            </tr>
+                            <tr>
+                                <th>Harga</th>
+                                <td>: Rp {{ number_format($product->price, 0, ',', '.') }}</td>
+                            </tr>
+                            <tr>
+                                <th>Stok</th>
+                                <td>: {{ $product->stock }}</td>
+                            </tr>
+                            <tr>
+                                <th>Status</th>
+                                <td>: {{ ucfirst($product->status) }}</td>
+                            </tr>
+                            <tr>
+                                <th>Supplier</th>
+                                <td>: {{ $product->supplier->name }}</td>
+                            </tr>
+                        </table>
                     </div>
                 </div>
             </div>
+
+            <!-- Tombol Aksi -->
+            <div class="card-footer d-flex justify-content-between align-items-center">
+                <a href="{{ route('product.index') }}" class="btn btn-outline-secondary">
+                    <i class="fas fa-arrow-left me-1"></i> Kembali
+                </a>
+
+                {{-- <button id="print-btn" class="btn btn-warning">
+                    <i class="fas fa-print me-1"></i> Print
+                </button> --}}
+            </div>
         </div>
-    </section>
+    </div>
 @endsection

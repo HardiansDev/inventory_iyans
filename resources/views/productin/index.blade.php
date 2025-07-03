@@ -34,25 +34,25 @@
             <div class="col-md-12">
                 <div class="box">
                     <!-- Header -->
-                    <div class="box-header d-flex flex-column align-items-start mb-3">
-                        <a href="{{ route('productin.create') }}" class="btn btn-warning btn-sm"><i
-                                class="fas fa-plus-circle"></i> Tambah Produk</a>
-                        <button id="BtnDeleteSelected" class="btn btn-danger btn-sm ms-auto" disabled>
+                    <div class="box-header d-flex flex-wrap align-items-center justify-content-start gap-2 mb-3">
+                        <!-- Tombol Tambah Produk -->
+                        <a href="{{ route('productin.create') }}" class="btn btn-success btn-sm">
+                            <i class="fas fa-plus-circle"></i> Tambah Produk
+                        </a>
+
+                        <!-- Tombol Hapus Terpilih -->
+                        <button id="BtnDeleteSelected" class="btn btn-danger btn-sm" disabled>
                             <i class="fas fa-trash-alt"></i> Hapus Terpilih
                         </button>
-                    </div>
-                    <!-- /.box-header -->
-                    <div class="box-body">
-                        <!-- Tombol Filter -->
-                        <div class="dropdown mb-3">
-                            <button class="btn btn-outline-primary dropdown-toggle" type="button" data-bs-toggle="dropdown"
-                                aria-expanded="false">
+
+                        <!-- Dropdown Filter -->
+                        <div class="dropdown">
+                            <button class="btn btn-outline-primary btn-sm dropdown-toggle" type="button"
+                                data-bs-toggle="dropdown" aria-expanded="false">
                                 <i class="fas fa-filter"></i> Filter Data
                             </button>
-
                             <div class="dropdown-menu p-4" style="min-width: 300px;">
                                 <form action="{{ route('productin.index') }}" method="GET">
-
                                     <!-- Filter Kategori -->
                                     <div class="mb-2">
                                         <label>Kategori</label>
@@ -134,10 +134,15 @@
                                             <i class="fas fa-search"></i> Terapkan Filter
                                         </button>
                                     </div>
-
                                 </form>
                             </div>
                         </div>
+                    </div>
+
+
+                    <!-- /.box-header -->
+                    <div class="box-body">
+
 
 
 
