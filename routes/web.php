@@ -71,6 +71,10 @@ Route::middleware(['auth', 'role:kasir,superadmin'])->group(function () {
     Route::post('/set-wishlist', [CheckoutController::class, 'setWishlist'])->name('set.wishlist');
     Route::get('/detail-cekout', [CheckoutController::class, 'showCheckout'])->name('detail-cekout');
     Route::post('/proses-pembayaran', [SalesDetailController::class, 'processPayment'])->name('process.payment');
+    // Rute baru untuk menyimpan detail penjualan setelah QRIS sukses
+    Route::post('/store-sales-detail', [SalesDetailController::class, 'storeSalesDetail'])->name('store.sales.detail');
+
+
     Route::get('/print-receipt/{transaction_number}', [SalesDetailController::class, 'printReceipt'])->name('print.receipt');
 });
 

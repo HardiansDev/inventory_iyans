@@ -3,6 +3,8 @@
 
 <head>
     <meta charset="UTF-8">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+
     <title>Struk Pembayaran</title>
     <style>
         @page {
@@ -40,6 +42,26 @@
 
         .bold {
             font-weight: bold;
+        }
+
+        .back-button {
+            display: block;
+            margin: 15px auto;
+            padding: 8px 16px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            font-size: 14px;
+            cursor: pointer;
+            border-radius: 5px;
+            text-align: center;
+            text-decoration: none;
+        }
+
+        @media print {
+            .back-button {
+                display: none !important;
+            }
         }
     </style>
 </head>
@@ -93,6 +115,13 @@
     <div class="line"></div>
 
     <p class="center">*** TERIMA KASIH ***<br>Barang yang sudah dibeli<br>tidak dapat dikembalikan.</p>
+
+    <!-- Tombol Kembali -->
+    <a href="{{ route('sales.index') }}" class="back-button" id="backBtn"
+        style="display: block; margin: 15px auto; padding: 8px 16px; background-color: #007bff; color: #fff; border: none; font-size: 14px; cursor: pointer; border-radius: 5px; text-align: center; text-decoration: none; font-family: 'Poppins', sans-serif;">
+        ← Kembali ke Menu Kasir
+    </a>
+
 
 </body>
 

@@ -312,7 +312,7 @@
 @endsection
 
 
-@section('scripts')
+@push('scripts')
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
@@ -590,4 +590,4 @@
         yearValues.forEach((d, i) => d.backgroundColor = generateColors(yearValues.length)[i]);
         createBarChart('salesYearChart', yearLabels, yearValues);
     </script>
-@endsection
+@endpush

@@ -21,7 +21,7 @@ class Sales extends Model
      */
     public function productIn()
     {
-        return $this->belongsTo(ProductIn::class, 'product_ins_id')->withDefault();
+        return $this->belongsTo(ProductIn::class, 'product_ins_id')->withTrashed();
     }
 
     /**

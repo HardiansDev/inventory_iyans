@@ -7,6 +7,9 @@ use App\Models\SalesDetail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Midtrans\Snap;
+use Midtrans\Config;
+
 
 class SalesDetailController extends Controller
 {
@@ -27,15 +30,25 @@ class SalesDetailController extends Controller
             'metode_pembayaran' => 'required|in:cash,qris',
         ]);
 
+        // Midtrans Config
+        Config::$serverKey = config('midtrans.serverKey');
+        Config::$isProduction = config('midtrans.isProduction');
+        Config::$isSanitized = config('midtrans.isSanitized');
+        Config::$is3ds = config('midtrans.is3ds');
+
         try {
             DB::beginTransaction();
 
             $stokKurang = [];
 
             foreach ($validated['sales'] as $item) {
-                $sales = Sales::with('productIn.product')->findOrFail($item['id']);
+                $sales = Sales::with(['productIn' => function ($query) {
+                    $query->withTrashed()->with('product');
+                }])->findOrFail($item['id']);
+
                 if ($sales->qty < $item['qty']) {
-                    $stokKurang[] = $sales->productIn->product->name ?? 'Produk ID: ' . $sales->product_ins_id;
+                    $productName = optional(optional($sales->productIn)->product)->name ?? 'Produk tidak ditemukan';
+                    $stokKurang[] = $productName;
                 }
             }
 
@@ -47,14 +60,55 @@ class SalesDetailController extends Controller
                 ], 422);
             }
 
+            // Jika QRIS, generate token dulu tanpa menyimpan ke DB
+            if ($validated['metode_pembayaran'] === 'qris') {
+                $orderId = uniqid('TRX-'); // Order ID untuk Midtrans
+                // Gunakan transaction_number dari validated data sebagai order_id jika ingin konsisten
+                // $orderId = $validated['transaction_number']; 
+
+                $params = [
+                    'transaction_details' => [
+                        'order_id' => $orderId,
+                        'gross_amount' => max(1, (int) $validated['subtotal']), // Gunakan subtotal untuk gross_amount Midtrans
+                    ]
+                ];
+
+                $snapToken = Snap::getSnapToken($params);
+
+                // Commit transaksi DB di sini untuk mengurangi stok,
+                // tapi SalesDetail akan disimpan setelah notifikasi sukses dari Midtrans
+                // Atau, bisa juga seluruh DB commit dipindahkan ke storeSalesDetail
+                // Untuk saat ini, kita akan simpan SalesDetail di fungsi baru.
+                DB::commit(); // Commit perubahan stok
+
+                return response()->json([
+                    'success' => true,
+                    'snap_token' => $snapToken,
+                    'transaction_number' => $validated['transaction_number'], // Kirim ini kembali ke frontend
+                    'invoice_number' => $validated['invoice_number'],
+                    'date_order' => $validated['date_order'],
+                    'discount_id' => $validated['discount_id'],
+                    'amount' => $validated['amount'],
+                    'total' => $validated['total'],
+                    'subtotal' => $validated['subtotal'],
+                    'change' => $validated['change'],
+                    'sales' => $validated['sales'], // Kirim data sales untuk disimpan nanti
+                    'metode_pembayaran' => $validated['metode_pembayaran'],
+                ]);
+            }
+
+            // Kalau metode cash, langsung proses simpan ke DB
             foreach ($validated['sales'] as $item) {
-                $sales = Sales::with('productIn.product')->findOrFail($item['id']);
+                $sales = Sales::with(['productIn' => function ($query) {
+                    $query->withTrashed()->with('product');
+                }])->findOrFail($item['id']);
+
                 $sales->qty -= $item['qty'];
                 $sales->save();
+
                 app(\App\Http\Controllers\ProductInController::class)->updateStatusPenjualan($sales->productIn);
 
-
-                $product = $sales->productIn->product;
+                $product = optional(optional($sales->productIn)->product);
 
                 SalesDetail::create([
                     'sales_id' => $sales->id,
@@ -67,7 +121,7 @@ class SalesDetailController extends Controller
                     'subtotal' => $validated['subtotal'],
                     'change' => $validated['change'],
                     'qty' => $item['qty'],
-                    'price' => $product->price,
+                    'price' => $product->price ?? 0,
                     'metode_pembayaran' => $validated['metode_pembayaran'],
                 ]);
             }
@@ -93,6 +147,85 @@ class SalesDetailController extends Controller
             ], 500);
         }
     }
+
+    public function storeSalesDetail(Request $request)
+    {
+        $validated = $request->validate([
+            'sales' => 'required|array',
+            'sales.*.id' => 'required|exists:sales,id',
+            'sales.*.qty' => 'required|integer|min:1',
+            'date_order' => 'required|date',
+            'discount_id' => 'nullable|exists:discounts,id',
+            'amount' => 'required|numeric|min:0',
+            'total' => 'required|numeric|min:0',
+            'subtotal' => 'required|numeric|min:0',
+            'change' => 'required|numeric|min:0',
+            'transaction_number' => 'required',
+            'invoice_number' => 'required',
+            'metode_pembayaran' => 'required|in:qris', // Pastikan ini 'qris'
+        ]);
+
+        try {
+            DB::beginTransaction();
+
+            foreach ($validated['sales'] as $item) {
+                $sales = Sales::with(['productIn' => function ($query) {
+                    $query->withTrashed()->with('product');
+                }])->findOrFail($item['id']);
+
+                // Pastikan product ada untuk mendapatkan harga
+                $product = optional(optional($sales->productIn)->product);
+
+                // 🔽 Kurangi stok sebelum simpan SalesDetail
+                if ($sales->qty >= $item['qty']) {
+                    $sales->qty -= $item['qty'];
+                    $sales->save();
+
+                    // Update status penjualan jika diperlukan
+                    app(\App\Http\Controllers\ProductInController::class)->updateStatusPenjualan($sales->productIn);
+                } else {
+                    throw new \Exception('Stok tidak cukup untuk produk: ' . ($product->name ?? 'Produk tidak ditemukan'));
+                }
+
+                // Simpan detail transaksi
+                SalesDetail::create([
+                    'sales_id' => $sales->id,
+                    'transaction_number' => $validated['transaction_number'],
+                    'invoice_number' => $validated['invoice_number'],
+                    'date_order' => $validated['date_order'],
+                    'discount_id' => $validated['discount_id'],
+                    'amount' => $validated['amount'],
+                    'total' => $validated['total'],
+                    'subtotal' => $validated['subtotal'],
+                    'change' => $validated['change'],
+                    'qty' => $item['qty'],
+                    'price' => $product->price ?? 0,
+                    'metode_pembayaran' => $validated['metode_pembayaran'],
+                ]);
+            }
+
+            DB::commit();
+
+            $url = route('print.receipt', ['transaction_number' => $validated['transaction_number']]);
+
+            return response()->json([
+                'success' => true,
+                'transaction_url' => $url,
+            ]);
+        } catch (\Throwable $e) {
+            DB::rollBack();
+            Log::error('Gagal menyimpan detail penjualan setelah QRIS sukses: ' . $e->getMessage(), [
+                'request' => $request->all(),
+                'trace' => $e->getTraceAsString(),
+            ]);
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Terjadi kesalahan saat menyimpan detail pembayaran. Silakan hubungi admin.',
+            ], 500);
+        }
+    }
+
 
     public function printReceipt($transaction_number)
     {

@@ -123,6 +123,7 @@
     </div>
 
     <!-- JavaScript Eksternal -->
+
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
@@ -130,9 +131,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/toastr@2.1.4/build/toastr.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    @yield('scripts')
-
-
     <!-- AdminLTE -->
     <script src="{{ asset('temp/dist/js/adminlte.min.js') }}"></script>
 
@@ -356,12 +354,6 @@
         });
     </script>
 
-
-
-
-
-
-
     {{-- nominal otomatis --}}
     <script>
         function formatPriceDisplay(input) {
@@ -571,8 +563,6 @@
             });
         });
     </script>
-
-
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
