@@ -20,6 +20,8 @@ class CreateAttendancesTable extends Migration
             $table->time('check_in')->nullable();
             $table->time('check_out')->nullable();
             $table->enum('status', ['Hadir', 'Sakit', 'Izin', 'Alpha'])->default('Hadir');
+            $table->decimal('latitude', 10, 7)->nullable();   // koordinat lokasi
+            $table->decimal('longitude', 10, 7)->nullable();
             $table->timestamps();
         });
     }

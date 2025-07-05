@@ -5,7 +5,6 @@
 @endsection
 
 @section('content')
-    <!-- Header Section -->
     <section class="content-header py-4 bg-light rounded mb-4">
         <div class="container-fluid">
             <div class="row justify-content-between align-items-center">
@@ -39,6 +38,7 @@
                                 <th>Departemen</th>
                                 <th>Posisi</th>
                                 <th>Status</th>
+                                <th>QR Code</th>
                                 <th>Aksi</th>
                             </tr>
                         </thead>
@@ -47,9 +47,20 @@
                                 <tr>
                                     <td>{{ $e->employee_number }}</td>
                                     <td>{{ $e->name }}</td>
-                                    <td>{{ $e->department->name }}</td>
-                                    <td>{{ $e->position->name }}</td>
-                                    <td>{{ $e->status->name }}</td>
+                                    <td>{{ $e->department->name ?? '-' }}</td>
+                                    <td>{{ $e->position->name ?? '-' }}</td>
+                                    <td>{{ $e->status->name ?? '-' }}</td>
+                                    <td class="text-center">
+                                        @php
+                                            $qrContent = $e->id; // isi QR dengan employee_id (bisa juga URL)
+                                            $qrSvg = QrCode::format('svg')->size(100)->generate($qrContent);
+                                            $filename = 'qr_pegawai_' . $e->id . '.svg';
+                                        @endphp
+                                        <a href="data:image/svg+xml;charset=utf-8,{{ urlencode($qrSvg) }}"
+                                            download="{{ $filename }}" title="Download QR {{ $e->name }}">
+                                            {!! $qrSvg !!}
+                                        </a>
+                                    </td>
                                     <td>
                                         <a href="{{ route('employees.show', $e->id) }}"
                                             class="btn btn-sm btn-info">Lihat</a>
@@ -57,7 +68,8 @@
                                             class="btn btn-sm btn-warning">Edit</a>
                                         <form action="{{ route('employees.destroy', $e->id) }}" method="POST"
                                             style="display:inline;">
-                                            @csrf @method('DELETE')
+                                            @csrf
+                                            @method('DELETE')
                                             <button onclick="return confirm('Hapus pegawai ini?')"
                                                 class="btn btn-sm btn-danger">Hapus</button>
                                         </form>
@@ -68,7 +80,7 @@
                     </table>
                 </div>
 
-                {{-- Pagination jika tidak pakai DataTables --}}
+                {{-- Jika pakai pagination --}}
                 {{-- {{ $employees->links() }} --}}
             </div>
         </div>

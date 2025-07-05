@@ -72,9 +72,9 @@
                         <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span>
                     </a>
                     <ul class="treeview-menu">
-                        <li class="{{ Request::is('inventory/dashboard') ? 'active' : '' }}">
+                        {{-- <li class="{{ Request::is('inventory/dashboard') ? 'active' : '' }}">
                             <a href="#"><i class="fa fa-circle-o"></i> Dashboard Inventory</a>
-                        </li>
+                        </li> --}}
                         <li class="{{ Request::is('product') ? 'active' : '' }}">
                             <a href="{{ route('product.index') }}"><i class="fa fa-circle-o"></i> Data Produk</a>
                         </li>
@@ -121,7 +121,7 @@
                         <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span>
                     </a>
                     <ul class="treeview-menu">
-                        <li>
+                        <li class="{{ Request::is('employees') ? 'active' : '' }}">
                             <a href="{{ route('employees.index') }}">
                                 <i class="fa fa-circle-o"></i> Data Pegawai
                             </a>

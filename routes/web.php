@@ -89,7 +89,10 @@ Route::middleware(['auth', 'role:kasir,superadmin'])->group(function () {
 
 Route::middleware(['auth', 'role:superadmin'])->group(function () {
     Route::resource('employees', EmployeeController::class);
-    Route::resource('employee-attendance', EmployeeAttendanceController::class);
+    Route::resource('employee-attendance', EmployeeAttendanceController::class)->except(['show']);
+    Route::get('employee-attendance/scan', [EmployeeAttendanceController::class, 'scanQR'])->name('employee-attendance.scan');
+    Route::post('/employee-attendance/scan/upload', [EmployeeAttendanceController::class, 'processUpload'])->name('employee-attendance.processUpload');
+    Route::post('/employee-attendance/qr-store', [EmployeeAttendanceController::class, 'qrStore'])->name('employee-attendance.qrStore');
     Route::resource('work-schedules', WorkScheduleController::class);
 });
 

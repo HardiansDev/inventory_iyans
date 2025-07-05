@@ -143,7 +143,7 @@
         $(document).ready(function() {
             var table = $('#example1').DataTable({
                 "language": {
-                    "emptyTable": "Data produk tidak ditemukan.", // Pesan jika tabel kosong
+                    "emptyTable": "Data tidak ditemukan.", // Pesan jika tabel kosong
                     "zeroRecords": "Data tidak ditemukan",
                     "lengthMenu": [10, 25, 50, 100], // Dropdown "Show Entries"
                     "pageLength": 10, // Default tampil 10 baris
