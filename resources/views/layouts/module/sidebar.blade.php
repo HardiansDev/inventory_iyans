@@ -68,7 +68,7 @@
             @if (in_array(Auth::user()->role, ['superadmin', 'admin_gudang']))
                 <li class="treeview {{ Request::is('inventory*') ? 'active menu-open' : '' }}">
                     <a href="#">
-                        <i class="fa fa-archive"></i> <span>Management Inventory</span>
+                        <i class="fa fa-archive"></i> <span>Inventory</span>
                         <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span>
                     </a>
                     <ul class="treeview-menu">
