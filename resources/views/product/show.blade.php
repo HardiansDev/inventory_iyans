@@ -15,7 +15,7 @@
                 <div class="row g-4 align-items-start">
                     <!-- Gambar Produk -->
                     <div class="col-md-5 text-center">
-                        <img src="{{ asset('/storage/fotoproduct/' . $product->photo) }}" alt="Foto Produk"
+                        <img src="{{ asset('/storage/fotoproduct/produk/' . $product->photo) }}" alt="Foto Produk"
                             class="img-fluid rounded shadow-sm" style="max-height: 300px; object-fit: cover;">
                     </div>
 

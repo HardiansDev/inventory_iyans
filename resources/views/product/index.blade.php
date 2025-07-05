@@ -116,7 +116,7 @@
                                             data-entry-id="{{ $product->id }}" /></td>
                                     <td>{{ $product->name }}</td>
                                     <td>{{ $product->code }}</td>
-                                    <td><img src="{{ asset('storage/fotoproduct/' . $product->photo) }}"
+                                    <td><img src="{{ asset('storage/fotoproduct/produk/' . $product->photo) }}"
                                             alt="Gambar Produk" class="img-thumbnail" style="width: 60px;"></td>
                                     <td>{{ $product->category->name }}</td>
                                     <td>Rp {{ number_format($product->price, 0, ',', '.') }}</td>

@@ -124,7 +124,7 @@ class ProductController extends Controller
         // Handle photo upload (if any)
         if ($request->hasFile('photo')) {
             $filename = time() . '_' . $request->file('photo')->getClientOriginalName();
-            $request->file('photo')->storeAs('fotoproduct', $filename, 'public');
+            $request->file('photo')->storeAs('fotoproduct/produk', $filename, 'public');
             $validatedData['photo'] = $filename;
         }
 
@@ -178,7 +178,7 @@ class ProductController extends Controller
         if ($request->hasFile('photo')) {
             // Delete old photo if it exists
             if ($product->photo) {
-                $oldPhotoPath = 'fotoproduct/' . $product->photo;
+                $oldPhotoPath = 'fotoproduct/produk' . $product->photo;
                 if (Storage::exists($oldPhotoPath)) {
                     Storage::delete($oldPhotoPath);
                 }
@@ -186,7 +186,7 @@ class ProductController extends Controller
 
             // Upload new photo
             $filename = time() . '_' . $request->file('photo')->getClientOriginalName();
-            $request->file('photo')->storeAs('fotoproduct', $filename, 'public');
+            $request->file('photo')->storeAs('fotoproduct/produk', $filename, 'public');
             $validatedData['photo'] = $filename;
         }
 

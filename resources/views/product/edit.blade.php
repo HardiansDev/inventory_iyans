@@ -74,8 +74,8 @@
                                         </label>
                                         <input type="file" class="form-control" name="photo" id="productPhoto">
                                         @if ($product->photo)
-                                            <img src="{{ asset('/storage/fotoproduct/' . $product->photo) }}" alt="Product Photo"
-                                                class="img-thumbnail mt-2" style="width: 80px;">
+                                            <img src="{{ asset('/storage/fotoproduct/produk/' . $product->photo) }}"
+                                                alt="Product Photo" class="img-thumbnail mt-2" style="width: 80px;">
                                         @else
                                             <p class="text-muted">Foto Tidak Ada</p>
                                         @endif

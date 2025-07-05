@@ -13,7 +13,12 @@ use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProductInController;
 use App\Http\Controllers\SalesDetailController;
+use App\Http\Controllers\EmployeeController;
+use App\Http\Controllers\EmployeeAttendanceController;
+use App\Http\Controllers\WorkScheduleController;
+// use App\Http\Controllers\InventoryDashboardController;
 use App\Http\Controllers\ExportController;
+
 
 
 Route::get('/', function () {
@@ -82,7 +87,11 @@ Route::middleware(['auth', 'role:kasir,superadmin'])->group(function () {
     Route::resource('discounts', DiscountController::class);
 });
 
-
+Route::middleware(['auth', 'role:superadmin'])->group(function () {
+    Route::resource('employees', EmployeeController::class);
+    Route::resource('employee-attendance', EmployeeAttendanceController::class);
+    Route::resource('work-schedules', WorkScheduleController::class);
+});
 
 // Rute otentikasi
 Route::middleware('guest')->group(function () {
