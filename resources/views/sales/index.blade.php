@@ -35,6 +35,7 @@
                         $productIn = $sale->productIn; // Mengambil data produk melalui relasi productIn
                         $product = $productIn?->product; // Ambil produk terkait
                     @endphp
+
                     <div class="col-md-3 mb-4">
                         <div class="card h-100 shadow-sm"
                             style="border-radius: 10px; overflow: hidden; transition: transform 0.3s, box-shadow 0.3s; background: #fdfdfd;">
@@ -42,8 +43,8 @@
                                 {{-- <span class="badge bg-danger position-absolute top-0 end-0 m-2"
                                     style="font-size: 12px; padding: 5px 10px; border-radius: 5px;">Diskon</span> --}}
                                 @if ($sale->productIn && $sale->productIn->product)
-                                    <img src="{{ asset('storage/fotoproduct/' . $sale->productIn->product->photo) }}"
-                                        width="50">
+                                    <img src="{{ asset('storage/fotoproduct/produk/' . $sale->productIn->product->photo) }}"
+                                        width="100" height="100">
                                 @else
                                     <span class="text-danger">Data Produk Dihapus</span>
                                 @endif

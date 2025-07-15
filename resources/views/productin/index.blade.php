@@ -142,11 +142,6 @@
 
                     <!-- /.box-header -->
                     <div class="box-body">
-
-
-
-
-
                         <!-- Table -->
                         <div class="table-responsive">
                             <table id="example1" class="table table-hover table-bordered">
@@ -176,22 +171,29 @@
                                                 <input type="checkbox" class="select-item" value="{{ $productIn->id }}"
                                                     data-entry-id="{{ $productIn->id }}" />
                                             </td>
-                                            {{-- <td>{{ $loop->iteration }}</td> --}}
-                                            <td>{{ $productIn->product->name }}</td>
-                                            <td>{{ $productIn->product->code }}</td>
+
+                                            <td>{{ optional($productIn->product)->name ?? 'Produk Dihapus' }}</td>
+                                            <td>{{ optional($productIn->product)->code ?? '-' }}</td>
                                             <td>{{ $productIn->date }}</td>
+
                                             <td>
-                                                @if ($productIn->product->photo)
-                                                    <img src="{{ asset('storage/fotoproduct/' . $productIn->product->photo) }}"
+                                                @if (optional($productIn->product)->photo)
+                                                    <img src="{{ asset('storage/fotoproduct/produk/' . $productIn->product->photo) }}"
                                                         alt="Image" width="50">
                                                 @else
-                                                    <span>No Image</span>
+                                                    <span class="text-muted">No Image</span>
                                                 @endif
                                             </td>
-                                            <td>{{ $productIn->product->category->name }}</td>
-                                            <td>Rp {{ number_format($productIn->product->price, 0, ',', '.') }}</td>
+
+                                            <td>{{ optional(optional($productIn->product)->category)->name ?? '-' }}</td>
+
+                                            <td>Rp
+                                                {{ number_format(optional($productIn->product)->price ?? 0, 0, ',', '.') }}
+                                            </td>
+
                                             <td>{{ $productIn->qty }}</td>
                                             <td>{{ $productIn->recipient }}</td>
+
                                             <td>
                                                 @if ($productIn->status === 'menunggu')
                                                     <span class="badge bg-warning text-dark">Menunggu</span>
@@ -200,7 +202,6 @@
                                                 @elseif ($productIn->status === 'ditolak')
                                                     <div class="d-flex flex-column align-items-start">
                                                         <span class="badge bg-danger">Ditolak</span>
-
                                                         @if ($productIn->catatan)
                                                             <div class="mt-1 ms-1 text-muted" style="font-size: 12px;">
                                                                 <i class="fa fa-info-circle me-1 text-secondary"></i> Note
@@ -211,10 +212,11 @@
                                                     </div>
                                                 @endif
                                             </td>
+
                                             <td>
                                                 @php
                                                     $statusPenjualan = $productIn->status_penjualan;
-                                                    $stokToko = $productIn->sales->sum('qty'); // Total qty tersedia di view sales
+                                                    $stokToko = $productIn->sales->sum('qty');
                                                 @endphp
 
                                                 @if ($statusPenjualan === 'sedang dijual')
@@ -229,14 +231,12 @@
                                                     <span class="badge bg-light text-muted">-</span>
                                                 @endif
 
-                                                {{-- Note kecil sisa stok --}}
                                                 @if ($statusPenjualan !== 'belum dijual')
                                                     <div style="font-size: 12px;" class="text-muted mt-1">
                                                         <i class="fas fa-box me-1"></i> Sisa Stok: {{ $stokToko }}
                                                     </div>
                                                 @endif
                                             </td>
-
 
                                             <td>
                                                 <div class="dropdown">
@@ -263,7 +263,7 @@
                                                                 <button type="button"
                                                                     class="dropdown-item text-danger btn-tolak-dengan-catatan"
                                                                     data-productin-id="{{ $productIn->id }}"
-                                                                    data-product-name="{{ $productIn->product->name }}">
+                                                                    data-product-name="{{ optional($productIn->product)->name ?? 'Produk Dihapus' }}">
                                                                     Tolak dengan Catatan
                                                                 </button>
                                                             </li>
@@ -275,7 +275,7 @@
                                                                     <button
                                                                         class="dropdown-item text-secondary open-sale-form"
                                                                         data-product-id="{{ $productIn->id }}"
-                                                                        data-product-name="{{ $productIn->product->name }}">
+                                                                        data-product-name="{{ optional($productIn->product)->name ?? 'Produk Dihapus' }}">
                                                                         Jual di Toko
                                                                     </button>
                                                                 </li>
@@ -284,17 +284,16 @@
                                                                     <button
                                                                         class="dropdown-item text-secondary btn-add-stock"
                                                                         data-productin-id="{{ $productIn->id }}"
-                                                                        data-product-name="{{ $productIn->product->name }}"
-                                                                        data-stock="{{ $productIn->product->stock }}">
+                                                                        data-product-name="{{ optional($productIn->product)->name ?? 'Produk Dihapus' }}"
+                                                                        data-stock="{{ optional($productIn->product)->stock ?? 0 }}">
                                                                         Tambah Stok ke Gudang
-
                                                                     </button>
                                                                 </li>
                                                                 <li>
                                                                     <button
                                                                         class="dropdown-item text-secondary btn-add-stock-toko"
                                                                         data-productin-id="{{ $productIn->id }}"
-                                                                        data-product-name="{{ $productIn->product->name }}"
+                                                                        data-product-name="{{ optional($productIn->product)->name ?? 'Produk Dihapus' }}"
                                                                         data-max-stok="{{ $productIn->qty }}">
                                                                         Tambah Stok ke Toko
                                                                     </button>
@@ -305,7 +304,7 @@
                                                         <li>
                                                             <button class="dropdown-item text-danger btn-delete-stock"
                                                                 data-productin-id="{{ $productIn->id }}"
-                                                                data-product-name="{{ $productIn->product->name }}">
+                                                                data-product-name="{{ optional($productIn->product)->name ?? 'Produk Dihapus' }}">
                                                                 Hapus Produk Masuk
                                                             </button>
                                                         </li>
@@ -315,6 +314,7 @@
                                         </tr>
                                     @endforeach
                                 </tbody>
+
                             </table>
                         </div>
                     </div>
