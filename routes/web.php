@@ -1,7 +1,10 @@
 <?php
 
-use App\Models\Sales;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
+use Illuminate\Auth\Events\Verified;
+use App\Models\User;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\SalesController;
@@ -16,78 +19,94 @@ use App\Http\Controllers\SalesDetailController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\EmployeeAttendanceController;
 use App\Http\Controllers\WorkScheduleController;
-// use App\Http\Controllers\InventoryDashboardController;
 use App\Http\Controllers\ExportController;
-
-
 
 Route::get('/', function () {
     return view('welcome');
 });
 
-// Rute dashboard
-Route::middleware(['auth', 'role:superadmin,manager'])->group(function () {
+
+// ==========================
+// Verifikasi Email
+// ==========================
+Route::get('/email/verify', function () {
+    return view('auth.verify-email');
+})->middleware('auth')->name('verification.notice');
+
+Route::get('/email/verify/{id}/{hash}', function (Request $request, $id, $hash) {
+    $user = \App\Models\User::findOrFail($id);
+
+    if (!hash_equals((string) $hash, sha1($user->getEmailForVerification()))) {
+        abort(403, 'Link verifikasi tidak valid.');
+    }
+
+    Auth::login($user);
+
+    if (!$user->hasVerifiedEmail()) {
+        $user->markEmailAsVerified();
+        event(new \Illuminate\Auth\Events\Verified($user));
+    }
+
+    // 🔄 Pakai method redirectByRole dari controller
+    return app(AuthController::class)->redirectByRole($user)->with('success', 'Email berhasil diverifikasi!');
+})->middleware(['signed'])->name('verification.verify');
+
+// Kirim ulang email verifikasi
+Route::post('/email/verification-notification', function (Request $request) {
+    $request->user()->sendEmailVerificationNotification();
+    return back()->with('success', 'Link verifikasi email telah dikirim ulang.');
+})->middleware(['auth', 'throttle:6,1'])->name('verification.send');
+
+
+// ==========================
+// Halaman Dashboard
+// ==========================
+Route::middleware(['auth', 'verified', 'role:superadmin,manager'])->group(function () {
     Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
 });
 
-// Rute user management (khusus superadmin)
-Route::middleware(['auth', 'role:superadmin'])->group(function () {
+// User Management (hanya Superadmin)
+Route::middleware(['auth', 'verified', 'role:superadmin'])->group(function () {
     Route::resource('user', UserController::class);
 });
 
-// Rute produk (khusus superadmin dan admin_gudang)
-Route::middleware(['auth', 'role:superadmin,admin_gudang'])->group(function () {
+// Produk (Superadmin & Admin Gudang)
+Route::middleware(['auth', 'verified', 'role:superadmin,admin_gudang'])->group(function () {
     Route::resource('product', ProductController::class);
     Route::post('/product/export', [ProductController::class, 'export'])->name('product.export');
     Route::post('/product/delete-all', [ProductController::class, 'deleteAll'])->name('product.deleteAll');
     Route::post('/product/download-pdf', [ProductController::class, 'downloadPdf'])->name('product.downloadPdf');
     Route::post('/product/download-excel', [ProductController::class, 'downloadExcel'])->name('product.downloadExcel');
-
     Route::get('/export/pdf', [ExportController::class, 'pdf'])->name('export.pdf');
     Route::get('/export/excel', [ExportController::class, 'excel'])->name('export.excel');
-
     Route::get('/get-product-details/{productId}', [ProductController::class, 'getProductDetails']);
     Route::resource('productin', ProductInController::class);
     Route::post('/productin/delete-selected', [ProductInController::class, 'deleteSelected'])->name('productin.deleteSelected');
-
     Route::post('/productin/store', [ProductInController::class, 'storeProductIn'])->name('productin.storeProductIn');
     Route::post('/productin/add-stock/{id}', [ProductInController::class, 'addStock'])->name('productin.addStock');
     Route::post('/productin/add-stock-toko/{id}', [ProductInController::class, 'addStockKeToko'])->name('productin.addStockKeToko');
-
-
     Route::put('/productin/update-status/{id}', [ProductInController::class, 'updateStatus'])->name('productin.updateStatus');
 });
 
-// Rute kategori (khusus superadmin dan admin_gudang)
-Route::middleware(['auth', 'role:superadmin,admin_gudang'])->group(function () {
+// Kategori & Supplier
+Route::middleware(['auth', 'verified', 'role:superadmin,admin_gudang'])->group(function () {
     Route::resource('category', CategoryController::class);
-});
-
-// Rute supplier (khusus superadmin dan admin_gudang)
-Route::middleware(['auth', 'role:superadmin,admin_gudang'])->group(function () {
     Route::resource('supplier', SupplierController::class);
 });
 
-
-
-// Rute produk keluar (khusus kasir)
-Route::middleware(['auth', 'role:kasir,superadmin'])->group(function () {
+// Penjualan & Diskon (Kasir & Superadmin)
+Route::middleware(['auth', 'verified', 'role:kasir,superadmin'])->group(function () {
     Route::resource('sales', SalesController::class);
     Route::post('/set-wishlist', [CheckoutController::class, 'setWishlist'])->name('set.wishlist');
     Route::get('/detail-cekout', [CheckoutController::class, 'showCheckout'])->name('detail-cekout');
     Route::post('/proses-pembayaran', [SalesDetailController::class, 'processPayment'])->name('process.payment');
-    // Rute baru untuk menyimpan detail penjualan setelah QRIS sukses
     Route::post('/store-sales-detail', [SalesDetailController::class, 'storeSalesDetail'])->name('store.sales.detail');
-
-
     Route::get('/print-receipt/{transaction_number}', [SalesDetailController::class, 'printReceipt'])->name('print.receipt');
-});
-
-Route::middleware(['auth', 'role:kasir,superadmin'])->group(function () {
     Route::resource('discounts', DiscountController::class);
 });
 
-Route::middleware(['auth', 'role:superadmin'])->group(function () {
+// Karyawan & Absensi
+Route::middleware(['auth', 'verified', 'role:superadmin'])->group(function () {
     Route::resource('employees', EmployeeController::class);
     Route::resource('employee-attendance', EmployeeAttendanceController::class)->except(['show']);
     Route::get('employee-attendance/scan', [EmployeeAttendanceController::class, 'scanQR'])->name('employee-attendance.scan');
@@ -96,11 +115,15 @@ Route::middleware(['auth', 'role:superadmin'])->group(function () {
     Route::resource('work-schedules', WorkScheduleController::class);
 });
 
-// Rute otentikasi
+
+// ==========================
+// Auth: Login & Register
+// ==========================
 Route::middleware('guest')->group(function () {
     Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
     Route::post('/login', [AuthController::class, 'login']);
     Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
     Route::post('/register', [AuthController::class, 'register']);
 });
+
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');

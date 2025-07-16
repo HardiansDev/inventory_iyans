@@ -9,105 +9,99 @@ use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
-    // Menampilkan form login
+    // Tampilkan form login/register
     public function showLogin()
     {
-        return view('auth.form'); // Menampilkan form login/register
-    }
-
-    // Melakukan login
-    public function login(Request $request)
-    {
-        // Cek apakah pengguna sudah login
         if (Auth::check()) {
-            // Ambil pengguna yang sedang login
-            $user = Auth::user();
-
-            // Redirect berdasarkan peran pengguna
-            switch ($user->role) {
-                case 'admin_gudang':
-                    return redirect()->route('product.index'); // Ganti dengan route untuk view produk
-                case 'kasir':
-                    return redirect()->route('sales.index'); // Ganti dengan route untuk view customer
-                case 'superadmin':
-                case 'manager':
-                    return redirect()->route('dashboard'); // Ganti dengan route untuk dashboard
-                default:
-                    // Jika peran tidak dikenali, logout pengguna dan kembali ke login dengan pesan error
-                    Auth::logout();
-                    return redirect()->route('login')->with('error', 'Peran tidak dikenali.');
-            }
+            return $this->redirectByRole(Auth::user());
         }
 
-        // Validasi input
+        // Buat angka random untuk captcha
+        $a = rand(1, 9);
+        $b = rand(1, 9);
+
+        // Simpan pertanyaan dan jawabannya di session
+        session([
+            'captcha_question' => "$a + $b",
+            'captcha_answer' => $a + $b,
+        ]);
+
+        return view('auth.form');
+    }
+
+    // Proses login
+    public function login(Request $request)
+    {
+        // Validasi input termasuk captcha
         $validated = $request->validate([
             'email' => 'required|email',
             'password' => 'required',
+            'captcha_answer' => 'required|numeric',
         ]);
+
+        // Cek jawaban captcha
+        if ((int)$validated['captcha_answer'] !== session('captcha_answer')) {
+            return back()->with('error', 'Jawaban captcha salah.')->withInput();
+        }
 
         // Coba login
         if (Auth::attempt(['email' => $validated['email'], 'password' => $validated['password']])) {
-            // Ambil pengguna yang sedang login
             $user = Auth::user();
 
-            // Redirect berdasarkan peran pengguna
-            switch ($user->role) {
-                case 'admin_gudang':
-                    return redirect()->route('product.index'); // Ganti dengan route untuk view produk
-                case 'kasir':
-                    return redirect()->route('sales.index'); // Ganti dengan route untuk view customer
-                case 'superadmin':
-                case 'manager':
-                    return redirect()->route('dashboard'); // Ganti dengan route untuk dashboard
-                default:
-                    // Jika peran tidak dikenali, logout pengguna dan kembali ke login dengan pesan error
-                    Auth::logout();
-                    return redirect()->route('login')->with('error', 'Peran tidak dikenali.');
-            }
+            // Cek apakah email sudah diverifikasi
+            // if (!$user->hasVerifiedEmail()) {
+            //     Auth::logout();
+            //     return back()->with('error', 'Akun belum diverifikasi. Silakan cek email Anda.');
+            // }
+
+            return $this->redirectByRole($user);
         }
 
-        // Jika login gagal, kembali ke halaman login dengan pesan kesalahan
-        return redirect()->route('login')->with('error', 'Email atau password salah, atau belum terdaftar.');
+        return back()->with('error', 'Email atau password salah, atau belum terdaftar.');
     }
 
-
-
-    // Menampilkan form registrasi
-    public function showRegister()
-    {
-        return view('auth.form'); // Menampilkan form login/register
-    }
-
-    // Melakukan registrasi
+    // Proses registrasi
     public function register(Request $request)
     {
-        // Validasi input
         $validated = $request->validate([
             'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email', // Pastikan email unik
-            'password' => 'required|min:8|confirmed', // Validasi konfirmasi password
-            'role' => 'required|in:kasir,manager,superadmin,admin_gudang', // Validasi role
+            'email' => 'required|email|unique:users,email',
+            'password' => 'required|min:8|confirmed',
+            'role' => 'required|in:kasir,manager,superadmin,admin_gudang',
         ]);
 
-        // Membuat user baru dengan password yang di-hash dan role yang dipilih
-        User::create([
+        // Simpan user ke variabel
+        $user = User::create([
             'name' => $validated['name'],
             'email' => $validated['email'],
-            'password' => Hash::make($validated['password']), // Meng-hash password
-            'role' => $validated['role'], // Role yang dipilih saat registrasi
+            'password' => Hash::make($validated['password']),
+            'role' => $validated['role'],
         ]);
 
-        return redirect()->route('login')->with('success', 'Registrasi berhasil, silakan login.');
+        // Kirim link verifikasi email
+        $user->sendEmailVerificationNotification();
+
+        return redirect()->route('login')->with('success', 'Registrasi berhasil. Silakan verifikasi email Anda sebelum login.');
     }
 
-    // Melakukan logout
+    // Logout
     public function logout(Request $request)
     {
         Auth::logout();
-
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
         return redirect('/login')->with('status', 'Anda telah logout.');
+    }
+
+    // Redirect berdasarkan role pengguna
+    public function redirectByRole($user)
+    {
+        return match ($user->role) {
+            'admin_gudang' => redirect()->route('product.index'),
+            'kasir' => redirect()->route('sales.index'),
+            'superadmin', 'manager' => redirect()->route('dashboard'),
+            default => redirect()->route('login')->with('error', 'Peran tidak dikenali.')
+        };
     }
 }

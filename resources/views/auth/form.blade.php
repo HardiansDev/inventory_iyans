@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sistem Inventory Iyan | Masuk & Daftar</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
+
     <style>
         body {
             background: linear-gradient(135deg, #6e8efb, #a777e3);
@@ -67,49 +68,56 @@
 
 <body>
     <div class="form-container" id="form-login">
-        <!-- Login Form -->
         <h3 class="form-title">Masuk</h3>
+
+        {{-- Pesan Error/Success --}}
         @if (session('error'))
-            <div class="alert alert-danger">
-                {{ session('error') }}
-            </div>
+            <div class="alert alert-danger">{{ session('error') }}</div>
         @endif
         @if (session('success'))
-            <div class="alert alert-success">
-                {{ session('success') }}
-            </div>
+            <div class="alert alert-success">{{ session('success') }}</div>
         @endif
+
         <form action="{{ route('login') }}" method="POST">
             @csrf
             <div class="mb-3">
                 <label for="email" class="form-label">Email</label>
-                <input type="email" class="form-control" id="email" name="email" placeholder="Masukkan Email"
-                    required>
+                <input type="email" class="form-control" name="email" placeholder="Masukkan Email kamu" required>
             </div>
             <div class="mb-3">
-                <label for="password" class="form-label">Kata sandi</label>
-                <input type="password" class="form-control" id="password" name="password"
-                    placeholder="Masukkan Password" required>
+                <label for="password" class="form-label">Kata Sandi</label>
+                <input type="password" class="form-control" name="password" placeholder="Masukkan Kata sandi kamu"
+                    required>
             </div>
+
+            <!-- Math Captcha -->
+            <div class="mb-3">
+                <label for="captcha" class="form-label">Berapa hasil dari: {{ session('captcha_question') }}</label>
+                <input type="text" class="form-control" name="captcha_answer" required placeholder="Jawaban">
+            </div>
+
             <button type="submit" class="btn btn-primary w-100">Masuk</button>
         </form>
+
         <p class="switch-link">
             Belum punya akun? <a href="#" id="to-register">Daftar Yuk</a>
         </p>
     </div>
 
     <div class="form-container d-none" id="form-register">
-        <!-- Register Form -->
         <h3 class="form-title">Daftar</h3>
+
+        {{-- Error validasi --}}
         @if ($errors->any())
             <div class="alert alert-danger">
-                <ul>
+                <ul class="mb-0">
                     @foreach ($errors->all() as $error)
                         <li>{{ $error }}</li>
                     @endforeach
                 </ul>
             </div>
         @endif
+
         <form action="{{ route('register') }}" method="POST">
             @csrf
             <div class="mb-3">
@@ -133,24 +141,26 @@
                 </select>
             </div>
             <div class="mb-3">
-                <label for="password-register" class="form-label">Kata sandi</label>
+                <label for="password-register" class="form-label">Kata Sandi</label>
                 <input type="password" class="form-control" id="password-register" name="password"
-                    placeholder="Masukkan Password" required>
+                    placeholder="Masukkan Kata Sandi" required>
             </div>
             <div class="mb-3">
-                <label for="password_confirmation" class="form-label">Konfirmasi Kata sandi</label>
+                <label for="password_confirmation" class="form-label">Konfirmasi Kata Sandi</label>
                 <input type="password" class="form-control" id="password_confirmation" name="password_confirmation"
-                    placeholder="Masukkan Konfirmasi Password" required>
+                    placeholder="Masukkan Konfirmasi Kata Sandi" required>
             </div>
-            <button type="submit" class="btn btn-primary w-100">Silahkan Daftar</button>
+
+            <button type="submit" class="btn btn-primary w-100">Silakan Daftar</button>
         </form>
+
         <p class="switch-link">
-            Sudah punya akun? <a href="#" id="to-login">Masuk yuk</a>
+            Sudah punya akun? <a href="#" id="to-login">Masuk Yuk</a>
         </p>
     </div>
 
+    {{-- Toggle Form --}}
     <script>
-        // Script to toggle between Login and Register forms
         const loginForm = document.getElementById("form-login");
         const registerForm = document.getElementById("form-register");
 
@@ -166,6 +176,7 @@
             loginForm.classList.remove("d-none");
         });
     </script>
+
 </body>
 
 </html>
