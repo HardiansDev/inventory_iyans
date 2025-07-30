@@ -40,18 +40,18 @@ Route::get('/', function () {
 //         abort(403, 'Link verifikasi tidak valid.');
 //     }
 
-// //     Auth::login($user);
+//     Auth::login($user);
 
-// //     if (!$user->hasVerifiedEmail()) {
-// //         $user->markEmailAsVerified();
-// //         event(new \Illuminate\Auth\Events\Verified($user));
-// //     }
+//     if (!$user->hasVerifiedEmail()) {
+//         $user->markEmailAsVerified();
+//         event(new \Illuminate\Auth\Events\Verified($user));
+//     }
 
-// //     // 🔄 Pakai method redirectByRole dari controller
-// //     return app(AuthController::class)->redirectByRole($user)->with('success', 'Email berhasil diverifikasi!');
-// // })->middleware(['signed'])->name('verification.verify');
+//     // 🔄 Pakai method redirectByRole dari controller
+//     return app(AuthController::class)->redirectByRole($user)->with('success', 'Email berhasil diverifikasi!');
+// })->middleware(['signed'])->name('verification.verify');
 
-// // Kirim ulang email verifikasi
+// Kirim ulang email verifikasi
 // Route::post('/email/verification-notification', function (Request $request) {
 //     $request->user()->sendEmailVerificationNotification();
 //     return back()->with('success', 'Link verifikasi email telah dikirim ulang.');
@@ -61,17 +61,17 @@ Route::get('/', function () {
 // ==========================
 // Halaman Dashboard
 // ==========================
-Route::middleware(['auth', 'verified', 'role:superadmin,manager'])->group(function () {
+Route::middleware(['auth', 'role:superadmin,manager'])->group(function () {
     Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
 });
 
 // User Management (hanya Superadmin)
-Route::middleware(['auth', 'verified', 'role:superadmin'])->group(function () {
+Route::middleware(['auth', 'role:superadmin'])->group(function () {
     Route::resource('user', UserController::class);
 });
 
 // Produk (Superadmin)
-Route::middleware(['auth', 'verified', 'role:superadmin'])->group(function () {
+Route::middleware(['auth', 'role:superadmin'])->group(function () {
     Route::resource('product', ProductController::class);
     Route::post('/product/export', [ProductController::class, 'export'])->name('product.export');
     Route::delete('/products/bulk-delete', [ProductController::class, 'bulkDelete'])->name('product.bulkDelete');
@@ -82,7 +82,7 @@ Route::middleware(['auth', 'verified', 'role:superadmin'])->group(function () {
     Route::get('/get-product-details/{productId}', [ProductController::class, 'getProductDetails']);
 });
 
-Route::middleware(['auth', 'verified', 'role:admin_gudang'])->group(function () {
+Route::middleware(['auth', 'role:admin_gudang'])->group(function () {
     Route::resource('productin', ProductInController::class);
     Route::post('/productin/bulk-delete', [ProductInController::class, 'bulkDelete'])->name('productin.bulkDelete');
     Route::post('/productin/store', [ProductInController::class, 'storeProductIn'])->name('productin.storeProductIn');
@@ -93,7 +93,7 @@ Route::middleware(['auth', 'verified', 'role:admin_gudang'])->group(function () 
 
 
 
-Route::middleware(['auth', 'verified', 'role:superadmin'])->group(function () {
+Route::middleware(['auth', 'role:superadmin'])->group(function () {
     Route::get('/product-in/{id}/confirm', [ProductInController::class, 'showConfirmation'])->name('product.confirmation');
     Route::post('/product-in/{id}/approve', [ProductInController::class, 'approve'])->name('product.approve');
     Route::post('/product-in/{id}/reject', [ProductInController::class, 'reject'])->name('product.reject');
@@ -101,13 +101,13 @@ Route::middleware(['auth', 'verified', 'role:superadmin'])->group(function () {
 
 
 // Kategori & Supplier
-Route::middleware(['auth', 'verified', 'role:superadmin'])->group(function () {
+Route::middleware(['auth', 'role:superadmin'])->group(function () {
     Route::resource('category', CategoryController::class);
     Route::resource('supplier', SupplierController::class);
 });
 
 // Penjualan & Diskon (Kasir & Superadmin)
-Route::middleware(['auth', 'verified', 'role:kasir,superadmin,admin_gudang'])->group(function () {
+Route::middleware(['auth', 'role:kasir,superadmin,admin_gudang'])->group(function () {
     Route::resource('sales', SalesController::class);
     Route::post('/set-wishlist', [CheckoutController::class, 'setWishlist'])->name('set.wishlist');
     Route::get('/detail-cekout', [CheckoutController::class, 'showCheckout'])->name('detail-cekout');
@@ -118,7 +118,7 @@ Route::middleware(['auth', 'verified', 'role:kasir,superadmin,admin_gudang'])->g
 });
 
 // Karyawan & Absensi
-Route::middleware(['auth', 'verified', 'role:superadmin'])->group(function () {
+Route::middleware(['auth', 'role:superadmin'])->group(function () {
     Route::resource('employees', EmployeeController::class);
     Route::resource('employee-attendance', EmployeeAttendanceController::class)->except(['show']);
     Route::get('employee-attendance/scan', [EmployeeAttendanceController::class, 'scanQR'])->name('employee-attendance.scan');
