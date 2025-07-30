@@ -62,7 +62,7 @@
                 <div class="rounded-lg bg-white shadow transition hover:shadow-lg">
                     @if ($product)
                         <img
-                            src="{{ asset('storage/fotoproduct/produk/' . $product->photo) }}"
+                            src="{{ $product->photo }}"
                             class="h-48 w-full rounded-t-lg object-cover"
                             alt="{{ $product->name }}"
                         />

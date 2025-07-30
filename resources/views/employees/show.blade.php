@@ -96,7 +96,7 @@
                     <dt class="mb-1 text-sm font-medium text-gray-500">Foto</dt>
                     @if ($employee->photo)
                         <img
-                            src="{{ asset('storage/fotoproduct/pegawai/' . $employee->photo) }}"
+                            src="{{ $employee->photo }}"
                             alt="Foto Pegawai"
                             class="max-h-48 w-full rounded-lg border object-cover shadow"
                         />

@@ -171,7 +171,7 @@
             <div class="mt-2">
                 <p class="text-xs text-gray-500">Foto saat ini:</p>
                 <img
-                    src="{{ asset('storage/fotoproduct/pegawai/' . $employee->photo) }}"
+                    src="{{ $employee->photo }}"
                     alt="Foto Pegawai"
                     class="mt-1 max-h-40 rounded-md border border-gray-200"
                 />

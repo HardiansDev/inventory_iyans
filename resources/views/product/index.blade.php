@@ -292,7 +292,7 @@
                                             src="{{ $product->photo }}"
                                             alt="Gambar Produk"
                                             class="h-14 w-14 cursor-pointer rounded-md border object-cover transition-transform duration-200 hover:scale-105"
-                                            onclick="zoomImage('{{ asset('storage/fotoproduct/produk/' . $product->photo) }}')"
+                                            onclick="zoomImage('{{ $product->photo }}')"
                                         />
                                     </td>
                                     <!-- Modal Zoom Gambar -->

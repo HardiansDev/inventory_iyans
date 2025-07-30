@@ -342,7 +342,7 @@
                                         <td class="px-4 py-2">
                                             @if (optional($productIn->product)->photo)
                                                 <img
-                                                    src="{{ asset('storage/fotoproduct/produk/' . $productIn->product->photo) }}"
+                                                    src="{{ $productIn->product->photo }}"
                                                     alt="Image"
                                                     class="h-12 w-12 rounded object-cover"
                                                 />
