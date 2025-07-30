@@ -289,10 +289,10 @@
                                     <td class="px-4 py-3">{{ $product->code }}</td>
                                     <td class="px-4 py-3">
                                         <img
-                                            src="{{ asset('storage/fotoproduct/produk/' . $product->photo) }}"
+                                            src="{{ Storage::url('fotoproduct/produk/' . $product->photo) }}"
                                             alt="Gambar Produk"
                                             class="h-14 w-14 cursor-pointer rounded-md border object-cover transition-transform duration-200 hover:scale-105"
-                                            onclick="zoomImage('{{ asset('storage/fotoproduct/produk/' . $product->photo) }}')"
+                                            onclick="zoomImage('{{ Storage::url('fotoproduct/produk/' . $product->photo) }}')"
                                         />
                                     </td>
                                     <!-- Modal Zoom Gambar -->
