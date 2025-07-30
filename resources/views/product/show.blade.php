@@ -63,7 +63,7 @@
                 <!-- Gambar -->
                 <div class="flex justify-center">
                     <img
-                        src="{{ asset('/storage/fotoproduct/produk/' . $product->photo) }}"
+                        src="{{ $product->photo }}"
                         alt="Foto Produk"
                         class="max-h-80 rounded-lg object-cover shadow-md"
                     />

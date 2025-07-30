@@ -6,8 +6,11 @@ namespace App\Http\Controllers;
 use App\Models\Product;
 use App\Models\Category;
 use App\Models\Supplier;
+// use Cloudinary\Cloudinary;
 use Illuminate\Http\Request;
 use App\Exports\ProductsExport;
+use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
+
 use Barryvdh\DomPDF\Facade\Pdf;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Storage;
@@ -134,18 +137,11 @@ class ProductController extends Controller
         );
 
         if ($request->hasFile('photo')) {
-            $originalName = $request->file('photo')->getClientOriginalName();
-            $filename = time() . '_' . str_replace(' ', '_', $originalName);
-
-            // Simpan ke storage/app/public/fotoproduct/produk
-            $request->file('photo')->storeAs('fotoproduct/produk', $filename, 'public');
-
-            $validatedData['photo'] = $filename;
+            $uploadedFileUrl = Cloudinary::upload($request->file('photo')->getRealPath())->getSecurePath();
+            $validatedData['photo'] = $uploadedFileUrl; // langsung URL
         }
 
-        // Simpan ke database
         Product::create($validatedData);
-
 
         return redirect()->route('product.index')->with('success', 'Produk ditambahkan!');
     }
@@ -191,25 +187,17 @@ class ProductController extends Controller
 
         $product = Product::findOrFail($id);
 
+
         if ($request->hasFile('photo')) {
-            // Hapus foto lama jika ada
+            // Hapus foto lama (kalau sebelumnya pakai Cloudinary juga)
             if ($product->photo) {
-                $oldPhotoPath = 'public/fotoproduct/produk/' . $product->photo;
-                if (Storage::exists($oldPhotoPath)) {
-                    Storage::delete($oldPhotoPath);
-                }
+                Cloudinary::destroy($product->photo); // jika simpan public_id
             }
 
-            // Upload foto baru
-            $originalName = $request->file('photo')->getClientOriginalName();
-            $filename = time() . '_' . str_replace(' ', '_', $originalName);
-
-            $request->file('photo')->storeAs('fotoproduct/produk', $filename, 'public');
-
-            $validatedData['photo'] = $filename;
+            $uploadedFileUrl = Cloudinary::upload($request->file('photo')->getRealPath())->getSecurePath();
+            $validatedData['photo'] = $uploadedFileUrl;
         }
 
-        // Update data produk
         $product->update($validatedData);
 
         // Redirect with success message
