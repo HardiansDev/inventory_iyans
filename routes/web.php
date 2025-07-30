@@ -40,22 +40,22 @@ Route::get('/', function () {
 //         abort(403, 'Link verifikasi tidak valid.');
 //     }
 
-//     Auth::login($user);
+// //     Auth::login($user);
 
-//     if (!$user->hasVerifiedEmail()) {
-//         $user->markEmailAsVerified();
-//         event(new \Illuminate\Auth\Events\Verified($user));
-//     }
+// //     if (!$user->hasVerifiedEmail()) {
+// //         $user->markEmailAsVerified();
+// //         event(new \Illuminate\Auth\Events\Verified($user));
+// //     }
 
-//     // 🔄 Pakai method redirectByRole dari controller
-//     return app(AuthController::class)->redirectByRole($user)->with('success', 'Email berhasil diverifikasi!');
-// })->middleware(['signed'])->name('verification.verify');
+// //     // 🔄 Pakai method redirectByRole dari controller
+// //     return app(AuthController::class)->redirectByRole($user)->with('success', 'Email berhasil diverifikasi!');
+// // })->middleware(['signed'])->name('verification.verify');
 
-// Kirim ulang email verifikasi
-Route::post('/email/verification-notification', function (Request $request) {
-    $request->user()->sendEmailVerificationNotification();
-    return back()->with('success', 'Link verifikasi email telah dikirim ulang.');
-})->middleware(['auth', 'throttle:6,1'])->name('verification.send');
+// // Kirim ulang email verifikasi
+// Route::post('/email/verification-notification', function (Request $request) {
+//     $request->user()->sendEmailVerificationNotification();
+//     return back()->with('success', 'Link verifikasi email telah dikirim ulang.');
+// })->middleware(['auth', 'throttle:6,1'])->name('verification.send');
 
 
 // ==========================
