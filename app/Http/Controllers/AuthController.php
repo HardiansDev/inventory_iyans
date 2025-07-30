@@ -73,9 +73,9 @@ class AuthController extends Controller
         ]);
 
         // Kirim link verifikasi email
-        $user->sendEmailVerificationNotification();
+        // $user->sendEmailVerificationNotification();
 
-        return redirect()->route('login')->with('success', 'Registrasi berhasil. Silakan verifikasi email Anda sebelum login.');
+        return redirect()->route('login')->with('success', 'Registrasi berhasil.');
     }
 
     // Logout
