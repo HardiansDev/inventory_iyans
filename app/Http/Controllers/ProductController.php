@@ -133,14 +133,19 @@ class ProductController extends Controller
             ]
         );
 
-        // Handle photo upload (if any)
         if ($request->hasFile('photo')) {
-            $filename = time() . '_' . $request->file('photo')->getClientOriginalName();
+            $originalName = $request->file('photo')->getClientOriginalName();
+            $filename = time() . '_' . str_replace(' ', '_', $originalName);
+
+            // Simpan ke storage/app/public/fotoproduct/produk
             $request->file('photo')->storeAs('fotoproduct/produk', $filename, 'public');
+
             $validatedData['photo'] = $filename;
         }
 
+        // Simpan ke database
         Product::create($validatedData);
+
 
         return redirect()->route('product.index')->with('success', 'Produk ditambahkan!');
     }
@@ -184,25 +189,27 @@ class ProductController extends Controller
             'stock' => 'required|string|max:50',
         ]);
 
-        // Find the product by ID
         $product = Product::findOrFail($id);
-        // Handle photo upload (if present)
+
         if ($request->hasFile('photo')) {
-            // Delete old photo if it exists
+            // Hapus foto lama jika ada
             if ($product->photo) {
-                $oldPhotoPath = 'fotoproduct/produk' . $product->photo;
+                $oldPhotoPath = 'public/fotoproduct/produk/' . $product->photo;
                 if (Storage::exists($oldPhotoPath)) {
                     Storage::delete($oldPhotoPath);
                 }
             }
 
-            // Upload new photo
-            $filename = time() . '_' . $request->file('photo')->getClientOriginalName();
+            // Upload foto baru
+            $originalName = $request->file('photo')->getClientOriginalName();
+            $filename = time() . '_' . str_replace(' ', '_', $originalName);
+
             $request->file('photo')->storeAs('fotoproduct/produk', $filename, 'public');
+
             $validatedData['photo'] = $filename;
         }
 
-        // Update the product with validated data
+        // Update data produk
         $product->update($validatedData);
 
         // Redirect with success message
