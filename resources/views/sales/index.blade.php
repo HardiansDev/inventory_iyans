@@ -1,0 +1,261 @@
+@extends('layouts.master')
+
+@section('title')
+    <title>Sistem Inventory Iyan | Penjualan</title>
+@endsection
+
+@section('content')
+    <section class="mb-6 rounded-lg bg-white p-6 shadow-sm">
+        <div class="mx-auto flex max-w-7xl flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
+            <!-- Judul dan Deskripsi -->
+            <div>
+                <h1 class="text-2xl font-bold text-gray-800">Menu Jualan</h1>
+                <p class="mt-1 text-sm text-gray-500">
+                    Kelola dan proses transaksi penjualan produk secara efisien
+                </p>
+            </div>
+
+            <!-- Breadcrumb -->
+            <nav
+                class="text-sm text-gray-600"
+                aria-label="Breadcrumb"
+            >
+                <ol class="flex items-center space-x-2">
+                    {{-- <li>
+                        <a
+                            href="{{ route('dashboard') }}"
+                            class="flex items-center text-gray-500 hover:text-blue-600"
+                        >
+                            <i class="fa fa-dashboard mr-1"></i>
+                            <span>Dashboard</span>
+                        </a>
+                    </li> --}}
+                    <li>
+                        {{-- <svg
+                            class="mx-1 h-4 w-4 text-gray-400"
+                            fill="currentColor"
+                            viewBox="0 0 20 20"
+                        >
+                            <path d="M6 9a1 1 0 000 2h8a1 1 0 000-2H6z" />
+                        </svg> --}}
+                    </li>
+                    <li class="text-gray-400">Penjualan</li>
+                </ol>
+            </nav>
+        </div>
+    </section>
+
+    <section
+        x-data="wishlistHandler()"
+        x-init="init()"
+        class="relative mx-auto mb-6 max-w-7xl px-4"
+    >
+        <!-- GRID PRODUK -->
+        <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+            @foreach ($sales as $sale)
+                @php
+                    $productIn = $sale->productIn;
+                    $product = $productIn?->product;
+                    $category = $product?->category;
+                @endphp
+
+                <div class="rounded-lg bg-white shadow transition hover:shadow-lg">
+                    @if ($product)
+                        <img
+                            src="{{ asset('storage/fotoproduct/produk/' . $product->photo) }}"
+                            class="h-48 w-full rounded-t-lg object-cover"
+                            alt="{{ $product->name }}"
+                        />
+                    @else
+                        <div class="p-4 text-sm text-red-600">Data Produk Dihapus</div>
+                    @endif
+
+                    <div
+                        class="p-4"
+                        x-data="{ qty: 1 }"
+                    >
+                        <h2 class="text-lg font-semibold text-gray-800">
+                            {{ $product->name ?? 'Produk telah dihapus' }}
+                        </h2>
+                        <p class="text-sm text-gray-500">{{ $category->name ?? 'Kategori tidak tersedia' }}</p>
+                        <p class="mb-1 text-sm text-gray-500">{{ $sale->qty }} Stok Tersedia</p>
+                        <p class="mb-3 text-xl font-bold text-green-600">
+                            Rp {{ number_format($product?->price ?? 0, 0, ',', '.') }}
+                        </p>
+
+                        <!-- Qty + Pesan -->
+                        <div class="flex items-center gap-2">
+                            <button
+                                @click="if (qty > 1) qty--"
+                                class="flex h-8 w-8 items-center justify-center rounded-full bg-red-500 font-bold text-white"
+                            >-</button>
+                            <input
+                                type="number"
+                                x-model="qty"
+                                class="qty-input w-14 rounded-md border border-gray-300 text-center text-sm"
+                                min="1"
+                            />
+                            <button
+                                @click="if (qty < {{ $sale->qty }}) qty++"
+                                class="flex h-8 w-8 items-center justify-center rounded-full bg-green-500 font-bold text-white"
+                            >+</button>
+
+                            <button
+                                @click="$dispatch('add-wishlist', {
+                                salesId: '{{ $sale->id }}',
+                                name: '{{ $product->name ?? 'Tidak Tersedia' }}',
+                                price: {{ $product->price ?? 0 }},
+                                qty: qty
+                            })"
+                                class="ml-auto rounded bg-yellow-500 px-4 py-2 text-sm text-white hover:bg-yellow-600"
+                                :disabled="{{ $product && $sale->qty > 0 ? 'false' : 'true' }}"
+                            >
+                                {{ $product && $sale->qty > 0 ? 'Pesan' : 'Tidak Tersedia' }}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            @endforeach
+        </div>
+
+        <!-- Floating Cart Icon -->
+        <div
+            x-show="wishlist.length > 0"
+            @click="openCart = !openCart"
+            class="fixed bottom-4 right-4 z-50 flex h-14 w-14 cursor-pointer items-center justify-center rounded-full bg-yellow-500 text-white shadow-lg hover:bg-yellow-600"
+            title="Lihat Pesanan"
+        >
+            <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-6 w-6"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+            >
+                <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 7M7 13l-1.3 2.7a1 1 0 001.4 1.3L10 15h4l1.3 1.3a1 1 0 001.4-1.3L17 13M5 21a1 1 0 102 0 1 1 0 00-2 0zm12 0a1 1 0 102 0 1 1 0 00-2 0z"
+                />
+            </svg>
+            <span
+                class="absolute right-0 top-0 -translate-y-1/2 translate-x-1/2 transform rounded-full bg-red-600 px-2 py-1 text-xs font-bold text-white"
+                x-text="wishlist.length"
+            ></span>
+        </div>
+
+        <!-- Modal Wishlist -->
+        <div
+            x-show="openCart"
+            @click.outside="openCart = false"
+            class="fixed bottom-20 right-4 z-50 w-80 rounded-lg border bg-white p-4 shadow-xl"
+        >
+            <h2 class="mb-2 text-lg font-bold">Pesanan Anda</h2>
+            <ul class="max-h-60 space-y-2 overflow-y-auto">
+                <template
+                    x-for="(item, index) in wishlist"
+                    :key="index"
+                >
+                    <li class="border-b pb-2">
+                        <div class="flex justify-between">
+                            <span x-text="item.name"></span>
+                            <button
+                                @click="removeFromWishlist(index)"
+                                class="text-xs text-red-500 hover:underline"
+                            >Hapus</button>
+                        </div>
+                        <div class="text-sm text-gray-600">
+                            Qty: <span x-text="item.qty"></span> × Rp <span
+                                x-text="item.price.toLocaleString('id-ID')"></span>
+                        </div>
+                    </li>
+                </template>
+            </ul>
+            <div class="mt-3 text-right font-semibold">
+                Total: <span x-text="totalFormatted"></span>
+            </div>
+            <div class="mt-4 text-right">
+                <button
+                    x-show="wishlist.length > 0"
+                    @click="checkout()"
+                    class="w-full rounded bg-teal-600 px-4 py-2 text-white hover:bg-teal-700"
+                >Checkout</button>
+            </div>
+        </div>
+    </section>
+@endsection
+@push('scripts')
+    <script>
+        function wishlistHandler() {
+            return {
+                wishlist: [],
+                totalPrice: 0,
+                openCart: false,
+
+                init() {
+                    this.$el.addEventListener('add-wishlist', (e) => {
+                        this.addToWishlist(e.detail);
+                    });
+                },
+
+                addToWishlist(product) {
+                    if (product.qty < 1) return;
+
+                    const existing = this.wishlist.find(item => item.sales_id === product.salesId);
+
+                    if (existing) {
+                        existing.qty = product.qty;
+                    } else {
+                        this.wishlist.push({
+                            sales_id: product.salesId,
+                            name: product.name,
+                            qty: product.qty,
+                            price: product.price
+                        });
+                    }
+
+                    this.updateTotalPrice();
+                },
+
+                removeFromWishlist(index) {
+                    this.wishlist.splice(index, 1);
+                    this.updateTotalPrice();
+                },
+
+                updateTotalPrice() {
+                    this.totalPrice = this.wishlist.reduce((sum, item) => sum + (item.price * item.qty), 0);
+                    if (this.wishlist.length === 0) this.openCart = false;
+                },
+
+                get totalFormatted() {
+                    return 'Rp ' + this.totalPrice.toLocaleString('id-ID');
+                },
+
+                checkout() {
+                    fetch("{{ route('set.wishlist') }}", {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json",
+                                "X-CSRF-TOKEN": document.querySelector('meta[name=\"csrf-token\"]').getAttribute(
+                                    'content'),
+                            },
+                            body: JSON.stringify(this.wishlist)
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                window.location.href = "{{ route('detail-cekout') }}";
+                            } else {
+                                alert("Gagal menyimpan wishlist.");
+                            }
+                        })
+                        .catch(error => {
+                            console.error("Error:", error);
+                            alert("Terjadi kesalahan saat menyimpan wishlist.");
+                        });
+                }
+            };
+        }
+    </script>
+@endpush
