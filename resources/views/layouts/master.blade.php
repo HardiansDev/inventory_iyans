@@ -109,11 +109,39 @@
                         <i class="fas fa-cog mr-2"></i>
                         Pengaturan Akun
                     </a> --}}
-                    <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();"
-                        class="block px-4 py-2 text-sm text-red-600 hover:bg-gray-100">
-                        <i class="fas fa-power-off mr-2"></i>
-                        Keluar
-                    </a>
+                    <div x-data="{ openLogout: false }">
+                        <!-- Tombol Logout -->
+                        <a href="#" @click.prevent="openLogout = true"
+                            class="block px-4 py-2 text-sm text-red-600 hover:bg-gray-100">
+                            <i class="fas fa-power-off mr-2"></i>
+                            Keluar
+                        </a>
+
+                        <!-- Modal Konfirmasi -->
+                        <div x-show="openLogout"
+                            class="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50" x-cloak>
+                            <div class="bg-white rounded-lg shadow-lg w-96 p-6">
+                                <h2 class="text-lg font-semibold text-gray-800 mb-4">Konfirmasi Logout</h2>
+                                <p class="text-gray-600 mb-6">Apakah Anda yakin ingin keluar dari akun?</p>
+                                <div class="flex justify-end space-x-4">
+                                    <button @click="openLogout = false"
+                                        class="px-4 py-2 text-sm text-gray-700 bg-gray-200 rounded hover:bg-gray-300">
+                                        Batal
+                                    </button>
+                                    <button @click="document.getElementById('logout-form').submit();"
+                                        class="px-4 py-2 text-sm text-white bg-red-600 rounded hover:bg-red-700">
+                                        Ya, Keluar
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Form Logout -->
+                        <form id="logout-form" action="{{ route('logout') }}" method="POST" class="hidden">
+                            @csrf
+                        </form>
+                    </div>
+
                 </div>
             </div>
         </div>
