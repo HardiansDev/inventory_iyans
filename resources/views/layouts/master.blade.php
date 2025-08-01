@@ -17,7 +17,6 @@
 
     {{-- Font Awesome --}}
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-    <!-- Google Fonts: Poppins -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
         rel="stylesheet" />
 
@@ -25,35 +24,89 @@
         [x-cloak] {
             display: none !important;
         }
-    </style>
 
-    <style>
-        html.collapsed .sidebar {
-            width: 0 !important;
-            padding: 0 !important;
+        /* ==== Layout Global ==== */
+        body {
+            transition: padding-left 0.3s ease-in-out;
+            padding-top: 4rem;
+            /* Sesuaikan dengan tinggi navbar */
+            padding-bottom: 4rem;
+            /* Sesuaikan dengan tinggi footer */
         }
 
-        html.collapsed main {
-            margin-left: 0 !important;
+        #sidebar {
+            transition: transform 0.3s ease-in-out;
         }
 
-        html.collapsed #navbar {
-            margin-left: 0 !important;
+        #navbar {
+            height: 4rem;
+        }
+
+        #mainFooter {
+            height: 4rem;
+        }
+
+        /* ==== Desktop & Tablet View (>= 768px) ==== */
+        @media (min-width: 768px) {
+            body {
+                padding-left: 15rem;
+                /* Ruang untuk sidebar saat terbuka */
+            }
+
+            html.sidebar-collapsed body {
+                padding-left: 0;
+            }
+
+            #sidebar {
+                transform: translateX(0);
+            }
+
+            html.sidebar-collapsed #sidebar {
+                transform: translateX(-15rem);
+            }
+        }
+
+        /* ==== Mobile View (< 768px) ==== */
+        @media (max-width: 767px) {
+            body {
+                padding-left: 0;
+            }
+
+            #sidebar {
+                transform: translateX(-15rem);
+                /* Sidebar tersembunyi secara default */
+                z-index: 50;
+            }
+
+            html.sidebar-open-mobile #sidebar {
+                transform: translateX(0);
+            }
+
+            /* Overlay untuk mode mobile saat sidebar terbuka */
+            html.sidebar-open-mobile::before {
+                content: '';
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background-color: rgba(0, 0, 0, 0.5);
+                z-index: 40;
+            }
         }
     </style>
 </head>
 
-<body class="bg-gray-100 text-gray-800" style="font-family: 'Poppins', sans-serif">
+<body class="bg-gray-100 text-gray-800" style="font-family: 'Poppins', sans-serif;">
     {{-- SIDEBAR --}}
     @include('layouts.module.sidebar')
 
-    <div id="navbar"
-        class="sticky top-0 z-50 ml-60 flex items-center justify-between bg-white p-4 shadow-md transition-all duration-300">
+
+    <div id="navbar" class="fixed top-0 z-30 w-full flex items-center justify-between bg-white px-4 shadow-md">
         <button id="sidebar-toggle" class="p-2 text-gray-800 focus:outline-none">
             <i class="fas fa-bars text-lg"></i>
         </button>
 
-        <!-- Notifikasi Super Admin -->
         @if (Auth::user()->role === 'superadmin')
             <div class="relative ml-4">
                 <button onclick="toggleNotificationMenu()" class="relative p-2 text-gray-800 focus:outline-none">
@@ -69,7 +122,6 @@
                     @endif
                 </button>
 
-                <!-- Dropdown Notifikasi -->
                 <div id="notificationMenu" class="absolute right-0 z-50 mt-2 hidden w-64 rounded-md bg-white shadow-lg">
                     <div class="py-2 text-sm text-gray-700">
                         @if ($pendingRequests > 0)
@@ -89,35 +141,21 @@
             </div>
         @endif
 
-        <!-- Right: User Dropdown -->
         <div class="relative ml-auto inline-block text-left">
             <button id="userMenuButton" onclick="toggleUserMenu()" class="flex items-center text-sm focus:outline-none">
                 <i class="fas fa-user-circle text-2xl text-gray-600"></i>
                 <span class="ml-2">{{ Auth::user()->name }}</span>
             </button>
 
-            <!-- Dropdown -->
             <div id="userMenu" class="absolute right-0 z-50 mt-2 hidden w-48 rounded-md bg-white shadow-lg">
                 <div class="py-1">
-                    {{-- <a href="{{ route('log.aktivitas') }}"
-                        class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                        <i class="fas fa-history mr-2"></i>
-                        Log Aktivitas
-                    </a>
-                    <a href="{{ route('akun.pengaturan') }}"
-                        class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                        <i class="fas fa-cog mr-2"></i>
-                        Pengaturan Akun
-                    </a> --}}
                     <div x-data="{ openLogout: false }">
-                        <!-- Tombol Logout -->
                         <a href="#" @click.prevent="openLogout = true"
                             class="block px-4 py-2 text-sm text-red-600 hover:bg-gray-100">
                             <i class="fas fa-power-off mr-2"></i>
                             Keluar
                         </a>
 
-                        <!-- Modal Konfirmasi -->
                         <div x-show="openLogout"
                             class="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50" x-cloak>
                             <div class="bg-white rounded-lg shadow-lg w-96 p-6">
@@ -136,7 +174,6 @@
                             </div>
                         </div>
 
-                        <!-- Form Logout -->
                         <form id="logout-form" action="{{ route('logout') }}" method="POST" class="hidden">
                             @csrf
                         </form>
@@ -151,9 +188,11 @@
 
 
     {{-- MAIN CONTENT --}}
-    <main class="ml-60 p-4 transition-all duration-300">
+    <main id="mainContent" class="min-h-[calc(100vh-4rem)] px-4 pb-24">
         @yield('content')
     </main>
+
+    @include('layouts.module.footer')
     @if (session('success') || session('error') || session('info') || session('warning'))
         <div x-data="{ show: true, type: '{{ session('success') ? 'success' : (session('error') ? 'error' : (session('warning') ? 'warning' : 'info')) }}' }" x-show="show" x-init="setTimeout(() => (show = false), 4000)" x-transition x-cloak
             :class="{
@@ -182,7 +221,6 @@
     @endif
 
 
-    <!-- Alpine Notifikasi dari JS -->
     <div x-data="{ show: false, message: '', type: 'info', timeout: null }" x-show="show" x-transition x-cloak x-init="window.addEventListener('notify', e => {
         message = e.detail.message;
         type = e.detail.type || 'info';
@@ -220,33 +258,56 @@
         @csrf
     </form>
 
-    {{-- Sidebar Toggle Script --}}
-    {{-- <script src="//unpkg.com/alpinejs" defer></script> --}}
-
-    {{-- <script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js" defer></script> --}}
-
 
     @stack('scripts')
 
+    {{-- master.blade.php --}}
     <script>
-        function toggleUserMenu() {
-            const menu = document.getElementById('userMenu')
-            menu.classList.toggle('hidden')
-        }
+        document.addEventListener('DOMContentLoaded', () => {
+            const sidebarToggle = document.getElementById('sidebar-toggle');
+            const html = document.documentElement;
 
-        // Optional: close dropdown jika klik di luar
-        window.addEventListener('click', function(e) {
-            const menu = document.getElementById('userMenu')
-            const button = document.getElementById('userMenuButton')
-            if (!menu.contains(e.target) && !button.contains(e.target)) {
-                menu.classList.add('hidden')
+            sidebarToggle?.addEventListener('click', () => {
+                if (window.innerWidth >= 768) {
+                    html.classList.toggle('sidebar-collapsed');
+                } else {
+                    html.classList.toggle('sidebar-open-mobile');
+                }
+            });
+
+            // Tutup sidebar saat klik di luar area sidebar pada mobile
+            window.addEventListener('click', function(e) {
+                if (window.innerWidth < 768 && html.classList.contains('sidebar-open-mobile')) {
+                    const sidebar = document.getElementById('sidebar');
+                    const toggleBtn = document.getElementById('sidebar-toggle');
+                    if (!sidebar.contains(e.target) && !toggleBtn.contains(e.target)) {
+                        html.classList.remove('sidebar-open-mobile');
+                    }
+                }
+            });
+
+            // Handle window resize
+            window.addEventListener('resize', () => {
+                if (window.innerWidth >= 768) {
+                    html.classList.remove('sidebar-open-mobile');
+                } else {
+                    html.classList.remove('sidebar-collapsed');
+                }
+            });
+
+            function toggleUserMenu() {
+                const menu = document.getElementById('userMenu')
+                menu.classList.toggle('hidden')
             }
-        })
-    </script>
-    <script>
-        function toggleNotificationMenu() {
-            document.getElementById('notificationMenu').classList.toggle('hidden');
-        }
+
+            function toggleNotificationMenu() {
+                const notif = document.getElementById('notificationMenu')
+                notif.classList.toggle('hidden')
+            }
+
+            window.toggleUserMenu = toggleUserMenu;
+            window.toggleNotificationMenu = toggleNotificationMenu;
+        });
     </script>
 </body>
 

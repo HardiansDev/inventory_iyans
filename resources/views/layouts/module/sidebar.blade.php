@@ -1,5 +1,5 @@
-<aside id="main-sidebar" id="main-sidebar"
-    class="sidebar fixed left-0 top-0 z-40 h-full w-60 overflow-hidden bg-gray-800 text-white transition-all duration-300">
+<aside id="sidebar"
+    class="sidebar fixed left-0 top-0 z-40 h-full w-60 overflow-y-auto bg-gray-800 text-white transition-all duration-300">
     <div class="flex-shrink-0 border-b border-gray-700 p-4">
         <div class="flex items-center space-x-3">
             <div class="flex h-10 w-10 items-center justify-center rounded-full bg-gray-200">
@@ -154,66 +154,10 @@
                             Absensi Pegawai
                         </a>
                     </li>
-                    {{-- <li>
-                        <a
-                            href="{{ route('work-schedules.index') }}"
-                            class="{{ Request::is('work-schedules') ? 'bg-gray-600 text-white' : 'text-gray-300' }} flex items-center rounded-lg p-2 text-sm hover:bg-gray-600 hover:text-white"
-                        >
-                            <i class="fa fa-circle-o mr-2 text-xs"></i>
-                            Jadwal Kerja
-                        </a>
-                    </li> --}}
+
                 </ul>
             </li>
         @endif
-
-        {{-- PAYROLL --}}
-        {{-- @if (in_array(Auth::user()->role, ['superadmin', 'manager']))
-            <li class="{{ Request::is('payroll*') ? 'menu-open-tailwind' : '' }} group">
-                <a
-                    href="#"
-                    onclick="event.preventDefault(); this.closest('li').classList.toggle('menu-open-tailwind');"
-                    class="{{ Request::is('payroll*') ? 'bg-gray-700 text-white' : 'text-gray-200' }} flex items-center justify-between rounded-lg p-2 text-sm hover:bg-gray-700 hover:text-white"
-                >
-                    <span class="flex items-center">
-                        <i class="fas fa-money-check-alt mr-3 text-lg"></i>
-                        Manajemen Payroll
-                    </span>
-                    <i
-                        class="fa fa-angle-left transition-transform duration-200 group-[.menu-open-tailwind]:rotate-90"></i>
-                </a>
-                <ul
-                    class="treeview-menu-tailwind mt-1 max-h-0 space-y-1 overflow-hidden pl-4 transition-all duration-300 group-[.menu-open-tailwind]:max-h-96">
-                    <li>
-                        <a
-                            href="#"
-                            class="flex items-center rounded-lg p-2 text-sm text-gray-300 hover:bg-gray-600 hover:text-white"
-                        >
-                            <i class="fa fa-circle-o mr-2 text-xs"></i>
-                            Slip Gaji
-                        </a>
-                    </li>
-                    <li>
-                        <a
-                            href="#"
-                            class="flex items-center rounded-lg p-2 text-sm text-gray-300 hover:bg-gray-600 hover:text-white"
-                        >
-                            <i class="fa fa-circle-o mr-2 text-xs"></i>
-                            Komponen Gaji
-                        </a>
-                    </li>
-                    <li>
-                        <a
-                            href="#"
-                            class="flex items-center rounded-lg p-2 text-sm text-gray-300 hover:bg-gray-600 hover:text-white"
-                        >
-                            <i class="fa fa-circle-o mr-2 text-xs"></i>
-                            Rekapitulasi Payroll
-                        </a>
-                    </li>
-                </ul>
-            </li>
-        @endif --}}
 
 
         {{-- PENGGUNA --}}
@@ -228,22 +172,3 @@
         @endif
     </ul>
 </aside>
-
-@push('scripts')
-    <script>
-        const sidebar = document.getElementById('main-sidebar')
-        const navbar = document.getElementById('navbar')
-        const toggleBtn = document.getElementById('sidebar-toggle')
-
-        toggleBtn.addEventListener('click', () => {
-            // Toggle class ke elemen html
-            document.documentElement.classList.toggle('collapsed')
-
-            // Toggle animasi sidebar
-            sidebar.classList.toggle('-translate-x-full')
-
-            // Navbar ikut mundur
-            navbar.classList.toggle('ml-60')
-        })
-    </script>
-@endpush
