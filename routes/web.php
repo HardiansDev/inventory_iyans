@@ -117,6 +117,8 @@ Route::middleware(['auth', 'role:kasir,superadmin,admin_gudang'])->group(functio
     Route::resource('discounts', DiscountController::class);
 });
 
+
+
 // Karyawan & Absensi
 Route::middleware(['auth', 'role:superadmin'])->group(function () {
     Route::resource('employees', EmployeeController::class);
