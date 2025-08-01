@@ -16,33 +16,7 @@
                 </p>
             </div>
 
-            <!-- Breadcrumb -->
-            <nav
-                class="text-sm text-gray-600"
-                aria-label="Breadcrumb"
-            >
-                <ol class="flex items-center space-x-2">
-                    <li>
-                        <a
-                            href="{{ route('dashboard') }}"
-                            class="flex items-center text-gray-500 hover:text-blue-600"
-                        >
-                            <i class="fa fa-dashboard mr-1"></i>
-                            <span>Dashboard</span>
-                        </a>
-                    </li>
-                    <li>
-                        <svg
-                            class="mx-1 h-4 w-4 text-gray-400"
-                            fill="currentColor"
-                            viewBox="0 0 20 20"
-                        >
-                            <path d="M6 9a1 1 0 000 2h8a1 1 0 000-2H6z" />
-                        </svg>
-                    </li>
-                    <li class="text-gray-400">Dashboard</li>
-                </ol>
-            </nav>
+
         </div>
     </section>
 
@@ -79,92 +53,50 @@
             <!-- Left Column (Sales) -->
             <section class="w-full space-y-6 lg:w-7/12">
                 <!-- Filter & Action Buttons -->
-                <form
-                    method="GET"
-                    action="{{ route('dashboard') }}"
-                    class="mb-2"
-                >
+                <form method="GET" action="{{ route('dashboard') }}" class="mb-2">
                     <div class="flex flex-wrap items-center gap-3">
-                        <select
-                            name="filter"
-                            onchange="this.form.submit()"
-                            class="rounded-md border border-gray-300 px-4 py-2 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        >
-                            <option
-                                value="daily"
-                                {{ $filter == 'daily' ? 'selected' : '' }}
-                            >
+                        <select name="filter" onchange="this.form.submit()"
+                            class="rounded-md border border-gray-300 px-4 py-2 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <option value="daily" {{ $filter == 'daily' ? 'selected' : '' }}>
                                 Per Hari
                             </option>
-                            <option
-                                value="weekly"
-                                {{ $filter == 'weekly' ? 'selected' : '' }}
-                            >
+                            <option value="weekly" {{ $filter == 'weekly' ? 'selected' : '' }}>
                                 Per Minggu
                             </option>
-                            <option
-                                value="monthly"
-                                {{ $filter == 'monthly' ? 'selected' : '' }}
-                            >
+                            <option value="monthly" {{ $filter == 'monthly' ? 'selected' : '' }}>
                                 Per Bulan
                             </option>
-                            <option
-                                value="yearly"
-                                {{ $filter == 'yearly' ? 'selected' : '' }}
-                            >
+                            <option value="yearly" {{ $filter == 'yearly' ? 'selected' : '' }}>
                                 Per Tahun
                             </option>
                         </select>
                         <div class="relative inline-block text-left">
                             <div>
-                                <button
-                                    type="button"
-                                    onclick="toggleDownloadDropdown(event)"
-                                    class="inline-flex w-full justify-center rounded-md bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow transition hover:bg-indigo-700"
-                                >
+                                <button type="button" onclick="toggleDownloadDropdown(event)"
+                                    class="inline-flex w-full justify-center rounded-md bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow transition hover:bg-indigo-700">
                                     Download
-                                    <svg
-                                        class="-mr-1 ml-2 h-4 w-4"
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        fill="none"
-                                        viewBox="0 0 20 20"
-                                        stroke="currentColor"
-                                    >
-                                        <path
-                                            stroke-linecap="round"
-                                            stroke-linejoin="round"
-                                            stroke-width="2"
-                                            d="M7 7l3-3 3 3m0 6l-3 3-3-3"
-                                        />
+                                    <svg class="-mr-1 ml-2 h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none"
+                                        viewBox="0 0 20 20" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M7 7l3-3 3 3m0 6l-3 3-3-3" />
                                     </svg>
                                 </button>
                             </div>
 
                             <!-- Dropdown menu -->
-                            <div
-                                id="downloadDropdown"
-                                class="absolute right-0 z-10 mt-2 hidden w-64 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5"
-                            >
+                            <div id="downloadDropdown"
+                                class="absolute right-0 z-10 mt-2 hidden w-64 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5">
                                 <div class="py-1">
-                                    <button
-                                        type="button"
-                                        onclick="downloadChartAsPDF()"
-                                        class="w-full rounded px-4 py-2 text-left text-sm font-medium text-black no-underline transition hover:bg-gray-100"
-                                    >
+                                    <button type="button" onclick="downloadChartAsPDF()"
+                                        class="w-full rounded px-4 py-2 text-left text-sm font-medium text-black no-underline transition hover:bg-gray-100">
                                         Download PDF
                                     </button>
-                                    <button
-                                        type="button"
-                                        onclick="downloadChartAsExcel()"
-                                        class="mt-1 w-full rounded px-4 py-2 text-left text-sm font-medium text-black no-underline transition hover:bg-gray-100"
-                                    >
+                                    <button type="button" onclick="downloadChartAsExcel()"
+                                        class="mt-1 w-full rounded px-4 py-2 text-left text-sm font-medium text-black no-underline transition hover:bg-gray-100">
                                         Download Excel
                                     </button>
-                                    <button
-                                        type="button"
-                                        onclick="downloadAllCharts()"
-                                        class="mt-1 w-full rounded px-4 py-2 text-left text-sm font-medium text-black no-underline transition hover:bg-gray-100"
-                                    >
+                                    <button type="button" onclick="downloadAllCharts()"
+                                        class="mt-1 w-full rounded px-4 py-2 text-left text-sm font-medium text-black no-underline transition hover:bg-gray-100">
                                         Download Semua (PDF)
                                     </button>
                                 </div>
@@ -179,23 +111,14 @@
                         <h3 class="mb-2 text-lg font-semibold text-gray-800">
                             {{ $chart['title'] }}
                         </h3>
-                        <div
-                            id="{{ $chart['wrapper'] }}"
-                            class="relative h-[300px] w-full md:h-[400px]"
-                        >
-                            <canvas
-                                id="{{ $chart['id'] }}"
-                                class="h-full w-full"
-                            ></canvas>
+                        <div id="{{ $chart['wrapper'] }}" class="relative h-[300px] w-full md:h-[400px]">
+                            <canvas id="{{ $chart['id'] }}" class="h-full w-full"></canvas>
                         </div>
                     </div>
                 @endforeach
             </section>
 
-            <div
-                id="pdfExportArea"
-                style="display: none; padding: 20px; font-family: Arial, sans-serif"
-            >
+            <div id="pdfExportArea" style="display: none; padding: 20px; font-family: Arial, sans-serif">
                 <h2 style="text-align: center; margin-bottom: 20px">{{ $title }}</h2>
                 <div
                     style="
@@ -239,37 +162,26 @@
 
                     <!-- Grafik Chart -->
                     <div style="width: 40%">
-                        <canvas
-                            id="pdfChart"
-                            width="430"
-                            height="350"
-                        ></canvas>
+                        <canvas id="pdfChart" width="430" height="350"></canvas>
                     </div>
                 </div>
             </div>
 
             <!-- Export Semua Grafik & Data -->
-            <div
-                id="pdfExportAll"
+            <div id="pdfExportAll"
                 style="
                     display: none;
                     padding: 20px;
                     font-family: Arial, sans-serif;
                     font-size: 11px;
-                "
-            >
+                ">
                 <h2 style="text-align: center; margin-bottom: 20px">
                     Laporan Lengkap - Sistem Inventory
                 </h2>
 
                 {{-- === Data Produk === --}}
                 <h4>Stok Produk</h4>
-                <table
-                    border="1"
-                    cellpadding="5"
-                    cellspacing="0"
-                    style="width: 100%; margin-bottom: 20px"
-                >
+                <table border="1" cellpadding="5" cellspacing="0" style="width: 100%; margin-bottom: 20px">
                     <thead style="background: #f2f2f2">
                         <tr>
                             <th>Produk</th>
@@ -288,12 +200,7 @@
 
                 {{-- === Produk Masuk === --}}
                 <h4>Produk Masuk</h4>
-                <table
-                    border="1"
-                    cellpadding="5"
-                    cellspacing="0"
-                    style="width: 100%; margin-bottom: 20px"
-                >
+                <table border="1" cellpadding="5" cellspacing="0" style="width: 100%; margin-bottom: 20px">
                     <thead style="background: #f2f2f2">
                         <tr>
                             <th>Produk</th>
@@ -312,12 +219,7 @@
 
                 {{-- === Produk Keluar === --}}
                 <h4>Produk Keluar</h4>
-                <table
-                    border="1"
-                    cellpadding="5"
-                    cellspacing="0"
-                    style="width: 100%; margin-bottom: 20px"
-                >
+                <table border="1" cellpadding="5" cellspacing="0" style="width: 100%; margin-bottom: 20px">
                     <thead style="background: #f2f2f2">
                         <tr>
                             <th>Produk</th>
@@ -376,10 +278,7 @@
                             {{ $product['title'] }}
                         </h3>
                         <div class="relative h-[300px] w-full md:h-[400px]">
-                            <canvas
-                                id="{{ $product['id'] }}"
-                                class="h-full w-full"
-                            ></canvas>
+                            <canvas id="{{ $product['id'] }}" class="h-full w-full"></canvas>
                         </div>
                     </div>
                 @endforeach

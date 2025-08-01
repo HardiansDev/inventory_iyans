@@ -14,33 +14,7 @@
                 </p>
             </div>
 
-            <!-- Breadcrumb -->
-            <nav
-                class="text-sm text-gray-600"
-                aria-label="Breadcrumb"
-            >
-                <ol class="flex items-center space-x-2">
-                    <li>
-                        <a
-                            href="{{ route('productin.index') }}"
-                            class="flex items-center text-gray-500 hover:text-blue-600"
-                        >
-                            <i class="fa fa-box mr-1"></i>
-                            <span>Produk Masuk</span>
-                        </a>
-                    </li>
-                    <li>
-                        <svg
-                            class="mx-1 h-4 w-4 text-gray-400"
-                            fill="currentColor"
-                            viewBox="0 0 20 20"
-                        >
-                            <path d="M6 9a1 1 0 000 2h8a1 1 0 000-2H6z" />
-                        </svg>
-                    </li>
-                    <li class="text-gray-400">Tambah Produk Masuk</li>
-                </ol>
-            </nav>
+
         </div>
     </section>
 
@@ -49,31 +23,18 @@
         <div class="rounded-xl border border-gray-200 bg-white p-6 shadow-lg">
             <h2 class="mb-6 text-xl font-semibold text-gray-800">Form Tambah Produk Masuk</h2>
 
-            <form
-                action="{{ route('productin.storeProductIn') }}"
-                method="POST"
-                enctype="multipart/form-data"
-                class="space-y-4"
-            >
+            <form action="{{ route('productin.storeProductIn') }}" method="POST" enctype="multipart/form-data"
+                class="space-y-4">
                 @csrf
 
-                <div
-                    id="dynamic-form"
-                    class="space-y-4"
-                >
+                <div id="dynamic-form" class="space-y-4">
                     <div class="grid grid-cols-12 items-end gap-4 border-b border-gray-200 pb-4">
                         <div class="col-span-3">
                             <label class="mb-1 block text-sm font-medium text-gray-700">Nama Produk</label>
-                            <select
-                                name="product_id[]"
+                            <select name="product_id[]"
                                 class="product-select w-full rounded-md border border-gray-300 bg-white px-4 py-2 text-sm text-gray-700 shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-500"
-                                required
-                            >
-                                <option
-                                    value=""
-                                    disabled
-                                    selected
-                                >Pilih Produk</option>
+                                required>
+                                <option value="" disabled selected>Pilih Produk</option>
                                 @foreach ($products as $product)
                                     <option value="{{ $product->id }}">{{ $product->name }} (Stok: {{ $product->stock }})
                                     </option>
@@ -81,71 +42,45 @@
                             </select>
                         </div>
 
-                        <input
-                            type="hidden"
-                            name="supplier_id[]"
-                            class="hidden-supplier"
-                        />
-                        <input
-                            type="hidden"
-                            name="category_id[]"
-                            class="hidden-category"
-                        />
+                        <input type="hidden" name="supplier_id[]" class="hidden-supplier" />
+                        <input type="hidden" name="category_id[]" class="hidden-category" />
 
                         <div class="col-span-2">
                             <label class="mb-1 block text-sm font-medium text-gray-700">Tanggal</label>
-                            <input
-                                type="date"
-                                name="date[]"
+                            <input type="date" name="date[]"
                                 class="w-full rounded-md border border-gray-300 bg-white px-4 py-2 text-sm text-gray-700 shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-500"
-                                required
-                            >
+                                required>
                         </div>
 
                         <div class="col-span-2">
                             <label class="mb-1 block text-sm font-medium text-gray-700">Jumlah</label>
-                            <input
-                                type="number"
-                                name="qty[]"
+                            <input type="number" name="qty[]"
                                 class="w-full rounded-md border border-gray-300 bg-white px-4 py-2 text-sm text-gray-700 shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-500"
-                                required
-                            >
+                                required>
                         </div>
 
 
 
                         <div class="col-span-2 flex justify-end">
-                            <button
-                                type="button"
-                                class="remove-row rounded-lg bg-red-500 px-4 py-2 text-sm text-white shadow hover:bg-red-600"
-                            >Hapus</button>
+                            <button type="button"
+                                class="remove-row rounded-lg bg-red-500 px-4 py-2 text-sm text-white shadow hover:bg-red-600">Hapus</button>
                         </div>
                     </div>
                 </div>
 
                 <div class="flex items-center justify-between">
-                    <button
-                        type="button"
-                        id="add-row"
-                        class="rounded-lg bg-green-600 px-5 py-2 text-sm font-medium text-white shadow hover:bg-green-700"
-                    >
+                    <button type="button" id="add-row"
+                        class="rounded-lg bg-green-600 px-5 py-2 text-sm font-medium text-white shadow hover:bg-green-700">
                         + Tambah Baris
                     </button>
                 </div>
 
                 <div class="mt-6 flex justify-between">
-                    <a
-                        href="{{ route('productin.index') }}"
-                        class="inline-flex items-center rounded-lg bg-gray-200 px-5 py-2 text-sm font-medium text-gray-700 shadow hover:bg-gray-300"
-                    >
-                        <
-                            Kembali
-                            </a
-                        >
-                            <button
-                                type="submit"
-                                class="rounded-lg bg-blue-600 px-6 py-2 text-sm font-medium text-white shadow hover:bg-blue-700"
-                            >
+                    <a href="{{ route('productin.index') }}"
+                        class="inline-flex items-center rounded-lg bg-gray-200 px-5 py-2 text-sm font-medium text-gray-700 shadow hover:bg-gray-300">
+                        < Kembali </a>
+                            <button type="submit"
+                                class="rounded-lg bg-blue-600 px-6 py-2 text-sm font-medium text-white shadow hover:bg-blue-700">
                                 Ajukan
                             </button>
                 </div>

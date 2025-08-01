@@ -10,18 +10,7 @@
         <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between">
                 <h1 class="text-xl font-semibold text-gray-900 dark:text-white">Scan QR Absensi</h1>
-                <nav class="text-sm text-gray-500 dark:text-gray-300">
-                    <ol class="flex items-center space-x-1">
-                        <li>
-                            <a
-                                href="{{ route('dashboard') }}"
-                                class="text-blue-600 hover:underline"
-                            >Dashboard</a>
-                        </li>
-                        <li>/</li>
-                        <li class="text-gray-700 dark:text-gray-200">Scan Absensi</li>
-                    </ol>
-                </nav>
+
             </div>
         </div>
     </section>
@@ -29,44 +18,23 @@
     <!-- QR Scanner & Upload -->
     <div class="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
         <div class="rounded-lg bg-white p-6 text-center shadow dark:bg-gray-900">
-            <div
-                id="qr-reader"
-                class="mx-auto"
-                style="width:100%; max-width:500px; min-height:300px;"
-            ></div>
+            <div id="qr-reader" class="mx-auto" style="width:100%; max-width:500px; min-height:300px;"></div>
             <p class="mt-4 text-sm text-gray-500">Arahkan kamera ke QR Code untuk melakukan absensi.</p>
 
             <div class="my-6 border-t border-gray-200 dark:border-gray-700"></div>
 
             <h2 class="mb-2 text-lg font-medium text-gray-800 dark:text-gray-200">Atau Upload Gambar QR</h2>
-            <form
-                action="{{ route('employee-attendance.processUpload') }}"
-                method="POST"
-                enctype="multipart/form-data"
-                class="space-y-4"
-            >
+            <form action="{{ route('employee-attendance.processUpload') }}" method="POST" enctype="multipart/form-data"
+                class="space-y-4">
                 @csrf
-                <input
-                    type="file"
-                    name="qr_image"
-                    accept="image/*"
-                    required
-                    class="block w-full cursor-pointer text-sm text-gray-700 file:mr-4 file:rounded file:border-0 file:bg-blue-50 file:px-4 file:py-2 file:text-sm file:font-semibold file:text-blue-700 hover:file:bg-blue-100 dark:text-gray-200"
-                />
+                <input type="file" name="qr_image" accept="image/*" required
+                    class="block w-full cursor-pointer text-sm text-gray-700 file:mr-4 file:rounded file:border-0 file:bg-blue-50 file:px-4 file:py-2 file:text-sm file:font-semibold file:text-blue-700 hover:file:bg-blue-100 dark:text-gray-200" />
 
-                <button
-                    type="submit"
-                    class="inline-flex items-center rounded bg-blue-600 px-4 py-2 text-sm font-medium text-white transition hover:bg-blue-700"
-                >
-                    <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        class="mr-2 h-4 w-4"
-                        viewBox="0 0 20 20"
-                        fill="currentColor"
-                    >
+                <button type="submit"
+                    class="inline-flex items-center rounded bg-blue-600 px-4 py-2 text-sm font-medium text-white transition hover:bg-blue-700">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="mr-2 h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
                         <path
-                            d="M4 3a1 1 0 00-1 1v12a1 1 0 001 1h5a1 1 0 001-1V8h4v8a1 1 0 001 1h5a1 1 0 001-1V4a1 1 0 00-1-1H4z"
-                        />
+                            d="M4 3a1 1 0 00-1 1v12a1 1 0 001 1h5a1 1 0 001-1V8h4v8a1 1 0 001 1h5a1 1 0 001-1V4a1 1 0 00-1-1H4z" />
                     </svg>
                     Upload QR Code
                 </button>

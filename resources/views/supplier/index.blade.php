@@ -15,33 +15,7 @@
                 </p>
             </div>
 
-            <!-- Breadcrumb -->
-            <nav
-                class="text-sm text-gray-600"
-                aria-label="Breadcrumb"
-            >
-                <ol class="flex items-center space-x-2">
-                    <li>
-                        <a
-                            href="{{ route('dashboard') }}"
-                            class="flex items-center text-gray-500 hover:text-blue-600"
-                        >
-                            <i class="fa fa-dashboard mr-1"></i>
-                            <span>Dashboard</span>
-                        </a>
-                    </li>
-                    <li>
-                        <svg
-                            class="mx-1 h-4 w-4 text-gray-400"
-                            fill="currentColor"
-                            viewBox="0 0 20 20"
-                        >
-                            <path d="M6 9a1 1 0 000 2h8a1 1 0 000-2H6z" />
-                        </svg>
-                    </li>
-                    <li class="text-gray-400">Supplier</li>
-                </ol>
-            </nav>
+
         </div>
     </section>
 
@@ -50,10 +24,8 @@
         <div class="mb-6 grid grid-cols-1 gap-4 md:grid-cols-2">
             <!-- Tombol Trigger Modal Tambah -->
             <div>
-                <button
-                    onclick="openAddSupplierModal()"
-                    class="flex w-full items-center gap-2 rounded bg-blue-600 px-4 py-2 text-white hover:bg-blue-700 md:w-auto"
-                >
+                <button onclick="openAddSupplierModal()"
+                    class="flex w-full items-center gap-2 rounded bg-blue-600 px-4 py-2 text-white hover:bg-blue-700 md:w-auto">
                     <i class="fas fa-plus-circle"></i>
                     <span>Tambah Supplier</span>
                 </button>
@@ -61,29 +33,16 @@
 
             <!-- Form Pencarian Supplier (pojok kanan dan proporsional) -->
             <div class="mb-4 flex justify-end">
-                <form
-                    action="{{ route('supplier.index') }}"
-                    method="GET"
-                    class="flex items-center gap-2"
-                >
-                    <input
-                        type="search"
-                        name="search"
-                        value="{{ $search }}"
-                        placeholder="Cari..."
-                        class="w-60 rounded-md border border-gray-300 px-3 py-2 text-sm text-gray-700 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:w-72"
-                    />
-                    <button
-                        type="submit"
-                        class="inline-flex items-center rounded-md bg-blue-600 px-4 py-2 text-sm text-white shadow-sm hover:bg-blue-700"
-                    >
+                <form action="{{ route('supplier.index') }}" method="GET" class="flex items-center gap-2">
+                    <input type="search" name="search" value="{{ $search }}" placeholder="Cari..."
+                        class="w-60 rounded-md border border-gray-300 px-3 py-2 text-sm text-gray-700 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:w-72" />
+                    <button type="submit"
+                        class="inline-flex items-center rounded-md bg-blue-600 px-4 py-2 text-sm text-white shadow-sm hover:bg-blue-700">
                         <i class="fas fa-search mr-2"></i>
                         Cari
                     </button>
-                    <a
-                        href="{{ route('supplier.index') }}"
-                        class="ml-2 inline-flex items-center rounded-md bg-gray-300 px-4 py-2 text-sm text-gray-800 shadow-sm hover:bg-gray-400""
-                    >
+                    <a href="{{ route('supplier.index') }}"
+                        class="ml-2 inline-flex items-center rounded-md bg-gray-300 px-4 py-2 text-sm text-gray-800 shadow-sm hover:bg-gray-400"">
                         <i class="fas fa-redo-alt mr-2"></i>
                         Reset
                     </a>
@@ -93,10 +52,7 @@
 
         <!-- Tabel Data -->
         <div class="overflow-x-auto rounded-lg border border-gray-200 shadow">
-            <table
-                id="example1"
-                class="min-w-full divide-y divide-gray-200 bg-white text-sm text-gray-700"
-            >
+            <table id="example1" class="min-w-full divide-y divide-gray-200 bg-white text-sm text-gray-700">
                 <thead class="bg-gray-50 text-left text-xs font-semibold uppercase tracking-wider text-gray-600">
                     <tr>
                         {{-- <th class="px-4 py-2 border">No</th> --}}
@@ -114,20 +70,16 @@
                             <td class="px-4 py-2 text-center">
                                 <div class="flex justify-center gap-2">
                                     <!-- Tombol Edit (di bagian tabel) -->
-                                    <button
-                                        type="button"
+                                    <button type="button"
                                         onclick="openEditModal({{ $item->id }}, '{{ $item->name }}', '{{ $item->address }}')"
-                                        class="rounded bg-yellow-400 px-3 py-1 text-sm text-white hover:bg-yellow-500"
-                                    >
+                                        class="rounded bg-yellow-400 px-3 py-1 text-sm text-white hover:bg-yellow-500">
                                         <i class="fas fa-edit"></i>
                                         Edit
                                     </button>
 
-                                    <button
-                                        type="button"
+                                    <button type="button"
                                         onclick="openDeleteModal({{ $item->id }}, '{{ $item->name }}')"
-                                        class="rounded bg-red-500 px-3 py-1 text-sm text-white hover:bg-red-600"
-                                    >
+                                        class="rounded bg-red-500 px-3 py-1 text-sm text-white hover:bg-red-600">
                                         <i class="fas fa-trash-alt"></i>
                                         Hapus
                                     </button>
@@ -136,10 +88,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td
-                                colspan="4"
-                                class="px-4 py-6 text-center text-gray-500"
-                            >
+                            <td colspan="4" class="px-4 py-6 text-center text-gray-500">
                                 Data Supplier tidak ditemukan.
                             </td>
                         </tr>
@@ -147,61 +96,34 @@
                 </tbody>
             </table>
             <!-- Modal Tambah Supplier -->
-            <div
-                id="addSupplierModal"
-                class="fixed inset-0 z-50 flex hidden items-center justify-center bg-black bg-opacity-50"
-            >
+            <div id="addSupplierModal"
+                class="fixed inset-0 z-50 flex hidden items-center justify-center bg-black bg-opacity-50">
                 <div class="w-full max-w-lg rounded-lg bg-white p-6 shadow-lg">
                     <h2 class="mb-4 text-lg font-semibold text-gray-800">Tambah Supplier</h2>
-                    <form
-                        action="{{ route('supplier.store') }}"
-                        method="POST"
-                    >
+                    <form action="{{ route('supplier.store') }}" method="POST">
                         @csrf
                         <div class="mb-4">
-                            <label
-                                for="addSupplierName"
-                                class="block text-sm font-medium text-gray-700"
-                            >
+                            <label for="addSupplierName" class="block text-sm font-medium text-gray-700">
                                 Nama Supplier
                             </label>
-                            <input
-                                type="text"
-                                name="name"
-                                id="addSupplierName"
+                            <input type="text" name="name" id="addSupplierName"
                                 class="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none focus:ring-blue-500"
-                                placeholder="Nama Supplier"
-                                required
-                            />
+                                placeholder="Nama Supplier" required />
                         </div>
                         <div class="mb-4">
-                            <label
-                                for="addSupplierAddress"
-                                class="block text-sm font-medium text-gray-700"
-                            >
+                            <label for="addSupplierAddress" class="block text-sm font-medium text-gray-700">
                                 Alamat Supplier
                             </label>
-                            <textarea
-                                type="text"
-                                name="address"
-                                id="addSupplierAddress"
+                            <textarea type="text" name="address" id="addSupplierAddress"
                                 class="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none focus:ring-blue-500"
-                                placeholder="Alamat Supplier"
-                                required
-                            ></textarea>
+                                placeholder="Alamat Supplier" required></textarea>
                         </div>
                         <div class="flex justify-end gap-2">
-                            <button
-                                type="button"
-                                onclick="closeAddSupplierModal()"
-                                class="rounded bg-gray-300 px-4 py-2 text-gray-800 hover:bg-gray-400"
-                            >
+                            <button type="button" onclick="closeAddSupplierModal()"
+                                class="rounded bg-gray-300 px-4 py-2 text-gray-800 hover:bg-gray-400">
                                 Batal
                             </button>
-                            <button
-                                type="submit"
-                                class="rounded bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
-                            >
+                            <button type="submit" class="rounded bg-blue-600 px-4 py-2 text-white hover:bg-blue-700">
                                 Simpan
                             </button>
                         </div>
@@ -210,60 +132,35 @@
             </div>
 
             <!-- Modal Edit Supplier -->
-            <div
-                id="editSupplierModal"
-                class="fixed inset-0 z-50 flex hidden items-center justify-center bg-black bg-opacity-50"
-            >
+            <div id="editSupplierModal"
+                class="fixed inset-0 z-50 flex hidden items-center justify-center bg-black bg-opacity-50">
                 <div class="w-full max-w-lg rounded-lg bg-white p-6 shadow-lg">
                     <h2 class="mb-4 text-lg font-semibold text-gray-800">Edit Supplier</h2>
-                    <form
-                        id="editSupplierForm"
-                        method="POST"
-                    >
+                    <form id="editSupplierForm" method="POST">
                         @csrf
                         @method('PUT')
                         <div class="mb-4">
-                            <label
-                                for="editSupplierName"
-                                class="block text-sm font-medium text-gray-700"
-                            >
+                            <label for="editSupplierName" class="block text-sm font-medium text-gray-700">
                                 Nama Supplier
                             </label>
-                            <input
-                                type="text"
-                                name="name"
-                                id="editSupplierName"
+                            <input type="text" name="name" id="editSupplierName"
                                 class="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none focus:ring-blue-500"
-                                required
-                            />
+                                required />
                         </div>
                         <div class="mb-4">
-                            <label
-                                for="editSupplierAddress"
-                                class="block text-sm font-medium text-gray-700"
-                            >
+                            <label for="editSupplierAddress" class="block text-sm font-medium text-gray-700">
                                 Alamat Supplier
                             </label>
-                            <textarea
-                                type="text"
-                                name="address"
-                                id="editSupplierAddress"
+                            <textarea type="text" name="address" id="editSupplierAddress"
                                 class="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none focus:ring-blue-500"
-                                required
-                            ></textarea>
+                                required></textarea>
                         </div>
                         <div class="flex justify-end gap-2">
-                            <button
-                                type="button"
-                                onclick="closeEditModal()"
-                                class="rounded bg-gray-300 px-4 py-2 text-gray-800 hover:bg-gray-400"
-                            >
+                            <button type="button" onclick="closeEditModal()"
+                                class="rounded bg-gray-300 px-4 py-2 text-gray-800 hover:bg-gray-400">
                                 Batal
                             </button>
-                            <button
-                                type="submit"
-                                class="rounded bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
-                            >
+                            <button type="submit" class="rounded bg-blue-600 px-4 py-2 text-white hover:bg-blue-700">
                                 Simpan
                             </button>
                         </div>
@@ -279,39 +176,24 @@
     </section>
 
     <!-- Modal Konfirmasi Hapus -->
-    <div
-        id="deleteModal"
-        class="fixed inset-0 z-50 flex hidden items-center justify-center bg-black bg-opacity-50"
-    >
+    <div id="deleteModal" class="fixed inset-0 z-50 flex hidden items-center justify-center bg-black bg-opacity-50">
         <div class="w-full max-w-md rounded-lg bg-white p-6 shadow-lg">
             <h2 class="mb-4 text-lg font-semibold text-gray-800">Konfirmasi Hapus</h2>
             <p class="mb-6 text-gray-700">
                 Yakin ingin menghapus supplier
-                <span
-                    id="supplierName"
-                    class="font-bold"
-                ></span>
+                <span id="supplierName" class="font-bold"></span>
                 ?
             </p>
 
-            <form
-                id="deleteForm"
-                method="POST"
-            >
+            <form id="deleteForm" method="POST">
                 @csrf
                 @method('DELETE')
                 <div class="flex justify-end gap-2">
-                    <button
-                        type="button"
-                        onclick="closeDeleteModal()"
-                        class="rounded bg-gray-300 px-4 py-2 text-gray-800 hover:bg-gray-400"
-                    >
+                    <button type="button" onclick="closeDeleteModal()"
+                        class="rounded bg-gray-300 px-4 py-2 text-gray-800 hover:bg-gray-400">
                         Batal
                     </button>
-                    <button
-                        type="submit"
-                        class="rounded bg-red-600 px-4 py-2 text-white hover:bg-red-700"
-                    >
+                    <button type="submit" class="rounded bg-red-600 px-4 py-2 text-white hover:bg-red-700">
                         Hapus
                     </button>
                 </div>
