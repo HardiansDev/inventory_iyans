@@ -25,161 +25,118 @@
             display: none !important;
         }
 
-        /* ==== Layout Global ==== */
-        body {
-            transition: padding-left 0.3s ease-in-out;
-            padding-top: 4rem;
-            /* Sesuaikan dengan tinggi navbar */
-            padding-bottom: 4rem;
-            /* Sesuaikan dengan tinggi footer */
-        }
-
-        #sidebar {
-            transition: transform 0.3s ease-in-out;
-        }
-
-        #navbar {
-            height: 4rem;
-        }
-
-        #mainFooter {
-            height: 4rem;
-        }
-
-        /* ==== Desktop & Tablet View (>= 768px) ==== */
         @media (min-width: 768px) {
-            body {
-                padding-left: 15rem;
-                /* Ruang untuk sidebar saat terbuka */
-            }
-
-            html.sidebar-collapsed body {
-                padding-left: 0;
-            }
-
-            #sidebar {
-                transform: translateX(0);
-            }
-
             html.sidebar-collapsed #sidebar {
                 transform: translateX(-15rem);
+                /* hidden sidebar */
             }
         }
 
-        /* ==== Mobile View (< 768px) ==== */
         @media (max-width: 767px) {
-            body {
-                padding-left: 0;
-            }
-
             #sidebar {
                 transform: translateX(-15rem);
-                /* Sidebar tersembunyi secara default */
-                z-index: 50;
+                z-index: 60 !important;
+                /* hidden by default */
             }
 
             html.sidebar-open-mobile #sidebar {
                 transform: translateX(0);
             }
-
-            /* Overlay untuk mode mobile saat sidebar terbuka */
-            html.sidebar-open-mobile::before {
-                content: '';
-                position: fixed;
-                top: 0;
-                left: 0;
-                right: 0;
-                bottom: 0;
-                background-color: rgba(0, 0, 0, 0.5);
-                z-index: 40;
-            }
         }
     </style>
+
+
+
+
 </head>
 
 <body class="bg-gray-100 text-gray-800" style="font-family: 'Poppins', sans-serif;">
+    <nav id="navbar"
+        class="fixed top-0 z-50 h-16 flex items-center justify-between bg-white px-4 shadow-md transition-all duration-300"
+        style="left: 15rem; right: 0;">
+        <button id="sidebar-toggle" class="p-2 text-gray-700 hover:text-gray-900">
+            <i id="sidebar-icon" class="fas fa-bars-staggered text-lg transition-all duration-300"></i>
+        </button>
+
+
+        <div class="flex items-center space-x-4 ml-auto">
+            {{-- Notifikasi untuk Superadmin --}}
+            @if (Auth::user()->role === 'superadmin')
+                <div class="relative">
+                    <button id="notifBtn" class="relative p-2 text-gray-800 focus:outline-none">
+                        <i class="fas fa-bell text-lg"></i>
+                        @php
+                            $pendingRequests = \App\Models\ProductIn::where('status', 'menunggu')->count();
+                        @endphp
+                        @if ($pendingRequests > 0)
+                            <span
+                                class="absolute -right-1 -top-1 h-4 w-4 flex items-center justify-center rounded-full bg-red-500 text-xs text-white">
+                                {{ $pendingRequests }}
+                            </span>
+                        @endif
+                    </button>
+
+                    {{-- Dropdown Notifikasi --}}
+                    <div id="notificationMenu"
+                        class="absolute right-0 mt-2 hidden w-64 rounded-md bg-white shadow-lg z-[60]">
+                        <div class="py-2 text-sm text-gray-700 max-h-72 overflow-y-auto">
+                            @if ($pendingRequests > 0)
+                                @foreach (\App\Models\ProductIn::where('status', 'menunggu')->latest()->take(5)->get() as $notif)
+                                    <a href="{{ route('product.confirmation', $notif->id) }}"
+                                        class="block border-b px-4 py-2 hover:bg-gray-100">
+                                        Permintaan: <strong>{{ $notif->requester_name }}</strong><br>
+                                        Produk: <strong>{{ $notif->product->name ?? '-' }}</strong><br>
+                                        <small class="text-gray-500">{{ $notif->created_at->diffForHumans() }}</small>
+                                    </a>
+                                @endforeach
+                            @else
+                                <p class="px-4 py-2 text-gray-500">Tidak ada notifikasi.</p>
+                            @endif
+                        </div>
+                    </div>
+                </div>
+            @endif
+
+            {{-- User Menu --}}
+            <div class="relative inline-block text-left">
+                <button id="userMenuButton" class="flex items-center text-sm focus:outline-none">
+                    <i class="fas fa-user-circle text-2xl text-gray-600"></i>
+                    <span class="ml-2">{{ Auth::user()->name }}</span>
+                </button>
+
+                {{-- Dropdown User --}}
+                <div id="userMenu" class="absolute right-0 mt-2 hidden w-48 rounded-md bg-white shadow-lg z-50">
+                    <div class="py-1">
+                        <a href="#" id="logoutConfirm"
+                            class="block px-4 py-2 text-sm text-red-600 hover:bg-gray-100">
+                            <i class="fas fa-power-off mr-2"></i> Keluar
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </nav>
     {{-- SIDEBAR --}}
     @include('layouts.module.sidebar')
 
 
-    <div id="navbar" class="fixed top-0 z-30 w-full flex items-center justify-between bg-white px-4 shadow-md">
-        <button id="sidebar-toggle" class="p-2 text-gray-800 focus:outline-none">
-            <i class="fas fa-bars text-lg"></i>
-        </button>
 
-        @if (Auth::user()->role === 'superadmin')
-            <div class="relative ml-4">
-                <button onclick="toggleNotificationMenu()" class="relative p-2 text-gray-800 focus:outline-none">
-                    <i class="fas fa-bell text-lg"></i>
-                    @php
-                        $pendingRequests = \App\Models\ProductIn::where('status', 'menunggu')->count();
-                    @endphp
-                    @if ($pendingRequests > 0)
-                        <span
-                            class="absolute -right-1 -top-1 inline-flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-xs text-white">
-                            {{ $pendingRequests }}
-                        </span>
-                    @endif
-                </button>
 
-                <div id="notificationMenu" class="absolute right-0 z-50 mt-2 hidden w-64 rounded-md bg-white shadow-lg">
-                    <div class="py-2 text-sm text-gray-700">
-                        @if ($pendingRequests > 0)
-                            @foreach (\App\Models\ProductIn::where('status', 'menunggu')->latest()->take(5)->get() as $notif)
-                                <a href="{{ route('product.confirmation', $notif->id) }}"
-                                    class="block border-b px-4 py-2 hover:bg-gray-100">
-                                    Permintaan masuk: <strong>{{ $notif->requester_name }}</strong><br>
-                                    Produk: <strong>{{ $notif->product->name ?? '-' }}</strong><br>
-                                    <small class="text-gray-500">{{ $notif->created_at->diffForHumans() }}</small>
-                                </a>
-                            @endforeach
-                        @else
-                            <p class="px-4 py-2 text-gray-500">Tidak ada notifikasi.</p>
-                        @endif
-                    </div>
-                </div>
-            </div>
-        @endif
 
-        <div class="relative ml-auto inline-block text-left">
-            <button id="userMenuButton" onclick="toggleUserMenu()" class="flex items-center text-sm focus:outline-none">
-                <i class="fas fa-user-circle text-2xl text-gray-600"></i>
-                <span class="ml-2">{{ Auth::user()->name }}</span>
-            </button>
-
-            <div id="userMenu" class="absolute right-0 z-50 mt-2 hidden w-48 rounded-md bg-white shadow-lg">
-                <div class="py-1">
-                    <div x-data="{ openLogout: false }">
-                        <a href="#" @click.prevent="openLogout = true"
-                            class="block px-4 py-2 text-sm text-red-600 hover:bg-gray-100">
-                            <i class="fas fa-power-off mr-2"></i>
-                            Keluar
-                        </a>
-
-                        <div x-show="openLogout"
-                            class="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50" x-cloak>
-                            <div class="bg-white rounded-lg shadow-lg w-96 p-6">
-                                <h2 class="text-lg font-semibold text-gray-800 mb-4">Konfirmasi Logout</h2>
-                                <p class="text-gray-600 mb-6">Apakah Anda yakin ingin keluar dari akun?</p>
-                                <div class="flex justify-end space-x-4">
-                                    <button @click="openLogout = false"
-                                        class="px-4 py-2 text-sm text-gray-700 bg-gray-200 rounded hover:bg-gray-300">
-                                        Batal
-                                    </button>
-                                    <button @click="document.getElementById('logout-form').submit();"
-                                        class="px-4 py-2 text-sm text-white bg-red-600 rounded hover:bg-red-700">
-                                        Ya, Keluar
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-
-                        <form id="logout-form" action="{{ route('logout') }}" method="POST" class="hidden">
-                            @csrf
-                        </form>
-                    </div>
-
-                </div>
+    <!-- Modal Logout -->
+    <div id="logoutModal" class="fixed inset-0 hidden items-center justify-center bg-black bg-opacity-50 z-50">
+        <div class="bg-white rounded-lg shadow-lg w-96 p-6">
+            <h2 class="text-lg font-semibold text-gray-800 mb-4">Konfirmasi Logout</h2>
+            <p class="text-gray-600 mb-6">Apakah Anda yakin ingin keluar dari akun?</p>
+            <div class="flex justify-end space-x-4">
+                <button id="cancelLogout"
+                    class="px-4 py-2 text-sm text-gray-700 bg-gray-200 rounded hover:bg-gray-300">Batal</button>
+                <form id="logout-form" action="{{ route('logout') }}" method="POST">
+                    @csrf
+                    <button type="submit" class="px-4 py-2 text-sm text-white bg-red-600 rounded hover:bg-red-700">Ya,
+                        Keluar</button>
+                </form>
             </div>
         </div>
     </div>
@@ -187,8 +144,9 @@
 
 
 
+
     {{-- MAIN CONTENT --}}
-    <main id="mainContent" class="min-h-[calc(100vh-4rem)] px-4 pb-24">
+    <main id="mainContent" class="min-h-[calc(100vh-4rem)] pt-24 px-4 pb-24 transition-all duration-300">
         @yield('content')
     </main>
 
@@ -253,62 +211,112 @@
 
 
 
-    {{-- LOGOUT FORM (Globally Accessible) --}}
-    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="hidden">
-        @csrf
-    </form>
+
 
 
     @stack('scripts')
 
-    {{-- master.blade.php --}}
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            const sidebarToggle = document.getElementById('sidebar-toggle');
             const html = document.documentElement;
+            const navbar = document.getElementById('navbar');
+            const sidebar = document.getElementById('sidebar');
+            const toggleBtn = document.getElementById('sidebar-toggle');
+            const mainContent = document.getElementById('mainContent');
 
-            sidebarToggle?.addEventListener('click', () => {
+            const notifBtn = document.getElementById('notifBtn');
+            const notifMenu = document.getElementById('notificationMenu');
+            const userMenuBtn = document.getElementById('userMenuButton');
+            const userMenu = document.getElementById('userMenu');
+            const logoutTrigger = document.getElementById('logoutConfirm');
+            const logoutModal = document.getElementById('logoutModal');
+            const cancelLogout = document.getElementById('cancelLogout');
+            const footer = document.getElementById('mainFooter');
+
+
+            function updateLayout() {
+                if (window.innerWidth >= 768) {
+                    const collapsed = html.classList.contains('sidebar-collapsed');
+                    navbar.style.left = collapsed ? '0' : '15rem';
+                    mainContent.style.marginLeft = collapsed ? '0' : '15rem';
+                    footer.style.marginLeft = collapsed ? '0' : '15rem';
+                } else {
+                    navbar.style.left = '0';
+                    mainContent.style.marginLeft = '0';
+                    footer.style.marginLeft = '0';
+                }
+            }
+
+            // Set posisi awal
+            updateLayout();
+
+            // Toggle Sidebar
+            toggleBtn?.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const icon = document.getElementById('sidebar-icon');
                 if (window.innerWidth >= 768) {
                     html.classList.toggle('sidebar-collapsed');
+                    const collapsed = html.classList.contains('sidebar-collapsed');
+                    icon.className = collapsed ?
+                        'fas fa-arrow-right text-lg transition-all duration-300' :
+                        'fas fa-bars-staggered text-lg transition-all duration-300';
                 } else {
                     html.classList.toggle('sidebar-open-mobile');
                 }
+                updateLayout();
             });
 
-            // Tutup sidebar saat klik di luar area sidebar pada mobile
-            window.addEventListener('click', function(e) {
+            // Close sidebar mobile jika klik luar
+            document.addEventListener('click', (e) => {
                 if (window.innerWidth < 768 && html.classList.contains('sidebar-open-mobile')) {
-                    const sidebar = document.getElementById('sidebar');
-                    const toggleBtn = document.getElementById('sidebar-toggle');
                     if (!sidebar.contains(e.target) && !toggleBtn.contains(e.target)) {
                         html.classList.remove('sidebar-open-mobile');
                     }
                 }
             });
 
-            // Handle window resize
+            // Resize
             window.addEventListener('resize', () => {
                 if (window.innerWidth >= 768) {
                     html.classList.remove('sidebar-open-mobile');
                 } else {
                     html.classList.remove('sidebar-collapsed');
                 }
+                updateLayout();
             });
 
-            function toggleUserMenu() {
-                const menu = document.getElementById('userMenu')
-                menu.classList.toggle('hidden')
-            }
+            // Dropdown Notifikasi
+            notifBtn?.addEventListener('click', (e) => {
+                e.stopPropagation();
+                notifMenu?.classList.toggle('hidden');
+            });
 
-            function toggleNotificationMenu() {
-                const notif = document.getElementById('notificationMenu')
-                notif.classList.toggle('hidden')
-            }
+            // Dropdown User Menu
+            userMenuBtn?.addEventListener('click', (e) => {
+                e.stopPropagation();
+                userMenu?.classList.toggle('hidden');
+            });
 
-            window.toggleUserMenu = toggleUserMenu;
-            window.toggleNotificationMenu = toggleNotificationMenu;
+            // Logout Modal
+            logoutTrigger?.addEventListener('click', () => {
+                logoutModal?.classList.remove('hidden');
+            });
+
+            cancelLogout?.addEventListener('click', () => {
+                logoutModal?.classList.add('hidden');
+            });
+
+            // Klik luar untuk tutup dropdown
+            window.addEventListener('click', () => {
+                notifMenu?.classList.add('hidden');
+                userMenu?.classList.add('hidden');
+            });
         });
     </script>
+
+
+
+
 </body>
 
 </html>

@@ -207,6 +207,7 @@
                                     <th class="px-4 py-3">Qty</th>
                                     <th class="px-4 py-3">Penerima</th>
                                     <th class="px-4 py-3">Status</th>
+                                    <th class="px-4 py-3">Deskripsi Penolakan</th>
                                     <th class="px-4 py-3">Status Penjualan</th>
                                     <th class="px-4 py-3">Aksi</th>
                                 </tr>
@@ -259,6 +260,7 @@
                                                 {{ ucfirst($status) }}
                                             </span>
                                         </td>
+                                        <td class="px-4 py-2">{{ $productIn->catatan }}</td>
 
                                         <td class="whitespace-nowrap px-4 py-2">
                                             @php

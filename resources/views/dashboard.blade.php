@@ -15,14 +15,12 @@
                     Selamat datang di sistem manajemen ERP Anda
                 </p>
             </div>
-
-
         </div>
     </section>
 
     <!-- Main content -->
     <section class="content">
-        <div class="mt-6 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        <div class="mt-6 grid grid-cols-2 gap-6 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4">
             <!-- Data Produk -->
             <div class="rounded-xl bg-blue-600 p-5 text-white shadow">
                 <div class="text-3xl font-bold">{{ $totalProduk }}</div>

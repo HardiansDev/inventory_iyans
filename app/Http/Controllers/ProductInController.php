@@ -49,10 +49,17 @@ class ProductInController extends Controller
     }
 
 
-    public function reject($id)
+    public function reject($id, Request $request)
     {
+        $request->validate([
+            'catatan' => 'required|string|max:255',
+        ]);
+
         $permintaan = ProductIn::findOrFail($id);
-        $permintaan->update(['status' => 'ditolak']);
+        $permintaan->update([
+            'status' => 'ditolak',
+            'catatan' => $request->catatan,
+        ]);
 
         return redirect()->route('product.index')->with('error', 'Permintaan ditolak.');
     }
@@ -197,55 +204,6 @@ class ProductInController extends Controller
         ]);
     }
 
-    public function updateStatus(Request $request, $id)
-    {
-        $request->validate([
-            'status' => 'required|in:diterima,ditolak',
-            'catatan' => 'required_if:status,ditolak'
-        ], [
-            'catatan.required_if' => 'Catatan wajib diisi jika produk ditolak.'
-        ]);
-
-        $productIn = ProductIn::findOrFail($id);
-        $product = $productIn->product;
-        $status = $request->input('status');
-
-        if ($status === 'disetujui') {
-            if ($productIn->status === 'menunggu') {
-                if ($product->stock >= $productIn->qty) {
-                    $product->stock -= $productIn->qty;
-                    $product->status = 'produk disetujui';
-                    $productIn->status = 'disetujui';
-                    $product->save();
-                } else {
-                    $msg = 'Stok tidak mencukupi!';
-                    return $request->expectsJson()
-                        ? response()->json(['success' => false, 'message' => $msg])
-                        : back()->with('error', $msg);
-                }
-            }
-            $productIn->catatan = null;
-        } elseif ($status === 'ditolak') {
-            if ($productIn->status === 'menunggu') {
-                $product->status = 'produk ditolak';
-                $productIn->status = 'ditolak';
-                $productIn->catatan = $request->input('catatan');
-                $product->save();
-            }
-        }
-
-        $productIn->save();
-        // $this->updateStatusPenjualan($productIn);
-
-        if ($request->expectsJson()) {
-            return response()->json([
-                'success' => true,
-                'message' => 'Status berhasil diperbarui!',
-            ]);
-        }
-
-        return redirect()->route('productin.index')->with('success', 'Status berhasil diperbarui!');
-    }
 
     public function addStock(Request $request, $id)
     {

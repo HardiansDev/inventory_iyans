@@ -1,25 +1,43 @@
 <aside id="sidebar"
-    class="sidebar fixed left-0 top-0 z-40 h-full w-60 overflow-y-auto bg-gray-800 text-white transition-all duration-300">
-    <div class="flex-shrink-0 border-b border-gray-700 p-4">
-        <div class="flex items-center space-x-3">
+    class="fixed top-0 left-0 z-40 w-60 h-full bg-gray-800 transition-transform duration-300 transform
+    translate-x-0 md:translate-x-0
+    md:sidebar-collapsed:translate-x-[-15rem]
+    sidebar-open-mobile:translate-x-0">
+    <div class="flex-shrink-0 border-b border-gray-700 px-4 py-4">
+        <!-- Branding Aplikasi -->
+        <div class="flex items-center space-x-2 mb-4">
+            <div class="flex h-10 w-10 items-center justify-center rounded-full bg-white shadow">
+                <i class="fas fa-box text-blue-600 text-xl"></i>
+            </div>
+            <div>
+                <h1 class="text-sm font-bold text-white leading-tight">Inventory ERP</h1>
+                <p class="text-xs text-gray-300">Sistem Manajemen</p>
+            </div>
+        </div>
+
+        <hr class="border-gray-700 my-2">
+
+        <!-- Info Pengguna -->
+        <div class="flex items-center space-x-3 pt-2">
             <div class="flex h-10 w-10 items-center justify-center rounded-full bg-gray-200">
                 <i class="fas fa-user text-xl text-gray-600"></i>
             </div>
             <div class="flex-1 overflow-hidden">
-                <p class="mt-1 truncate text-sm text-white">{{ Auth::user()->name }}</p>
+                <p class="truncate text-sm text-white">{{ Auth::user()->name }}</p>
                 <span
                     class="@switch(Auth::user()->role)
-                        @case('superadmin') bg-green-500 @break
-                        @case('admin_gudang') bg-blue-500 @break
-                        @case('kasir') bg-yellow-400 text-gray-900 @break
-                        @case('manager') bg-red-500 @break
-                        @default bg-gray-500
-                    @endswitch mt-1 inline-block rounded px-2 py-0.5 text-xs text-white">
+                    @case('superadmin') bg-green-500 @break
+                    @case('admin_gudang') bg-blue-500 @break
+                    @case('kasir') bg-yellow-400 text-gray-900 @break
+                    @case('manager') bg-red-500 @break
+                    @default bg-gray-500
+                @endswitch mt-1 inline-block rounded px-2 py-0.5 text-xs text-white">
                     {{ ucfirst(Auth::user()->role) }}
                 </span>
             </div>
         </div>
     </div>
+
 
     <ul class="space-y-1 p-2">
         <li class="mt-4 px-2 py-2 text-xs font-semibold uppercase text-gray-400">Menu Utama</li>
