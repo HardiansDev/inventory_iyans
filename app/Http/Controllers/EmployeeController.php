@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Endroid\QrCode\QrCode;
 use Endroid\QrCode\Writer\PngWriter;
 use Illuminate\Support\Facades\Storage;
+use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
 
 class EmployeeController extends Controller
 {
@@ -86,17 +87,17 @@ class EmployeeController extends Controller
             'is_active' => 'required|boolean',
         ], $messages);
 
-        // Upload foto jika ada
         if ($request->hasFile('photo')) {
-            $filename = time() . '_' . $request->file('photo')->getClientOriginalName();
-            $request->file('photo')->storeAs('fotoproduct/pegawai/', $filename, 'public');
-            $validated['photo'] = $filename;
+            $uploadedFileUrl = Cloudinary::upload($request->file('photo')->getRealPath())->getSecurePath();
+            $validated['photo'] = $uploadedFileUrl;
         }
 
         Employee::create($validated);
 
+
         return redirect()->route('employees.index')->with('success', 'Pegawai berhasil ditambahkan.');
     }
+
 
     public function edit(Employee $employee)
     {
@@ -110,7 +111,7 @@ class EmployeeController extends Controller
     {
         $messages = [
             'employee_number.required' => 'NIP wajib diisi.',
-            'employee_number.unique' => 'NIP sudah digunakan oleh pegawai lain.',
+            'employee_number.unique' => 'NIP sudah digunakan.',
             'name.required' => 'Nama wajib diisi.',
             'email.email' => 'Format email tidak valid.',
             'phone.numeric' => 'Nomor HP harus berupa angka.',
@@ -147,18 +148,16 @@ class EmployeeController extends Controller
 
         if ($request->hasFile('photo')) {
             if ($employee->photo) {
-                $oldPhotoPath = 'fotoproduct/pegawai/' . $employee->photo;
-                if (Storage::disk('public')->exists($oldPhotoPath)) {
-                    Storage::disk('public')->delete($oldPhotoPath);
-                }
+                $publicId = $this->extractCloudinaryPublicId($employee->photo);
+                Cloudinary::destroy($publicId);
             }
 
-            $filename = time() . '_' . $request->file('photo')->getClientOriginalName();
-            $request->file('photo')->storeAs('fotoproduct/pegawai/', $filename, 'public');
-            $validated['photo'] = $filename;
+            $uploadedFileUrl = Cloudinary::upload($request->file('photo')->getRealPath())->getSecurePath();
+            $validated['photo'] = $uploadedFileUrl;
         }
 
         $employee->update($validated);
+
 
         return redirect()->route('employees.index')->with('success', 'Data pegawai diperbarui.');
     }
@@ -181,5 +180,13 @@ class EmployeeController extends Controller
         $employee->delete();
 
         return back()->with('success', 'Pegawai dihapus.');
+    }
+
+
+    private function extractCloudinaryPublicId($url)
+    {
+        $path = parse_url($url, PHP_URL_PATH);
+        $filename = pathinfo($path, PATHINFO_FILENAME);
+        return $filename;
     }
 }

@@ -50,7 +50,7 @@
 
 </head>
 
-<body class="bg-gray-100 text-gray-800" style="font-family: 'Poppins', sans-serif;">
+<body x-data class="bg-gray-100 text-gray-800" style="font-family: 'Poppins', sans-serif;">
     <nav id="navbar"
         class="fixed top-0 z-50 h-16 flex items-center justify-between bg-white px-4 shadow-md transition-all duration-300"
         style="left: 15rem; right: 0;">
@@ -106,40 +106,47 @@
 
                 {{-- Dropdown User --}}
                 <div id="userMenu" class="absolute right-0 mt-2 hidden w-48 rounded-md bg-white shadow-lg z-50">
-                    <div class="py-1">
-                        <a href="#" id="logoutConfirm"
-                            class="block px-4 py-2 text-sm text-red-600 hover:bg-gray-100">
-                            <i class="fas fa-power-off mr-2"></i> Keluar
-                        </a>
-                    </div>
+                    <a href="#" @click.prevent="$dispatch('open-logout-modal')"
+                        class="block px-4 py-2 text-sm text-red-600 hover:bg-gray-100">
+                        <i class="fas fa-power-off mr-2"></i> Keluar
+                    </a>
+
+
+
                 </div>
             </div>
         </div>
-
     </nav>
-    {{-- SIDEBAR --}}
+
+
     @include('layouts.module.sidebar')
 
 
 
+    <div x-data="{ show: false }" @open-logout-modal.window="show = true" x-show="show" x-transition x-cloak
+        class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
 
-
-    <!-- Modal Logout -->
-    <div id="logoutModal" class="fixed inset-0 hidden items-center justify-center bg-black bg-opacity-50 z-50">
-        <div class="bg-white rounded-lg shadow-lg w-96 p-6">
-            <h2 class="text-lg font-semibold text-gray-800 mb-4">Konfirmasi Logout</h2>
-            <p class="text-gray-600 mb-6">Apakah Anda yakin ingin keluar dari akun?</p>
+        <div @click.away="show = false" class="w-full max-w-md rounded-lg bg-white p-6 shadow-lg">
+            <h2 class="mb-4 text-lg font-semibold text-gray-800">Konfirmasi Logout</h2>
+            <p class="mb-6 text-gray-600">Apakah Anda yakin ingin keluar dari akun?</p>
             <div class="flex justify-end space-x-4">
-                <button id="cancelLogout"
-                    class="px-4 py-2 text-sm text-gray-700 bg-gray-200 rounded hover:bg-gray-300">Batal</button>
-                <form id="logout-form" action="{{ route('logout') }}" method="POST">
+                <button @click="show = false"
+                    class="rounded bg-gray-200 px-4 py-2 text-sm text-gray-700 hover:bg-gray-300">
+                    Batal
+                </button>
+                <form method="POST" action="{{ route('logout') }}">
                     @csrf
-                    <button type="submit" class="px-4 py-2 text-sm text-white bg-red-600 rounded hover:bg-red-700">Ya,
-                        Keluar</button>
+                    <button type="submit" class="rounded bg-red-600 px-4 py-2 text-sm text-white hover:bg-red-700">
+                        Ya, Keluar
+                    </button>
                 </form>
             </div>
         </div>
     </div>
+
+
+
+
 
 
 
@@ -214,6 +221,7 @@
 
 
 
+
     @stack('scripts')
 
     <script>
@@ -228,9 +236,7 @@
             const notifMenu = document.getElementById('notificationMenu');
             const userMenuBtn = document.getElementById('userMenuButton');
             const userMenu = document.getElementById('userMenu');
-            const logoutTrigger = document.getElementById('logoutConfirm');
-            const logoutModal = document.getElementById('logoutModal');
-            const cancelLogout = document.getElementById('cancelLogout');
+
             const footer = document.getElementById('mainFooter');
 
 
@@ -297,14 +303,9 @@
                 userMenu?.classList.toggle('hidden');
             });
 
-            // Logout Modal
-            logoutTrigger?.addEventListener('click', () => {
-                logoutModal?.classList.remove('hidden');
-            });
 
-            cancelLogout?.addEventListener('click', () => {
-                logoutModal?.classList.add('hidden');
-            });
+
+
 
             // Klik luar untuk tutup dropdown
             window.addEventListener('click', () => {
