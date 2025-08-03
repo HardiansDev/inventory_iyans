@@ -20,6 +20,9 @@ use App\Http\Controllers\ProductInController;
 use App\Http\Controllers\SalesDetailController;
 use App\Http\Controllers\WorkScheduleController;
 use App\Http\Controllers\EmployeeAttendanceController;
+use App\Http\Controllers\EmploymentStatusController;
+use App\Http\Controllers\DepartmentController;
+use App\Http\Controllers\PositionController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -63,6 +66,9 @@ Route::get('/', function () {
 // ==========================
 Route::middleware(['auth', 'role:superadmin,manager'])->group(function () {
     Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::resource('employment_status', EmploymentStatusController::class);
+    Route::resource('department', DepartmentController::class);
+    Route::resource('position', PositionController::class);
 });
 
 // User Management (hanya Superadmin)

@@ -6,14 +6,23 @@
 
 @section('content')
     <!-- Header -->
-    <section class="mb-6 rounded-md bg-gray-100 py-4 dark:bg-gray-800">
-        <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <div class="flex items-center justify-between">
-                <h1 class="text-xl font-semibold text-gray-900 dark:text-white">Scan QR Absensi</h1>
-
+    <section class="mb-6 rounded-lg bg-white p-6 shadow-sm">
+        <div class="mx-auto flex max-w-7xl flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
+            <!-- Title -->
+            <div>
+                <h1 class="text-2xl font-bold text-gray-800">Scan QR Absensi</h1>
+                <p class="mt-1 text-sm text-gray-500">Gunakan QR Code untuk melakukan absensi masuk atau pulang</p>
             </div>
+
+            <!-- Optional Back Button -->
+            <a href="{{ route('employee-attendance.index') }}"
+                class="inline-flex items-center rounded-md bg-gray-500 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-gray-600 transition">
+                <i class="fas fa-arrow-left mr-2"></i> Kembali
+            </a>
         </div>
     </section>
+
+
 
     <!-- QR Scanner & Upload -->
     <div class="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">

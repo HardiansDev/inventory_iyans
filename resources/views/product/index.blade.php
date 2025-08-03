@@ -50,32 +50,6 @@
 
                     <!-- Kanan: Dropdowns -->
                     <div class="flex flex-wrap gap-2">
-                        <!-- Dropdown: Unduh Data Terpilih -->
-                        {{--
-                            <div x-data="{ open: false }" class="relative">
-                            <button @click="open = !open"
-                            class="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium bg-yellow-500 hover:bg-yellow-600 text-white rounded shadow-sm">
-                            <i class="fa fa-download"></i> Unduh Data Terpilih
-                            <svg class="w-4 h-4 ml-1" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd"
-                            d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 111.06 1.06l-4.24 4.24a.75.75 0 01-1.06 0L5.25 8.29a.75.75 0 01-.02-1.06z"
-                            clip-rule="evenodd" />
-                            </svg>
-                            </button>
-                            <div x-show="open" @click.away="open = false"
-                            class="absolute z-10 mt-2 w-48 bg-white border border-gray-200 rounded shadow-lg overflow-hidden">
-                            <a id="downloadPdfBtn" href="#"
-                            class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                            <i class="fa fa-file-pdf-o text-red-500 mr-2"></i> Unduh PDF
-                            </a>
-                            <a id="downloadExcelBtn" href="#"
-                            class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                            <i class="fa fa-file-excel-o text-green-600 mr-2"></i> Unduh Excel
-                            </a>
-                            </div>
-                            </div>
-                        --}}
-
                         <!-- Dropdown: Unduh Semua Data -->
                         <div x-data="{ open: false }" class="relative">
                             <button @click="open = !open"
@@ -241,8 +215,6 @@
                                                         <i class="fas fa-trash-alt mr-2 w-4"></i>
                                                         Hapus
                                                     </button>
-
-
                                                 </div>
                                             </div>
                                         </div>

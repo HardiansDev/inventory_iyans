@@ -93,7 +93,7 @@
             </table>
             <!-- Modal Edit Kategori -->
             <div id="editCategoryModal"
-                class="fixed inset-0 z-50 flex hidden items-center justify-center bg-black bg-opacity-50">
+                class="fixed inset-0 z-50 hidden items-center justify-center bg-black bg-opacity-50">
                 <div class="w-full max-w-md rounded-lg bg-white p-6 shadow-lg">
                     <h2 class="mb-4 text-lg font-semibold text-gray-800">Edit Kategori</h2>
                     <form id="editCategoryForm" method="POST">
@@ -121,8 +121,7 @@
             </div>
 
             <!-- Modal Tambah Kategori -->
-            <div id="categoryModal"
-                class="fixed inset-0 z-50 flex hidden items-center justify-center bg-black bg-opacity-50">
+            <div id="categoryModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black bg-opacity-50">
                 <div class="w-full max-w-md rounded-lg bg-white p-6 shadow-lg">
                     <h2 class="mb-4 text-lg font-semibold text-gray-800">Tambah Kategori</h2>
                     <form action="{{ route('category.store') }}" method="POST">
@@ -149,7 +148,7 @@
             </div>
 
             <!-- Modal Konfirmasi Hapus -->
-            <div id="deleteModal" class="fixed inset-0 z-50 flex hidden items-center justify-center bg-black bg-opacity-50">
+            <div id="deleteModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black bg-opacity-50">
                 <div class="w-full max-w-md rounded-lg bg-white p-6 shadow-lg">
                     <h2 class="mb-4 text-lg font-semibold text-gray-800">Konfirmasi Hapus</h2>
                     <p class="mb-6 text-gray-700">
@@ -184,63 +183,70 @@
 
 @push('scripts')
     <script>
+        // Buka modal edit
         function openEditModal(id, name) {
-            const modal = document.getElementById('editCategoryModal')
-            const form = document.getElementById('editCategoryForm')
-            const input = document.getElementById('editCategoryName')
+            const modal = document.getElementById('editCategoryModal');
+            const form = document.getElementById('editCategoryForm');
+            const input = document.getElementById('editCategoryName');
 
-            // Set value
-            input.value = name
-
-            // Set action
-            form.action = `/category/${id}`
-
-            // Tampilkan modal
-            modal.classList.remove('hidden')
+            input.value = name;
+            form.action = `/category/${id}`;
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
         }
 
+        // Tutup modal edit
         function closeEditModal() {
-            const modal = document.getElementById('editCategoryModal')
-            modal.classList.add('hidden')
+            const modal = document.getElementById('editCategoryModal');
+            modal.classList.remove('flex');
+            modal.classList.add('hidden');
         }
 
-        // Tutup modal jika klik luar konten
-        window.addEventListener('click', function(e) {
-            const modal = document.getElementById('editCategoryModal')
-            if (e.target === modal) {
-                closeEditModal()
-            }
-        })
-
+        // Buka modal delete
         function openDeleteModal(id, name) {
-            const modal = document.getElementById('deleteModal')
-            const form = document.getElementById('deleteForm')
-            const nameSpan = document.getElementById('categoryName')
+            const modal = document.getElementById('deleteModal');
+            const form = document.getElementById('deleteForm');
+            const nameSpan = document.getElementById('categoryName');
 
-            form.action = `/category/${id}`
-            nameSpan.textContent = name
+            form.action = `/category/${id}`;
+            nameSpan.textContent = name;
 
-            modal.classList.remove('hidden')
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
         }
 
+        // Tutup modal delete
         function closeDeleteModal() {
-            document.getElementById('deleteModal').classList.add('hidden')
+            const modal = document.getElementById('deleteModal');
+            modal.classList.remove('flex');
+            modal.classList.add('hidden');
         }
 
-        // Klik luar modal menutup modal
-        window.addEventListener('click', function(e) {
-            const modal = document.getElementById('deleteModal')
-            if (e.target === modal) {
-                closeDeleteModal()
-            }
-        })
-
+        // Buka modal tambah kategori
         function openCategoryModal() {
-            document.getElementById('categoryModal').classList.remove('hidden')
+            const modal = document.getElementById('categoryModal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
         }
 
+        // Tutup modal tambah kategori
         function closeCategoryModal() {
-            document.getElementById('categoryModal').classList.add('hidden')
+            const modal = document.getElementById('categoryModal');
+            modal.classList.remove('flex');
+            modal.classList.add('hidden');
         }
+
+        // Global click event untuk close modal saat klik di luar kontennya
+        window.addEventListener('click', function(e) {
+            const modals = ['editCategoryModal', 'deleteModal', 'categoryModal'];
+
+            modals.forEach(function(id) {
+                const modal = document.getElementById(id);
+                if (e.target === modal) {
+                    modal.classList.remove('flex');
+                    modal.classList.add('hidden');
+                }
+            });
+        });
     </script>
 @endpush

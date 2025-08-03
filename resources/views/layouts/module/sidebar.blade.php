@@ -24,17 +24,23 @@
             </div>
             <div class="flex-1 overflow-hidden">
                 <p class="truncate text-sm text-white">{{ Auth::user()->name }}</p>
-                <span
-                    class="@switch(Auth::user()->role)
-                    @case('superadmin') bg-green-500 @break
-                    @case('admin_gudang') bg-blue-500 @break
-                    @case('kasir') bg-yellow-400 text-gray-900 @break
-                    @case('manager') bg-red-500 @break
-                    @default bg-gray-500
-                @endswitch mt-1 inline-block rounded px-2 py-0.5 text-xs text-white">
-                    {{ ucfirst(Auth::user()->role) }}
+
+                @php
+                    $role = Auth::user()->role;
+                    $roleBadgeClass = match ($role) {
+                        'superadmin' => 'bg-green-500 text-white',
+                        'admin_gudang' => 'bg-blue-500 text-white',
+                        'kasir' => 'bg-yellow-400 text-gray-900',
+                        'manager' => 'bg-red-500 text-white',
+                        default => 'bg-gray-500 text-white',
+                    };
+                @endphp
+
+                <span class="mt-1 inline-block rounded px-2 py-0.5 text-xs {{ $roleBadgeClass }}">
+                    {{ ucfirst($role) }}
                 </span>
             </div>
+
         </div>
     </div>
 
@@ -145,10 +151,10 @@
         {{-- PEGAWAI --}}
         @if (in_array(Auth::user()->role, ['superadmin', 'manager']))
             <li
-                class="{{ Request::is('employees*') || Request::is('employee-attendance*') || Request::is('work-schedules*') ? 'menu-open-tailwind' : '' }} group">
+                class="{{ Request::is('employees*') || Request::is('employee-attendance*') || Request::is('employment_status*') || Request::is('department*') || Request::is('position*') ? 'menu-open-tailwind' : '' }} group">
                 <a href="#"
                     onclick="event.preventDefault(); this.closest('li').classList.toggle('menu-open-tailwind');"
-                    class="{{ Request::is('employees*') || Request::is('employee-attendance*') || Request::is('work-schedules*') ? 'bg-gray-700 text-white' : 'text-gray-200' }} flex items-center justify-between rounded-lg p-2 text-sm hover:bg-gray-700 hover:text-white">
+                    class="{{ Request::is('employees*') || Request::is('employee-attendance*') || Request::is('employment_status*') || Request::is('department*') || Request::is('position*') ? 'bg-gray-700 text-white' : 'text-gray-200' }} flex items-center justify-between rounded-lg p-2 text-sm hover:bg-gray-700 hover:text-white">
                     <span class="flex items-center">
                         <i class="fas fa-users mr-3 text-lg"></i>
                         Manajemen Pegawai
@@ -172,7 +178,27 @@
                             Absensi Pegawai
                         </a>
                     </li>
-
+                    <li>
+                        <a href="{{ route('employment_status.index') }}"
+                            class="{{ Request::is('employment_status') ? 'bg-gray-600 text-white' : 'text-gray-300' }} flex items-center rounded-lg p-2 text-sm hover:bg-gray-600 hover:text-white">
+                            <i class="fa fa-circle-o mr-2 text-xs"></i>
+                            Status Pegawai
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ route('department.index') }}"
+                            class="{{ Request::is('department') ? 'bg-gray-600 text-white' : 'text-gray-300' }} flex items-center rounded-lg p-2 text-sm hover:bg-gray-600 hover:text-white">
+                            <i class="fa fa-circle-o mr-2 text-xs"></i>
+                            Departemen
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ route('position.index') }}"
+                            class="{{ Request::is('position') ? 'bg-gray-600 text-white' : 'text-gray-300' }} flex items-center rounded-lg p-2 text-sm hover:bg-gray-600 hover:text-white">
+                            <i class="fa fa-circle-o mr-2 text-xs"></i>
+                            Posisi Pegawai
+                        </a>
+                    </li>
                 </ul>
             </li>
         @endif

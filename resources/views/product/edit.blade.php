@@ -56,7 +56,7 @@
                         class="w-full rounded-lg border-gray-300 text-sm file:border-none file:bg-gray-100 file:px-3 file:py-2 file:text-gray-700" />
 
                     @if ($product->photo)
-                        <img src="{{ asset('/storage/fotoproduct/produk/' . $product->photo) }}" alt="Foto Produk"
+                        <img src="{{ $product->photo }}" alt="Foto Produk"
                             class="mt-2 h-20 w-20 rounded border border-gray-300 shadow-md" />
                     @else
                         <p class="mt-2 text-sm text-gray-400">Foto tidak tersedia</p>

@@ -6,14 +6,16 @@
 
 @section('content')
     <!-- Header Section -->
-    <section class="mb-6 rounded-md bg-gray-100 py-4 dark:bg-gray-800">
-        <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <div class="flex items-center justify-between">
-                <h1 class="text-xl font-semibold text-gray-900 dark:text-white">Absensi Pegawai</h1>
-
+    <section class="mb-6 rounded-lg bg-white p-6 shadow-sm">
+        <div class="mx-auto flex max-w-7xl flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
+            <!-- Title -->
+            <div>
+                <h1 class="text-2xl font-bold text-gray-800">Absensi Pegawai</h1>
+                <p class="mt-1 text-sm text-gray-500">Lihat dan kelola data absensi pegawai secara real-time</p>
             </div>
         </div>
     </section>
+
 
     <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div class="overflow-hidden rounded-lg bg-white shadow-md dark:bg-gray-900">

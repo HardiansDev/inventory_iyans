@@ -212,7 +212,7 @@
                                     <th class="px-4 py-3">Aksi</th>
                                 </tr>
                             </thead>
-                            <tbody class="relative z-10 divide-y divide-gray-200 overflow-visible">
+                            <tbody class="divide-y divide-gray-100">
                                 @forelse ($productIns as $productIn)
                                     <tr x-data="{ visible: true }" x-show="visible" id="productin-{{ $productIn->id }}"
                                         class="hover:bg-gray-50">
@@ -301,10 +301,10 @@
                                                 @endif
                                             </div>
                                         </td>
-                                        <td class="relative whitespace-nowrap px-4 py-2">
+                                        <td class="relative whitespace-nowrap px-4 py-3">
                                             <div x-data="{ open: false }" class="relative inline-block text-left">
                                                 <!-- Dropdown Toggle -->
-                                                <button @click="open = !open" @click.away="open = false" type="button"
+                                                <button @click="open = !open" type="button"
                                                     class="inline-flex items-center rounded bg-gray-100 px-3 py-1.5 text-xs font-medium text-gray-700 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1">
                                                     <i class="fas fa-cogs mr-1"></i>
                                                     Aksi
@@ -316,9 +316,8 @@
                                                 </button>
 
                                                 <!-- Dropdown Menu -->
-                                                <div x-show="open" x-transition
-                                                    class="absolute right-0 top-full z-50 mt-2 w-52 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5"
-                                                    style="overflow: visible">
+                                                <div x-show="open" @click.away="open = false" x-transition
+                                                    class="class"="absolute bottom-full right-0 mb-2 w-52 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none z-50">
                                                     <div class="py-1 text-sm text-gray-700">
                                                         @if ($productIn->status === 'disetujui' || session('status') === 'produk disetujui')
                                                             @if ($productIn->sales->isEmpty())
@@ -336,7 +335,7 @@
                                                                     @click="$dispatch('open-add-stock-modal', { id: {{ $productIn->id }}, name: '{{ optional($productIn->product)->name ?? 'Produk Dihapus' }}' })">
 
                                                                     <span class="ml-2">
-                                                                        Tambah Stok ke Gudang
+                                                                        + Stok ke Gudang
                                                                     </span>
                                                                 </button>
                                                                 @php
@@ -351,7 +350,7 @@
                                                                     max: {{ $productIn->qty }},
                                                                     stokToko: {{ $totalQtySales }}
                                                                 })">
-                                                                    <span class="ml-2">Tambah Stok ke Toko</span>
+                                                                    <span class="ml-2"> + Stok ke Toko</span>
                                                                 </button>
                                                             @endif
                                                         @endif

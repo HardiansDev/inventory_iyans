@@ -34,11 +34,39 @@ class EmployeeController extends Controller
         return response()->download(storage_path('app/' . $path));
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $employees = Employee::with(['department', 'position', 'status'])->paginate(10);
-        return view('employees.index', compact('employees'));
+        $query = Employee::with(['department', 'position', 'status']);
+
+        if ($request->filled('department')) {
+            $query->where('department_id', $request->department);
+        }
+
+        if ($request->filled('position')) {
+            $query->where('position_id', $request->position);
+        }
+
+        if ($request->filled('status')) {
+            $query->where('status_id', $request->status);
+        }
+
+        if ($request->filled('search')) {
+            $query->where(function ($q) use ($request) {
+                $q->where('name', 'like', '%' . $request->search . '%')
+                    ->orWhere('employee_number', 'like', '%' . $request->search . '%');
+            });
+        }
+
+        $employees = $query->paginate(10);
+
+        return view('employees.index', [
+            'employees' => $employees,
+            'departments' => Department::all(),
+            'positions' => Position::all(),
+            'statuses' => EmploymentStatus::all(),
+        ]);
     }
+
 
     public function create()
     {
