@@ -22,25 +22,13 @@
                     <div class="mb-6 grid grid-cols-1 gap-4 md:grid-cols-2">
                         <div>
                             <p><strong>Tanggal Pesanan:</strong> {{ now()->format('d-m-Y H:i:s') }}</p>
-                            <input
-                                type="hidden"
-                                name="date_order"
-                                value="{{ now()->format('Y-m-d') }}"
-                            >
+                            <input type="hidden" name="date_order" value="{{ now()->format('Y-m-d') }}">
                             <p><strong>No Transaksi:</strong> {{ $transaction_number }}</p>
-                            <input
-                                type="hidden"
-                                name="transaction_number"
-                                value="{{ $transaction_number }}"
-                            >
+                            <input type="hidden" name="transaction_number" value="{{ $transaction_number }}">
                         </div>
                         <div class="text-right">
                             <p><strong>Nomor Invoice:</strong> {{ $invoice_number }}</p>
-                            <input
-                                type="hidden"
-                                name="invoice_number"
-                                value="{{ $invoice_number }}"
-                            >
+                            <input type="hidden" name="invoice_number" value="{{ $invoice_number }}">
                         </div>
                     </div>
 
@@ -66,11 +54,7 @@
                                         <td class="border p-2">Rp {{ number_format($item['price'], 0, ',', '.') }}</td>
                                         <td class="border p-2">Rp {{ number_format($total, 0, ',', '.') }}</td>
                                     </tr>
-                                    <input
-                                        type="hidden"
-                                        name="sales[]"
-                                        value="{{ json_encode($item) }}"
-                                    >
+                                    <input type="hidden" name="sales[]" value="{{ json_encode($item) }}">
                                 @endforeach
                             </tbody>
                         </table>
@@ -79,49 +63,20 @@
                     <div class="grid grid-cols-1 gap-4 md:grid-cols-4">
                         <div>
                             <label class="block font-semibold">Jumlah Bayar:</label>
-                            <input
-                                type="text"
-                                id="amount_formatted"
-                                class="w-full rounded border px-3 py-2"
-                                placeholder="Masukkan jumlah pembayaran"
-                                required
-                            >
-                            <input
-                                type="hidden"
-                                name="amount"
-                                id="amount"
-                            >
-                            <p
-                                class="mt-2 font-semibold text-green-600"
-                                id="change-display"
-                            >Kembalian: Rp 0</p>
-                            <input
-                                type="hidden"
-                                name="change"
-                                id="change-input"
-                            >
+                            <input type="text" id="amount_formatted" class="w-full rounded border px-3 py-2"
+                                placeholder="Masukkan jumlah pembayaran" required>
+                            <input type="hidden" name="amount" id="amount">
+                            <p class="mt-2 font-semibold text-green-600" id="change-display">Kembalian: Rp 0</p>
+                            <input type="hidden" name="change" id="change-input">
                         </div>
-                        <div
-                            id="change-warning"
-                            class="hidden text-sm font-semibold text-red-500"
-                        >Uang kurang!</div>
+                        <div id="change-warning" class="hidden text-sm font-semibold text-red-500">Uang kurang!</div>
 
                         <div>
                             <label class="block font-semibold">Diskon:</label>
-                            <select
-                                name="discount_id"
-                                id="discount_id"
-                                class="w-full rounded border px-3 py-2"
-                            >
-                                <option
-                                    value=""
-                                    data-percentage="0"
-                                >Tanpa Diskon</option>
+                            <select name="discount_id" id="discount_id" class="w-full rounded border px-3 py-2">
+                                <option value="" data-percentage="0">Tanpa Diskon</option>
                                 @foreach ($discounts as $diskon)
-                                    <option
-                                        value="{{ $diskon->id }}"
-                                        data-percentage="{{ $diskon->nilai }}"
-                                    >
+                                    <option value="{{ $diskon->id }}" data-percentage="{{ $diskon->nilai }}">
                                         {{ $diskon->name }} - {{ $diskon->nilai }}%
                                     </option>
                                 @endforeach
@@ -130,70 +85,38 @@
                         </div>
                         <div>
                             <label class="block font-semibold">Metode Pembayaran:</label>
-                            <select
-                                name="metode_pembayaran"
-                                id="metode_pembayaran"
-                                class="w-full rounded border px-3 py-2"
-                                required
-                            >
+                            <select name="metode_pembayaran" id="metode_pembayaran" class="w-full rounded border px-3 py-2"
+                                required>
                                 <option value="">-- Pilih --</option>
-                                <option
-                                    value="cash"
-                                    selected
-                                >Cash</option>
+                                <option value="cash" selected>Cash</option>
                                 <option value="qris">QRIS</option>
                             </select>
                         </div>
                         <div>
                             <p class="font-semibold">Total Harga:</p>
-                            <h3
-                                class="text-lg font-bold text-green-600"
-                                id="total-price-display"
-                            >Rp {{ number_format($totalPrice, 0, ',', '.') }}</h3>
-                            <input
-                                type="hidden"
-                                name="subtotal"
-                                value="{{ $totalPrice }}"
-                            >
-                            <input
-                                type="hidden"
-                                name="total"
-                                id="total-value"
-                                value="{{ $totalPrice }}"
-                            >
+                            <h3 class="text-lg font-bold text-green-600" id="total-price-display">Rp
+                                {{ number_format($totalPrice, 0, ',', '.') }}</h3>
+                            <input type="hidden" name="subtotal" value="{{ $totalPrice }}">
+                            <input type="hidden" name="total" id="total-value" value="{{ $totalPrice }}">
+                            <input type="hidden" name="created_by" value="{{ auth()->id() }}">
+
                         </div>
                         <div>
                             <p class="font-semibold">Diskon (Rp):</p>
-                            <h3
-                                id="discount-display"
-                                class="text-lg font-bold text-orange-500"
-                            >Rp 0</h3>
-                            <input
-                                type="hidden"
-                                id="discount-value"
-                                name="discount_value"
-                                value="0"
-                            >
+                            <h3 id="discount-display" class="text-lg font-bold text-orange-500">Rp 0</h3>
+                            <input type="hidden" id="discount-value" name="discount_value" value="0">
                         </div>
 
                     </div>
 
                     <div class="mt-6 text-center">
-                        <a
-                            href="{{ route('sales.index') }}"
-                            class="mr-2 inline-block rounded bg-gray-500 px-4 py-2 text-white"
-                        >Batal</a>
-                        <button
-                            type="submit"
-                            id="pay-btn"
-                            class="inline-flex items-center rounded bg-green-600 px-6 py-2 font-semibold text-white hover:bg-green-700 disabled:opacity-50"
-                        >
+                        <a href="{{ route('sales.index') }}"
+                            class="mr-2 inline-block rounded bg-gray-500 px-4 py-2 text-white">Batal</a>
+                        <button type="submit" id="pay-btn"
+                            class="inline-flex items-center rounded bg-green-600 px-6 py-2 font-semibold text-white hover:bg-green-700 disabled:opacity-50">
                             <span id="btn-text">Bayar Sekarang</span>
-                            <span
-                                id="btn-loading"
-                                class="spinner-border spinner-border-sm ml-2 hidden"
-                                role="status"
-                            ></span>
+                            <span id="btn-loading" class="spinner-border spinner-border-sm ml-2 hidden"
+                                role="status"></span>
                         </button>
                     </div>
                 </form>
@@ -204,10 +127,8 @@
 
 
 @push('scripts')
-    <script
-        src="https://app.sandbox.midtrans.com/snap/snap.js"
-        data-client-key="{{ config('midtrans.clientKey') }}"
-    ></script>
+    <script src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="{{ config('midtrans.clientKey') }}">
+    </script>
 
 
     <script>
@@ -357,7 +278,10 @@
                                                 'X-CSRF-TOKEN': "{{ csrf_token() }}",
                                                 'Content-Type': 'application/json'
                                             },
-                                            body: JSON.stringify(res)
+                                            body: JSON.stringify({
+                                                ...res,
+                                                created_by: "{{ Auth::id() }}",
+                                            })
                                         })
                                         .then(r => r.json())
                                         .then(final => {

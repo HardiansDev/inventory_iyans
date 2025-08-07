@@ -28,6 +28,8 @@
     <div class="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
         <div class="rounded-lg bg-white p-6 text-center shadow dark:bg-gray-900">
             <div id="qr-reader" class="mx-auto" style="width:100%; max-width:500px; min-height:300px;"></div>
+            <input type="hidden" id="absenType" value="{{ request('type') ?? 'check_in' }}">
+
             <p class="mt-4 text-sm text-gray-500">Arahkan kamera ke QR Code untuk melakukan absensi.</p>
 
             <div class="my-6 border-t border-gray-200 dark:border-gray-700"></div>
@@ -57,95 +59,46 @@
     <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
 
     <script>
-        const officeLatitude = -6.2
-        const officeLongitude = 106.816666
-        const maxDistance = 0.2
-
-        function getDistanceFromLatLonInKm(lat1, lon1, lat2, lon2) {
-            const R = 6371
-            const dLat = ((lat2 - lat1) * Math.PI) / 180
-            const dLon = ((lon2 - lon1) * Math.PI) / 180
-            const a =
-                Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-                Math.cos((lat1 * Math.PI) / 180) *
-                Math.cos((lat2 * Math.PI) / 180) *
-                Math.sin(dLon / 2) *
-                Math.sin(dLon / 2)
-            const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a))
-            return R * c
-        }
-
         function onScanSuccess(decodedText, decodedResult) {
             html5QrCode.stop().then(() => {
-                if (navigator.geolocation) {
-                    navigator.geolocation.getCurrentPosition(
-                        function(position) {
-                            const userLat = position.coords.latitude
-                            const userLon = position.coords.longitude
-                            const distance = getDistanceFromLatLonInKm(
-                                userLat, userLon, officeLatitude, officeLongitude
-                            )
+                const type = document.getElementById('absenType').value; // Ambil dari hidden input
 
-                            if (distance > maxDistance) {
-                                Swal.fire({
-                                    icon: 'error',
-                                    title: 'Diluar Jangkauan',
-                                    text: `Kamu berada di luar jangkauan kantor! (${(distance * 1000).toFixed(1)} meter)`,
-                                }).then(() => location.reload())
-                                return
-                            }
-
-                            const type =
-                                document.querySelector('input[name="type"]:checked')?.value || 'check_in'
-
-                            fetch('{{ route('employee-attendance.qrStore') }}', {
-                                    method: 'POST',
-                                    headers: {
-                                        'Content-Type': 'application/json',
-                                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                                    },
-                                    body: JSON.stringify({
-                                        employee_id: decodedText,
-                                        latitude: userLat,
-                                        longitude: userLon,
-                                        type: type,
-                                    }),
-                                })
-                                .then(res => res.ok ? res.json() : res.json().then(err => Promise.reject(err)))
-                                .then(data => {
-                                    Swal.fire({
-                                        icon: 'success',
-                                        title: 'Berhasil',
-                                        text: data.message || 'Absen berhasil!',
-                                    }).then(() => location.reload())
-                                })
-                                .catch(err => {
-                                    Swal.fire({
-                                        icon: 'error',
-                                        title: 'Gagal Absen',
-                                        text: err.message || 'Terjadi kesalahan',
-                                    }).then(() => location.reload())
-                                })
+                fetch('{{ route('employee-attendance.qrStore') }}', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                            'X-Requested-With': 'XMLHttpRequest',
                         },
-                        error => {
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Lokasi Error',
-                                text: 'Gagal mendapatkan lokasi: ' + error.message,
-                            }).then(() => location.reload())
-                        }
-                    )
-                } else {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Geolocation Tidak Didukung',
-                        text: 'Browser tidak mendukung Geolocation.',
-                    }).then(() => location.reload())
-                }
-            })
+                        body: JSON.stringify({
+                            employee_id: decodedText,
+                            latitude: 0,
+                            longitude: 0,
+                            type: type,
+                        }),
+                    })
+                    .then(async res => {
+                        const data = await res.json();
+                        if (!res.ok) throw data;
+
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Berhasil',
+                            text: data.message || 'Absen berhasil!',
+                        }).then(() => location.href = '{{ route('employee-attendance.index') }}');
+                    })
+                    .catch(err => {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Gagal Absen',
+                            text: err.message || 'Terjadi kesalahan',
+                        }).then(() => location.reload());
+                    });
+            });
         }
 
-        const html5QrCode = new Html5Qrcode('qr-reader')
+
+        const html5QrCode = new Html5Qrcode('qr-reader');
         html5QrCode
             .start({
                 facingMode: 'environment'
@@ -158,7 +111,7 @@
                     icon: 'error',
                     title: 'Kamera Gagal Dibuka',
                     text: err,
-                })
-            })
+                });
+            });
     </script>
 @endpush

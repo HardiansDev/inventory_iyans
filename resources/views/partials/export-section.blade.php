@@ -69,8 +69,7 @@
         align-items: flex-start;
         gap: 10px;
         margin-bottom: 30px;
-    "
->
+    ">
     <!-- Tabel Penjualan -->
     <div class="section-row">
         <div class="table-container">
@@ -78,9 +77,7 @@
                 <thead>
                     <tr>
                         <th>Produk</th>
-                        @foreach ($labels as $label)
-                            <th>{{ $label }}</th>
-                        @endforeach
+                        <th>Jumlah</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -109,8 +106,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-        "
-    >
+        ">
         <canvas id="{{ $chartId }}" width="300" height="200" style="display: block"></canvas>
     </div>
 </div>

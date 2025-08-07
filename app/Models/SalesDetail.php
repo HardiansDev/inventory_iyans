@@ -24,6 +24,7 @@ class SalesDetail extends Model
         'invoice_number',
         'qty',
         'price',
+        'created_by',
     ];
 
     /**

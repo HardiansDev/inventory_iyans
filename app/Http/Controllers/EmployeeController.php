@@ -11,6 +11,7 @@ use Endroid\QrCode\QrCode;
 use Endroid\QrCode\Writer\PngWriter;
 use Illuminate\Support\Facades\Storage;
 use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
+use Carbon\Carbon;
 
 class EmployeeController extends Controller
 {
@@ -120,6 +121,12 @@ class EmployeeController extends Controller
             $validated['photo'] = $uploadedFileUrl;
         }
 
+        if (!empty($validated['birth_date'])) {
+            $validated['birth_date'] = Carbon::createFromFormat('m/d/Y', $validated['birth_date'])->format('Y-m-d');
+        }
+        $validated['date_joined'] = Carbon::createFromFormat('m/d/Y', $validated['date_joined'])->format('Y-m-d');
+
+
         Employee::create($validated);
 
 
@@ -183,6 +190,11 @@ class EmployeeController extends Controller
             $uploadedFileUrl = Cloudinary::upload($request->file('photo')->getRealPath())->getSecurePath();
             $validated['photo'] = $uploadedFileUrl;
         }
+
+        if (!empty($validated['birth_date'])) {
+            $validated['birth_date'] = Carbon::createFromFormat('m/d/Y', $validated['birth_date'])->format('Y-m-d');
+        }
+        $validated['date_joined'] = Carbon::createFromFormat('m/d/Y', $validated['date_joined'])->format('Y-m-d');
 
         $employee->update($validated);
 

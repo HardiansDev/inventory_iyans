@@ -20,7 +20,7 @@
 
     <!-- Main content -->
     <section class="content">
-        <div class="mt-6 grid grid-cols-2 gap-6 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4">
+        <div class="mt-6 grid grid-cols-2 gap-6 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-4">
             <!-- Data Produk -->
             <div class="rounded-xl bg-blue-600 p-5 text-white shadow">
                 <div class="text-3xl font-bold">{{ $totalProduk }}</div>
@@ -30,13 +30,13 @@
             <!-- Produk Masuk -->
             <div class="rounded-xl bg-orange-500 p-5 text-white shadow">
                 <div class="text-3xl font-bold">{{ $produkMasuk }}</div>
-                <div class="mt-1 text-sm">Produk Masuk</div>
+                <div class="mt-1 text-sm">Total Produk Masuk</div>
             </div>
 
             <!-- Produk Keluar -->
             <div class="rounded-xl bg-red-500 p-5 text-white shadow">
                 <div class="text-3xl font-bold">{{ $produkKeluar }}</div>
-                <div class="mt-1 text-sm">Produk Keluar</div>
+                <div class="mt-1 text-sm">Total Produk Keluar</div>
             </div>
 
             <!-- Pengguna -->
@@ -44,560 +44,498 @@
                 <div class="text-3xl font-bold">{{ $totalUser }}</div>
                 <div class="mt-1 text-sm">Pengguna</div>
             </div>
+
+            <!-- Penjualan Hari Ini -->
+            <div class="rounded-xl bg-indigo-500 p-5 text-white shadow">
+                <div class="text-3xl font-bold">
+                    Rp {{ number_format($penjualanHariIni, 0, ',', '.') }}
+                </div>
+                <div class="mt-1 text-sm">Penjualan Hari Ini</div>
+            </div>
+
+            <!-- Transaksi Hari Ini -->
+            <div class="rounded-xl bg-cyan-600 p-5 text-white shadow">
+                <div class="text-3xl font-bold">{{ $transaksiHariIni }}</div>
+                <div class="mt-1 text-sm">Transaksi Hari Ini</div>
+            </div>
+
+            <!-- Pegawai Aktif -->
+            <div class="rounded-xl bg-teal-500 p-5 text-white shadow">
+                <div class="text-3xl font-bold">{{ $pegawaiAktif }}</div>
+                <div class="mt-1 text-sm">Pegawai Aktif</div>
+            </div>
+
+            <!-- Pegawai Tidak Aktif -->
+            <div class="rounded-xl bg-gray-500 p-5 text-white shadow">
+                <div class="text-3xl font-bold">{{ $pegawaiTidakAktif }}</div>
+                <div class="mt-1 text-sm">Pegawai Tidak Aktif</div>
+            </div>
         </div>
 
+
         <!-- Main Dashboard Row -->
-        <div class="mt-6 flex flex-col gap-6 lg:flex-row">
-            <!-- Left Column (Sales) -->
-            <section class="w-full space-y-6 lg:w-7/12">
-                <!-- Filter & Action Buttons -->
-                <form method="GET" action="{{ route('dashboard') }}" class="mb-2">
-                    <div class="flex flex-wrap items-center gap-3">
-                        <select name="filter" onchange="this.form.submit()"
-                            class="rounded-md border border-gray-300 px-4 py-2 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
-                            <option value="daily" {{ $filter == 'daily' ? 'selected' : '' }}>
-                                Per Hari
-                            </option>
-                            <option value="weekly" {{ $filter == 'weekly' ? 'selected' : '' }}>
-                                Per Minggu
-                            </option>
-                            <option value="monthly" {{ $filter == 'monthly' ? 'selected' : '' }}>
-                                Per Bulan
-                            </option>
-                            <option value="yearly" {{ $filter == 'yearly' ? 'selected' : '' }}>
-                                Per Tahun
-                            </option>
-                        </select>
-                        <div class="relative inline-block text-left">
-                            <div>
-                                <button type="button" onclick="toggleDownloadDropdown(event)"
-                                    class="inline-flex w-full justify-center rounded-md bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow transition hover:bg-indigo-700">
-                                    Download
-                                    <svg class="-mr-1 ml-2 h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none"
-                                        viewBox="0 0 20 20" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M7 7l3-3 3 3m0 6l-3 3-3-3" />
-                                    </svg>
-                                </button>
-                            </div>
+        <!-- Wrapper utama -->
+        <div class="mt-6 mb-6 flex flex-col lg:flex-row justify-between items-center">
+            <!-- Judul -->
+            <h2 class="text-xl font-semibold text-gray-800 dark:text-white mb-4 lg:mb-0">
+                Data Statistik
+            </h2>
 
-                            <!-- Dropdown menu -->
-                            <div id="downloadDropdown"
-                                class="absolute right-0 z-10 mt-2 hidden w-64 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5">
-                                <div class="py-1">
-                                    <button type="button" onclick="downloadChartAsPDF()"
-                                        class="w-full rounded px-4 py-2 text-left text-sm font-medium text-black no-underline transition hover:bg-gray-100">
-                                        Download PDF
-                                    </button>
-                                    <button type="button" onclick="downloadChartAsExcel()"
-                                        class="mt-1 w-full rounded px-4 py-2 text-left text-sm font-medium text-black no-underline transition hover:bg-gray-100">
-                                        Download Excel
-                                    </button>
-                                    <button type="button" onclick="downloadAllCharts()"
-                                        class="mt-1 w-full rounded px-4 py-2 text-left text-sm font-medium text-black no-underline transition hover:bg-gray-100">
-                                        Download Semua (PDF)
-                                    </button>
-                                </div>
+            <!-- Tools: Date Range, Reset, Export -->
+            <div class="flex flex-wrap items-center gap-4">
+                <!-- Date Range Picker + Reset -->
+                <div class="flex items-center gap-2">
+                    <div id="date-range-picker" date-rangepicker class="flex items-center">
+                        <!-- Start Date -->
+                        <div class="relative">
+                            <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+                                <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" fill="currentColor"
+                                    viewBox="0 0 20 20">
+                                    <path
+                                        d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z" />
+                                </svg>
                             </div>
+                            <input id="datepicker-range-start" name="start" type="text"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
+                                placeholder="Pilih tanggal awal">
+                        </div>
+
+                        <span class="mx-4 text-gray-500">-</span>
+
+                        <!-- End Date -->
+                        <div class="relative">
+                            <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+                                <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" fill="currentColor"
+                                    viewBox="0 0 20 20">
+                                    <path
+                                        d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z" />
+                                </svg>
+                            </div>
+                            <input id="datepicker-range-end" name="end" type="text"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
+                                placeholder="Pilih tanggal akhir">
                         </div>
                     </div>
-                </form>
 
-                <!-- Sales Charts -->
-                @foreach ([['title' => 'Penjualan per Hari', 'id' => 'salesDayChart', 'wrapper' => 'salesChartWrapperDay'], ['title' => 'Penjualan per Minggu', 'id' => 'salesWeekChart', 'wrapper' => 'salesChartWrapperWeek'], ['title' => 'Penjualan per Bulan', 'id' => 'sales6MonthsChart', 'wrapper' => 'salesChartWrapperMonth'], ['title' => 'Penjualan per Tahun', 'id' => 'salesYearChart', 'wrapper' => 'salesChartWrapperYear']] as $chart)
-                    <div class="rounded-xl bg-white p-4 shadow">
-                        <h3 class="mb-2 text-lg font-semibold text-gray-800">
-                            {{ $chart['title'] }}
-                        </h3>
-                        <div id="{{ $chart['wrapper'] }}" class="relative h-[300px] w-full md:h-[400px]">
-                            <canvas id="{{ $chart['id'] }}" class="h-full w-full"></canvas>
-                        </div>
-                    </div>
-                @endforeach
-            </section>
+                    <!-- Reset Button -->
+                    <button type="button" onclick="resetDateRange()"
+                        class="inline-flex items-center text-sm px-4 py-2 rounded-lg bg-gray-500 hover:bg-gray-600 text-white font-medium">
+                        Reset
+                    </button>
+                </div>
 
-            <div id="pdfExportArea" style="display: none; padding: 20px; font-family: Arial, sans-serif">
-                <h2 style="text-align: center; margin-bottom: 20px">{{ $title }}</h2>
-                <div
-                    style="
-                        display: flex;
-                        gap: 20px;
-                        align-items: flex-start;
-                        justify-content: space-between;
-                    ">
-                    <!-- Tabel Penjualan -->
-                    <table style="border-collapse: collapse; width: 35%; font-size: 11px">
-                        <thead>
-                            <tr style="background-color: #f2f2f2">
-                                <th style="border: 1px solid #ddd; padding: 8px">Produk</th>
-                                @foreach ($labels as $label)
-                                    <th style="border: 1px solid #ddd; padding: 8px">
-                                        {{ $label }}
-                                    </th>
-                                @endforeach
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach ($values as $row)
-                                <tr>
-                                    <td style="border: 1px solid #ddd; padding: 8px">
-                                        {{ $row['label'] }}
-                                    </td>
-                                    @foreach ($row['data'] as $val)
-                                        <td
-                                            style="
-                                                border: 1px solid #ddd;
-                                                padding: 8px;
-                                                text-align: center;
-                                            ">
-                                            {{ $val }}
-                                        </td>
-                                    @endforeach
-                                </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
+                <!-- Export Dropdown -->
+                <div class="relative">
+                    <button id="dropdownButton" data-dropdown-toggle="dropdownExport"
+                        class="inline-flex items-center rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-blue-300">
+                        Export
+                        <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7">
+                            </path>
+                        </svg>
+                    </button>
 
-                    <!-- Grafik Chart -->
-                    <div style="width: 40%">
-                        <canvas id="pdfChart" width="430" height="350"></canvas>
+                    <!-- Dropdown menu -->
+                    <div id="dropdownExport"
+                        class="z-10 hidden w-44 rounded-lg bg-white shadow dark:bg-gray-700 dark:divide-gray-600 absolute right-0 mt-2">
+                        <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownButton">
+                            <li>
+                                <a href="#" onclick="exportToPDF()"
+                                    class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Export
+                                    PDF</a>
+                            </li>
+                            <li>
+                                <a href="#" onclick="exportToExcel()"
+                                    class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Export
+                                    Excel</a>
+                            </li>
+                            <li>
+                                <a href="#" onclick="exportToCSV()"
+                                    class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Export
+                                    CSV</a>
+                            </li>
+                        </ul>
                     </div>
                 </div>
             </div>
+        </div>
 
-            <!-- Export Semua Grafik & Data -->
-            <div id="pdfExportAll"
-                style="
-                    display: none;
-                    padding: 20px;
-                    font-family: Arial, sans-serif;
-                    font-size: 11px;
-                ">
-                <h2 style="text-align: center; margin-bottom: 20px">
-                    Laporan Lengkap - Sistem Inventory
-                </h2>
+        <!-- GRAFIK TREN PENJUALAN & DONAT + TABEL TRANSAKSI HARI INI -->
+        <div class="w-full mt-6 flex flex-col lg:flex-row gap-6">
+            <!-- KIRI: Grafik Penjualan + Tabel Aktivitas -->
+            <div class="w-full lg:w-2/3 flex flex-col gap-6">
+                <!-- TABS PENJUALAN -->
+                <div class="bg-white dark:bg-gray-800 rounded shadow p-4">
+                    <h4 class="text-lg font-semibold mb-4">Trend Penjualan</h4>
+                    <!-- Tabs Navigation -->
+                    <div class="mb-4 border-b border-gray-200 dark:border-gray-700">
+                        <ul class="flex flex-wrap -mb-px text-sm font-medium text-center" id="chartTabs" role="tablist">
+                            <li class="me-2">
+                                <button
+                                    class="inline-block p-4 border-b-2 rounded-t-lg active text-blue-600 border-blue-600"
+                                    id="tab-day" data-tabs-target="#tab-content-day" type="button" role="tab"
+                                    aria-controls="tab-content-day" aria-selected="true">
+                                    Harian
+                                </button>
+                            </li>
+                            <li class="me-2">
+                                <button class="inline-block p-4 border-b-2 rounded-t-lg" id="tab-week"
+                                    data-tabs-target="#tab-content-week" type="button" role="tab"
+                                    aria-controls="tab-content-week" aria-selected="false">
+                                    Mingguan
+                                </button>
+                            </li>
+                            <li class="me-2">
+                                <button class="inline-block p-4 border-b-2 rounded-t-lg" id="tab-month"
+                                    data-tabs-target="#tab-content-month" type="button" role="tab"
+                                    aria-controls="tab-content-month" aria-selected="false">
+                                    Bulanan
+                                </button>
+                            </li>
+                            <li class="me-2">
+                                <button class="inline-block p-4 border-b-2 rounded-t-lg" id="tab-year"
+                                    data-tabs-target="#tab-content-year" type="button" role="tab"
+                                    aria-controls="tab-content-year" aria-selected="false">
+                                    Tahunan
+                                </button>
+                            </li>
+                        </ul>
+                    </div>
 
-                {{-- === Data Produk === --}}
-                <h4>Stok Produk</h4>
-                <table border="1" cellpadding="5" cellspacing="0" style="width: 100%; margin-bottom: 20px">
-                    <thead style="background: #f2f2f2">
-                        <tr>
-                            <th>Produk</th>
-                            <th>Stok</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach ($productNames as $i => $name)
-                            <tr>
-                                <td>{{ $name }}</td>
-                                <td>{{ $productStocks[$i] }}</td>
-                            </tr>
-                        @endforeach
-                    </tbody>
-                </table>
-
-                {{-- === Produk Masuk === --}}
-                <h4>Produk Masuk</h4>
-                <table border="1" cellpadding="5" cellspacing="0" style="width: 100%; margin-bottom: 20px">
-                    <thead style="background: #f2f2f2">
-                        <tr>
-                            <th>Produk</th>
-                            <th>Jumlah Masuk</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach ($inLabels as $i => $name)
-                            <tr>
-                                <td>{{ $name }}</td>
-                                <td>{{ $inQtys[$i] }}</td>
-                            </tr>
-                        @endforeach
-                    </tbody>
-                </table>
-
-                {{-- === Produk Keluar === --}}
-                <h4>Produk Keluar</h4>
-                <table border="1" cellpadding="5" cellspacing="0" style="width: 100%; margin-bottom: 20px">
-                    <thead style="background: #f2f2f2">
-                        <tr>
-                            <th>Produk</th>
-                            <th>Jumlah Keluar</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach ($outLabels as $i => $name)
-                            <tr>
-                                <td>{{ $name }}</td>
-                                <td>{{ $outQtys[$i] }}</td>
-                            </tr>
-                        @endforeach
-                    </tbody>
-                </table>
-
-                {{-- === Penjualan Harian - Chart + Tabel === --}}
-                <h4>Penjualan per Hari</h4>
-                @include('partials.export-section', [
-                    'labels' => $dailyLabels,
-                    'values' => $dailyValues,
-                    'chartId' => 'chartExportDaily',
-                ])
-
-                {{-- === Penjualan Mingguan - Chart + Tabel === --}}
-                <h4>Penjualan per Minggu</h4>
-                @include('partials.export-section', [
-                    'labels' => $weekLabels,
-                    'values' => $weekValues,
-                    'chartId' => 'chartExportWeek',
-                ])
-
-                {{-- === Penjualan Bulanan - Chart + Tabel === --}}
-                <h4>Penjualan per Bulan</h4>
-                @include('partials.export-section', [
-                    'labels' => $monthLabels,
-                    'values' => $monthValues,
-                    'chartId' => 'chartExportMonth',
-                ])
-
-                {{-- === Penjualan Tahunan - Chart + Tabel === --}}
-                <h4>Penjualan per Tahun</h4>
-                @include('partials.export-section', [
-                    'labels' => $yearLabels,
-                    'values' => $yearValues,
-                    'chartId' => 'chartExportYear',
-                ])
-            </div>
-
-            <!-- Right Column (Produk) -->
-            <section class="w-full space-y-6 lg:w-5/12">
-                <!-- Product Charts -->
-                @foreach ([['title' => 'Data Produk', 'id' => 'productChart'], ['title' => 'Produk Masuk', 'id' => 'productInChart'], ['title' => 'Produk Keluar', 'id' => 'productOutChart']] as $product)
-                    <div class="rounded-xl bg-white p-4 shadow">
-                        <h3 class="mb-2 text-lg font-semibold text-gray-800">
-                            {{ $product['title'] }}
-                        </h3>
-                        <div class="relative h-[300px] w-full md:h-[400px]">
-                            <canvas id="{{ $product['id'] }}" class="h-full w-full"></canvas>
+                    <!-- Tabs Content -->
+                    <div id="chart-tabs-content">
+                        <div class="p-4 bg-white dark:bg-gray-800" id="tab-content-day">
+                            <canvas id="chart-day" class="w-full h-80"></canvas>
+                        </div>
+                        <div class="hidden p-4 bg-white dark:bg-gray-800" id="tab-content-week">
+                            <canvas id="chart-week" class="w-full h-80"></canvas>
+                        </div>
+                        <div class="hidden p-4 bg-white dark:bg-gray-800" id="tab-content-month">
+                            <canvas id="chart-month" class="w-full h-80"></canvas>
+                        </div>
+                        <div class="hidden p-4 bg-white dark:bg-gray-800" id="tab-content-year">
+                            <canvas id="chart-year" class="w-full h-80"></canvas>
                         </div>
                     </div>
-                @endforeach
-            </section>
+                </div>
 
+                <!-- TABEL AKTIVITAS TRANSAKSI HARI INI -->
+                <div class="bg-white dark:bg-gray-800 rounded shadow p-4">
+                    <h4 class="text-lg font-semibold mb-4">Aktivitas Transaksi Hari Ini</h4>
+                    <div class="overflow-x-auto">
+                        <table
+                            class="min-w-full divide-y divide-gray-200 text-sm text-left text-gray-700 dark:text-gray-200">
+                            <thead class="bg-gray-100 dark:bg-gray-700">
+                                <tr>
+                                    <th class="px-4 py-2">Waktu</th>
+                                    <th class="px-4 py-2">Produk</th>
+                                    <th class="px-4 py-2">Qty</th>
+                                    <th class="px-4 py-2 text-right">Total</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-100 dark:divide-gray-700">
+                                @forelse ($aktivitasHariIni as $item)
+                                    <tr class="border-t border-gray-100 hover:bg-gray-50">
+                                        <td class="px-4 py-2 text-gray-700">
+                                            {{ \Carbon\Carbon::parse($item->created_at)->format('H:i') }}</td>
+                                        <td class="px-4 py-2 text-gray-700">{{ $item->product_name }}</td>
+                                        <td class="px-4 py-2">{{ $item->qty }}</td>
+                                        <td class="px-4 py-2 text-right">Rp {{ number_format($item->total, 0, ',', '.') }}
+                                        </td>
+                                    </tr>
+                                @empty
+                                    <tr>
+                                        <td colspan="4" class="text-center text-gray-500 py-4">Belum ada transaksi hari
+                                            ini.</td>
+                                    </tr>
+                                @endforelse
+
+                            </tbody>
+                        </table>
+                        <div class="mt-4">
+                            {{ $aktivitasHariIni->links('pagination::tailwind') }}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Performa Kasir Hari Ini -->
+                <div class="mt-3 bg-white rounded-lg shadow p-6">
+                    <h2 class="text-lg font-semibold text-gray-700 mb-4">Performa Kasir Hari Ini</h2>
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full divide-y divide-gray-200 text-sm text-left text-gray-700">
+                            <thead class="bg-gray-100">
+                                <tr>
+                                    <th scope="col" class="px-6 py-3 font-bold">Kasir</th>
+                                    <th scope="col" class="px-6 py-3 font-bold text-center">Total Transaksi</th>
+                                    <th scope="col" class="px-6 py-3 font-bold text-right">Total Penjualan</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-200">
+                                @forelse ($performaKasirHariIni as $kasir)
+                                    <tr class="bg-white hover:bg-gray-50">
+                                        <td class="px-6 py-3 text-gray-700 font-medium">{{ strtoupper($kasir->kasir) }}
+                                        </td>
+                                        <td class="px-6 py-3 text-center text-gray-700">{{ $kasir->total_transaksi }}</td>
+                                        <td class="px-6 py-3 text-right text-gray-700">Rp
+                                            {{ number_format($kasir->total_penjualan, 0, ',', '.') }}
+                                        </td>
+                                    </tr>
+                                @empty
+                                    <tr>
+                                        <td colspan="3" class="px-6 py-4 text-center text-gray-500">
+                                            Belum ada transaksi dari kasir hari ini
+                                        </td>
+                                    </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+
+            </div>
+
+            <!-- KANAN: Donut Chart -->
+            <div class="w-full lg:w-1/3 flex flex-col gap-6" style="overflow: hidden;">
+                <!-- Produk Terjual -->
+                <div class="p-4 bg-white dark:bg-gray-800 rounded shadow">
+                    <h4 class="text-center text-sm font-semibold mb-2">Produk Terjual</h4>
+                    <canvas id="donut-product-sold" class="w-full h-60"></canvas>
+                </div>
+
+                <!-- Produk Masuk -->
+                <div class="p-4 bg-white dark:bg-gray-800 rounded shadow">
+                    <h4 class="text-center text-sm font-semibold mb-2">Produk Masuk</h4>
+                    <canvas id="donut-product-in" class="w-full h-60"></canvas>
+                </div>
+            </div>
         </div>
+
+
+
     </section>
-    <!-- /.content -->
 @endsection
 
 @push('scripts')
     <script>
-        function downloadAllCharts() {
-            const chartConfigs = [{
-                    id: 'chartExportDaily',
-                    labels: @json($dailyLabels),
-                    datasets: @json($dailyValues),
-                },
-                {
-                    id: 'chartExportWeek',
-                    labels: @json($weekLabels),
-                    datasets: @json($weekValues),
-                },
-                {
-                    id: 'chartExportMonth',
-                    labels: @json($monthLabels),
-                    datasets: @json($monthValues),
-                },
-                {
-                    id: 'chartExportYear',
-                    labels: @json($yearLabels),
-                    datasets: @json($yearValues),
-                },
-            ]
+        let chartDay, chartWeek, chartMonth, chartYear;
 
-            chartConfigs.forEach((cfg) => {
-                const ctx = document.getElementById(cfg.id).getContext('2d');
-                new Chart(ctx, {
-                    type: 'bar',
-                    data: {
-                        labels: cfg.labels,
-                        datasets: cfg.datasets.map((d, i) => ({
-                            ...d,
-                            backgroundColor: generateColors(cfg.datasets.length)[i],
-                        })),
-                    },
-                    options: {
-                        responsive: false,
-                        plugins: {
-                            legend: {
-                                position: 'bottom',
-                            },
-                        },
-                        scales: {
-                            y: {
-                                beginAtZero: true,
-                            },
-                        },
-                    },
-                })
-            })
+        function initChartDay() {
+            const ctx = document.getElementById("chart-day").getContext("2d");
+            if (chartDay) chartDay.destroy();
 
-            setTimeout(() => {
-                const element = document.getElementById('pdfExportAll');
-                element.style.display = 'block'
-                html2pdf()
-                    .from(element)
-                    .set({
-                        margin: 0.4,
-                        filename: 'Laporan-Sistem-Inventory.pdf',
-                        html2canvas: {
-                            scale: 2,
-                            // useCORS: true
-                        },
-                        jsPDF: {
-                            orientation: 'landscape',
-                            unit: 'cm',
-                            format: 'A3',
-                        },
-                    })
-                    .save()
-                    .then(() => {
-                        element.style.display = 'none'
-                    })
-            }, 800) // beri delay agar chart sempat render
-        }
-    </script>
-
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-
-            // ✅ Fungsi download PDF grafik
-            window.downloadChartAsPDF = function() {
-                const labels = {!! json_encode($labels ?? []) !!};
-                const values = {!! json_encode($values ?? []) !!};
-                const title = {!! json_encode($title ?? 'Laporan Penjualan') !!};
-
-                const ctx = document.getElementById('pdfChart').getContext('2d');
-
-                // Hapus chart lama jika ada
-                if (window.pdfChartInstance) {
-                    window.pdfChartInstance.destroy();
-                }
-
-                // Buat chart baru untuk export PDF
-                window.pdfChartInstance = new Chart(ctx, {
-                    type: 'bar',
-                    data: {
-                        labels: labels,
-                        datasets: values,
-                    },
-                    options: {
-                        responsive: false,
-                        plugins: {
-                            legend: {
-                                position: 'bottom'
-                            },
-                            title: {
-                                display: false
-                            },
-                        },
-                        scales: {
-                            y: {
-                                beginAtZero: true
-                            },
-                        },
-                    },
-                });
-
-                // Tampilkan dan convert jadi PDF
-                setTimeout(() => {
-                    const element = document.getElementById('pdfExportArea');
-                    element.style.display = 'block';
-
-                    const now = new Date().toLocaleDateString('id-ID', {
-                        year: 'numeric',
-                        month: 'long',
-                        day: 'numeric',
-                    });
-
-                    html2pdf()
-                        .from(element)
-                        .set({
-                            margin: 0.3,
-                            filename: title + ' - ' + now + '.pdf',
-                            html2canvas: {
-                                scale: 2
-                            },
-                            jsPDF: {
-                                orientation: 'landscape'
-                            },
-                        })
-                        .save()
-                        .then(() => {
-                            element.style.display = 'none';
-                        });
-                }, 500); // beri jeda agar chart sempat render
-            };
-
-            // ✅ Fungsi download Excel grafik
-            window.downloadChartAsExcel = function() {
-                const labels = {!! json_encode($labels ?? []) !!};
-                const values = {!! json_encode($values ?? []) !!};
-                const title = {!! json_encode($title ?? 'Laporan Penjualan') !!};
-
-                const wb = XLSX.utils.book_new();
-                const wsData = [
-                    ['Produk', ...labels]
-                ];
-
-                values.forEach((ds) => {
-                    wsData.push([ds.label, ...ds.data]);
-                });
-
-                const ws = XLSX.utils.aoa_to_sheet(wsData);
-                XLSX.utils.book_append_sheet(wb, ws, 'Data Penjualan');
-                XLSX.writeFile(wb, title + '.xlsx');
-            };
-
-        });
-    </script>
-
-
-    <script>
-        // === Generate Dynamic Warna Berdasarkan Index ===
-        function generateColors(count, alpha = 0.6) {
-            const colors = []
-            for (let i = 0; i < count; i++) {
-                const hue = (i * 50) % 360
-                colors.push(`hsl(${hue}, 70%, 60%, ${alpha})`)
-            }
-            return colors
-        }
-
-        // === Chart Config Helper ===
-        function createBarChart(ctxId, labels, datasets) {
-            const ctx = document.getElementById(ctxId).getContext('2d')
-            new Chart(ctx, {
-                type: 'bar',
+            chartDay = new Chart(ctx, {
+                type: "line",
                 data: {
-                    labels: labels,
-                    datasets: datasets,
+                    labels: @json($dailyLabels),
+                    datasets: [
+                        @foreach ($dailyByProduct as $dataset)
+                            {!! json_encode($dataset) !!},
+                        @endforeach
+                    ]
                 },
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
                     plugins: {
                         legend: {
-                            position: 'bottom',
-                        },
-                        tooltip: {
-                            mode: 'index',
-                            intersect: false,
-                        },
+                            position: 'top'
+                        }
                     },
                     scales: {
                         y: {
-                            beginAtZero: true,
-                        },
-                    },
-                },
-            })
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
         }
 
-        function createDonutChart(ctxId, labels, data) {
-            const ctx = document.getElementById(ctxId).getContext('2d')
-            new Chart(ctx, {
-                type: 'doughnut',
+        function initChartWeek() {
+            const ctx = document.getElementById("chart-week").getContext("2d");
+            if (chartWeek) chartWeek.destroy();
+
+            chartWeek = new Chart(ctx, {
+                type: "bar",
                 data: {
-                    labels: labels,
-                    datasets: [{
-                        label: 'Stok Produk',
-                        data: data,
-                        backgroundColor: generateColors(data.length),
-                    }, ],
+                    labels: @json($weekLabels),
+                    datasets: [
+                        @foreach ($weeklyByProduct as $dataset)
+                            {!! json_encode($dataset) !!},
+                        @endforeach
+                    ]
                 },
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
                     plugins: {
                         legend: {
-                            position: 'bottom',
-                        },
+                            position: 'top'
+                        }
                     },
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        }
+
+        function initChartMonth() {
+            const ctx = document.getElementById("chart-month").getContext("2d");
+            if (chartMonth) chartMonth.destroy();
+
+            chartMonth = new Chart(ctx, {
+                type: "bar",
+                data: {
+                    labels: @json($monthLabels),
+                    datasets: [
+                        @foreach ($monthlyByProduct as $dataset)
+                            {!! json_encode($dataset) !!},
+                        @endforeach
+                    ]
                 },
-            })
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false
+                }
+            });
         }
 
-        // === 🧩 Data from backend ===
-        const productNames = @json($productNames ?? []);
-        const productStocks = @json($productStocks ?? []);
-        const inLabels = @json($inLabels ?? []);
-        const inQtys = @json($inQtys ?? []);
-        const outLabels = @json($outLabels ?? []);
-        const outQtys = @json($outQtys ?? []);
-        const dailyLabels = @json($dailyLabels ?? []);
-        const dailyValues = @json($dailyValues ?? []);
-        const weekLabels = @json($weekLabels ?? []);
-        const weekValues = @json($weekValues ?? []);
-        const monthLabels = @json($monthLabels ?? []);
-        const monthValues = @json($monthValues ?? []);
-        const yearLabels = @json($yearLabels ?? []);
-        const yearValues = @json($yearValues ?? []);
+        function initChartYear() {
+            const ctx = document.getElementById("chart-year").getContext("2d");
+            if (chartYear) chartYear.destroy();
 
-        // === Render All Charts ===
+            chartYear = new Chart(ctx, {
+                type: "line",
+                data: {
+                    labels: @json($yearLabels),
+                    datasets: [
+                        @foreach ($yearlyByProduct as $dataset)
+                            {!! json_encode($dataset) !!},
+                        @endforeach
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'top'
+                        },
 
-        // 1. Donut Chart - Stok Produk
-        createDonutChart('productChart', productNames, productStocks)
-
-        // 2. Bar Chart - Produk Masuk
-        createBarChart('productInChart', inLabels, [{
-            label: 'Produk Masuk',
-            data: inQtys,
-            backgroundColor: 'rgba(255, 206, 86, 0.7)',
-            borderColor: 'rgba(255, 206, 86, 1)',
-            borderWidth: 1,
-        }, ])
-
-        // 3. Bar Chart - Produk Keluar
-        createBarChart('productOutChart', outLabels, [{
-            label: 'Produk Keluar',
-            data: outQtys,
-            backgroundColor: 'rgba(255, 99, 132, 0.6)',
-            borderColor: 'rgba(255, 99, 132, 1)',
-            borderWidth: 1,
-        }, ])
-
-        // 4. Bar Chart - Penjualan Harian (by Produk)
-        // dailyValues = array of dataset per produk
-        dailyValues.forEach((d, i) => (d.backgroundColor = generateColors(dailyValues.length)[i]))
-        createBarChart('salesDayChart', dailyLabels, dailyValues)
-
-        // 5. Bar Chart - Penjualan Mingguan (by Produk)
-        weekValues.forEach((d, i) => (d.backgroundColor = generateColors(weekValues.length)[i]))
-        createBarChart('salesWeekChart', weekLabels, weekValues)
-
-        // 6. Bar Chart - Penjualan Bulanan (by Produk)
-        monthValues.forEach((d, i) => (d.backgroundColor = generateColors(monthValues.length)[i]))
-        createBarChart('sales6MonthsChart', monthLabels, monthValues)
-
-        // 7. Bar Chart - Penjualan Tahunan (by Produk)
-        yearValues.forEach((d, i) => (d.backgroundColor = generateColors(yearValues.length)[i]))
-        createBarChart('salesYearChart', yearLabels, yearValues)
-    </script>
-
-    <script>
-        function toggleDownloadDropdown(event) {
-            event.stopPropagation() // Cegah dropdown langsung tertutup
-            const dropdown = document.getElementById('downloadDropdown')
-            dropdown.classList.toggle('hidden')
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
         }
 
-        // Tutup dropdown jika klik di luar
-        window.addEventListener('click', function(e) {
-            const dropdown = document.getElementById('downloadDropdown')
-            if (
-                !document.getElementById('downloadDropdown').contains(e.target) &&
-                !e.target.closest('button[onclick^="toggleDownloadDropdown"]')
-            ) {
-                dropdown.classList.add('hidden')
+        // === Tabs Handling ===
+        const tabButtons = document.querySelectorAll('[data-tabs-target]');
+        const tabContents = document.querySelectorAll('#chart-tabs-content > div');
+
+        tabButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const targetId = button.getAttribute('data-tabs-target');
+
+                tabButtons.forEach(btn => btn.classList.remove("text-blue-600", "border-blue-600",
+                    "active"));
+                button.classList.add("text-blue-600", "border-blue-600", "active");
+
+                tabContents.forEach(content => {
+                    content.classList.add('hidden');
+
+                    if ("#" + content.id === targetId) {
+                        content.classList.remove('hidden');
+
+                        // Render chart sesuai tab yang aktif
+                        switch (targetId) {
+                            case '#tab-content-day':
+                                initChartDay();
+                                break;
+                            case '#tab-content-week':
+                                initChartWeek();
+                                break;
+                            case '#tab-content-month':
+                                initChartMonth();
+                                break;
+                            case '#tab-content-year':
+                                initChartYear();
+                                break;
+                        }
+                    }
+                });
+            });
+        });
+
+        // Render chart default saat halaman dimuat
+        window.addEventListener('DOMContentLoaded', () => {
+            initChartDay();
+        });
+
+        // Resize otomatis saat window diubah
+        window.addEventListener('resize', () => {
+            chartDay?.resize();
+            chartWeek?.resize();
+            chartMonth?.resize();
+            chartYear?.resize();
+            donutSold?.resize();
+            donutIn?.resize();
+        });
+
+
+        // Definisikan variabel chart global
+        let donutSold;
+        let donutIn;
+
+        // Donut Chart Produk Keluar (Terjual)
+        const ctxSold = document.getElementById('donut-product-sold');
+        if (donutSold) donutSold.destroy(); // Destroy jika chart sudah ada
+        donutSold = new Chart(ctxSold, {
+            type: 'doughnut',
+            data: {
+                labels: @json($outLabels),
+                datasets: [{
+                    data: @json($outQtys),
+                    backgroundColor: ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6'],
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'bottom'
+                    }
+                }
             }
-        })
+        });
+
+        // Donut Chart Produk Masuk
+        const ctxIn = document.getElementById('donut-product-in');
+        if (donutIn) donutIn.destroy(); // Destroy jika chart sudah ada
+        donutIn = new Chart(ctxIn, {
+            type: 'doughnut',
+            data: {
+                labels: @json($inLabels),
+                datasets: [{
+                    data: @json($inQtys),
+                    backgroundColor: ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6'],
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'bottom'
+                    }
+                }
+            }
+        });
     </script>
 @endpush

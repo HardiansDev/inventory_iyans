@@ -14,9 +14,10 @@ class EmployeeAttendanceController extends Controller
         return view('employee_attendance.index', compact('attendances'));
     }
 
-    public function scanQR()
+    public function scanQR(Request $request)
     {
-        return view('employee_attendance.scan');
+        $type = $request->query('type', 'check_in');
+        return view('employee_attendance.scan', compact('type'));
     }
 
     public function processUpload(Request $request)
@@ -65,64 +66,72 @@ class EmployeeAttendanceController extends Controller
         }
     }
 
+    public function processQRCode(Request $request)
+    {
+        $employeeId = (int) $request->qrcode;
+        $employee = Employee::find($employeeId);
+        if (!$employee) {
+            return response()->json(['message' => 'Pegawai tidak ditemukan.'], 404);
+        }
 
+        $attendance = Attendance::firstOrCreate([
+            'employee_id' => $employeeId,
+            'date' => now()->toDateString(),
+        ]);
 
+        if (!$attendance->check_in) {
+            $attendance->check_in = now()->format('H:i:s');
+            $attendance->save();
+            return response()->json(['message' => 'Absen masuk berhasil']);
+        }
+
+        if (!$attendance->check_out) {
+            $attendance->check_out = now()->format('H:i:s');
+            $attendance->save();
+            return response()->json(['message' => 'Absen pulang berhasil']);
+        }
+
+        return response()->json(['message' => 'Anda sudah absen masuk & pulang hari ini.']);
+    }
 
     public function qrStore(Request $request)
     {
         $request->validate([
-            'employee_id' => 'required|exists:employees,id',
-            'latitude'    => 'required|numeric',
-            'longitude'   => 'required|numeric',
-            'type'        => 'required|in:check_in,check_out',
+            'employee_id' => 'required|integer|exists:employees,id',
+            'type' => 'required|in:check_in,check_out',
         ]);
 
-        // Lokasi kantor
-        $officeLat = -6.200000; // Ganti sesuai lokasi kantor kamu
-        $officeLng = 106.816666;
+        $employeeId = $request->employee_id;
+        $type = $request->type;
 
-        $distance = $this->calculateDistance($officeLat, $officeLng, $request->latitude, $request->longitude);
-
-        if ($distance > 0.2) { // km
-            return response()->json(['message' => 'Anda berada di luar radius 200 meter dari kantor.'], 403);
+        $employee = Employee::find($employeeId);
+        if (!$employee) {
+            return response()->json(['message' => 'Pegawai tidak ditemukan.'], 404);
         }
 
         $attendance = Attendance::firstOrCreate([
-            'employee_id' => $request->employee_id,
-            'date'        => now()->toDateString(),
+            'employee_id' => $employeeId,
+            'date' => now()->toDateString(),
         ]);
 
-        if ($request->type == 'check_in') {
+        if ($type === 'check_in') {
             if ($attendance->check_in) {
-                return response()->json(['message' => 'Anda sudah absen masuk.'], 409);
+                return response()->json(['message' => 'Anda sudah absen masuk hari ini.'], 422);
             }
             $attendance->check_in = now()->format('H:i:s');
-        } else { // check_out
-            if ($attendance->check_out) {
-                return response()->json(['message' => 'Anda sudah absen pulang.'], 409);
-            }
-            $attendance->check_out = now()->format('H:i:s');
+            $attendance->save();
+            return response()->json(['message' => 'Absen masuk berhasil.']);
         }
 
-        $attendance->latitude = $request->latitude;
-        $attendance->longitude = $request->longitude;
-        $attendance->save();
+        if ($type === 'check_out') {
+            if ($attendance->check_out) {
+                return response()->json(['message' => 'Anda sudah absen pulang hari ini.'], 422);
+            }
+            $attendance->check_out = now()->format('H:i:s');
+            $attendance->save();
+            return response()->json(['message' => 'Absen pulang berhasil.']);
+        }
 
-        return response()->json(['message' => 'Absen berhasil!', 'data' => $attendance]);
-    }
-
-    private function calculateDistance($lat1, $lon1, $lat2, $lon2)
-    {
-        $earthRadius = 6371; // km
-
-        $dLat = deg2rad($lat2 - $lat1);
-        $dLon = deg2rad($lon2 - $lon1);
-
-        $a = sin($dLat / 2) * sin($dLat / 2) +
-            cos(deg2rad($lat1)) * cos(deg2rad($lat2)) *
-            sin($dLon / 2) * sin($dLon / 2);
-
-        $c = 2 * atan2(sqrt($a), sqrt(1 - $a));
-        return $earthRadius * $c; // km
+        return response()->json(['message' => 'Tipe absen tidak valid.'], 400);
     }
 }

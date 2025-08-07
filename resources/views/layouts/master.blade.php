@@ -10,9 +10,23 @@
 
     {{-- Tailwind CSS --}}
     <script src="https://cdn.tailwindcss.com"></script>
+
+    {{-- Chart.js (hanya sekali) --}}
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    {{-- Flowbite (cukup satu versi stabil terbaru) --}}
+    <script src="https://unpkg.com/flowbite@latest/dist/flowbite.min.js"></script>
+
+    {{-- Optional: Plugin Flowbite Charts (boleh dipakai) --}}
+    <script src="https://unpkg.com/flowbite/dist/flowbite.charts.js"></script>
+
+    {{-- html2pdf (untuk export PDF) --}}
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.min.js"></script>
+
+    {{-- XLSX (untuk export Excel) --}}
     <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
+
+    {{-- Alpine.js (untuk interaktifitas ringan) --}}
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 
 

@@ -46,10 +46,13 @@
                         <input type="hidden" name="category_id[]" class="hidden-category" />
 
                         <div class="col-span-2">
-                            <label class="mb-1 block text-sm font-medium text-gray-700">Tanggal</label>
-                            <input type="date" name="date[]"
-                                class="w-full rounded-md border border-gray-300 bg-white px-4 py-2 text-sm text-gray-700 shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-500"
-                                required>
+                            <label class="mb-1 block text-sm font-medium text-gray-700">Tanggal Masuk</label>
+
+                            <input id="datepicker-actions" datepicker datepicker-buttons datepicker-autoselect-today
+                                type="text" name="date[]"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                placeholder="Pilih tanggal" required>
+
                         </div>
 
                         <div class="col-span-2">
@@ -88,7 +91,6 @@
         </div>
     </div>
 
-    {{-- Script --}}
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const formContainer = document.getElementById('dynamic-form');
@@ -110,14 +112,24 @@
                     <input type="hidden" name="category_id[]" class="hidden-category" />
 
                     <div class="col-span-2">
-                        <input type="date" name="date[]" class="w-full rounded-md border border-gray-300 bg-white px-4 py-2 text-sm text-gray-700 shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-500" required>
+                        <label class="mb-1 block text-sm font-medium text-gray-700">Tanggal Masuk</label>
+                        <input
+                            type="text"
+                            name="date[]"
+                            datepicker
+                            datepicker-buttons
+                            datepicker-autoselect-today
+                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5"
+                            placeholder="Pilih tanggal"
+                            required />
                     </div>
 
                     <div class="col-span-2">
+                        <label class="mb-1 block text-sm font-medium text-gray-700">Jumlah</label>
                         <input type="number" name="qty[]" class="w-full rounded-md border border-gray-300 bg-white px-4 py-2 text-sm text-gray-700 shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-500" required>
                     </div>
 
-                    <div class="col-span-2 text-right">
+                    <div class="col-span-2 text-right flex justify-end">
                         <button type="button" class="remove-row rounded-lg bg-red-500 px-4 py-2 text-sm text-white shadow hover:bg-red-600">Hapus</button>
                     </div>
                 </div>
@@ -126,6 +138,17 @@
 
             addRowButton.addEventListener('click', function() {
                 formContainer.insertAdjacentHTML('beforeend', generateRow());
+
+                // Re-initialize Flowbite datepicker untuk input yang baru
+                document.querySelectorAll('[datepicker]:not([data-datepicker-initialized])').forEach(
+                    function(el) {
+                        new Datepicker(el, {
+                            autohide: true,
+                            todayBtn: true,
+                            todayHighlight: true
+                        });
+                        el.setAttribute('data-datepicker-initialized', 'true');
+                    });
             });
 
             formContainer.addEventListener('change', function(event) {

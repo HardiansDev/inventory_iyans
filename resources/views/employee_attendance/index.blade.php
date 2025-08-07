@@ -68,7 +68,7 @@
                                     </td>
                                     <td class="px-4 py-3">
                                         @if (!$item->check_out)
-                                            <a href="{{ route('employee-attendance.scan') }}"
+                                            <a href="{{ route('employee-attendance.scan', ['type' => 'check_out']) }}"
                                                 class="inline-block rounded bg-green-600 px-3 py-1 text-xs text-white transition hover:bg-green-700">
                                                 Absen Pulang
                                             </a>

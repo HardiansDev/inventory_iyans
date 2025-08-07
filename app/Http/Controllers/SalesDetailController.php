@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Midtrans\Snap;
+use Illuminate\Support\Facades\Auth;
 use Midtrans\Config;
 
 class SalesDetailController extends Controller
@@ -119,6 +120,7 @@ class SalesDetailController extends Controller
                     'qty' => $item['qty'],
                     'price' => $product->price,
                     'metode_pembayaran' => $validated['metode_pembayaran'],
+                    'created_by' => Auth::id(),
                 ]);
             }
 
@@ -197,6 +199,7 @@ class SalesDetailController extends Controller
                     'qty' => $item['qty'],
                     'price' => $product->price,
                     'metode_pembayaran' => $validated['metode_pembayaran'],
+                    'created_by' => $request->created_by ?? auth()->id(),
                 ]);
             }
 

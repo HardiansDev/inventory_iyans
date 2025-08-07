@@ -8,6 +8,8 @@ use App\Models\Product;
 use App\Models\Sales;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Carbon\Carbon;
+
 
 
 class ProductInController extends Controller
@@ -135,11 +137,12 @@ class ProductInController extends Controller
 
         foreach ($validated['product_id'] as $index => $productId) {
             $requesterName = auth()->user()->name;
+            $parsedDate = Carbon::createFromFormat('m/d/Y', $validated['date'][$index])->format('Y-m-d');
             \App\Models\ProductIn::create([
                 'product_id'     => $productId,
                 'supplier_id'    => $validated['supplier_id'][$index],
                 'category_id'    => $validated['category_id'][$index],
-                'date'           => $validated['date'][$index],
+                'date'           => $parsedDate,
                 'qty'            => $validated['qty'][$index],
                 // 'recipient'      => $validated['recipient'][$index],
                 'requester_name' => $requesterName,
