@@ -74,7 +74,7 @@
                 <div class="flex items-center justify-between">
                     <button type="button" id="add-row"
                         class="rounded-lg bg-green-600 px-5 py-2 text-sm font-medium text-white shadow hover:bg-green-700">
-                        + Tambah Baris
+                        + Tambah Produk
                     </button>
                 </div>
 

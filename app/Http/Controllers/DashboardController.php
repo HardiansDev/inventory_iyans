@@ -21,7 +21,12 @@ class DashboardController extends Controller
         $produkMasuk = ProductIn::sum('qty');
         $produkKeluar = SalesDetail::sum('qty');
         $totalUser = User::count();
-        $penjualanHariIni = SalesDetail::whereDate('created_at', today())->sum('total');
+        $penjualanHariIni = SalesDetail::join('sales', 'sales.id', '=', 'salesdetails.sales_id')
+            ->leftJoin('discounts', 'salesdetails.discount_id', '=', 'discounts.id')
+            ->whereDate('salesdetails.created_at', Carbon::today())
+            ->select(DB::raw('SUM((salesdetails.price * salesdetails.qty) - ((salesdetails.price * salesdetails.qty) * (COALESCE(discounts.nilai, 0) / 100))) as total'))
+            ->value('total');
+
         $transaksiHariIni = SalesDetail::whereDate('created_at', today())->count();
         $pegawaiAktif = Employee::where('is_active', 1)->count();
         $pegawaiTidakAktif = Employee::where('is_active', 0)->count();
@@ -56,27 +61,32 @@ class DashboardController extends Controller
         $startOfDay = Carbon::now()->startOfDay();
         $endOfDay = Carbon::now()->endOfDay();
 
-        $performaKasirHariIni = DB::table('salesdetails')
-            ->join('users', 'salesdetails.created_by', '=', 'users.id')
-            ->whereBetween('salesdetails.created_at', [$startOfDay, $endOfDay])
-            ->groupBy('users.id', 'users.name')
+        $performaKasirHariIni = SalesDetail::join('sales', 'sales.id', '=', 'salesdetails.sales_id')
+            ->leftJoin('discounts', 'salesdetails.discount_id', '=', 'discounts.id')
+            ->join('users', 'users.id', '=', 'salesdetails.created_by')
+            ->whereDate('salesdetails.created_at', Carbon::today())
+            ->groupBy('users.name')
             ->select(
                 'users.name as kasir',
-                DB::raw('COALESCE(SUM(salesdetails.qty), 0) as total_transaksi'),
-                DB::raw('COALESCE(SUM(salesdetails.total), 0) as total_penjualan')
+                DB::raw('COUNT(DISTINCT salesdetails.transaction_number) as transaksi'),
+                DB::raw('SUM((salesdetails.price * salesdetails.qty) - ((salesdetails.price * salesdetails.qty) * (COALESCE(discounts.nilai, 0) / 100))) as total_penjualan')
             )
             ->get();
+
 
         $aktivitasHariIni = SalesDetail::with(['sales.productIn.product', 'sales.user'])
             ->whereDate('salesdetails.created_at', Carbon::today())
             ->join('sales', 'sales.id', '=', 'salesdetails.sales_id')
+            ->leftJoin('discounts', 'salesdetails.discount_id', '=', 'discounts.id') // JOIN ke diskon
             ->join('product_ins', 'product_ins.id', '=', 'sales.product_ins_id')
             ->join('products', 'products.id', '=', 'product_ins.product_id')
             ->select(
                 'salesdetails.created_at',
                 'products.name as product_name',
                 'salesdetails.qty',
-                'salesdetails.total',
+                DB::raw('salesdetails.price * salesdetails.qty as subtotal'),
+                DB::raw('COALESCE(discounts.nilai, 0) as discount'),
+                DB::raw('(salesdetails.price * salesdetails.qty) - ((salesdetails.price * salesdetails.qty) * (COALESCE(discounts.nilai, 0) / 100)) as total')
             )
             ->orderBy('salesdetails.created_at', 'desc')
             ->paginate(10);

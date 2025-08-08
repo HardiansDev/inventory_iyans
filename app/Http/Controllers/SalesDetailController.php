@@ -7,9 +7,9 @@ use App\Models\SalesDetail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-use Midtrans\Snap;
 use Illuminate\Support\Facades\Auth;
 use Midtrans\Config;
+use Midtrans\Snap;
 
 class SalesDetailController extends Controller
 {
@@ -39,75 +39,39 @@ class SalesDetailController extends Controller
             DB::beginTransaction();
 
             $stokKurang = [];
+            $itemsToInsert = [];
 
             foreach ($validated['sales'] as $item) {
-                $sales = Sales::with(['productIn' => function ($query) {
-                    $query->withTrashed()->with('product');
-                }])->findOrFail($item['sales_id']);
+                $sales = Sales::with(['productIn' => fn($q) => $q->withTrashed()->with('product')])->findOrFail($item['sales_id']);
 
                 if ($sales->qty < $item['qty']) {
-                    $productName = optional(optional($sales->productIn)->product)->name ?? 'Produk tidak ditemukan';
-                    $stokKurang[] = $productName;
+                    $stokKurang[] = optional(optional($sales->productIn)->product)->name ?? 'Produk tidak ditemukan';
                 }
             }
 
             if (!empty($stokKurang)) {
                 DB::rollBack();
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Stok tidak mencukupi untuk: ' . implode(', ', $stokKurang),
-                ], 422);
-            }
-
-            if ($validated['metode_pembayaran'] === 'qris') {
-                $orderId = uniqid('TRX-');
-
-                $params = [
-                    'transaction_details' => [
-                        'order_id' => $orderId,
-                        'gross_amount' => max(1, (int) $validated['total']),
-                    ]
-                ];
-
-                $snapToken = Snap::getSnapToken($params);
-                $url = route('print.receipt', ['transaction_number' => $validated['transaction_number']]);
-
-                DB::commit();
-
-                return response()->json([
-                    'success' => true,
-                    'snap_token' => $snapToken,
-                    'transaction_number' => $validated['transaction_number'],
-                    'invoice_number' => $validated['invoice_number'],
-                    'date_order' => $validated['date_order'],
-                    'discount_id' => $validated['discount_id'],
-                    'amount' => $validated['amount'],
-                    'total' => $validated['total'],
-                    'subtotal' => $validated['subtotal'],
-                    'change' => $validated['change'],
-                    'sales' => $validated['sales'],
-                    'metode_pembayaran' => $validated['metode_pembayaran'],
-                    'transaction_url' => $url,
-                ]);
+                return response()->json(['success' => false, 'message' => 'Stok tidak cukup untuk: ' . implode(', ', $stokKurang)], 422);
             }
 
             foreach ($validated['sales'] as $item) {
-                $sales = Sales::with(['productIn' => function ($query) {
-                    $query->withTrashed()->with('product');
-                }])->findOrFail($item['sales_id']);
+                $sales = Sales::with(['productIn' => fn($q) => $q->withTrashed()->with('product')])->findOrFail($item['sales_id']);
+                $product = optional(optional($sales->productIn)->product);
 
-                $sales->qty -= $item['qty'];
+                if (!$product || !$product->price) {
+                    throw new \Exception('Produk tidak valid atau harga belum ditentukan.');
+                }
+
+                $qty = $item['qty'];
+                $price = $product->price;
+                $subtotal = $price * $qty;
+
+                $sales->qty -= $qty;
                 $sales->save();
 
                 app(\App\Http\Controllers\ProductInController::class)->updateStatusPenjualan($sales->productIn);
 
-                $product = optional(optional($sales->productIn)->product);
-
-                if (!$product || !$product->price) {
-                    throw new \Exception('Produk tidak valid atau harga belum ditentukan.');
-                }
-
-                SalesDetail::create([
+                $itemsToInsert[] = [
                     'sales_id' => $sales->id,
                     'transaction_number' => $validated['transaction_number'],
                     'invoice_number' => $validated['invoice_number'],
@@ -115,112 +79,71 @@ class SalesDetailController extends Controller
                     'discount_id' => $validated['discount_id'],
                     'amount' => $validated['amount'],
                     'total' => $validated['total'],
-                    'subtotal' => $validated['subtotal'],
+                    'subtotal' => $subtotal,
                     'change' => $validated['change'],
-                    'qty' => $item['qty'],
-                    'price' => $product->price,
+                    'qty' => $qty,
+                    'price' => $price,
                     'metode_pembayaran' => $validated['metode_pembayaran'],
                     'created_by' => Auth::id(),
-                ]);
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ];
+            }
+
+            SalesDetail::insert($itemsToInsert);
+
+            // Jika metode QRIS, generate Snap token
+            if ($validated['metode_pembayaran'] === 'qris') {
+                $orderId = 'TRX-' . uniqid();
+
+                $params = [
+                    'transaction_details' => [
+                        'order_id' => $orderId,
+                        'gross_amount' => max(1000, (int) $validated['total']),
+                    ],
+                    'callbacks' => [
+                        'finish' => route('print.receipt', ['transaction_number' => $validated['transaction_number']])
+                    ]
+
+                ];
+
+                try {
+                    Log::info("ORDER ID:", [$orderId]);
+                    Log::info("GROSS:", [$validated['total']]);
+
+                    $snapToken = Snap::getSnapToken($params);
+                    DB::commit();
+
+                    return response()->json([
+                        'success' => true,
+                        'snap_token' => $snapToken,
+                        'metode_pembayaran' => 'qris',
+                        'transaction_url' => route('print.receipt', ['transaction_number' => $validated['transaction_number']]),
+                        ...$validated,
+                    ]);
+                } catch (\Exception $e) {
+                    DB::rollBack();
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'Midtrans Snap error: ' . $e->getMessage(),
+                    ]);
+                }
             }
 
             DB::commit();
 
-            $url = route('print.receipt', ['transaction_number' => $validated['transaction_number']]);
-
             return response()->json([
                 'success' => true,
-                'transaction_url' => $url,
+                'metode_pembayaran' => 'cash',
+                'transaction_url' => route('print.receipt', ['transaction_number' => $validated['transaction_number']]),
+                ...$validated,
             ]);
-        } catch (\Throwable $e) {
+        } catch (\Exception $e) {
             DB::rollBack();
-            Log::error('Pembayaran gagal: ' . $e->getMessage(), [
-                'request' => $request->all(),
-                'trace' => $e->getTraceAsString(),
-            ]);
-
             return response()->json([
                 'success' => false,
-                'message' => 'Terjadi kesalahan saat memproses pembayaran. Silakan coba lagi.',
-            ], 500);
-        }
-    }
-
-    public function storeSalesDetail(Request $request)
-    {
-        $validated = $request->validate([
-            'sales' => 'required|array',
-            'sales.*.sales_id' => 'required|exists:sales,id',
-            'sales.*.qty' => 'required|integer|min:1',
-            'date_order' => 'required|date',
-            'discount_id' => 'nullable|exists:discounts,id',
-            'amount' => 'required|numeric|min:0',
-            'total' => 'required|numeric|min:0',
-            'subtotal' => 'required|numeric|min:0',
-            'change' => 'required|numeric|min:0',
-            'transaction_number' => 'required',
-            'invoice_number' => 'required',
-            'metode_pembayaran' => 'required|in:qris',
-        ]);
-
-        try {
-            DB::beginTransaction();
-
-            foreach ($validated['sales'] as $item) {
-                $sales = Sales::with(['productIn' => function ($query) {
-                    $query->withTrashed()->with('product');
-                }])->findOrFail($item['sales_id']);
-
-                $product = optional(optional($sales->productIn)->product);
-
-                if (!$product || !$product->price) {
-                    throw new \Exception('Produk tidak valid atau harga belum ditentukan.');
-                }
-
-                if ($sales->qty >= $item['qty']) {
-                    $sales->qty -= $item['qty'];
-                    $sales->save();
-
-                    app(\App\Http\Controllers\ProductInController::class)->updateStatusPenjualan($sales->productIn);
-                } else {
-                    throw new \Exception('Stok tidak cukup untuk produk: ' . ($product->name ?? 'Produk tidak ditemukan'));
-                }
-
-                SalesDetail::create([
-                    'sales_id' => $sales->id,
-                    'transaction_number' => $validated['transaction_number'],
-                    'invoice_number' => $validated['invoice_number'],
-                    'date_order' => $validated['date_order'],
-                    'discount_id' => $validated['discount_id'],
-                    'amount' => $validated['amount'],
-                    'total' => $validated['total'],
-                    'subtotal' => $validated['subtotal'],
-                    'change' => $validated['change'],
-                    'qty' => $item['qty'],
-                    'price' => $product->price,
-                    'metode_pembayaran' => $validated['metode_pembayaran'],
-                    'created_by' => $request->created_by ?? auth()->id(),
-                ]);
-            }
-
-            DB::commit();
-
-            $url = route('print.receipt', ['transaction_number' => $validated['transaction_number']]);
-
-            return response()->json([
-                'success' => true,
-                'transaction_url' => $url,
-            ]);
-        } catch (\Throwable $e) {
-            DB::rollBack();
-            Log::error('Gagal menyimpan detail penjualan setelah QRIS sukses: ' . $e->getMessage(), [
-                'request' => $request->all(),
-                'trace' => $e->getTraceAsString(),
-            ]);
-
-            return response()->json([
-                'success' => false,
-                'message' => 'Terjadi kesalahan saat menyimpan detail pembayaran. Silakan hubungi admin.',
+                'message' => 'Terjadi kesalahan saat memproses transaksi.',
+                'error' => $e->getMessage(),
             ], 500);
         }
     }
@@ -228,7 +151,7 @@ class SalesDetailController extends Controller
     public function printReceipt($transaction_number)
     {
         $salesDetails = SalesDetail::where('transaction_number', $transaction_number)
-            ->with('sales.productIn.product')
+            ->with(['sales.productIn.product', 'discount'])
             ->get();
 
         if ($salesDetails->isEmpty()) {
@@ -237,6 +160,60 @@ class SalesDetailController extends Controller
 
         $invoice = $salesDetails->first();
 
-        return view('penjualan.receipt', compact('salesDetails', 'invoice'));
+        $subtotal = $salesDetails->sum(fn($item) => $item->qty * $item->price);
+
+        $discountPercentage = optional($invoice->discount)->nilai ?? 0;
+        $discount = ($subtotal * $discountPercentage) / 100;
+
+        $total = $subtotal - $discount;
+
+        $amount = $invoice->amount;
+        $change = $invoice->change;
+
+        $paymentMethod = $invoice->metode_pembayaran;
+
+        return view('penjualan.receipt', compact(
+            'salesDetails',
+            'invoice',
+            'subtotal',
+            'discount',
+            'total',
+            'amount',
+            'change',
+            'paymentMethod'
+        ));
+    }
+
+    /**
+     * Fungsi ini digunakan untuk menyimpan data detail penjualan secara manual jika dibutuhkan
+     */
+    public function storeSalesDetail(Request $request)
+    {
+        $validated = $request->validate([
+            'sales_id' => 'required|exists:sales,id',
+            'transaction_number' => 'required|string',
+            'invoice_number' => 'required|string',
+            'date_order' => 'required|date',
+            'discount_id' => 'nullable|exists:discounts,id',
+            'amount' => 'required|numeric',
+            'total' => 'required|numeric',
+            'subtotal' => 'required|numeric',
+            'change' => 'required|numeric',
+            'qty' => 'required|integer',
+            'price' => 'required|numeric',
+            'metode_pembayaran' => 'required|in:cash,qris',
+        ]);
+
+        $validated['created_by'] = Auth::id();
+        $validated['created_at'] = now();
+        $validated['updated_at'] = now();
+
+        SalesDetail::create($validated);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Detail penjualan berhasil disimpan.',
+            'transaction_number' => $validated['transaction_number'], // ← HARUS ADA
+        ]);
     }
 }

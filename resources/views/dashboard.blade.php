@@ -241,8 +241,13 @@
                                             {{ \Carbon\Carbon::parse($item->created_at)->format('H:i') }}</td>
                                         <td class="px-4 py-2 text-gray-700">{{ $item->product_name }}</td>
                                         <td class="px-4 py-2">{{ $item->qty }}</td>
-                                        <td class="px-4 py-2 text-right">Rp {{ number_format($item->total, 0, ',', '.') }}
+                                        <td class="px-4 py-2 text-right">
+                                            Rp {{ number_format($item->total, 0, ',', '.') }}
+                                            @if ($item->discount > 0)
+                                                <br><span class="text-xs text-green-600">(-{{ $item->discount }}%)</span>
+                                            @endif
                                         </td>
+
                                     </tr>
                                 @empty
                                     <tr>
@@ -267,19 +272,18 @@
                             <thead class="bg-gray-100">
                                 <tr>
                                     <th scope="col" class="px-6 py-3 font-bold">Kasir</th>
-                                    <th scope="col" class="px-6 py-3 font-bold text-center">Total Transaksi</th>
+                                    <th scope="col" class="px-6 py-3 font-bold text-center"> Melalukan Transaksi
+                                    </th>
                                     <th scope="col" class="px-6 py-3 font-bold text-right">Total Penjualan</th>
                                 </tr>
                             </thead>
                             <tbody class="divide-y divide-gray-200">
                                 @forelse ($performaKasirHariIni as $kasir)
                                     <tr class="bg-white hover:bg-gray-50">
-                                        <td class="px-6 py-3 text-gray-700 font-medium">{{ strtoupper($kasir->kasir) }}
-                                        </td>
-                                        <td class="px-6 py-3 text-center text-gray-700">{{ $kasir->total_transaksi }}</td>
-                                        <td class="px-6 py-3 text-right text-gray-700">Rp
-                                            {{ number_format($kasir->total_penjualan, 0, ',', '.') }}
-                                        </td>
+                                        <td class="px-4 py-2">{{ $kasir->kasir }}</td>
+                                        <td class="px-4 py-2 text-center">{{ $kasir->transaksi }}</td>
+                                        <td class="px-4 py-2 text-right">Rp
+                                            {{ number_format($kasir->total_penjualan, 0, ',', '.') }}</td>
                                     </tr>
                                 @empty
                                     <tr>
@@ -288,6 +292,7 @@
                                         </td>
                                     </tr>
                                 @endforelse
+
                             </tbody>
                         </table>
                     </div>

@@ -249,6 +249,7 @@
                     transaction_number: formData.get('transaction_number'),
                     invoice_number: formData.get('invoice_number'),
                     date_order: formData.get('date_order'),
+                    created_by: formData.get('created_by'),
                 };
 
                 fetch("{{ route('process.payment') }}", {
@@ -272,43 +273,30 @@
                         if (res.metode_pembayaran === 'qris') {
                             window.snap.pay(res.snap_token, {
                                 onSuccess: function() {
-                                    fetch("{{ route('store.sales.detail') }}", {
-                                            method: 'POST',
-                                            headers: {
-                                                'X-CSRF-TOKEN': "{{ csrf_token() }}",
-                                                'Content-Type': 'application/json'
-                                            },
-                                            body: JSON.stringify({
-                                                ...res,
-                                                created_by: "{{ Auth::id() }}",
-                                            })
-                                        })
-                                        .then(r => r.json())
-                                        .then(final => {
-                                            if (final.success) {
-                                                const newTab = window.open(res
-                                                    .transaction_url, '_blank');
-                                                if (!newTab) {
-                                                    alert(
-                                                        "Pop-up diblokir! Mohon aktifkan pop-up."
-                                                    );
-                                                } else {
-                                                    window.location.href =
-                                                        "{{ route('sales.index') }}";
-                                                }
-                                            } else {
-                                                alert(final.message);
-                                            }
-                                        });
+                                    const newTab = window.open(res.transaction_url,
+                                        '_blank');
+                                    if (!newTab) {
+                                        alert("Pop-up diblokir! Mohon aktifkan pop-up.");
+                                    } else {
+                                        window.location.href =
+                                            "{{ route('sales.index') }}";
+                                    }
                                 },
                                 onPending: function() {
-                                    alert('Pembayaran sedang diproses');
+                                    alert(
+                                        "Pembayaran masih menunggu. Silakan selesaikan pembayaran QRIS."
+                                    );
                                 },
-                                onError: function() {
-                                    alert('Pembayaran gagal');
+                                onError: function(result) {
+                                    console.error(result);
+                                    alert('Terjadi kesalahan saat pembayaran.');
+                                },
+                                onClose: function() {
+                                    alert('Pembayaran QRIS dibatalkan.');
                                 }
                             });
                         } else {
+                            // Jika metode bukan qris (misalnya cash), langsung redirect
                             const newTab = window.open(res.transaction_url, '_blank');
                             if (!newTab) {
                                 alert("Pop-up diblokir! Mohon aktifkan pop-up.");
@@ -317,10 +305,7 @@
                             }
                         }
                     })
-                    .catch(err => {
-                        console.error(err);
-                        alert('Terjadi kesalahan saat proses pembayaran.');
-                    });
+
             });
 
             // Inisialisasi

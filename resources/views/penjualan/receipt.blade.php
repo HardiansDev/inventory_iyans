@@ -1,21 +1,11 @@
 <!DOCTYPE html>
-<html
-    lang="id"
-    x-data
-    x-init="$nextTick(() => window.print())"
->
+<html lang="id" x-data x-init="$nextTick(() => window.print())">
 
 <head>
     <meta charset="UTF-8" />
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Struk Pembayaran</title>
-    <script
-        src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"
-        defer
-    ></script>
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @media print {
@@ -66,10 +56,7 @@
         <tbody>
             @foreach ($salesDetails as $item)
                 <tr>
-                    <td
-                        colspan="2"
-                        class="font-medium text-black"
-                    >
+                    <td colspan="2" class="font-medium text-black">
                         {{ $item->sales->productIn->product->name ?? 'Produk Tidak Ditemukan' }}
                     </td>
                 </tr>
@@ -88,21 +75,31 @@
     <table class="w-full text-sm">
         <tr>
             <td>SUBTOTAL</td>
-            <td class="text-right">Rp {{ number_format($invoice->subtotal, 0, ',', '.') }}</td>
+            <td class="text-right">Rp {{ number_format($subtotal, 0, ',', '.') }}</td>
         </tr>
         @if ($invoice->discount_id)
             <tr>
-                <td>DISKON</td>
-                <td class="text-right">- Rp {{ number_format($invoice->subtotal - $invoice->total, 0, ',', '.') }}</td>
+                <td>DISKON ({{ $invoice->discount->nilai ?? 0 }}%)</td>
+                <td class="text-right">- Rp {{ number_format($discount, 0, ',', '.') }}</td>
             </tr>
         @endif
         <tr>
             <td class="font-bold">TOTAL</td>
-            <td class="text-right font-bold">Rp {{ number_format($invoice->total, 0, ',', '.') }}</td>
+            <td class="text-right font-bold">Rp {{ number_format($total, 0, ',', '.') }}</td>
+        </tr>
+        <tr>
+            <td class="font-bold">BAYAR</td>
+            <td class="text-right font-bold">Rp {{ number_format($amount, 0, ',', '.') }}</td>
         </tr>
         <tr>
             <td>KEMBALI</td>
-            <td class="text-right">Rp {{ number_format($invoice->change, 0, ',', '.') }}</td>
+            <td class="text-right">Rp {{ number_format($change, 0, ',', '.') }}</td>
+        </tr>
+        <tr>
+            <td>METODE PEMBAYARAN</td>
+            <td class="text-right">
+                {{ $invoice->metode_pembayaran === 'cash' ? 'cash' : 'QRIS' }}
+            </td>
         </tr>
     </table>
 
@@ -115,6 +112,7 @@
         <br />
         tidak dapat dikembalikan.
     </div>
+
 
 
 </body>
