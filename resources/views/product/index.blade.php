@@ -23,24 +23,24 @@
     <!-- Main Content -->
     <section class="content">
         <div class="card shadow-sm">
-            <div class="card-body">
-                <div class="mb-6 flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
+            <div class="card-body bg-white p-6">
+                <!-- Bagian Tombol Aksi -->
+                <div class="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                     <!-- Kiri: Tombol Aksi -->
-                    <div class="flex flex-wrap gap-2">
+                    <div class="flex flex-col gap-2 sm:flex-row">
                         <button type="button" onclick="openModal()"
-                            class="inline-flex items-center gap-2 rounded bg-green-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-green-700">
+                            class="inline-flex w-full sm:w-auto items-center gap-2 rounded bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-blue-700">
                             <i class="fas fa-plus-circle"></i>
                             Tambah Produk
                         </button>
 
-                        <form id="bulkDeleteForm" method="POST" action="{{ route('product.bulkDelete') }}">
+                        <form id="bulkDeleteForm" method="POST" action="{{ route('product.bulkDelete') }}"
+                            class="w-full sm:w-auto">
                             @csrf
                             @method('DELETE')
-
                             <input type="hidden" name="ids" id="bulkDeleteIds" />
-
                             <button id="deleteAllBtn" type="submit"
-                                class="inline-flex hidden items-center gap-2 rounded bg-red-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-red-700 disabled:opacity-50"
+                                class="inline-flex w-full sm:w-auto hidden items-center gap-2 rounded bg-red-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-red-700 disabled:opacity-50"
                                 disabled>
                                 <i class="fas fa-trash-alt"></i>
                                 Pilih Menghapus
@@ -48,12 +48,11 @@
                         </form>
                     </div>
 
-                    <!-- Kanan: Dropdowns -->
-                    <div class="flex flex-wrap gap-2">
-                        <!-- Dropdown: Unduh Semua Data -->
-                        <div x-data="{ open: false }" class="relative">
+                    <!-- Kanan: Dropdown Unduh Data -->
+                    <div class="flex flex-col gap-2 sm:flex-row sm:items-center">
+                        <div x-data="{ open: false }" class="relative w-full sm:w-auto">
                             <button @click="open = !open"
-                                class="inline-flex items-center gap-2 rounded bg-teal-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-teal-700">
+                                class="inline-flex w-full sm:w-auto items-center gap-2 rounded bg-teal-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-teal-700">
                                 <i class="fas fa-download"></i>
                                 Unduh Data
                                 <svg class="ml-1 h-4 w-4" fill="currentColor" viewBox="0 0 20 20">
@@ -63,7 +62,7 @@
                                 </svg>
                             </button>
                             <div x-show="open" @click.away="open = false"
-                                class="absolute z-10 mt-2 w-52 overflow-hidden rounded border border-gray-200 bg-white shadow-lg">
+                                class="absolute z-10 mt-2 w-full sm:w-52 overflow-hidden rounded border border-gray-200 bg-white shadow-lg">
                                 <form action="{{ route('product.export') }}" method="POST">
                                     @csrf
                                     <button type="submit" name="export_type" value="excel"
@@ -85,16 +84,17 @@
                     </div>
                 </div>
 
+                <!-- Bagian Filter & Search -->
                 <form action="{{ route('product.index') }}" method="GET"
-                    class="mb-6 flex flex-col items-start gap-4 sm:flex-row sm:items-center">
-                    {{-- Filter Kategori --}}
-                    <div>
+                    class="mb-6 flex flex-col gap-4 sm:flex-row sm:items-end sm:gap-6">
+                    <!-- Filter Kategori -->
+                    <div class="w-full sm:w-auto">
                         <label for="filtername" class="mb-1 block text-sm font-medium text-gray-700">
                             <i class="fas fa-filter mr-1 text-gray-500"></i>
                             Filter Kategori
                         </label>
                         <select name="category" id="filtername"
-                            class="w-60 rounded-md border border-gray-300 px-3 py-2 text-sm text-gray-700 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:w-72">
+                            class="w-full sm:w-72 rounded-md border border-gray-300 px-3 py-2 text-sm text-gray-700 shadow-sm focus:border-blue-500 focus:ring-blue-500">
                             <option value="">Pilih Kategori</option>
                             @foreach ($datacategory as $category)
                                 <option value="{{ $category->name }}"
@@ -105,31 +105,32 @@
                         </select>
                     </div>
 
-                    {{-- Search Produk --}}
-                    <div>
+                    <!-- Search Produk -->
+                    <div class="w-full sm:w-auto">
                         <label for="search" class="mb-1 block text-sm font-medium text-gray-700">
                             <i class="fas fa-search mr-1 text-gray-500"></i>
                             Cari Produk
                         </label>
                         <input type="text" name="search" id="search" placeholder="Nama produk..."
                             value="{{ request('search') }}"
-                            class="w-60 rounded-md border border-gray-300 px-3 py-2 text-sm text-gray-700 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:w-72" />
+                            class="w-full sm:w-72 rounded-md border border-gray-300 px-3 py-2 text-sm text-gray-700 shadow-sm focus:border-blue-500 focus:ring-blue-500" />
                     </div>
 
-                    {{-- Tombol Submit --}}
-                    <div class="mt-1 sm:mt-6">
+                    <!-- Tombol Filter & Reset -->
+                    <div class="flex w-full sm:w-auto gap-2 sm:mt-0">
                         <button type="submit"
-                            class="inline-flex items-center rounded-md bg-blue-600 px-4 py-2 text-sm text-white shadow-sm hover:bg-blue-700">
+                            class="flex-1 sm:flex-none inline-flex items-center justify-center rounded-md bg-blue-600 px-4 py-2 text-sm text-white shadow-sm hover:bg-blue-700">
                             <i class="fas fa-search mr-2"></i>
                             Filter
                         </button>
                         <a href="{{ route('product.index') }}"
-                            class="ml-2 inline-flex items-center rounded-md bg-gray-300 px-4 py-2 text-sm text-gray-800 shadow-sm hover:bg-gray-400">
+                            class="flex-1 sm:flex-none inline-flex items-center justify-center rounded-md bg-gray-300 px-4 py-2 text-sm text-gray-800 shadow-sm hover:bg-gray-400">
                             <i class="fas fa-redo-alt mr-2"></i>
                             Reset
                         </a>
                     </div>
                 </form>
+
 
                 <!-- Table Produk -->
                 <div class="overflow-x-auto rounded-lg border border-gray-200 shadow">
@@ -229,23 +230,11 @@
                             @endforelse
                         </tbody>
                     </table>
-                    <div class="mt-6 flex items-center justify-between rounded-b-md border-t bg-white px-4 py-3 shadow-sm">
-                        <div class="text-sm text-gray-600">
-                            Menampilkan
-                            <span class="font-medium">{{ $products->firstItem() }}</span>
-                            sampai
-                            <span class="font-medium">{{ $products->lastItem() }}</span>
-                            dari
-                            <span class="font-medium">{{ $products->total() }}</span>
-                            data
-                        </div>
 
-                        <div>
-                            {{ $products->onEachSide(1)->links('vendor.pagination.tailwind') }}
-                        </div>
-                    </div>
                 </div>
-
+                <div class="mt-4">
+                    {{ $products->links('pagination::tailwind') }}
+                </div>
                 <!-- Modal Konfirmasi Hapus -->
                 <div id="deleteModal"
                     class="fixed inset-0 z-50 hidden items-center justify-center bg-black bg-opacity-50">

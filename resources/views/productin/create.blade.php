@@ -13,11 +13,8 @@
                     kelola data produk yang masuk ke dalam penjualan
                 </p>
             </div>
-
-
         </div>
     </section>
-
 
     <div class="container mx-auto mt-6 px-4">
         <div class="rounded-xl border border-gray-200 bg-white p-6 shadow-lg">
@@ -28,8 +25,9 @@
                 @csrf
 
                 <div id="dynamic-form" class="space-y-4">
-                    <div class="grid grid-cols-12 items-end gap-4 border-b border-gray-200 pb-4">
-                        <div class="col-span-3">
+                    <div
+                        class="grid grid-cols-2 md:grid-cols-12 gap-2 md:gap-4 items-end border-b border-gray-200 pb-4 overflow-x-auto">
+                        <div class="col-span-2 md:col-span-3">
                             <label class="mb-1 block text-sm font-medium text-gray-700">Nama Produk</label>
                             <select name="product_id[]"
                                 class="product-select w-full rounded-md border border-gray-300 bg-white px-4 py-2 text-sm text-gray-700 shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-500"
@@ -45,26 +43,22 @@
                         <input type="hidden" name="supplier_id[]" class="hidden-supplier" />
                         <input type="hidden" name="category_id[]" class="hidden-category" />
 
-                        <div class="col-span-2">
+                        <div class="col-span-1 md:col-span-2">
                             <label class="mb-1 block text-sm font-medium text-gray-700">Tanggal Masuk</label>
-
                             <input id="datepicker-actions" datepicker datepicker-buttons datepicker-autoselect-today
                                 type="text" name="date[]"
-                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5"
                                 placeholder="Pilih tanggal" required>
-
                         </div>
 
-                        <div class="col-span-2">
+                        <div class="col-span-1 md:col-span-2">
                             <label class="mb-1 block text-sm font-medium text-gray-700">Jumlah</label>
                             <input type="number" name="qty[]"
                                 class="w-full rounded-md border border-gray-300 bg-white px-4 py-2 text-sm text-gray-700 shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-500"
                                 required>
                         </div>
 
-
-
-                        <div class="col-span-2 flex justify-end">
+                        <div class="col-span-2 md:col-span-2 flex justify-end">
                             <button type="button"
                                 class="remove-row rounded-lg bg-red-500 px-4 py-2 text-sm text-white shadow hover:bg-red-600">Hapus</button>
                         </div>
@@ -81,11 +75,12 @@
                 <div class="mt-6 flex justify-between">
                     <a href="{{ route('productin.index') }}"
                         class="inline-flex items-center rounded-lg bg-gray-200 px-5 py-2 text-sm font-medium text-gray-700 shadow hover:bg-gray-300">
-                        < Kembali </a>
-                            <button type="submit"
-                                class="rounded-lg bg-blue-600 px-6 py-2 text-sm font-medium text-white shadow hover:bg-blue-700">
-                                Ajukan
-                            </button>
+                        &lt; Kembali
+                    </a>
+                    <button type="submit"
+                        class="rounded-lg bg-blue-600 px-6 py-2 text-sm font-medium text-white shadow hover:bg-blue-700">
+                        Ajukan
+                    </button>
                 </div>
             </form>
         </div>
@@ -98,8 +93,8 @@
 
             const generateRow = () => {
                 return `
-                <div class="grid grid-cols-12 gap-4 items-end border-b border-gray-200 pb-4">
-                    <div class="col-span-3">
+                <div class="grid grid-cols-2 md:grid-cols-12 gap-2 md:gap-4 items-end border-b border-gray-200 pb-4 overflow-x-auto">
+                    <div class="col-span-2 md:col-span-3">
                         <select name="product_id[]" class="product-select w-full rounded-md border border-gray-300 bg-white px-4 py-2 text-sm text-gray-700 shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-500" required>
                             <option value="" disabled selected>Pilih Produk</option>
                             @foreach ($products as $product)
@@ -111,7 +106,7 @@
                     <input type="hidden" name="supplier_id[]" class="hidden-supplier" />
                     <input type="hidden" name="category_id[]" class="hidden-category" />
 
-                    <div class="col-span-2">
+                    <div class="col-span-1 md:col-span-2">
                         <label class="mb-1 block text-sm font-medium text-gray-700">Tanggal Masuk</label>
                         <input
                             type="text"
@@ -124,12 +119,12 @@
                             required />
                     </div>
 
-                    <div class="col-span-2">
+                    <div class="col-span-1 md:col-span-2">
                         <label class="mb-1 block text-sm font-medium text-gray-700">Jumlah</label>
                         <input type="number" name="qty[]" class="w-full rounded-md border border-gray-300 bg-white px-4 py-2 text-sm text-gray-700 shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-500" required>
                     </div>
 
-                    <div class="col-span-2 text-right flex justify-end">
+                    <div class="col-span-2 md:col-span-2 flex justify-end">
                         <button type="button" class="remove-row rounded-lg bg-red-500 px-4 py-2 text-sm text-white shadow hover:bg-red-600">Hapus</button>
                     </div>
                 </div>

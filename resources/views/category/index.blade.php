@@ -19,33 +19,39 @@
 
     <!-- Konten -->
     <section class="rounded bg-white p-6 shadow-sm">
-        <div class="mb-4 grid grid-cols-1 gap-4 md:grid-cols-2">
-            <div>
+        <div class="mb-4 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+            <!-- Tombol Tambah Kategori -->
+            <div class="w-full md:w-auto">
                 <button onclick="openCategoryModal()"
-                    class="flex w-full items-center gap-2 rounded bg-blue-600 px-4 py-2 text-white hover:bg-blue-700 md:w-auto">
+                    class="flex w-full items-center justify-center gap-2 rounded bg-blue-600 px-4 py-2 text-white hover:bg-blue-700 md:w-auto">
                     <i class="fas fa-plus-circle"></i>
                     <span>Tambah Kategori</span>
                 </button>
             </div>
 
             <!-- Form Pencarian -->
-            <div class="mb-4 flex justify-end">
-                <form action="{{ route('category.index') }}" method="GET" class="flex items-center gap-2">
+            <div class="w-full md:w-auto">
+                <form action="{{ route('category.index') }}" method="GET"
+                    class="flex flex-col gap-2 sm:flex-row sm:items-center">
                     <input type="search" name="search" value="{{ $search }}" placeholder="Cari..."
-                        class="w-60 rounded-md border border-gray-300 px-3 py-2 text-sm text-gray-700 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:w-72" />
-                    <button type="submit"
-                        class="inline-flex items-center rounded-md bg-blue-600 px-4 py-2 text-sm text-white shadow-sm hover:bg-blue-700">
-                        <i class="fas fa-search mr-2"></i>
-                        Cari
-                    </button>
-                    <a href="{{ route('category.index') }}"
-                        class="ml-2 inline-flex items-center rounded-md bg-gray-300 px-4 py-2 text-sm text-gray-800 shadow-sm hover:bg-gray-400"">
-                        <i class="fas fa-redo-alt mr-2"></i>
-                        Reset
-                    </a>
+                        class="w-full rounded-md border border-gray-300 px-3 py-2 text-sm text-gray-700 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:w-72" />
+
+                    <div class="flex gap-2">
+                        <button type="submit"
+                            class="flex flex-1 items-center justify-center rounded-md bg-blue-600 px-4 py-2 text-sm text-white shadow-sm hover:bg-blue-700 sm:flex-none">
+                            <i class="fas fa-search mr-2"></i>
+                            Cari
+                        </button>
+                        <a href="{{ route('category.index') }}"
+                            class="flex flex-1 items-center justify-center rounded-md bg-gray-300 px-4 py-2 text-sm text-gray-800 shadow-sm hover:bg-gray-400 sm:flex-none">
+                            <i class="fas fa-redo-alt mr-2"></i>
+                            Reset
+                        </a>
+                    </div>
                 </form>
             </div>
         </div>
+
 
         <!-- Tabel Data -->
         <div class="overflow-x-auto rounded-lg border border-gray-200 shadow">

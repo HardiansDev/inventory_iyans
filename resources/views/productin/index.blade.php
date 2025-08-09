@@ -26,22 +26,22 @@
                 <div class="box">
                     <!-- Header Action -->
                     <div class="mb-6 grid grid-cols-1 gap-3 sm:grid-cols-2 sm:items-center">
-                        <!-- KIRI: Tombol Aksi -->
-                        <div class="flex flex-wrap items-center gap-2">
+                        <!-- KIRI: Tombol Aksi dan Filter -->
+                        <div class="flex flex-col sm:flex-row sm:items-center sm:gap-3 gap-2">
                             <!-- Tombol Minta Produk -->
                             <a href="{{ route('productin.create') }}"
-                                class="inline-flex items-center rounded bg-green-600 px-4 py-2 text-sm text-white shadow-sm hover:bg-green-700">
+                                class="inline-flex items-center justify-center rounded bg-green-600 px-4 py-2 text-sm text-white shadow-sm hover:bg-green-700 whitespace-nowrap">
                                 <i class="fas fa-plus-circle mr-2"></i>
                                 Minta Produk
                             </a>
 
                             <!-- Tombol Bulk Delete -->
                             <form method="POST" action="{{ route('productin.bulkDelete') }}"
-                                onsubmit="return confirm('Yakin ingin menghapus produk terpilih?')">
+                                onsubmit="return confirm('Yakin ingin menghapus produk terpilih?')" class="inline-flex">
                                 @csrf
                                 <input type="hidden" name="ids" id="bulkDeleteIds" />
                                 <button id="deleteAllBtn" type="submit"
-                                    class="inline-flex hidden items-center gap-2 rounded bg-red-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-red-700 disabled:opacity-50"
+                                    class="inline-flex hidden items-center gap-2 rounded bg-red-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-red-700 disabled:opacity-50 whitespace-nowrap"
                                     disabled>
                                     <i class="fas fa-trash-alt"></i>
                                     Pilih Menghapus
@@ -51,14 +51,14 @@
                             <!-- Filter Data -->
                             <div class="relative">
                                 <button onclick="toggleFilterDropdown()" type="button"
-                                    class="inline-flex items-center rounded border border-blue-600 px-4 py-2 text-sm text-blue-600 shadow-sm hover:bg-blue-50">
+                                    class="inline-flex items-center rounded border border-blue-600 px-4 py-2 text-sm text-blue-600 shadow-sm hover:bg-blue-50 whitespace-nowrap">
                                     <i class="fas fa-filter mr-2"></i>
                                     Filter Data
                                 </button>
 
                                 <!-- Dropdown Box Filter -->
                                 <div id="filterDropdown"
-                                    class="absolute right-0 z-50 mt-2 hidden w-80 rounded-lg border border-gray-200 bg-white p-4 shadow-lg">
+                                    class="absolute right-0 z-50 mt-2 hidden w-full max-w-xs rounded-lg border border-gray-200 bg-white p-4 shadow-lg sm:w-80">
                                     <!-- Form Filter -->
                                     <form action="{{ route('productin.index') }}" method="GET" class="space-y-4">
                                         <!-- Kategori -->
@@ -128,9 +128,11 @@
                                             </label>
                                             <div class="flex gap-2">
                                                 <input type="number" name="min_price" value="{{ request('min_price') }}"
-                                                    placeholder="Min" class="w-1/2 rounded border px-3 py-2 text-sm" />
+                                                    placeholder="Min"
+                                                    class="w-1/2 rounded border px-3 py-2 text-sm focus:outline-none focus:ring-blue-400" />
                                                 <input type="number" name="max_price" value="{{ request('max_price') }}"
-                                                    placeholder="Max" class="w-1/2 rounded border px-3 py-2 text-sm" />
+                                                    placeholder="Max"
+                                                    class="w-1/2 rounded border px-3 py-2 text-sm focus:outline-none focus:ring-blue-400" />
                                             </div>
                                         </div>
 
@@ -141,9 +143,11 @@
                                             </label>
                                             <div class="flex gap-2">
                                                 <input type="number" name="min_qty" value="{{ request('min_qty') }}"
-                                                    placeholder="Min" class="w-1/2 rounded border px-3 py-2 text-sm" />
+                                                    placeholder="Min"
+                                                    class="w-1/2 rounded border px-3 py-2 text-sm focus:outline-none focus:ring-blue-400" />
                                                 <input type="number" name="max_qty" value="{{ request('max_qty') }}"
-                                                    placeholder="Max" class="w-1/2 rounded border px-3 py-2 text-sm" />
+                                                    placeholder="Max"
+                                                    class="w-1/2 rounded border px-3 py-2 text-sm focus:outline-none focus:ring-blue-400" />
                                             </div>
                                         </div>
 
@@ -153,7 +157,6 @@
                                                 class="inline-flex items-center rounded-md bg-gray-300 px-4 py-2 text-sm text-gray-800 shadow-sm hover:bg-gray-400">
                                                 <i class="fas fa-undo mr-1"></i>
                                                 Reset Filter
-
                                             </a>
                                             <button type="submit"
                                                 class="rounded bg-blue-600 px-4 py-2 text-sm text-white hover:bg-blue-700">
@@ -169,18 +172,18 @@
                         <!-- KANAN: Form Pencarian -->
                         <div class="flex justify-end">
                             <form method="GET" action="{{ route('productin.index') }}"
-                                class="flex flex-col items-end gap-2 sm:flex-row sm:items-center">
+                                class="flex flex-col items-end gap-2 sm:flex-row sm:items-center w-full sm:w-auto">
                                 <input type="text" name="search" value="{{ request('search') }}"
                                     placeholder="Cari nama produk..."
-                                    class="w-full rounded border px-3 py-2 text-sm shadow focus:border-blue-300 focus:outline-none focus:ring sm:w-56">
-                                <div class="flex gap-2">
+                                    class="w-full rounded border px-3 py-2 text-sm shadow focus:border-blue-300 focus:outline-none focus:ring sm:w-56" />
+                                <div class="flex gap-2 w-full sm:w-auto">
                                     <button type="submit"
-                                        class="flex items-center gap-1 rounded bg-blue-600 px-3 py-2 text-sm text-white hover:bg-blue-700">
+                                        class="flex items-center justify-center gap-1 rounded bg-blue-600 px-3 py-2 text-sm text-white hover:bg-blue-700 whitespace-nowrap w-full sm:w-auto">
                                         <i class="fas fa-search"></i>
                                         Cari
                                     </button>
                                     <a href="{{ route('productin.index') }}"
-                                        class="ml-2 inline-flex items-center rounded-md bg-gray-300 px-4 py-2 text-sm text-gray-800 shadow-sm hover:bg-gray-400"">
+                                        class="inline-flex items-center justify-center rounded-md bg-gray-300 px-4 py-2 text-sm text-gray-800 shadow-sm hover:bg-gray-400 whitespace-nowrap w-full sm:w-auto">
                                         <i class="fas fa-redo-alt mr-2"></i>
                                         Reset
                                     </a>

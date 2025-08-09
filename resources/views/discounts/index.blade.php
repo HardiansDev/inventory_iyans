@@ -18,11 +18,11 @@
 
     <!-- Konten -->
     <section class="rounded bg-white p-6 shadow-sm" x-data="discountModal()" x-init="init()">
-        <div class="mb-4 grid grid-cols-1 gap-4 md:grid-cols-2">
+        <div class="mb-4 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
             <!-- Tombol Tambah -->
-            <div x-data="{ open: false }">
+            <div x-data="{ open: false }" class="w-full md:w-auto">
                 <button @click="open = true"
-                    class="inline-flex items-center gap-2 rounded bg-blue-600 px-4 py-2 text-white hover:bg-blue-700">
+                    class="flex w-full items-center justify-center gap-2 rounded bg-blue-600 px-4 py-2 text-white hover:bg-blue-700 md:w-auto">
                     <i class="fas fa-plus-circle"></i>
                     Tambah Diskon
                 </button>
@@ -66,20 +66,28 @@
             </div>
 
             <!-- Form Pencarian -->
-            <div class="flex justify-end">
-                <form action="{{ route('discounts.index') }}" method="GET" class="flex items-center gap-2">
+            <div class="w-full md:w-auto">
+                <form action="{{ route('discounts.index') }}" method="GET"
+                    class="flex flex-col gap-2 sm:flex-row sm:items-center">
                     <input type="search" name="search" value="{{ request('search') }}" placeholder="Cari diskon..."
-                        class="w-60 rounded-md border px-3 py-2 text-sm shadow-sm focus:ring-blue-500" />
-                    <button type="submit" class="rounded bg-blue-600 px-4 py-2 text-sm text-white hover:bg-blue-700">
-                        <i class="fas fa-search mr-2"></i>Cari
-                    </button>
-                    <a href="{{ route('discounts.index') }}"
-                        class="rounded bg-gray-300 px-4 py-2 text-sm text-gray-800 hover:bg-gray-400">
-                        <i class="fas fa-redo-alt mr-2"></i>Reset
-                    </a>
+                        class="w-full rounded-md border border-gray-300 px-3 py-2 text-sm text-gray-700 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:w-72" />
+
+                    <div class="flex gap-2">
+                        <button type="submit"
+                            class="flex flex-1 items-center justify-center rounded-md bg-blue-600 px-4 py-2 text-sm text-white shadow-sm hover:bg-blue-700 sm:flex-none">
+                            <i class="fas fa-search mr-2"></i>
+                            Cari
+                        </button>
+                        <a href="{{ route('discounts.index') }}"
+                            class="flex flex-1 items-center justify-center rounded-md bg-gray-300 px-4 py-2 text-sm text-gray-800 shadow-sm hover:bg-gray-400 sm:flex-none">
+                            <i class="fas fa-redo-alt mr-2"></i>
+                            Reset
+                        </a>
+                    </div>
                 </form>
             </div>
         </div>
+
 
         <!-- Tabel Data -->
         <div class="overflow-x-auto rounded-lg border border-gray-200 shadow">
