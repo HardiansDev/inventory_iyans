@@ -64,10 +64,7 @@
                                 <td class="py-2">: {{ $product->stock }}</td>
                             </tr>
 
-                            <tr>
-                                <th class="py-2 text-left font-medium">Supplier</th>
-                                <td class="py-2">: {{ $product->supplier->name }}</td>
-                            </tr>
+
                         </tbody>
                     </table>
                 </div>

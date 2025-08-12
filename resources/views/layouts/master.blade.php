@@ -7,18 +7,19 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     @yield('title')
-
-    {{-- Tailwind CSS --}}
     <script src="https://cdn.tailwindcss.com"></script>
+
+
+
+
+
+
 
     {{-- Chart.js (hanya sekali) --}}
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     {{-- Flowbite (cukup satu versi stabil terbaru) --}}
     <script src="https://unpkg.com/flowbite@latest/dist/flowbite.min.js"></script>
-
-    {{-- Optional: Plugin Flowbite Charts (boleh dipakai) --}}
-    <script src="https://unpkg.com/flowbite/dist/flowbite.charts.js"></script>
 
     {{-- html2pdf (untuk export PDF) --}}
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.min.js"></script>
@@ -60,9 +61,6 @@
         }
     </style>
 
-
-
-
 </head>
 
 <body x-data class="bg-gray-100 text-gray-800" style="font-family: 'Poppins', sans-serif;">
@@ -75,10 +73,11 @@
 
 
         <div class="flex items-center space-x-4 ml-auto">
+
             {{-- Notifikasi untuk Superadmin --}}
             @if (Auth::user()->role === 'superadmin')
                 <div class="relative">
-                    <button id="notifBtn" class="relative p-2 text-gray-800 focus:outline-none">
+                    <button id="notifBtn" class="relative p-2 text-gray-800 focus:outline-none dark:text-white">
                         <i class="fas fa-bell text-lg"></i>
                         @php
                             $pendingRequests = \App\Models\ProductIn::where('status', 'menunggu')->count();
@@ -93,19 +92,20 @@
 
                     {{-- Dropdown Notifikasi --}}
                     <div id="notificationMenu"
-                        class="absolute right-0 mt-2 hidden w-64 rounded-md bg-white shadow-lg z-[60]">
-                        <div class="py-2 text-sm text-gray-700 max-h-72 overflow-y-auto">
+                        class="absolute right-0 mt-2 hidden w-64 rounded-md bg-white dark:bg-gray-800 shadow-lg z-[60]">
+                        <div class="py-2 text-sm text-gray-700  max-h-72 overflow-y-auto">
                             @if ($pendingRequests > 0)
                                 @foreach (\App\Models\ProductIn::where('status', 'menunggu')->latest()->take(5)->get() as $notif)
                                     <a href="{{ route('product.confirmation', $notif->id) }}"
-                                        class="block border-b px-4 py-2 hover:bg-gray-100">
+                                        class="block border-b dark:border-gray-700 px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700">
                                         Permintaan: <strong>{{ $notif->requester_name }}</strong><br>
                                         Produk: <strong>{{ $notif->product->name ?? '-' }}</strong><br>
-                                        <small class="text-gray-500">{{ $notif->created_at->diffForHumans() }}</small>
+                                        <small
+                                            class="text-gray-500 dark:text-gray-400">{{ $notif->created_at->diffForHumans() }}</small>
                                     </a>
                                 @endforeach
                             @else
-                                <p class="px-4 py-2 text-gray-500">Tidak ada notifikasi.</p>
+                                <p class="px-4 py-2 text-gray-500 dark:text-gray-400">Tidak ada notifikasi.</p>
                             @endif
                         </div>
                     </div>
@@ -115,19 +115,16 @@
             {{-- User Menu --}}
             <div class="relative inline-block text-left">
                 <button id="userMenuButton" class="flex items-center text-sm focus:outline-none">
-                    <i class="fas fa-user-circle text-2xl text-gray-600"></i>
-                    <span class="ml-2">{{ Auth::user()->name }}</span>
+                    <i class="fas fa-user-circle text-2xl text-gray-600 "></i>
+                    <span class="ml-2 dark:text-white">{{ Auth::user()->name }}</span>
                 </button>
 
                 {{-- Dropdown User --}}
                 <div id="userMenu" class="absolute right-0 mt-2 hidden w-48 rounded-md bg-white shadow-lg z-50">
                     <a href="#" @click.prevent="$dispatch('open-logout-modal')"
-                        class="block px-4 py-2 text-sm text-red-600 hover:bg-gray-100">
+                        class="block px-4 py-2 text-sm text-red-600 hover:bg-gray-100 dark:text-red-400 dark:hover:bg-gray-700">
                         <i class="fas fa-power-off mr-2"></i> Keluar
                     </a>
-
-
-
                 </div>
             </div>
         </div>
@@ -137,16 +134,15 @@
     @include('layouts.module.sidebar')
 
 
-
     <div x-data="{ show: false }" @open-logout-modal.window="show = true" x-show="show" x-transition x-cloak
         class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
 
         <div @click.away="show = false" class="w-full max-w-md rounded-lg bg-white p-6 shadow-lg">
-            <h2 class="mb-4 text-lg font-semibold text-gray-800">Konfirmasi Logout</h2>
-            <p class="mb-6 text-gray-600">Apakah Anda yakin ingin keluar dari akun?</p>
+            <h2 class="mb-4 text-lg font-semibold text-gray-800 ">Konfirmasi Logout</h2>
+            <p class="mb-6 text-gray-600 dark:text-gray-400">Apakah Anda yakin ingin keluar dari akun?</p>
             <div class="flex justify-end space-x-4">
                 <button @click="show = false"
-                    class="rounded bg-gray-200 px-4 py-2 text-sm text-gray-700 hover:bg-gray-300">
+                    class="rounded bg-gray-200 px-4 py-2 text-sm text-gray-700 hover:bg-gray-300 ">
                     Batal
                 </button>
                 <form method="POST" action="{{ route('logout') }}">
@@ -158,14 +154,6 @@
             </div>
         </div>
     </div>
-
-
-
-
-
-
-
-
 
     {{-- MAIN CONTENT --}}
     <main id="mainContent" class="min-h-[calc(100vh-4rem)] pt-24 px-4 pb-24 transition-all duration-300">
@@ -205,7 +193,7 @@
         message = e.detail.message;
         type = e.detail.type || 'info';
         show = true;
-
+    
         clearTimeout(timeout);
         timeout = setTimeout(() => show = false, 4000);
     });"
@@ -232,11 +220,6 @@
     </div>
 
 
-
-
-
-
-
     @stack('scripts')
 
     <script>
@@ -251,8 +234,8 @@
             const notifMenu = document.getElementById('notificationMenu');
             const userMenuBtn = document.getElementById('userMenuButton');
             const userMenu = document.getElementById('userMenu');
-
             const footer = document.getElementById('mainFooter');
+
 
 
             function updateLayout() {
@@ -318,10 +301,6 @@
                 userMenu?.classList.toggle('hidden');
             });
 
-
-
-
-
             // Klik luar untuk tutup dropdown
             window.addEventListener('click', () => {
                 notifMenu?.classList.add('hidden');
@@ -329,10 +308,6 @@
             });
         });
     </script>
-
-
-
-
 </body>
 
 </html>

@@ -21,7 +21,6 @@ class CreateProductsTable extends Migration
 
             // Foreign keys with SET NULL
             $table->foreignId('category_id')->nullable()->constrained()->onDelete('set null');
-            $table->foreignId('supplier_id')->nullable()->constrained()->onDelete('set null');
 
             $table->integer('price');
             $table->string('stock');
@@ -39,7 +38,6 @@ class CreateProductsTable extends Migration
     {
         Schema::table('products', function (Blueprint $table) {
             $table->dropForeign(['category_id']);
-            $table->dropForeign(['supplier_id']);
         });
         Schema::dropIfExists('products');
     }

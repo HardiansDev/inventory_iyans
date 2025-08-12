@@ -21,8 +21,7 @@ class Product extends Model
         'category_id',    // ID kategori
         'price',          // Harga produk
         'stock',          // Informasi stok
-        'supplier_id',    // ID supplier
-        // 'status',
+
     ];
 
     /**
@@ -35,12 +34,7 @@ class Product extends Model
         ]);
     }
 
-    public function supplier()
-    {
-        return $this->belongsTo(Supplier::class)->withDefault([
-            'name' => 'No Supplier',
-        ]);
-    }
+
 
     public function productIns()
     {

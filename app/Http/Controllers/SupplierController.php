@@ -13,7 +13,8 @@ class SupplierController extends Controller
     {
         $search = $request->query('search');
         if (!empty($search)) {
-            $suppliers = Supplier::where('name', 'LIKE', '%' . $request->search . '%')
+            $suppliers = Supplier::where('name', 'LIKE', '%' . $search . '%')
+                ->orWhere('name_prod', 'LIKE', '%' . $search . '%')
                 ->paginate(5)
                 ->onEachSide(2);
         } else {
@@ -34,13 +35,19 @@ class SupplierController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            'name' => 'required',
-            'address' => 'required'
+            'name' => 'required|string|max:255',
+            'name_prod' => 'required|string|max:255',
+            'address' => 'required|string|max:1000',
+            'telp' => 'required|string|max:20',
+            'email_sup' => 'nullable|email|max:255',
         ]);
 
         Supplier::create([
             'name' => $request->name,
-            'address' => $request->address
+            'name_prod' => $request->name_prod,
+            'address' => $request->address,
+            'telp' => $request->telp,
+            'email_sup' => $request->email_sup,
         ]);
         return redirect(route('supplier.index'))->with('success', 'Supplier ditambah!');
     }
@@ -63,13 +70,19 @@ class SupplierController extends Controller
     public function update($id, Request $request)
     {
         $this->validate($request, [
-            'name' => 'required',
-            'address' => 'required'
+            'name' => 'required|string|max:255',
+            'name_prod' => 'required|string|max:255',
+            'address' => 'required|string|max:1000',
+            'telp' => 'required|string|max:20',
+            'email_sup' => 'nullable|email|max:255',
         ]);
 
         $supplier = Supplier::findOrFail($id);
         $supplier->name = $request->name;
+        $supplier->name_prod = $request->name_prod;
         $supplier->address = $request->address;
+        $supplier->telp = $request->telp;
+        $supplier->email_sup = $request->email_sup;
         $supplier->save();
 
         return redirect(route('supplier.index'))->with('success', 'Supplier Telah diupdate!');

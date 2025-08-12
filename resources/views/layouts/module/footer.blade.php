@@ -1,5 +1,5 @@
 <footer id="mainFooter"
-    class="fixed bottom-0 z-30 flex w-full items-center justify-between bg-white px-4 py-4 text-sm text-gray-600 shadow-inner transition-all duration-300">
+    class="fixed bottom-0 z-30 flex w-full items-center justify-between bg-white px-4 py-4 text-sm text-gray-600 shadow-inner transition-all duration-300 ">
     <div class="mb-2 md:mb-0">
         <strong>
             Powered by &copy; {{ date('Y') }}

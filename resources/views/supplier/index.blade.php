@@ -61,26 +61,39 @@
                 <thead class="bg-gray-50 text-left text-xs font-semibold uppercase tracking-wider text-gray-600">
                     <tr>
                         {{-- <th class="px-4 py-2 border">No</th> --}}
-                        <th class="px-4 py-2">Nama Supplier</th>
+                        <th class="px-4 py-2">Supplier</th>
+                        <th class="px-4 py-2">Produk</th>
                         <th class="px-4 py-2">Alamat</th>
+                        <th class="px-4 py-2">No Telp</th>
+                        <th class="px-4 py-2">Email</th>
                         <th class="px-4 py-2 text-center">Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
                     @forelse ($suppliers as $index => $item)
                         <tr class="hover:bg-gray-50">
-                            {{-- <td class="px-4 py-2 ">{{ $index + $suppliers->firstItem() }}</td> --}}
                             <td class="px-4 py-2">{{ $item->name }}</td>
+                            <td class="px-4 py-2">{{ $item->name_prod }}</td>
                             <td class="px-4 py-2">{{ $item->address }}</td>
+                            <td class="px-4 py-2">{{ $item->telp }}</td>
+                            <td class="px-4 py-2">{{ $item->email_sup }}</td>
                             <td class="px-4 py-2 text-center">
                                 <div class="flex justify-center gap-2">
                                     <!-- Tombol Edit (di bagian tabel) -->
                                     <button type="button"
-                                        onclick="openEditModal({{ $item->id }}, '{{ $item->name }}', '{{ $item->address }}')"
+                                        onclick="openEditModal(
+                                            {{ $item->id }},
+                                            '{{ addslashes($item->name) }}',
+                                            '{{ addslashes($item->name_prod) }}',
+                                            '{{ addslashes($item->address) }}',
+                                            '{{ $item->telp }}',
+                                            '{{ $item->email_sup }}'
+                                        )"
                                         class="rounded bg-yellow-400 px-3 py-1 text-sm text-white hover:bg-yellow-500">
                                         <i class="fas fa-edit"></i>
                                         Edit
                                     </button>
+
 
                                     <button type="button"
                                         onclick="openDeleteModal({{ $item->id }}, '{{ $item->name }}')"
@@ -93,7 +106,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="4" class="px-4 py-6 text-center text-gray-500">
+                            <td colspan="6" class="px-4 py-6 text-center text-gray-500">
                                 Data Supplier tidak ditemukan.
                             </td>
                         </tr>
@@ -116,12 +129,36 @@
                                 placeholder="Nama Supplier" required />
                         </div>
                         <div class="mb-4">
+                            <label for="addSupplierProduct" class="block text-sm font-medium text-gray-700">
+                                Nama Produk
+                            </label>
+                            <input type="text" name="name_prod" id="addSupplierProduct"
+                                class="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none focus:ring-blue-500"
+                                placeholder="Nama Produk" required />
+                        </div>
+                        <div class="mb-4">
                             <label for="addSupplierAddress" class="block text-sm font-medium text-gray-700">
                                 Alamat Supplier
                             </label>
-                            <textarea type="text" name="address" id="addSupplierAddress"
+                            <textarea name="address" id="addSupplierAddress"
                                 class="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none focus:ring-blue-500"
                                 placeholder="Alamat Supplier" required></textarea>
+                        </div>
+                        <div class="mb-4">
+                            <label for="addSupplierTelp" class="block text-sm font-medium text-gray-700">
+                                No Telepon Supplier
+                            </label>
+                            <input type="tel" name="telp" id="addSupplierTelp"
+                                class="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none focus:ring-blue-500"
+                                placeholder="08xxxxx" required />
+                        </div>
+                        <div class="mb-4">
+                            <label for="addSupplierEmail" class="block text-sm font-medium text-gray-700">
+                                Email Supplier
+                            </label>
+                            <input type="email" name="email_sup" id="addSupplierEmail"
+                                class="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none focus:ring-blue-500"
+                                placeholder="supplier@mail.com" />
                         </div>
                         <div class="flex justify-end gap-2">
                             <button type="button" onclick="closeAddSupplierModal()"
@@ -153,12 +190,36 @@
                                 required />
                         </div>
                         <div class="mb-4">
+                            <label for="editSupplierProduct" class="block text-sm font-medium text-gray-700">
+                                Nama Produk
+                            </label>
+                            <input type="text" name="name_prod" id="editSupplierProduct"
+                                class="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none focus:ring-blue-500"
+                                required />
+                        </div>
+                        <div class="mb-4">
                             <label for="editSupplierAddress" class="block text-sm font-medium text-gray-700">
                                 Alamat Supplier
                             </label>
-                            <textarea type="text" name="address" id="editSupplierAddress"
+                            <textarea name="address" id="editSupplierAddress"
                                 class="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none focus:ring-blue-500"
                                 required></textarea>
+                        </div>
+                        <div class="mb-4">
+                            <label for="editSupplierTelp" class="block text-sm font-medium text-gray-700">
+                                No Telepon Supplier
+                            </label>
+                            <input type="tel" name="telp" id="editSupplierTelp"
+                                class="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none focus:ring-blue-500"
+                                placeholder="08xxxxx" required />
+                        </div>
+                        <div class="mb-4">
+                            <label for="editSupplierEmail" class="block text-sm font-medium text-gray-700">
+                                Email Supplier
+                            </label>
+                            <input type="email" name="email_sup" id="editSupplierEmail"
+                                class="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none focus:ring-blue-500"
+                                placeholder="supplier@mail.com" />
                         </div>
                         <div class="flex justify-end gap-2">
                             <button type="button" onclick="closeEditModal()"
@@ -172,6 +233,7 @@
                     </form>
                 </div>
             </div>
+
         </div>
 
         <!-- Pagination -->
@@ -231,18 +293,26 @@
             }
         })
 
-        function openEditModal(id, name, address) {
+        function openEditModal(id, name, name_prod, address, telp, email_sup) {
             const modal = document.getElementById('editSupplierModal')
             const form = document.getElementById('editSupplierForm')
             const nameInput = document.getElementById('editSupplierName')
+            const productInput = document.getElementById('editSupplierProduct')
             const addressInput = document.getElementById('editSupplierAddress')
+            const telpInput = document.getElementById('editSupplierTelp')
+            const emailInput = document.getElementById('editSupplierEmail')
 
             nameInput.value = name
+            productInput.value = name_prod
             addressInput.value = address
+            telpInput.value = telp
+            emailInput.value = email_sup
+
             form.action = `/supplier/${id}`
 
             modal.classList.remove('hidden')
         }
+
 
         function closeEditModal() {
             document.getElementById('editSupplierModal').classList.add('hidden')

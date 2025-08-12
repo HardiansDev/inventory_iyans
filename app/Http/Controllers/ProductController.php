@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Product;
 use App\Models\Category;
-use App\Models\Supplier;
+// use App\Models\Supplier;
 // use Cloudinary\Cloudinary;
 use Illuminate\Http\Request;
 use App\Exports\ProductsExport;
@@ -29,7 +29,7 @@ class ProductController extends Controller
         $categoryName = $request->query('category');
 
         $datacategory = Category::all();
-        $datasupplier = Supplier::all();
+        // $datasupplier = Supplier::all();
 
         $query = Product::with(['category', 'productins']);
 
@@ -55,7 +55,7 @@ class ProductController extends Controller
             return $product;
         });
 
-        return view('product.index', compact('products', 'search', 'datacategory', 'datasupplier'));
+        return view('product.index', compact('products', 'search', 'datacategory'));
     }
 
 
@@ -75,7 +75,6 @@ class ProductController extends Controller
 
         // Kirimkan data supplier_id dan category_id sebagai response JSON
         return response()->json([
-            'supplier_id' => $product->supplier_id,
             'category_id' => $product->category_id,
         ]);
     }
@@ -90,9 +89,8 @@ class ProductController extends Controller
     public function create()
     {
         $datacategory = Category::all();
-        $datasupplier = Supplier::all();
 
-        return view('product.create', compact('datacategory', 'datasupplier'));
+        return view('product.create', compact('datacategory'));
     }
 
     /**
@@ -106,7 +104,6 @@ class ProductController extends Controller
                 'code' => 'required|string|max:50',
                 'photo' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
                 'category_id' => 'nullable|exists:categories,id',
-                'supplier_id' => 'nullable|exists:suppliers,id',
                 'price' => 'required|numeric',
                 'stock' => 'required|string|max:50',
             ],
@@ -124,7 +121,6 @@ class ProductController extends Controller
                 'photo.max' => 'Ukuran foto tidak boleh lebih dari 2 MB.',
 
                 'category_id.exists' => 'Kategori yang dipilih tidak valid.',
-                'supplier_id.exists' => 'Supplier yang dipilih tidak valid.',
 
                 'price.required' => 'Harga wajib diisi.',
                 'price.numeric' => 'Harga harus berupa angka.',
@@ -152,7 +148,7 @@ class ProductController extends Controller
      */
     public function show($id)
     {
-        $product = Product::with(['category', 'supplier'])->findOrFail($id);
+        $product = Product::with(['category'])->findOrFail($id);
 
         return view('product.show', compact('product'));
     }
@@ -164,9 +160,9 @@ class ProductController extends Controller
     {
         $product = Product::findOrFail($id);
         $datacategory = Category::all();
-        $datasupplier = Supplier::all();
+        // $datasupplier = Supplier::all();
 
-        return view('product.edit', compact('product', 'datacategory', 'datasupplier'));
+        return view('product.edit', compact('product', 'datacategory'));
     }
 
     /**
@@ -180,7 +176,6 @@ class ProductController extends Controller
             'code' => 'required|string|max:50|unique:products,code,' . $id,
             'photo' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
             'category_id' => 'nullable|exists:categories,id',
-            'supplier_id' => 'nullable|exists:suppliers,id',
             'price' => 'required|numeric',
             'stock' => 'required|string|max:50',
         ]);

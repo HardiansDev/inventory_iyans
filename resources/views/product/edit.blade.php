@@ -103,24 +103,6 @@
                         class="w-full rounded-md border border-gray-300 px-4 py-2 shadow-sm focus:ring-2 focus:ring-blue-400"
                         value="{{ $product->stock }}" required />
                 </div>
-
-                <!-- Supplier -->
-                <div>
-                    <label for="supplierSelect" class="mb-1 block text-sm font-semibold text-gray-700">
-                        Supplier
-                    </label>
-                    <select name="supplier_id" id="supplierSelect"
-                        class="w-full rounded-md border border-gray-300 px-4 py-2 shadow-sm focus:ring-2 focus:ring-blue-400"
-                        required>
-                        <option value="">Pilih Supplier</option>
-                        @foreach ($datasupplier as $supplier)
-                            <option value="{{ $supplier->id }}"
-                                {{ $product->supplier_id == $supplier->id ? 'selected' : '' }}>
-                                {{ $supplier->name }}
-                            </option>
-                        @endforeach
-                    </select>
-                </div>
             </div>
 
             <!-- Tombol Aksi -->

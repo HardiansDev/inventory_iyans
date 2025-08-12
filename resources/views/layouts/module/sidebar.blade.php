@@ -1,5 +1,5 @@
 <aside id="sidebar"
-    class="fixed top-0 left-0 z-40 w-60 h-full bg-gray-800 transition-transform duration-300 transform
+    class="fixed top-0 left-0 z-40 w-60 h-full bg-gray-800 overflow-y-auto scroll-smooth transition-transform duration-300 transform
     translate-x-0 md:translate-x-0
     md:sidebar-collapsed:translate-x-[-15rem]
     sidebar-open-mobile:translate-x-0">
@@ -61,10 +61,10 @@
         {{-- INVENTORY --}}
         @if (in_array(Auth::user()->role, ['superadmin', 'admin_gudang']))
             <li
-                class="{{ Request::is('inventory*') || Request::is('product') || Request::is('category') || Request::is('supplier') || Request::is('productin') ? 'menu-open-tailwind' : '' }} group">
+                class="{{ Request::is('inventory*') || Request::is('product') || Request::is('bahan_baku') || Request::is('category') || Request::is('supplier') || Request::is('productin') ? 'menu-open-tailwind' : '' }} group">
                 <a href="#"
                     onclick="event.preventDefault(); this.closest('li').classList.toggle('menu-open-tailwind');"
-                    class="{{ Request::is('inventory*') || Request::is('product') || Request::is('category') || Request::is('supplier') || Request::is('productin') ? 'bg-gray-700 text-white' : 'text-gray-200' }} flex items-center justify-between rounded-lg p-2 text-sm hover:bg-gray-700 hover:text-white">
+                    class="{{ Request::is('inventory*') || Request::is('product') || Request::is('bahan_baku') || Request::is('category') || Request::is('supplier') || Request::is('productin') ? 'bg-gray-700 text-white' : 'text-gray-200' }} flex items-center justify-between rounded-lg p-2 text-sm hover:bg-gray-700 hover:text-white">
                     <span class="flex items-center">
                         <i class="fa fa-archive mr-3 text-lg"></i>
                         Inventory
@@ -85,6 +85,14 @@
                                 <span class="menu-text">Data Produk</span>
                             </a>
                         </li>
+                        <li>
+                            <a href="{{ route('bahan_baku.index') }}"
+                                class="{{ Request::is('bahan_baku*') ? 'bg-gray-600 text-white' : 'text-gray-300' }} flex items-center rounded-lg p-2 text-sm hover:bg-gray-600 hover:text-white">
+                                <i class="fa fa-circle-o mr-2 text-xs"></i>
+                                <span class="menu-text">Data Bahan Baku</span>
+                            </a>
+                        </li>
+
                         <li>
                             <a href="{{ route('category.index') }}"
                                 class="{{ Request::is('category') ? 'bg-gray-600 text-white' : 'text-gray-300' }} flex items-center rounded-lg p-2 text-sm hover:bg-gray-600 hover:text-white">

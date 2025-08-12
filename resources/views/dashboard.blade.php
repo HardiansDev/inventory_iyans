@@ -21,6 +21,14 @@
     <!-- Main content -->
     <section class="content">
         <div class="mt-6 grid grid-cols-2 gap-6 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-4">
+            <!-- Modal Hari Ini -->
+            <div class="rounded-xl bg-teal-800 p-5 text-white shadow">
+                <div class="text-3xl font-bold"></div>
+                <div class="text-3xl font-bold">Rp {{ number_format($totalModal, 0, ',', '.') }}</div>
+                {{-- <div class="text-xl font-semibold mt-2">Modal Hari Ini</div> --}}
+                <div class="mt-1 text-sm">Total Modal </div>
+            </div>
+
             <!-- Data Produk -->
             <div class="rounded-xl bg-blue-600 p-5 text-white shadow">
                 <div class="text-3xl font-bold">{{ $totalProduk }}</div>
@@ -141,9 +149,11 @@
                         class="z-10 hidden w-44 rounded-lg bg-white shadow dark:bg-gray-700 dark:divide-gray-600 absolute right-0 mt-2">
                         <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownButton">
                             <li>
-                                <a href="#" onclick="exportToPDF()"
-                                    class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Export
-                                    PDF</a>
+                                <a href="#" onclick="exportToPDF(); return false;"
+                                    class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                                    Export PDF
+                                </a>
+
                             </li>
                             <li>
                                 <a href="#" onclick="exportToExcel()"
@@ -542,5 +552,37 @@
                 }
             }
         });
+
+
+        function resetDateRange() {
+            const startInput = document.getElementById('datepicker-range-start');
+            const endInput = document.getElementById('datepicker-range-end');
+
+            if (startInput) startInput.value = '';
+            if (endInput) endInput.value = '';
+
+            // Kalau pakai Flowbite datepicker, perlu trigger event manual biar efek visualnya ikut ke-reset
+            startInput.dispatchEvent(new Event('change'));
+            endInput.dispatchEvent(new Event('change'));
+        }
+
+        function exportToPDF() {
+            // Ambil nilai tanggal dari input datepicker
+            const start = document.getElementById('datepicker-range-start').value;
+            const end = document.getElementById('datepicker-range-end').value;
+
+            if (!start || !end) {
+                alert('Harap pilih tanggal awal dan akhir terlebih dahulu!');
+                return;
+            }
+
+            // Buat URL dengan query param untuk route PDF kamu
+            const url = new URL('{{ route('report.penjualan.pdf') }}', window.location.origin);
+            url.searchParams.append('start', start);
+            url.searchParams.append('end', end);
+
+            // Buka URL di tab baru supaya user bisa download atau lihat PDF
+            window.open(url.toString(), '_blank');
+        }
     </script>
 @endpush

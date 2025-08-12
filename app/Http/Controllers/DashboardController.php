@@ -7,6 +7,7 @@ use App\Models\ProductIn;
 use App\Models\SalesDetail;
 use App\Models\User;
 use App\Models\Employee;
+use App\Models\BahanBaku;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
@@ -18,6 +19,9 @@ class DashboardController extends Controller
     {
         // Statistik dashboard
         $totalProduk = Product::count();
+        $totalBahanBaku = BahanBaku::count();
+        // Sum harga bahan baku (misal harga * stok)
+        $totalModal = BahanBaku::sum(DB::raw('price * stock'));
         $produkMasuk = ProductIn::sum('qty');
         $produkKeluar = SalesDetail::sum('qty');
         $totalUser = User::count();
@@ -291,7 +295,8 @@ class DashboardController extends Controller
             'pegawaiTidakAktif',
             'aktivitasHariIni',
             'performaKasirHariIni',
-            // 'userName'
+            'totalBahanBaku',
+            'totalModal'
         ));
     }
 }

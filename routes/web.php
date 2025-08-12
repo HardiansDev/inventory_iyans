@@ -23,6 +23,8 @@ use App\Http\Controllers\EmployeeAttendanceController;
 use App\Http\Controllers\EmploymentStatusController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\PositionController;
+use App\Http\Controllers\BahanBakuController;
+use App\Http\Controllers\ReportController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -69,6 +71,8 @@ Route::middleware(['auth', 'role:superadmin,manager'])->group(function () {
     Route::resource('employment_status', EmploymentStatusController::class);
     Route::resource('department', DepartmentController::class);
     Route::resource('position', PositionController::class);
+    Route::get('report/penjualan', [ReportController::class, 'penjualan'])->name('report.penjualan');
+    Route::get('report/penjualan/pdf', [ReportController::class, 'penjualanPdf'])->name('report.penjualan.pdf');
 });
 
 // User Management (hanya Superadmin)
@@ -110,6 +114,7 @@ Route::middleware(['auth', 'role:superadmin'])->group(function () {
 Route::middleware(['auth', 'role:superadmin'])->group(function () {
     Route::resource('category', CategoryController::class);
     Route::resource('supplier', SupplierController::class);
+    Route::resource('bahan_baku', BahanBakuController::class);
 });
 
 // Penjualan & Diskon (Kasir & Superadmin)

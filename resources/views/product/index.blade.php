@@ -146,7 +146,7 @@
                                 <th class="px-4 py-3">Kategori</th>
                                 <th class="px-4 py-3">Harga</th>
                                 <th class="px-4 py-3">Stok</th>
-                                {{-- <th class="px-4 py-3">Status</th> --}}
+
                                 <th class="px-4 py-3">Aksi</th>
                             </tr>
                         </thead>
@@ -180,7 +180,7 @@
                                     <td class="px-4 py-3">
                                         Rp {{ number_format($product->price, 0, ',', '.') }}
                                     </td>
-                                    <td class="px-4 py-3">{{ $product->stock }} pcs</td>
+                                    <td class="px-4 py-3">{{ $product->stock }} cup</td>
                                     <td class="relative whitespace-nowrap px-4 py-3">
                                         <div x-data="{ open: false }" class="relative inline-block text-left">
                                             <!-- Dropdown Toggle -->
@@ -284,84 +284,6 @@
                                         </svg>
                                     </button>
                                 </div>
-
-                                <!-- Modal Body -->
-                                <form action="{{ route('productin.store') }}" method="POST"
-                                    class="space-y-4 px-6 py-5 text-sm">
-                                    @csrf
-                                    <input type="hidden" name="product_id" value="{{ $product->id }}" />
-                                    <input type="hidden" name="supplier_id" value="{{ $product->supplier->id }}" />
-                                    <input type="hidden" name="category_id" value="{{ $product->category->id }}" />
-
-                                    <div class="grid grid-cols-1 gap-5 sm:grid-cols-2">
-                                        <div>
-                                            <label class="mb-1 block font-medium text-gray-700">
-                                                Nama Produk
-                                            </label>
-                                            <input type="text" readonly value="{{ $product->name }}"
-                                                class="w-full rounded-lg border border-gray-300 bg-gray-100 px-3 py-2 text-gray-700" />
-                                        </div>
-
-                                        <div>
-                                            <label class="mb-1 block font-medium text-gray-700">
-                                                Supplier
-                                            </label>
-                                            <input type="text" readonly value="{{ $product->supplier->name }}"
-                                                class="w-full rounded-lg border border-gray-300 bg-gray-100 px-3 py-2 text-gray-700" />
-                                        </div>
-
-                                        <div>
-                                            <label class="mb-1 block font-medium text-gray-700">
-                                                Kategori
-                                            </label>
-                                            <input type="text" readonly value="{{ $product->category->name }}"
-                                                class="w-full rounded-lg border border-gray-300 bg-gray-100 px-3 py-2 text-gray-700" />
-                                        </div>
-
-                                        <div>
-                                            <label class="mb-1 block font-medium text-gray-700">
-                                                Qty
-                                                <span class="text-xs text-gray-500">
-                                                    (maks: {{ $product->stock }})
-                                                </span>
-                                            </label>
-                                            <input type="number" name="qty" required min="1"
-                                                max="{{ $product->stock }}"
-                                                class="w-full rounded-lg border border-gray-300 px-3 py-2 focus:border-blue-500 focus:ring focus:ring-blue-200"
-                                                placeholder="Masukkan jumlah" />
-                                        </div>
-
-                                        <div>
-                                            <label class="mb-1 block font-medium text-gray-700">
-                                                Tanggal Masuk
-                                            </label>
-                                            <input type="date" name="date" required
-                                                class="w-full rounded-lg border border-gray-300 px-3 py-2 focus:border-blue-500 focus:ring focus:ring-blue-200" />
-                                        </div>
-
-                                        <div>
-                                            <label class="mb-1 block font-medium text-gray-700">
-                                                Penerima
-                                            </label>
-                                            <input type="text" name="recipient" required placeholder="Nama penerima"
-                                                class="w-full rounded-lg border border-gray-300 px-3 py-2 focus:border-blue-500 focus:ring focus:ring-blue-200" />
-                                        </div>
-                                    </div>
-
-                                    <!-- Modal Footer -->
-                                    <div class="mt-4 flex items-center justify-between border-t pt-5">
-                                        <button type="button" @click="modalId = null"
-                                            class="rounded-lg bg-gray-500 px-4 py-2 text-sm text-white hover:bg-gray-600">
-                                            <i class="fas fa-times-circle mr-1"></i>
-                                            Batal
-                                        </button>
-                                        <button type="submit"
-                                            class="rounded-lg bg-green-600 px-4 py-2 text-sm text-white hover:bg-green-700">
-                                            <i class="fas fa-check-circle mr-1"></i>
-                                            Simpan
-                                        </button>
-                                    </div>
-                                </form>
                             </div>
                         </div>
                     @endforeach
@@ -455,24 +377,6 @@
                                     <input type="number" name="stock"
                                         class="w-full rounded-lg border border-gray-300 px-3 py-2 focus:border-blue-500 focus:ring focus:ring-blue-200"
                                         placeholder="Contoh: 100" value="{{ old('stock') }}" required />
-                                </div>
-
-                                <!-- Supplier -->
-                                <div>
-                                    <label class="mb-1 block text-sm font-medium text-gray-700">
-                                        Supplier
-                                    </label>
-                                    <select name="supplier_id"
-                                        class="w-full rounded-lg border border-gray-300 px-3 py-2 focus:border-blue-500 focus:ring focus:ring-blue-200"
-                                        required>
-                                        <option value="">Pilih Supplier</option>
-                                        @foreach ($datasupplier as $supplier)
-                                            <option value="{{ $supplier->id }}"
-                                                {{ old('supplier_id') == $supplier->id ? 'selected' : '' }}>
-                                                {{ $supplier->name }}
-                                            </option>
-                                        @endforeach
-                                    </select>
                                 </div>
                             </div>
 
