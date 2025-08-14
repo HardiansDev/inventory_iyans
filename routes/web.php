@@ -25,6 +25,7 @@ use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\PositionController;
 use App\Http\Controllers\BahanBakuController;
 use App\Http\Controllers\ReportController;
+use App\Http\Controllers\NotificationController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -103,10 +104,16 @@ Route::middleware(['auth', 'role:admin_gudang'])->group(function () {
 
 
 
-Route::middleware(['auth', 'role:superadmin'])->group(function () {
+Route::middleware(['auth', 'role:superadmin,admin_gudang'])->group(function () {
     Route::get('/product-in/{id}/confirm', [ProductInController::class, 'showConfirmation'])->name('product.confirmation');
     Route::post('/product-in/{id}/approve', [ProductInController::class, 'approve'])->name('product.approve');
     Route::post('/product-in/{id}/reject', [ProductInController::class, 'reject'])->name('product.reject');
+    // Notifikasi Superadmin
+    Route::get('/notifications/superadmin', [NotificationController::class, 'superadminIndex'])
+        ->name('notifications.superadmin');
+
+    Route::get('/notifications/admin-gudang', [NotificationController::class, 'adminGudangIndex'])->name('notifications.admin_gudang');
+    Route::get('/notifications/admin-gudang/{id}', [NotificationController::class, 'showAdminGudang'])->name('notifications.admin_gudang.show');
 });
 
 

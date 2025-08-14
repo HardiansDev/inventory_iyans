@@ -208,9 +208,9 @@
                                     <th class="px-4 py-3">Kategori Produk</th>
                                     <th class="px-4 py-3">Harga</th>
                                     <th class="px-4 py-3">Qty</th>
-                                    <th class="px-4 py-3">Penerima</th>
+                                    <th class="px-4 py-3">PPIC</th>
                                     <th class="px-4 py-3">Status</th>
-                                    <th class="px-4 py-3">Deskripsi Penolakan</th>
+
                                     <th class="px-4 py-3">Status Penjualan</th>
                                     <th class="px-4 py-3">Aksi</th>
                                 </tr>
@@ -246,7 +246,10 @@
                                             {{ number_format(optional($productIn->product)->price ?? 0, 0, ',', '.') }}
                                         </td>
                                         <td class="px-4 py-2">{{ $productIn->qty }}</td>
-                                        <td class="px-4 py-2">{{ $productIn->recipient }}</td>
+                                        <td class="px-4 py-2">
+                                            {{ $productIn->status === 'ditolak' ? 'Sistem' : $productIn->recipient }}
+                                        </td>
+
                                         <td class="whitespace-nowrap px-4 py-2">
                                             @php
                                                 $status = $productIn->status ?? 'menunggu';
@@ -263,7 +266,7 @@
                                                 {{ ucfirst($status) }}
                                             </span>
                                         </td>
-                                        <td class="px-4 py-2">{{ $productIn->catatan }}</td>
+
 
                                         <td class="whitespace-nowrap px-4 py-2">
                                             @php

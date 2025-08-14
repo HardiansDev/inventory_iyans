@@ -47,6 +47,13 @@ class ProductInController extends Controller
         $request->recipient = Auth::user()->name;
         $request->save();
 
+        // Cek jumlah notifikasi tersisa
+        $pendingRequests = ProductIn::where('status', 'menunggu')->count();
+
+        if ($pendingRequests > 3) {
+            return redirect()->route('notifications.superadmin')->with('success', 'Permintaan disetujui');
+        }
+
         return redirect()->route('product.index')->with('success', 'Permintaan disetujui');
     }
 
@@ -62,6 +69,12 @@ class ProductInController extends Controller
             'status' => 'ditolak',
             'catatan' => $request->catatan,
         ]);
+
+        // Cek jumlah notifikasi tersisa
+        $pendingRequests = ProductIn::where('status', 'menunggu')->count();
+        if ($pendingRequests > 3) {
+            return redirect()->route('notifications.superadmin')->with('error', 'Permintaan ditolak.');
+        }
 
         return redirect()->route('product.index')->with('error', 'Permintaan ditolak.');
     }

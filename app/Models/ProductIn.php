@@ -71,4 +71,22 @@ class ProductIn extends Model
     {
         return $this->status === 'ditolak';
     }
+
+
+
+    public function scopeNotifForUser($query)
+    {
+        if (auth()->user()->role === 'superadmin') {
+            // Superadmin lihat permintaan menunggu
+            return $query->where('status', 'menunggu');
+        }
+
+        if (auth()->user()->role === 'admin_gudang') {
+            // Admin gudang lihat feedback permintaan mereka sendiri
+            return $query->whereIn('status', ['disetujui', 'ditolak'])
+                ->where('requester_name', auth()->user()->name);
+        }
+
+        return $query->whereRaw('1=0'); // default kosong
+    }
 }

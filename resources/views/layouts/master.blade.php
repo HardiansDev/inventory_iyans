@@ -9,12 +9,6 @@
     @yield('title')
     <script src="https://cdn.tailwindcss.com"></script>
 
-
-
-
-
-
-
     {{-- Chart.js (hanya sekali) --}}
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
@@ -74,43 +68,127 @@
 
         <div class="flex items-center space-x-4 ml-auto">
 
-            {{-- Notifikasi untuk Superadmin --}}
-            @if (Auth::user()->role === 'superadmin')
+            {{-- Notifikasi untuk Superadmin & Admin Gudang --}}
+            @if (Auth::user()->role === 'superadmin' || Auth::user()->role === 'admin_gudang')
                 <div class="relative">
+                    {{-- Tombol Bell --}}
                     <button id="notifBtn" class="relative p-2 text-gray-800 focus:outline-none dark:text-white">
                         <i class="fas fa-bell text-lg"></i>
                         @php
-                            $pendingRequests = \App\Models\ProductIn::where('status', 'menunggu')->count();
+                            if (Auth::user()->role === 'superadmin') {
+                                // Notif untuk superadmin = permintaan menunggu
+                                $notifCount = \App\Models\ProductIn::where('status', 'menunggu')
+                                    ->where('is_read', false)
+                                    ->count();
+                            } else {
+                                // Notif untuk admin gudang = feedback permintaan
+                                $notifCount = \App\Models\ProductIn::where('requester_name', Auth::user()->name)
+                                    ->whereIn('status', ['disetujui', 'ditolak'])
+                                    ->where('is_read', false)
+                                    ->count();
+                            }
                         @endphp
-                        @if ($pendingRequests > 0)
+
+                        {{-- Badge --}}
+                        @if ($notifCount > 0)
                             <span
                                 class="absolute -right-1 -top-1 h-4 w-4 flex items-center justify-center rounded-full bg-red-500 text-xs text-white">
-                                {{ $pendingRequests }}
+                                {{ $notifCount }}
                             </span>
                         @endif
                     </button>
 
-                    {{-- Dropdown Notifikasi --}}
+                    {{-- Dropdown --}}
                     <div id="notificationMenu"
-                        class="absolute right-0 mt-2 hidden w-64 rounded-md bg-white dark:bg-gray-800 shadow-lg z-[60]">
-                        <div class="py-2 text-sm text-gray-700  max-h-72 overflow-y-auto">
-                            @if ($pendingRequests > 0)
-                                @foreach (\App\Models\ProductIn::where('status', 'menunggu')->latest()->take(5)->get() as $notif)
+                        class="absolute right-0 mt-2 hidden w-72 rounded-md bg-white dark:bg-gray-800 shadow-lg z-[60]">
+                        <div class="py-2 text-sm text-gray-700 max-h-72 overflow-y-auto">
+
+                            {{-- Superadmin --}}
+                            @if (Auth::user()->role === 'superadmin')
+                                @php
+                                    $notifs = \App\Models\ProductIn::where('status', 'menunggu')
+                                        ->latest()
+                                        ->take(3)
+                                        ->get();
+                                @endphp
+
+                                @forelse ($notifs as $notif)
                                     <a href="{{ route('product.confirmation', $notif->id) }}"
                                         class="block border-b dark:border-gray-700 px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700">
                                         Permintaan: <strong>{{ $notif->requester_name }}</strong><br>
                                         Produk: <strong>{{ $notif->product->name ?? '-' }}</strong><br>
-                                        <small
-                                            class="text-gray-500 dark:text-gray-400">{{ $notif->created_at->diffForHumans() }}</small>
+                                        <small class="text-gray-500 dark:text-gray-400">
+                                            {{ $notif->created_at->diffForHumans() }}
+                                        </small>
                                     </a>
-                                @endforeach
-                            @else
-                                <p class="px-4 py-2 text-gray-500 dark:text-gray-400">Tidak ada notifikasi.</p>
+                                @empty
+                                    <p class="px-4 py-2 text-gray-500 dark:text-gray-400">Tidak ada notifikasi.</p>
+                                @endforelse
+
+                                @if ($notifCount > 3)
+                                    <a href="{{ route('notifications.superadmin') }}"
+                                        class="block text-center text-blue-600 dark:text-blue-400 font-semibold py-2 hover:underline">
+                                        Lihat semua notifikasi
+                                    </a>
+                                @endif
+
+                                {{-- Admin Gudang --}}
+                            @elseif (Auth::user()->role === 'admin_gudang')
+                                @php
+                                    // Hitung jumlah unread untuk badge
+                                    $notifCount = \App\Models\ProductIn::where('requester_name', Auth::user()->name)
+                                        ->whereIn('status', ['disetujui', 'ditolak'])
+                                        ->where('is_read', false)
+                                        ->count();
+
+                                    // Ambil 3 notifikasi terbaru (baik sudah dibaca atau belum)
+                                    $notifs = \App\Models\ProductIn::where('requester_name', Auth::user()->name)
+                                        ->whereIn('status', ['disetujui', 'ditolak'])
+                                        ->latest()
+                                        ->take(3)
+                                        ->get();
+                                @endphp
+
+                                @forelse ($notifs as $notif)
+                                    <a href="{{ route('notifications.admin_gudang.show', $notif->id) }}"
+                                        class="block border-b dark:border-gray-700 px-4 py-2
+                                        hover:bg-gray-100 dark:hover:bg-gray-800
+                                        {{ $notif->is_read ? 'bg-gray-100 text-gray-600' : 'bg-white text-gray-900' }}">
+                                        Feedback permintaan produk
+                                        <strong>{{ $notif->product->name ?? '-' }}</strong><br>
+                                        Status:
+                                        @if ($notif->status === 'disetujui')
+                                            <span class="text-green-600 font-semibold">Disetujui</span>
+                                        @else
+                                            <span class="text-red-600 font-semibold">Ditolak</span>
+                                        @endif
+                                        <br>
+                                        <small class="text-gray-500 dark:text-gray-400">
+                                            {{ $notif->updated_at->diffForHumans() }}
+                                        </small>
+                                    </a>
+                                @empty
+                                    <p class="px-4 py-2 text-gray-500 dark:text-gray-400">Tidak ada notifikasi.</p>
+                                @endforelse
+
+
+                                <a href="{{ route('notifications.admin_gudang') }}"
+                                    class="block text-center text-blue-600 dark:text-blue-400 font-semibold py-2 hover:underline">
+                                    Lihat semua notifikasi
+                                </a>
+
                             @endif
+
+
+
                         </div>
                     </div>
                 </div>
             @endif
+
+
+
+
 
             {{-- User Menu --}}
             <div class="relative inline-block text-left">
@@ -193,7 +271,7 @@
         message = e.detail.message;
         type = e.detail.type || 'info';
         show = true;
-    
+
         clearTimeout(timeout);
         timeout = setTimeout(() => show = false, 4000);
     });"

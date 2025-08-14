@@ -26,7 +26,11 @@ class AuthController extends Controller
             'captcha_answer' => $a + $b,
         ]);
 
-        return view('auth.form');
+        // Cek apakah sudah ada Super Admin
+        $superadminExists = \App\Models\User::where('role', 'superadmin')->exists();
+
+
+        return view('auth.form', compact('superadminExists'));
     }
 
     // Proses login
@@ -54,6 +58,13 @@ class AuthController extends Controller
         return back()->with('error', 'Email atau password salah, atau belum terdaftar.');
     }
 
+
+    public function showRegister()
+    {
+        $superadminExists = User::where('role', 'superadmin')->exists();
+        return view('auth.form', compact('superadminExists'));
+    }
+
     // Proses registrasi
     public function register(Request $request)
     {
@@ -64,19 +75,24 @@ class AuthController extends Controller
             'role' => 'required|in:kasir,manager,superadmin,admin_gudang',
         ]);
 
+        // Cek apakah sudah ada Super Admin
+        if ($validated['role'] === 'superadmin' && User::where('role', 'superadmin')->exists()) {
+            return back()->withErrors([
+                'role' => 'Role Super Admin sudah digunakan dan tidak bisa dipilih lagi.'
+            ])->withInput();
+        }
+
         // Simpan user ke variabel
-        $user = User::create([
+        User::create([
             'name' => $validated['name'],
             'email' => $validated['email'],
             'password' => Hash::make($validated['password']),
             'role' => $validated['role'],
         ]);
 
-        // Kirim link verifikasi email
-        // $user->sendEmailVerificationNotification();
-
         return redirect()->route('login')->with('success', 'Registrasi berhasil.');
     }
+
 
     // Logout
     public function logout(Request $request)

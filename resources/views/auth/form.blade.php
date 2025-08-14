@@ -46,25 +46,25 @@
                         placeholder="********" required />
                     <button type="button"
                         class="toggle-password absolute inset-y-0 right-0 flex items-center pr-3 text-gray-500 hover:text-gray-700">
-                        <!-- Mata terbuka -->
-                        <svg class="eye-open h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none"
+                        <!-- Mata terbuka (default hidden) -->
+                        <svg class="eye-open h-5 w-5 hidden" xmlns="http://www.w3.org/2000/svg" fill="none"
                             viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                             <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5
-                       c4.477 0 8.268 2.943 9.542 7
-                       -1.274 4.057-5.065 7-9.542 7
-                       -4.477 0-8.268-2.943-9.542-7z" />
+                            c4.477 0 8.268 2.943 9.542 7
+                            -1.274 4.057-5.065 7-9.542 7
+                            -4.477 0-8.268-2.943-9.542-7z" />
                         </svg>
-                        <!-- Mata tertutup -->
-                        <svg class="eye-closed h-5 w-5 hidden" xmlns="http://www.w3.org/2000/svg" fill="none"
+                        <!-- Mata tertutup (default visible) -->
+                        <svg class="eye-closed h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none"
                             viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M13.875 18.825A10.05 10.05 0 0112 19
-                       c-4.477 0-8.268-2.943-9.542-7
-                       a10.05 10.05 0 012.913-4.411
-                       m3.29-2.028A9.956 9.956 0 0112 5
-                       c4.477 0 8.268 2.943 9.542 7
-                       a9.96 9.96 0 01-4.133 5.411
-                       M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                            c-4.477 0-8.268-2.943-9.542-7
+                            a10.05 10.05 0 012.913-4.411
+                            m3.29-2.028A9.956 9.956 0 0112 5
+                            c4.477 0 8.268 2.943 9.542 7
+                            a9.96 9.96 0 01-4.133 5.411
+                            M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                             <path stroke-linecap="round" stroke-linejoin="round" d="M3 3l18 18" />
                         </svg>
                     </button>
@@ -125,12 +125,18 @@
                     class="w-full rounded-lg border border-gray-300 px-4 py-2 focus:ring-2 focus:ring-purple-500"
                     required>
                     <option disabled selected>Pilih Peran</option>
-                    <option value="superadmin">Super Admin</option>
+
+                    {{-- Kalau belum ada superadmin, tampilkan --}}
+                    @unless ($superadminExists)
+                        <option value="superadmin">Super Admin</option>
+                    @endunless
+
                     <option value="admin_gudang">Admin Gudang</option>
                     <option value="kasir">Kasir</option>
                     <option value="manager">Manager</option>
                 </select>
             </div>
+
             <div>
                 <label for="password" class="mb-1 block text-sm font-semibold text-gray-700">Kata Sandi</label>
                 <div class="relative">
@@ -139,29 +145,30 @@
                         placeholder="********" required />
                     <button type="button"
                         class="toggle-password absolute inset-y-0 right-0 flex items-center pr-3 text-gray-500 hover:text-gray-700">
-                        <!-- Mata terbuka -->
-                        <svg class="eye-open h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none"
+                        <!-- Mata terbuka (default hidden) -->
+                        <svg class="eye-open h-5 w-5 hidden" xmlns="http://www.w3.org/2000/svg" fill="none"
                             viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                             <path stroke-linecap="round" stroke-linejoin="round"
                                 d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                             <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5
-                       c4.477 0 8.268 2.943 9.542 7
-                       -1.274 4.057-5.065 7-9.542 7
-                       -4.477 0-8.268-2.943-9.542-7z" />
+                            c4.477 0 8.268 2.943 9.542 7
+                            -1.274 4.057-5.065 7-9.542 7
+                            -4.477 0-8.268-2.943-9.542-7z" />
                         </svg>
-                        <!-- Mata tertutup -->
-                        <svg class="eye-closed h-5 w-5 hidden" xmlns="http://www.w3.org/2000/svg" fill="none"
+                        <!-- Mata tertutup (default visible) -->
+                        <svg class="eye-closed h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none"
                             viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M13.875 18.825A10.05 10.05 0 0112 19
-                       c-4.477 0-8.268-2.943-9.542-7
-                       a10.05 10.05 0 012.913-4.411
-                       m3.29-2.028A9.956 9.956 0 0112 5
-                       c4.477 0 8.268 2.943 9.542 7
-                       a9.96 9.96 0 01-4.133 5.411
-                       M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                            c-4.477 0-8.268-2.943-9.542-7
+                            a10.05 10.05 0 012.913-4.411
+                            m3.29-2.028A9.956 9.956 0 0112 5
+                            c4.477 0 8.268 2.943 9.542 7
+                            a9.96 9.96 0 01-4.133 5.411
+                            M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                             <path stroke-linecap="round" stroke-linejoin="round" d="M3 3l18 18" />
                         </svg>
                     </button>
+
                 </div>
             </div>
 
@@ -174,26 +181,26 @@
                         placeholder="********" required />
                     <button type="button"
                         class="toggle-password absolute inset-y-0 right-0 flex items-center pr-3 text-gray-500 hover:text-gray-700">
-                        <!-- Mata terbuka -->
-                        <svg class="eye-open h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none"
+                        <!-- Mata terbuka (default hidden) -->
+                        <svg class="eye-open h-5 w-5 hidden" xmlns="http://www.w3.org/2000/svg" fill="none"
                             viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                             <path stroke-linecap="round" stroke-linejoin="round"
                                 d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                             <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5
-                       c4.477 0 8.268 2.943 9.542 7
-                       -1.274 4.057-5.065 7-9.542 7
-                       -4.477 0-8.268-2.943-9.542-7z" />
+                            c4.477 0 8.268 2.943 9.542 7
+                            -1.274 4.057-5.065 7-9.542 7
+                            -4.477 0-8.268-2.943-9.542-7z" />
                         </svg>
-                        <!-- Mata tertutup -->
-                        <svg class="eye-closed h-5 w-5 hidden" xmlns="http://www.w3.org/2000/svg" fill="none"
+                        <!-- Mata tertutup (default visible) -->
+                        <svg class="eye-closed h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none"
                             viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M13.875 18.825A10.05 10.05 0 0112 19
-                       c-4.477 0-8.268-2.943-9.542-7
-                       a10.05 10.05 0 012.913-4.411
-                       m3.29-2.028A9.956 9.956 0 0112 5
-                       c4.477 0 8.268 2.943 9.542 7
-                       a9.96 9.96 0 01-4.133 5.411
-                       M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                            c-4.477 0-8.268-2.943-9.542-7
+                            a10.05 10.05 0 012.913-4.411
+                            m3.29-2.028A9.956 9.956 0 0112 5
+                            c4.477 0 8.268 2.943 9.542 7
+                            a9.96 9.96 0 01-4.133 5.411
+                            M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                             <path stroke-linecap="round" stroke-linejoin="round" d="M3 3l18 18" />
                         </svg>
                     </button>
