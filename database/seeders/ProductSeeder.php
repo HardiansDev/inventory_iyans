@@ -28,7 +28,7 @@ class ProductSeeder extends Seeder
                 'code' => $code,
                 'photo' => "product_$i.jpg", // Lokasi foto dummy
                 'category_id' => $categories[array_rand($categories)],
-                'supplier_id' => $suppliers[array_rand($suppliers)],
+
                 'price' => mt_rand(1000, 100000) / 100, // Harga antara 10.00 hingga 1000.00
                 'stock' => mt_rand(0, 500), // Stok antara 0 hingga 500
                 'created_at' => now(),

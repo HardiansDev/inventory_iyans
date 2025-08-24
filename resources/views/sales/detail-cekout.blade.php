@@ -4,6 +4,7 @@
     <title>Sistem Inventory Iyan | Detail Pesanan</title>
 @endsection
 
+
 @section('content')
     @php
         $transaction_number = $transaction_number ?? 'TRX-' . strtoupper(uniqid());
@@ -12,13 +13,18 @@
     @endphp
 
     <div class="mx-auto mt-6 max-w-6xl px-4">
-        <div class="overflow-hidden rounded-lg bg-white shadow-lg">
-            <div class="bg-teal-600 px-6 py-4 text-white">
+        <div class="overflow-hidden rounded-lg bg-white shadow-lg dark:bg-gray-900">
+            <!-- Header -->
+            <div class="bg-teal-600 px-6 py-4 text-white dark:bg-teal-700">
                 <h2 class="text-center text-xl font-bold">Detail Pesanan</h2>
             </div>
-            <div class="px-6 py-6">
+
+            <!-- Content -->
+            <div class="px-6 py-6 text-gray-800 dark:text-gray-200">
                 <form id="checkout-form">
                     @csrf
+
+                    <!-- Info transaksi -->
                     <div class="mb-6 grid grid-cols-1 gap-4 md:grid-cols-2">
                         <div>
                             <p><strong>Tanggal Pesanan:</strong> {{ now()->format('d-m-Y H:i:s') }}</p>
@@ -32,14 +38,15 @@
                         </div>
                     </div>
 
+                    <!-- Table produk -->
                     <div class="mb-6 overflow-x-auto">
-                        <table class="w-full table-auto border border-gray-200 text-left">
-                            <thead class="bg-gray-100">
+                        <table class="w-full table-auto border border-gray-200 text-left dark:border-gray-700">
+                            <thead class="bg-gray-100 dark:bg-gray-800">
                                 <tr>
-                                    <th class="border p-2">Produk</th>
-                                    <th class="border p-2">Qty</th>
-                                    <th class="border p-2">Harga</th>
-                                    <th class="border p-2">Total</th>
+                                    <th class="border p-2 dark:border-gray-700">Produk</th>
+                                    <th class="border p-2 dark:border-gray-700">Qty</th>
+                                    <th class="border p-2 dark:border-gray-700">Harga</th>
+                                    <th class="border p-2 dark:border-gray-700">Total</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -48,11 +55,13 @@
                                         $total = $item['price'] * $item['qty'];
                                         $totalPrice += $total;
                                     @endphp
-                                    <tr>
-                                        <td class="border p-2">{{ $item['name'] }}</td>
-                                        <td class="border p-2">{{ $item['qty'] }}</td>
-                                        <td class="border p-2">Rp {{ number_format($item['price'], 0, ',', '.') }}</td>
-                                        <td class="border p-2">Rp {{ number_format($total, 0, ',', '.') }}</td>
+                                    <tr class="hover:bg-gray-50 dark:hover:bg-gray-800">
+                                        <td class="border p-2 dark:border-gray-700">{{ $item['name'] }}</td>
+                                        <td class="border p-2 dark:border-gray-700">{{ $item['qty'] }}</td>
+                                        <td class="border p-2 dark:border-gray-700">Rp
+                                            {{ number_format($item['price'], 0, ',', '.') }}</td>
+                                        <td class="border p-2 dark:border-gray-700">Rp
+                                            {{ number_format($total, 0, ',', '.') }}</td>
                                     </tr>
                                     <input type="hidden" name="sales[]" value="{{ json_encode($item) }}">
                                 @endforeach
@@ -60,20 +69,24 @@
                         </table>
                     </div>
 
+                    <!-- Input pembayaran -->
                     <div class="grid grid-cols-1 gap-4 md:grid-cols-4">
                         <div>
                             <label class="block font-semibold">Jumlah Bayar:</label>
-                            <input type="text" id="amount_formatted" class="w-full rounded border px-3 py-2"
+                            <input type="text" id="amount_formatted"
+                                class="w-full rounded border px-3 py-2 dark:border-gray-700 dark:bg-gray-800 dark:text-white"
                                 placeholder="Masukkan jumlah pembayaran" required>
                             <input type="hidden" name="amount" id="amount">
-                            <p class="mt-2 font-semibold text-green-600" id="change-display">Kembalian: Rp 0</p>
+                            <p class="mt-2 font-semibold text-green-600 dark:text-green-400" id="change-display">Kembalian:
+                                Rp 0</p>
                             <input type="hidden" name="change" id="change-input">
                         </div>
                         <div id="change-warning" class="hidden text-sm font-semibold text-red-500">Uang kurang!</div>
 
                         <div>
                             <label class="block font-semibold">Diskon:</label>
-                            <select name="discount_id" id="discount_id" class="w-full rounded border px-3 py-2">
+                            <select name="discount_id" id="discount_id"
+                                class="w-full rounded border px-3 py-2 dark:border-gray-700 dark:bg-gray-800 dark:text-white">
                                 <option value="" data-percentage="0">Tanpa Diskon</option>
                                 @foreach ($discounts as $diskon)
                                     <option value="{{ $diskon->id }}" data-percentage="{{ $diskon->nilai }}">
@@ -81,39 +94,41 @@
                                     </option>
                                 @endforeach
                             </select>
-
                         </div>
+
                         <div>
                             <label class="block font-semibold">Metode Pembayaran:</label>
-                            <select name="metode_pembayaran" id="metode_pembayaran" class="w-full rounded border px-3 py-2"
+                            <select name="metode_pembayaran" id="metode_pembayaran"
+                                class="w-full rounded border px-3 py-2 dark:border-gray-700 dark:bg-gray-800 dark:text-white"
                                 required>
                                 <option value="">-- Pilih --</option>
                                 <option value="cash" selected>Cash</option>
                                 <option value="qris">QRIS</option>
                             </select>
                         </div>
+
                         <div>
                             <p class="font-semibold">Total Harga:</p>
-                            <h3 class="text-lg font-bold text-green-600" id="total-price-display">Rp
+                            <h3 class="text-lg font-bold text-green-600 dark:text-green-400" id="total-price-display">Rp
                                 {{ number_format($totalPrice, 0, ',', '.') }}</h3>
                             <input type="hidden" name="subtotal" value="{{ $totalPrice }}">
                             <input type="hidden" name="total" id="total-value" value="{{ $totalPrice }}">
                             <input type="hidden" name="created_by" value="{{ auth()->id() }}">
-
                         </div>
+
                         <div>
                             <p class="font-semibold">Diskon (Rp):</p>
                             <h3 id="discount-display" class="text-lg font-bold text-orange-500">Rp 0</h3>
                             <input type="hidden" id="discount-value" name="discount_value" value="0">
                         </div>
-
                     </div>
 
+                    <!-- Action buttons -->
                     <div class="mt-6 text-center">
                         <a href="{{ route('sales.index') }}"
-                            class="mr-2 inline-block rounded bg-gray-500 px-4 py-2 text-white">Batal</a>
+                            class="mr-2 inline-block rounded bg-gray-500 px-4 py-2 text-white hover:bg-gray-600 dark:hover:bg-gray-700">Batal</a>
                         <button type="submit" id="pay-btn"
-                            class="inline-flex items-center rounded bg-green-600 px-6 py-2 font-semibold text-white hover:bg-green-700 disabled:opacity-50">
+                            class="inline-flex items-center rounded bg-green-600 px-6 py-2 font-semibold text-white hover:bg-green-700 disabled:opacity-50 dark:bg-green-700 dark:hover:bg-green-800">
                             <span id="btn-text">Bayar Sekarang</span>
                             <span id="btn-loading" class="spinner-border spinner-border-sm ml-2 hidden"
                                 role="status"></span>
@@ -124,6 +139,8 @@
         </div>
     </div>
 @endsection
+
+
 
 
 @push('scripts')

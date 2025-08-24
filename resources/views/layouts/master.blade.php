@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="id" class="">
 
 <head>
     <meta charset="UTF-8" />
@@ -8,6 +8,14 @@
 
     @yield('title')
     <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class', // aktifkan dark mode berbasis class
+            theme: {
+                extend: {}
+            }
+        }
+    </script>
 
     {{-- Chart.js (hanya sekali) --}}
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -57,9 +65,10 @@
 
 </head>
 
-<body x-data class="bg-gray-100 text-gray-800" style="font-family: 'Poppins', sans-serif;">
+<body x-data class="bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-200 min-h-screen"
+    style="font-family: 'Poppins', sans-serif;">
     <nav id="navbar"
-        class="fixed top-0 z-50 h-16 flex items-center justify-between bg-white px-4 shadow-md transition-all duration-300"
+        class="fixed top-0 z-50 h-16 flex items-center justify-between bg-white dark:bg-gray-900  px-4 shadow-md transition-all duration-300"
         style="left: 15rem; right: 0;">
         <button id="sidebar-toggle" class="p-2 text-gray-700 hover:text-gray-900">
             <i id="sidebar-icon" class="fas fa-bars-staggered text-lg transition-all duration-300"></i>
@@ -234,9 +243,13 @@
     </div>
 
     {{-- MAIN CONTENT --}}
-    <main id="mainContent" class="min-h-[calc(100vh-4rem)] pt-24 px-4 pb-24 transition-all duration-300">
+    <main id="mainContent"
+        class="min-h-[calc(100vh-4rem)] pt-24 px-4 pb-24 transition-all duration-300
+           bg-white dark:bg-gray-900
+           text-gray-900 dark:text-gray-100">
         @yield('content')
     </main>
+
 
     @include('layouts.module.footer')
     @if (session('success') || session('error') || session('info') || session('warning'))
@@ -271,7 +284,7 @@
         message = e.detail.message;
         type = e.detail.type || 'info';
         show = true;
-
+    
         clearTimeout(timeout);
         timeout = setTimeout(() => show = false, 4000);
     });"

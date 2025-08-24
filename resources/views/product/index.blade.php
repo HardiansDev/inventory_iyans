@@ -6,11 +6,11 @@
 
 @section('content')
     <!-- Header Section -->
-    <section class="mb-6 rounded-lg bg-white p-6 shadow-sm">
+    <section class="mb-6 rounded-lg bg-white dark:bg-gray-800 p-6 shadow-sm">
         <div class="mx-auto flex max-w-7xl flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
             <!-- Title -->
             <div>
-                <h1 class="text-2xl font-bold text-gray-800">Manajemen Produk</h1>
+                <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-100">Manajemen Produk</h1>
                 <p class="mt-1 text-sm text-gray-500">
                     Kelola data produk dalam sistem inventory Anda
                 </p>
@@ -21,9 +21,9 @@
     </section>
 
     <!-- Main Content -->
-    <section class="content">
-        <div class="card shadow-sm">
-            <div class="card-body bg-white p-6">
+    <section class="content bg-white">
+        <div class="card shadow-sm bg-white">
+            <div class="card-body bg-white dark:bg-gray-800 dark:text-gray-100 p-6">
                 <!-- Bagian Tombol Aksi -->
                 <div class="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                     <!-- Kiri: Tombol Aksi -->
@@ -89,12 +89,12 @@
                     class="mb-6 flex flex-col gap-4 sm:flex-row sm:items-end sm:gap-6">
                     <!-- Filter Kategori -->
                     <div class="w-full sm:w-auto">
-                        <label for="filtername" class="mb-1 block text-sm font-medium text-gray-700">
+                        <label for="filtername" class="mb-1 block text-sm font-medium dark:bg-gray-800 dark:text-gray-100">
                             <i class="fas fa-filter mr-1 text-gray-500"></i>
                             Filter Kategori
                         </label>
                         <select name="category" id="filtername"
-                            class="w-full sm:w-72 rounded-md border border-gray-300 px-3 py-2 text-sm text-gray-700 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                            class="w-full sm:w-72 rounded-md border border-gray-300 px-3 py-2 text-sm dark:bg-gray-800 dark:text-gray-100 shadow-sm focus:border-blue-500 focus:ring-blue-500">
                             <option value="">Pilih Kategori</option>
                             @foreach ($datacategory as $category)
                                 <option value="{{ $category->name }}"
@@ -107,13 +107,13 @@
 
                     <!-- Search Produk -->
                     <div class="w-full sm:w-auto">
-                        <label for="search" class="mb-1 block text-sm font-medium text-gray-700">
+                        <label for="search" class="mb-1 block text-sm font-medium dark:bg-gray-800 dark:text-gray-100">
                             <i class="fas fa-search mr-1 text-gray-500"></i>
                             Cari Produk
                         </label>
                         <input type="text" name="search" id="search" placeholder="Nama produk..."
                             value="{{ request('search') }}"
-                            class="w-full sm:w-72 rounded-md border border-gray-300 px-3 py-2 text-sm text-gray-700 shadow-sm focus:border-blue-500 focus:ring-blue-500" />
+                            class="w-full sm:w-72 rounded-md border border-gray-300 px-3 py-2 text-sm dark:bg-gray-800 dark:text-gray-100 shadow-sm focus:border-blue-500 focus:ring-blue-500" />
                     </div>
 
                     <!-- Tombol Filter & Reset -->
@@ -134,7 +134,7 @@
 
                 <!-- Table Produk -->
                 <div class="overflow-x-auto rounded-lg border border-gray-200 shadow">
-                    <table id="example1" class="min-w-full divide-y divide-gray-200 bg-white text-sm text-gray-700">
+                    <table class="min-w-full divide-y divide-gray-200 bg-white text-sm dark:bg-gray-900 dark:text-gray-100">
                         <thead class="bg-gray-50 text-left text-xs font-semibold uppercase tracking-wider text-gray-600">
                             <tr>
                                 <th class="px-4 py-3 text-center">
@@ -150,9 +150,9 @@
                                 <th class="px-4 py-3">Aksi</th>
                             </tr>
                         </thead>
-                        <tbody class="divide-y divide-gray-100">
+                        <tbody class="divide-y dark:bg-gray-900 dark:text-gray-100">
                             @forelse ($products as $product)
-                                <tr class="hover:bg-gray-50">
+                                <tr class="dark:bg-gray-900 dark:text-gray-100">
                                     <td class="px-4 py-3 text-center">
                                         <input type="checkbox" class="form-checkbox select-item text-blue-600"
                                             value="{{ $product->id }}" name="ids[]" />

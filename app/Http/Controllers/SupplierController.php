@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\BahanBaku;
 use Illuminate\Http\Request;
 use App\Models\Supplier;
 use App\Models\Product;
@@ -94,7 +95,7 @@ class SupplierController extends Controller
         $supplier = Supplier::findOrFail($id);  // Ensure the pic exists
 
         // Set pic_id in products to null
-        Product::where('supplier_id', $id)->update(['supplier_id' => null]);
+        BahanBaku::where('supplier_id', $id)->update(['supplier_id' => null]);
 
         // Delete the pic
         $supplier->delete();

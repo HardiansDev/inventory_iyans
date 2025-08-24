@@ -1,11 +1,6 @@
-// tailwind.config.js
 module.exports = {
-    content: [
-        './resources/**/*.blade.php',
-        './resources/**/*.js',
-        './resources/**/*.vue',
-    ],
-    darkMode: 'class', // <--- penting biar bisa dark mode pakai class
+    darkMode: 'class', // <- WAJIB supaya toggle pakai class dark
+    content: ['./resources/**/*.blade.php', './resources/**/*.js', './resources/**/*.vue'],
     theme: {
         extend: {},
     },

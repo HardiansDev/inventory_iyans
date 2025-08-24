@@ -6,17 +6,18 @@
 
 @section('content')
     <!-- Content Header (Page header) -->
-    <section class="mb-6 rounded-lg bg-white p-6 shadow-sm">
+    <section class="mb-6 rounded-lg bg-white dark:bg-gray-800 p-6 shadow-sm transition-colors">
         <div class="mx-auto flex max-w-7xl flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
             <!-- Title -->
             <div>
-                <h1 class="text-2xl font-bold text-gray-800">Dashboard</h1>
-                <p class="mt-1 text-sm text-gray-500">
+                <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-100">Dashboard</h1>
+                <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
                     Selamat datang di sistem manajemen ERP Anda
                 </p>
             </div>
         </div>
     </section>
+
 
     <!-- Main content -->
     <section class="content">
@@ -231,82 +232,95 @@
                 </div>
 
                 <!-- TABEL AKTIVITAS TRANSAKSI HARI INI -->
-                <div class="bg-white dark:bg-gray-800 rounded shadow p-4">
-                    <h4 class="text-lg font-semibold mb-4">Aktivitas Transaksi Hari Ini</h4>
+                <div class="bg-white dark:bg-gray-800 rounded-xl shadow p-4">
+                    <h4 class="text-lg font-semibold mb-4 text-gray-800 dark:text-gray-100">
+                        Aktivitas Transaksi Hari Ini
+                    </h4>
                     <div class="overflow-x-auto">
-                        <table
-                            class="min-w-full divide-y divide-gray-200 text-sm text-left text-gray-700 dark:text-gray-200">
+                        <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700 text-sm text-left">
                             <thead class="bg-gray-100 dark:bg-gray-700">
                                 <tr>
-                                    <th class="px-4 py-2">Waktu</th>
-                                    <th class="px-4 py-2">Produk</th>
-                                    <th class="px-4 py-2">Qty</th>
-                                    <th class="px-4 py-2 text-right">Total</th>
+                                    <th class="px-4 py-2 text-gray-700 dark:text-gray-200">Waktu</th>
+                                    <th class="px-4 py-2 text-gray-700 dark:text-gray-200">Produk</th>
+                                    <th class="px-4 py-2 text-gray-700 dark:text-gray-200">Qty</th>
+                                    <th class="px-4 py-2 text-right text-gray-700 dark:text-gray-200">Total</th>
                                 </tr>
                             </thead>
                             <tbody class="divide-y divide-gray-100 dark:divide-gray-700">
                                 @forelse ($aktivitasHariIni as $item)
-                                    <tr class="border-t border-gray-100 hover:bg-gray-50">
-                                        <td class="px-4 py-2 text-gray-700">
-                                            {{ \Carbon\Carbon::parse($item->created_at)->format('H:i') }}</td>
-                                        <td class="px-4 py-2 text-gray-700">{{ $item->product_name }}</td>
-                                        <td class="px-4 py-2">{{ $item->qty }}</td>
-                                        <td class="px-4 py-2 text-right">
+                                    <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/50 transition">
+                                        <td class="px-4 py-2 text-gray-700 dark:text-gray-300">
+                                            {{ \Carbon\Carbon::parse($item->created_at)->format('H:i') }}
+                                        </td>
+                                        <td class="px-4 py-2 text-gray-700 dark:text-gray-300">
+                                            {{ $item->product_name }}
+                                        </td>
+                                        <td class="px-4 py-2 text-gray-700 dark:text-gray-300">
+                                            {{ $item->qty }}
+                                        </td>
+                                        <td class="px-4 py-2 text-right text-gray-700 dark:text-gray-300">
                                             Rp {{ number_format($item->total, 0, ',', '.') }}
                                             @if ($item->discount > 0)
-                                                <br><span class="text-xs text-green-600">(-{{ $item->discount }}%)</span>
+                                                <br>
+                                                <span class="text-xs text-green-600 dark:text-green-400">
+                                                    (-{{ $item->discount }}%)
+                                                </span>
                                             @endif
                                         </td>
-
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="4" class="text-center text-gray-500 py-4">Belum ada transaksi hari
-                                            ini.</td>
+                                        <td colspan="4" class="text-center text-gray-500 dark:text-gray-400 py-4">
+                                            Belum ada transaksi hari ini.
+                                        </td>
                                     </tr>
                                 @endforelse
-
                             </tbody>
                         </table>
+
                         <div class="mt-4">
                             {{ $aktivitasHariIni->links('pagination::tailwind') }}
                         </div>
                     </div>
                 </div>
 
+
                 <!-- Performa Kasir Hari Ini -->
-                <div class="mt-3 bg-white rounded-lg shadow p-6">
-                    <h2 class="text-lg font-semibold text-gray-700 mb-4">Performa Kasir Hari Ini</h2>
+                <div class="mt-3 bg-white dark:bg-gray-800 rounded-lg shadow p-6">
+                    <h2 class="text-lg font-semibold text-gray-700 dark:text-gray-200 mb-4">
+                        Performa Kasir Hari Ini
+                    </h2>
                     <div class="overflow-x-auto">
-                        <table class="min-w-full divide-y divide-gray-200 text-sm text-left text-gray-700">
-                            <thead class="bg-gray-100">
+                        <table
+                            class="min-w-full divide-y divide-gray-200 dark:divide-gray-700 text-sm text-left text-gray-700 dark:text-gray-200">
+                            <thead class="bg-gray-100 dark:bg-gray-700">
                                 <tr>
                                     <th scope="col" class="px-6 py-3 font-bold">Kasir</th>
-                                    <th scope="col" class="px-6 py-3 font-bold text-center"> Melalukan Transaksi
-                                    </th>
+                                    <th scope="col" class="px-6 py-3 font-bold text-center">Melakukan Transaksi</th>
                                     <th scope="col" class="px-6 py-3 font-bold text-right">Total Penjualan</th>
                                 </tr>
                             </thead>
-                            <tbody class="divide-y divide-gray-200">
+                            <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
                                 @forelse ($performaKasirHariIni as $kasir)
-                                    <tr class="bg-white hover:bg-gray-50">
+                                    <tr class="bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700">
                                         <td class="px-4 py-2">{{ $kasir->kasir }}</td>
                                         <td class="px-4 py-2 text-center">{{ $kasir->transaksi }}</td>
-                                        <td class="px-4 py-2 text-right">Rp
-                                            {{ number_format($kasir->total_penjualan, 0, ',', '.') }}</td>
+                                        <td class="px-4 py-2 text-right">
+                                            Rp {{ number_format($kasir->total_penjualan, 0, ',', '.') }}
+                                        </td>
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="3" class="px-6 py-4 text-center text-gray-500">
+                                        <td colspan="3" class="px-6 py-4 text-center text-gray-500 dark:text-gray-400">
                                             Belum ada transaksi dari kasir hari ini
                                         </td>
                                     </tr>
                                 @endforelse
-
                             </tbody>
                         </table>
                     </div>
                 </div>
+
 
 
             </div>

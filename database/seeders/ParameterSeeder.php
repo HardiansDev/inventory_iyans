@@ -26,18 +26,5 @@ class ParameterSeeder extends Seeder
         foreach ($categories as $category) {
             Category::create($category);
         }
-
-        // Seed suppliers
-        $suppliers = [
-            ['name' => 'Supplier A', 'address' => 'Jl. Merdeka No.1'],
-            ['name' => 'Supplier B', 'address' => 'Jl. Sudirman No.2'],
-            ['name' => 'Supplier C', 'address' => 'Jl. Thamrin No.3'],
-        ];
-
-        foreach ($suppliers as $supplier) {
-            Supplier::create($supplier);
-        }
-
-        
     }
 }
