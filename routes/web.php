@@ -145,6 +145,7 @@ Route::middleware(['auth', 'role:superadmin'])->group(function () {
     Route::post('/employee-attendance/scan/upload', [EmployeeAttendanceController::class, 'processUpload'])->name('employee-attendance.processUpload');
     Route::post('/employee-attendance/qr-store', [EmployeeAttendanceController::class, 'qrStore'])->name('employee-attendance.qrStore');
     Route::get('/employees/{id}/download-qr', [EmployeeController::class, 'downloadQrCode'])->name('employees.downloadQr');
+    Route::get('/employee-attendance/export-pdf', [EmployeeAttendanceController::class, 'exportPdf'])->name('employee-attendance.export-pdf');
 
     Route::resource('work-schedules', WorkScheduleController::class);
 });

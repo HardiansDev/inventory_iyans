@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Attendance;
 use App\Models\Employee;
 use Illuminate\Http\Request;
+use Barryvdh\DomPDF\Facade\Pdf;
+
 
 class EmployeeAttendanceController extends Controller
 {
@@ -133,5 +135,12 @@ class EmployeeAttendanceController extends Controller
         }
 
         return response()->json(['message' => 'Tipe absen tidak valid.'], 400);
+    }
+
+    public function exportPdf()
+    {
+        $attendances = Attendance::with('employee')->get();
+        $pdf = Pdf::loadView('employee_attendance.export-pdf', compact('attendances'));
+        return $pdf->download('absensi_pegawai.pdf');
     }
 }
