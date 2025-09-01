@@ -26,6 +26,8 @@ use App\Http\Controllers\PositionController;
 use App\Http\Controllers\BahanBakuController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ActivityLogController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -162,3 +164,10 @@ Route::middleware('guest')->group(function () {
 });
 
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::post('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::get('/activity-log', [ActivityLogController::class, 'index'])->name('activity.log');
+});

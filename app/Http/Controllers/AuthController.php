@@ -29,14 +29,12 @@ class AuthController extends Controller
         // Cek apakah sudah ada Super Admin
         $superadminExists = \App\Models\User::where('role', 'superadmin')->exists();
 
-
         return view('auth.form', compact('superadminExists'));
     }
 
     // Proses login
     public function login(Request $request)
     {
-        // Validasi input termasuk captcha
         $validated = $request->validate([
             'email' => 'required|email',
             'password' => 'required',
@@ -52,12 +50,17 @@ class AuthController extends Controller
         if (Auth::attempt(['email' => $validated['email'], 'password' => $validated['password']])) {
             $user = Auth::user();
 
+            // Catat ke log
+            activity_log('login', "User {$user->name} berhasil login.");
+
             return $this->redirectByRole($user);
         }
 
+        // Catat login gagal
+        activity_log('login_failed', "Login gagal untuk email {$validated['email']}.");
+
         return back()->with('error', 'Email atau password salah, atau belum terdaftar.');
     }
-
 
     public function showRegister()
     {
@@ -75,31 +78,38 @@ class AuthController extends Controller
             'role' => 'required|in:kasir,manager,superadmin,admin_gudang',
         ]);
 
-        // Cek apakah sudah ada Super Admin
         if ($validated['role'] === 'superadmin' && User::where('role', 'superadmin')->exists()) {
             return back()->withErrors([
                 'role' => 'Role Super Admin sudah digunakan dan tidak bisa dipilih lagi.'
             ])->withInput();
         }
 
-        // Simpan user ke variabel
-        User::create([
+        $user = User::create([
             'name' => $validated['name'],
             'email' => $validated['email'],
             'password' => Hash::make($validated['password']),
             'role' => $validated['role'],
         ]);
 
+        // Catat ke log
+        activity_log('register', "User {$user->name} berhasil registrasi sebagai {$user->role}.");
+
         return redirect()->route('login')->with('success', 'Registrasi berhasil.');
     }
-
 
     // Logout
     public function logout(Request $request)
     {
+        $user = Auth::user();
+
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
+
+        // Catat ke log
+        if ($user) {
+            activity_log('logout', "User {$user->name} telah logout.");
+        }
 
         return redirect('/login')->with('status', 'Anda telah logout.');
     }
