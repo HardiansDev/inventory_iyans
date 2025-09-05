@@ -13,7 +13,5 @@
             </a>.
         </strong>
     </div>
-    <div class="mb-2 md:mb-0">
-        <span class="text-gray-500 dark:text-gray-400">Version 1.0.0</span>
-    </div>
+
 </footer>

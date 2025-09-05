@@ -59,7 +59,7 @@
                 <div class="text-3xl font-bold">
                     Rp {{ number_format($penjualanHariIni, 0, ',', '.') }}
                 </div>
-                <div class="mt-1 text-sm">Penjualan Hari Ini</div>
+                <div class="mt-1 text-sm">Pendapatan Hari Ini</div>
             </div>
 
             <!-- Transaksi Hari Ini -->
@@ -154,17 +154,6 @@
                                     class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
                                     Export PDF
                                 </a>
-
-                            </li>
-                            <li>
-                                <a href="#" onclick="exportToExcel()"
-                                    class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Export
-                                    Excel</a>
-                            </li>
-                            <li>
-                                <a href="#" onclick="exportToCSV()"
-                                    class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Export
-                                    CSV</a>
                             </li>
                         </ul>
                     </div>

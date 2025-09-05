@@ -9,45 +9,82 @@
             font-family: DejaVu Sans, Arial, sans-serif;
             font-size: 12px;
             color: #333;
-            margin: 0;
-            padding: 0;
+            margin: 30px;
+            background: #fff;
         }
 
-        h1,
-        h2 {
+        /* Kop Surat */
+        .kop {
             text-align: center;
-            margin-bottom: 0;
+            border-bottom: 2px solid #000;
+            padding-bottom: 8px;
+            margin-bottom: 20px;
         }
 
-        h2 {
-            margin-top: 5px;
-            font-weight: normal;
+        .kop h1 {
+            font-size: 16px;
+            margin: 0;
+            font-weight: bold;
+        }
+
+        .kop p {
+            margin: 2px 0;
+            font-size: 11px;
             color: #555;
         }
 
-        .period {
+        /* Judul Laporan dalam box */
+        .report-header {
             text-align: center;
-            margin: 10px 0 20px;
-            font-size: 14px;
-            color: #666;
+            margin: 20px auto 30px auto;
+            padding: 15px 20px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            background: #f9f9f9;
+            width: 60%;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
         }
 
+        .report-header h2 {
+            font-size: 18px;
+            margin: 0;
+            font-weight: bold;
+            color: #222;
+        }
+
+        .report-header h3 {
+            font-size: 13px;
+            margin-top: 5px;
+            color: #555;
+            font-weight: normal;
+        }
+
+        /* Table */
         table {
             width: 100%;
             border-collapse: collapse;
-            margin-bottom: 40px;
+            margin-bottom: 15px;
         }
 
         th,
         td {
             border: 1px solid #ddd;
-            padding: 6px 8px;
-            text-align: left;
+            padding: 6px 10px;
+            font-size: 12px;
         }
 
         th {
-            background-color: #f7f7f7;
-            font-weight: 600;
+            background-color: #f2f2f2;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        td {
+            vertical-align: top;
+        }
+
+        tr:nth-child(even) td {
+            background-color: #fafafa;
         }
 
         td.text-right {
@@ -61,22 +98,52 @@
             padding: 20px 0;
         }
 
-        footer {
-            position: fixed;
-            bottom: 10px;
+        .total-row td {
+            font-weight: bold;
+            background-color: #f9f9f9;
+        }
+
+        /* Tanda tangan */
+        .signature {
+            margin-top: 50px;
             width: 100%;
+        }
+
+        .signature .left,
+        .signature .right {
+            width: 45%;
             text-align: center;
-            font-size: 10px;
-            color: #aaa;
+            display: inline-block;
+            vertical-align: top;
+        }
+
+        .signature .right {
+            float: right;
+        }
+
+        .signature p {
+            margin: 60px 0 0 0;
+            font-size: 12px;
         }
     </style>
 </head>
 
 <body>
-    <h1>Laporan Penjualan</h1>
-    <h2>Periode {{ \Carbon\Carbon::parse($start)->format('d M Y') }} -
-        {{ \Carbon\Carbon::parse($end)->format('d M Y') }}</h2>
+    <!-- Kop Surat -->
+    <div class="kop">
+        <h1>PT. KASIRIN.ID</h1>
+        <p>Jl. Contoh Alamat No. 123, Jakarta</p>
+        <p>Telp: (021) 1234567 | Email: info@company.com</p>
+    </div>
 
+    <!-- Judul Laporan -->
+    <div class="report-header">
+        <h2>Laporan Penjualan</h2>
+        <h3>Periode {{ \Carbon\Carbon::parse($start)->format('d M Y') }} -
+            {{ \Carbon\Carbon::parse($end)->format('d M Y') }}</h3>
+    </div>
+
+    <!-- Tabel -->
     <table>
         <thead>
             <tr>
@@ -90,11 +157,11 @@
         <tbody>
             @forelse($penjualans as $penjualan)
                 <tr>
-                    <td>{{ \Carbon\Carbon::parse($penjualan->date_order)->format('d-m-Y') }}</td>
-
+                    <td style="text-align:center;">
+                        {{ \Carbon\Carbon::parse($penjualan->date_order)->format('d-m-Y') }}
+                    </td>
                     <td>{{ $penjualan->transaction_number ?? '-' }}</td>
                     <td>{{ $penjualan->sales->productIn->product->name ?? '-' }}</td>
-
                     <td class="text-right">{{ $penjualan->qty }}</td>
                     <td class="text-right">Rp {{ number_format($penjualan->subtotal, 0, ',', '.') }}</td>
                 </tr>
@@ -103,12 +170,30 @@
                     <td colspan="5" class="no-data">Tidak ada data penjualan.</td>
                 </tr>
             @endforelse
+
+            {{-- Tambah total jika ada data --}}
+            @if ($penjualans->count() > 0)
+                <tr class="total-row">
+                    <td colspan="4" class="text-right">Total Penjualan</td>
+                    <td class="text-right">
+                        Rp {{ number_format($penjualans->sum('subtotal'), 0, ',', '.') }}
+                    </td>
+                </tr>
+            @endif
         </tbody>
     </table>
 
-    <footer>
-        &copy; {{ date('Y') }} Your Company Name - Generated on {{ \Carbon\Carbon::now()->format('d M Y H:i') }}
-    </footer>
+    <!-- Tanda Tangan -->
+    <div class="signature">
+        <div class="left">
+            <p>Mengetahui,<br><br><br><br>__________________________<br>Manager</p>
+        </div>
+        <div class="right">
+            <p>Jakarta, {{ \Carbon\Carbon::now()->format('d M Y') }}<br><br><br><br>__________________________<br>Kasir
+            </p>
+        </div>
+    </div>
+
 </body>
 
 </html>

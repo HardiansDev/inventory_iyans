@@ -1,6 +1,8 @@
 @extends('layouts.master')
 
-@section('title', 'Log Aktivitas')
+@section('title')
+    <title>Log Aktivitas</title>
+@endsection
 
 @section('content')
     <div class="p-6">
@@ -57,7 +59,7 @@
         </div>
 
         <div class="mt-4">
-            {{ $logs->links() }}
+            {{ $logs->links('pagination::tailwind') }}
         </div>
     </div>
 @endsection
