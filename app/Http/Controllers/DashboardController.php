@@ -88,6 +88,7 @@ class DashboardController extends Controller
                 'salesdetails.created_at',
                 'products.name as product_name',
                 'salesdetails.qty',
+                'salesdetails.metode_pembayaran',
                 DB::raw('salesdetails.price * salesdetails.qty as subtotal'),
                 DB::raw('COALESCE(discounts.nilai, 0) as discount'),
                 DB::raw('(salesdetails.price * salesdetails.qty) - ((salesdetails.price * salesdetails.qty) * (COALESCE(discounts.nilai, 0) / 100)) as total')

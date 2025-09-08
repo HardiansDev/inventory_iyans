@@ -139,8 +139,10 @@
     <!-- Judul Laporan -->
     <div class="report-header">
         <h2>Laporan Penjualan</h2>
-        <h3>Periode {{ \Carbon\Carbon::parse($start)->format('d M Y') }} -
-            {{ \Carbon\Carbon::parse($end)->format('d M Y') }}</h3>
+        <h3>
+            Periode {{ \Carbon\Carbon::parse($start)->format('d M Y') }} -
+            {{ \Carbon\Carbon::parse($end)->format('d M Y') }}
+        </h3>
     </div>
 
     <!-- Tabel -->
@@ -163,7 +165,25 @@
                     <td>{{ $penjualan->transaction_number ?? '-' }}</td>
                     <td>{{ $penjualan->sales->productIn->product->name ?? '-' }}</td>
                     <td class="text-right">{{ $penjualan->qty }}</td>
-                    <td class="text-right">Rp {{ number_format($penjualan->subtotal, 0, ',', '.') }}</td>
+                    <td class="text-right">
+                        @if ($penjualan->discount && $penjualan->discount->nilai > 0)
+                            {{-- Harga sebelum diskon dicoret --}}
+                            <span style="text-decoration: line-through; color: red;">
+                                Rp {{ number_format($penjualan->subtotal, 0, ',', '.') }}
+                            </span><br>
+                            {{-- Harga setelah diskon --}}
+                            @php
+                                $afterDiscount =
+                                    $penjualan->subtotal - $penjualan->subtotal * ($penjualan->discount->nilai / 100);
+                            @endphp
+
+                            Rp {{ number_format($afterDiscount, 0, ',', '.') }}
+
+                            <small>({{ $penjualan->discount->nilai }}%)</small>
+                        @else
+                            Rp {{ number_format($penjualan->subtotal, 0, ',', '.') }}
+                        @endif
+                    </td>
                 </tr>
             @empty
                 <tr>
@@ -176,7 +196,7 @@
                 <tr class="total-row">
                     <td colspan="4" class="text-right">Total Penjualan</td>
                     <td class="text-right">
-                        Rp {{ number_format($penjualans->sum('subtotal'), 0, ',', '.') }}
+                        Rp {{ number_format($total, 0, ',', '.') }}
                     </td>
                 </tr>
             @endif
@@ -189,11 +209,12 @@
             <p>Mengetahui,<br><br><br><br>__________________________<br>Manager</p>
         </div>
         <div class="right">
-            <p>Jakarta, {{ \Carbon\Carbon::now()->format('d M Y') }}<br><br><br><br>__________________________<br>Kasir
+            <p>Jakarta, {{ \Carbon\Carbon::now()->format('d M Y') }}<br><br><br><br>
+                __________________________<br>Kasir
             </p>
         </div>
     </div>
-
 </body>
+
 
 </html>

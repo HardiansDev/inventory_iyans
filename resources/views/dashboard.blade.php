@@ -232,6 +232,7 @@
                                     <th class="px-4 py-2 text-gray-700 dark:text-gray-200">Waktu</th>
                                     <th class="px-4 py-2 text-gray-700 dark:text-gray-200">Produk</th>
                                     <th class="px-4 py-2 text-gray-700 dark:text-gray-200">Qty</th>
+                                    <th class="px-4 py-2 text-gray-700 dark:text-gray-200">Metode Pembayaran</th>
                                     <th class="px-4 py-2 text-right text-gray-700 dark:text-gray-200">Total</th>
                                 </tr>
                             </thead>
@@ -246,6 +247,9 @@
                                         </td>
                                         <td class="px-4 py-2 text-gray-700 dark:text-gray-300">
                                             {{ $item->qty }}
+                                        </td>
+                                        <td class="px-4 py-2 text-gray-700 dark:text-gray-300">
+                                            {{ $item->metode_pembayaran }}
                                         </td>
                                         <td class="px-4 py-2 text-right text-gray-700 dark:text-gray-300">
                                             Rp {{ number_format($item->total, 0, ',', '.') }}

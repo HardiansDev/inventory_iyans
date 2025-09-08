@@ -75,7 +75,7 @@
                     <th>Kategori</th>
                     <th>Harga</th>
                     <th>Stok</th>
-                    <th>Supplier</th>
+                    {{-- <th>Supplier</th> --}}
                 </tr>
             </thead>
             <tbody>
@@ -87,7 +87,7 @@
                         <td>{{ $product->category->name }}</td>
                         <td>Rp. {{ number_format($product->price, 0, ',', '.') }}</td>
                         <td>{{ $product->stock }}</td>
-                        <td>{{ $product->supplier->name }}</td>
+                        {{-- <td>{{ $product->supplier->name }}</td> --}}
                     </tr>
                 @endforeach
             </tbody>

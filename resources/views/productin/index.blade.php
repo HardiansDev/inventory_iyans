@@ -6,16 +6,14 @@
 
 @section('content')
     <!-- Header -->
-    <section class="mb-6 rounded-lg bg-white p-6 shadow-sm">
+    <section class="mb-6 rounded-lg bg-white p-6 shadow-sm dark:bg-gray-900 dark:shadow-md">
         <div class="mx-auto flex max-w-7xl flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
             <div>
-                <h1 class="text-2xl font-bold text-gray-800">Data Produk Masuk</h1>
-                <p class="mt-1 text-sm text-gray-500">
+                <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-100">Data Produk Masuk</h1>
+                <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
                     Lihat dan kelola data produk yang masuk ke dalam inventori
                 </p>
             </div>
-
-
         </div>
     </section>
 
@@ -27,7 +25,7 @@
                     <!-- Header Action -->
                     <div class="mb-6 grid grid-cols-1 gap-3 sm:grid-cols-2 sm:items-center">
                         <!-- KIRI: Tombol Aksi dan Filter -->
-                        <div class="flex flex-col sm:flex-row sm:items-center sm:gap-3 gap-2">
+                        <div class="flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-3">
                             <!-- Tombol Minta Produk -->
                             <a href="{{ route('productin.create') }}"
                                 class="inline-flex items-center justify-center rounded bg-green-600 px-4 py-2 text-sm text-white shadow-sm hover:bg-green-700 whitespace-nowrap">
@@ -51,23 +49,23 @@
                             <!-- Filter Data -->
                             <div class="relative">
                                 <button onclick="toggleFilterDropdown()" type="button"
-                                    class="inline-flex items-center rounded border border-blue-600 px-4 py-2 text-sm text-blue-600 shadow-sm hover:bg-blue-50 whitespace-nowrap">
+                                    class="inline-flex items-center rounded border border-blue-600 px-4 py-2 text-sm text-blue-600 shadow-sm hover:bg-blue-50 dark:border-blue-400 dark:text-blue-400 dark:hover:bg-gray-800 whitespace-nowrap">
                                     <i class="fas fa-filter mr-2"></i>
                                     Filter Data
                                 </button>
 
                                 <!-- Dropdown Box Filter -->
                                 <div id="filterDropdown"
-                                    class="absolute right-0 z-50 mt-2 hidden w-full max-w-xs rounded-lg border border-gray-200 bg-white p-4 shadow-lg sm:w-80">
+                                    class="absolute right-0 z-50 mt-2 hidden w-full max-w-xs rounded-lg border border-gray-200 bg-white p-4 shadow-lg dark:border-gray-700 dark:bg-gray-800 sm:w-80">
                                     <!-- Form Filter -->
                                     <form action="{{ route('productin.index') }}" method="GET" class="space-y-4">
                                         <!-- Kategori -->
                                         <div>
-                                            <label class="block text-sm font-medium text-gray-700">
+                                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">
                                                 Kategori
                                             </label>
                                             <select name="category"
-                                                class="w-full rounded border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-blue-400">
+                                                class="w-full rounded border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-blue-400 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-200">
                                                 <option value="">-- Semua Kategori --</option>
                                                 @foreach ($categories as $category)
                                                     <option value="{{ $category->id }}"
@@ -80,11 +78,11 @@
 
                                         <!-- Status Produk -->
                                         <div>
-                                            <label class="block text-sm font-medium text-gray-700">
+                                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">
                                                 Status Produk
                                             </label>
                                             <select name="status_produk"
-                                                class="w-full rounded border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-blue-400">
+                                                class="w-full rounded border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-blue-400 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-200">
                                                 <option value="">-- Semua --</option>
                                                 <option value="menunggu"
                                                     {{ request('status_produk') == 'menunggu' ? 'selected' : '' }}>Menunggu
@@ -100,11 +98,11 @@
 
                                         <!-- Status Penjualan -->
                                         <div>
-                                            <label class="block text-sm font-medium text-gray-700">
+                                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">
                                                 Status Penjualan
                                             </label>
                                             <select name="status_penjualan"
-                                                class="w-full rounded border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-blue-400">
+                                                class="w-full rounded border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-blue-400 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-200">
                                                 <option value="">-- Semua --</option>
                                                 <option value="belum dijual"
                                                     {{ request('status_penjualan') == 'belum dijual' ? 'selected' : '' }}>
@@ -123,38 +121,38 @@
 
                                         <!-- Filter Harga -->
                                         <div>
-                                            <label class="block text-sm font-medium text-gray-700">
+                                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">
                                                 Harga (Min - Max)
                                             </label>
                                             <div class="flex gap-2">
                                                 <input type="number" name="min_price" value="{{ request('min_price') }}"
                                                     placeholder="Min"
-                                                    class="w-1/2 rounded border px-3 py-2 text-sm focus:outline-none focus:ring-blue-400" />
+                                                    class="w-1/2 rounded border px-3 py-2 text-sm focus:outline-none focus:ring-blue-400 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-200" />
                                                 <input type="number" name="max_price" value="{{ request('max_price') }}"
                                                     placeholder="Max"
-                                                    class="w-1/2 rounded border px-3 py-2 text-sm focus:outline-none focus:ring-blue-400" />
+                                                    class="w-1/2 rounded border px-3 py-2 text-sm focus:outline-none focus:ring-blue-400 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-200" />
                                             </div>
                                         </div>
 
                                         <!-- Filter Qty -->
                                         <div>
-                                            <label class="block text-sm font-medium text-gray-700">
+                                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">
                                                 Qty (Min - Max)
                                             </label>
                                             <div class="flex gap-2">
                                                 <input type="number" name="min_qty" value="{{ request('min_qty') }}"
                                                     placeholder="Min"
-                                                    class="w-1/2 rounded border px-3 py-2 text-sm focus:outline-none focus:ring-blue-400" />
+                                                    class="w-1/2 rounded border px-3 py-2 text-sm focus:outline-none focus:ring-blue-400 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-200" />
                                                 <input type="number" name="max_qty" value="{{ request('max_qty') }}"
                                                     placeholder="Max"
-                                                    class="w-1/2 rounded border px-3 py-2 text-sm focus:outline-none focus:ring-blue-400" />
+                                                    class="w-1/2 rounded border px-3 py-2 text-sm focus:outline-none focus:ring-blue-400 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-200" />
                                             </div>
                                         </div>
 
                                         <!-- Tombol Aksi Filter -->
                                         <div class="flex justify-between pt-2">
                                             <a href="{{ route('productin.index') }}"
-                                                class="inline-flex items-center rounded-md bg-gray-300 px-4 py-2 text-sm text-gray-800 shadow-sm hover:bg-gray-400">
+                                                class="inline-flex items-center rounded-md bg-gray-300 px-4 py-2 text-sm text-gray-800 shadow-sm hover:bg-gray-400 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600">
                                                 <i class="fas fa-undo mr-1"></i>
                                                 Reset Filter
                                             </a>
@@ -172,18 +170,18 @@
                         <!-- KANAN: Form Pencarian -->
                         <div class="flex justify-end">
                             <form method="GET" action="{{ route('productin.index') }}"
-                                class="flex flex-col items-end gap-2 sm:flex-row sm:items-center w-full sm:w-auto">
+                                class="flex w-full flex-col items-end gap-2 sm:w-auto sm:flex-row sm:items-center">
                                 <input type="text" name="search" value="{{ request('search') }}"
                                     placeholder="Cari nama produk..."
-                                    class="w-full rounded border px-3 py-2 text-sm shadow focus:border-blue-300 focus:outline-none focus:ring sm:w-56" />
-                                <div class="flex gap-2 w-full sm:w-auto">
+                                    class="w-full rounded border px-3 py-2 text-sm shadow focus:border-blue-300 focus:outline-none focus:ring dark:border-gray-600 dark:bg-gray-900 dark:text-gray-200 sm:w-56" />
+                                <div class="flex w-full gap-2 sm:w-auto">
                                     <button type="submit"
-                                        class="flex items-center justify-center gap-1 rounded bg-blue-600 px-3 py-2 text-sm text-white hover:bg-blue-700 whitespace-nowrap w-full sm:w-auto">
+                                        class="flex w-full items-center justify-center gap-1 rounded bg-blue-600 px-3 py-2 text-sm text-white hover:bg-blue-700 sm:w-auto">
                                         <i class="fas fa-search"></i>
                                         Cari
                                     </button>
                                     <a href="{{ route('productin.index') }}"
-                                        class="inline-flex items-center justify-center rounded-md bg-gray-300 px-4 py-2 text-sm text-gray-800 shadow-sm hover:bg-gray-400 whitespace-nowrap w-full sm:w-auto">
+                                        class="inline-flex w-full items-center justify-center rounded-md bg-gray-300 px-4 py-2 text-sm text-gray-800 shadow-sm hover:bg-gray-400 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600 sm:w-auto">
                                         <i class="fas fa-redo-alt mr-2"></i>
                                         Reset
                                     </a>
@@ -192,14 +190,16 @@
                         </div>
                     </div>
 
-
-                    <div class="overflow-x-auto rounded-lg border border-gray-200 shadow">
-                        <table id="example1" class="min-w-full divide-y divide-gray-200 bg-white text-sm text-gray-700">
+                    <!-- Table -->
+                    <div class="overflow-x-auto rounded-lg border border-gray-200 shadow dark:border-gray-700">
+                        <table
+                            class="min-w-full divide-y divide-gray-200 bg-white text-sm text-gray-700 dark:divide-gray-700 dark:bg-gray-900 dark:text-gray-300">
                             <thead
-                                class="bg-gray-50 text-left text-xs font-semibold uppercase tracking-wider text-gray-600">
+                                class="bg-gray-50 text-left text-xs font-semibold uppercase tracking-wider text-gray-600 dark:bg-gray-800 dark:text-gray-400">
                                 <tr>
                                     <th class="px-4 py-3 text-center">
-                                        <input type="checkbox" id="selectAll" class="form-checkbox text-blue-600" />
+                                        <input type="checkbox" id="selectAll"
+                                            class="form-checkbox text-blue-600 dark:text-blue-400" />
                                     </th>
                                     <th class="px-4 py-3">Nama Produk</th>
                                     <th class="px-4 py-3">Kode Produk</th>
@@ -210,15 +210,13 @@
                                     <th class="px-4 py-3">Qty</th>
                                     <th class="px-4 py-3">PPIC</th>
                                     <th class="px-4 py-3">Status</th>
-
                                     <th class="px-4 py-3">Status Penjualan</th>
                                     <th class="px-4 py-3">Aksi</th>
                                 </tr>
                             </thead>
-                            <tbody class="divide-y divide-gray-100">
+                            <tbody class="divide-y divide-gray-100 dark:divide-gray-800">
                                 @forelse ($productIns as $productIn)
-                                    <tr x-data="{ visible: true }" x-show="visible" id="productin-{{ $productIn->id }}"
-                                        class="hover:bg-gray-50">
+                                    <tr x-data="{ visible: true }" x-show="visible" id="productin-{{ $productIn->id }}">
                                         <td class="px-4 py-3 text-center">
                                             <input type="checkbox" class="form-checkbox select-item text-blue-600"
                                                 value="{{ $productIn->id }}" name="ids[]" />
@@ -374,166 +372,13 @@
                                 @endforelse
                             </tbody>
                         </table>
-
-
-                        {{-- modal tambah stok toko --}}
-                        <div x-data="stokTokoModal()" x-init="window.addEventListener('open-stock-toko-modal', e => {
-                            openModal(e.detail.id, e.detail.name, e.detail.max, e.detail.stokToko);
-                        })" x-show="show" x-cloak
-                            class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-                            <div class="mx-auto w-full max-w-md rounded-lg bg-white p-6 shadow-lg">
-                                <h2 class="mb-4 text-lg font-bold" x-text="modalTitle"></h2>
-
-                                <form @submit.prevent="submitForm">
-                                    <input type="hidden" x-model="productInId">
-
-                                    <div class="mb-4">
-                                        <label class="block text-sm font-medium text-gray-700">Jumlah Qty</label>
-                                        <input type="number"
-                                            class="mt-1 w-full rounded-md border p-2 focus:border-blue-300 focus:outline-none focus:ring"
-                                            min="1" x-model="qty">
-                                        <small class="text-gray-500">
-                                            <span x-text="'Stok tersedia di Gudang: ' + maxStok"></span><br>
-                                            <span x-text="'Stok tersedia di Toko: ' + stokToko"></span>
-                                        </small>
-
-                                    </div>
-
-                                    <div class="flex justify-end space-x-2">
-                                        <button type="button" @click="closeModal"
-                                            class="rounded bg-gray-200 px-4 py-2">Batal</button>
-                                        <button type="submit" class="rounded bg-blue-600 px-4 py-2 text-white">Tambah ke
-                                            Toko</button>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-
-
-
-                        <!-- Modal Tambah Stok Gudang -->
-                        <div x-data="addStockModal()" x-show="open" x-cloak
-                            @open-add-stock-modal.window="openModal($event.detail)"
-                            class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-                            <div class="w-full max-w-md rounded-lg bg-white p-6 shadow">
-                                <h2 class="mb-4 text-xl font-semibold text-gray-800">Tambah Stok ke Gudang</h2>
-                                <p class="mb-2 text-gray-600">Produk: <span class="font-semibold"
-                                        x-text="productName"></span></p>
-                                <form @submit.prevent="submitForm">
-                                    <input type="hidden" x-model="productInId">
-                                    <div class="mb-4">
-                                        <label class="block text-gray-700">Jumlah Tambah (Qty)</label>
-                                        <input type="number" min="1" x-model.number="qty"
-                                            class="mt-1 w-full rounded-md border p-2 focus:border-blue-300 focus:outline-none focus:ring"
-                                            required>
-                                    </div>
-                                    <template x-if="errorMessage">
-                                        <div class="mb-2 text-sm text-red-600" x-text="errorMessage"></div>
-                                    </template>
-                                    <template x-if="successMessage">
-                                        <div class="mb-2 text-sm text-green-600" x-text="successMessage"></div>
-                                    </template>
-                                    <div class="flex justify-end space-x-2">
-                                        <button type="button" @click="closeModal"
-                                            class="rounded bg-gray-300 px-4 py-2 text-gray-800 hover:bg-gray-400">Batal</button>
-                                        <button type="submit"
-                                            class="rounded bg-blue-600 px-4 py-2 text-white hover:bg-blue-700">Tambah</button>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-
-
-                        <!-- Modal Alpine -->
-                        <div x-data="{ open: false, productId: null, productName: '', qty: 1 }" x-show="open" x-cloak
-                            @open-sale-modal.window="
-                                open = true;
-                                productId = $event.detail.productId;
-                                productName = $event.detail.productName;
-                                qty = 1;
-                                $nextTick(() => $refs.qtyInput.focus());
-                            "
-                            class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-                            <div class="w-full max-w-md rounded-lg bg-white p-6 shadow-lg">
-                                <h2 class="mb-4 text-xl font-semibold text-gray-800">Jual Produk: <span
-                                        x-text="productName"></span></h2>
-
-                                <form method="POST" action="{{ route('sales.store') }}">
-                                    @csrf
-                                    <input type="hidden" name="product_ins_id" :value="productId">
-
-                                    <div class="mb-4">
-                                        <label for="qty" class="block text-gray-700">Jumlah (Qty)</label>
-                                        <input type="number" name="qty" x-ref="qtyInput" min="1"
-                                            x-model="qty"
-                                            class="mt-1 w-full rounded-md border p-2 focus:border-blue-300 focus:outline-none focus:ring"
-                                            required>
-                                    </div>
-
-                                    <div class="flex justify-end space-x-2">
-                                        <button type="button" @click="open = false"
-                                            class="rounded bg-gray-300 px-4 py-2 text-gray-800 hover:bg-gray-400">Batal</button>
-                                        <button type="submit"
-                                            class="rounded bg-blue-600 px-4 py-2 text-white hover:bg-blue-700">Jual ke
-                                            Toko</button>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-
-
-                        <div x-data="{
-                            openModal: false,
-                            selectedProductId: null,
-                            selectedProductName: null,
-                            rejectionNote: '',
-                        }" x-cloak
-                            @open-rejection-modal.window="
-                                    openModal = true;
-                                    selectedProductId = $event.detail.id;
-                                    selectedProductName = $event.detail.name;
-                                ">
-                            <div x-show="openModal" x-cloak
-                                class="fixed inset-0 z-50 flex items-center justify-center bg-gray-600 bg-opacity-75">
-                                <div class="m-4 w-full max-w-sm rounded-lg bg-white p-6 shadow-xl"
-                                    @click.away="openModal = false">
-                                    <h3 class="mb-4 text-lg font-semibold">
-                                        Tolak
-                                        <span x-text="selectedProductName"></span>
-                                    </h3>
-                                    <form :action="'{{ route('productin.updateStatus', '') }}/' + selectedProductId"
-                                        method="POST">
-                                        @csrf
-                                        @method('PUT')
-                                        <input type="hidden" name="status" value="ditolak" />
-                                        <div class="mb-4">
-                                            <label for="catatan" class="mb-2 block text-sm font-bold text-gray-700">
-                                                Catatan Penolakan:
-                                            </label>
-                                            <textarea name="catatan" id="catatan" rows="4"
-                                                class="focus:shadow-outline w-full appearance-none rounded border px-3 py-2 leading-tight text-gray-700 shadow focus:outline-none"
-                                                x-model="rejectionNote" required></textarea>
-                                        </div>
-                                        <div class="flex justify-end">
-                                            <button type="button" @click="openModal = false"
-                                                class="mr-2 rounded bg-gray-300 px-4 py-2 font-bold text-gray-800 hover:bg-gray-400">
-                                                Batal
-                                            </button>
-                                            <button type="submit"
-                                                class="rounded bg-red-500 px-4 py-2 font-bold text-white hover:bg-red-700">
-                                                Kirim Penolakan
-                                            </button>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 @endsection
+
 
 @push('scripts')
     <script>
