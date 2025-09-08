@@ -144,8 +144,6 @@ class ProductInController extends Controller
             'date.*'         => 'required|date',
             'qty'            => 'required|array',
             'qty.*'          => 'required|integer|min:1',
-            // 'recipient'      => 'required|array',
-            // 'recipient.*'    => '|string|max:255',
         ]);
 
         foreach ($validated['product_id'] as $index => $productId) {
@@ -157,7 +155,7 @@ class ProductInController extends Controller
                 'category_id'    => $validated['category_id'][$index],
                 'date'           => $parsedDate,
                 'qty'            => $validated['qty'][$index],
-                // 'recipient'      => $validated['recipient'][$index],
+
                 'requester_name' => $requesterName,
                 'status'         => 'menunggu',
             ]);
@@ -174,22 +172,6 @@ class ProductInController extends Controller
 
         // Kirim data produk ke view
         return view('productin.create', compact('products'));
-    }
-
-
-    public function show($id)
-    {
-        //
-    }
-
-    public function edit($id)
-    {
-        //
-    }
-
-    public function update(Request $request, $id)
-    {
-        //
     }
 
     public function destroy($id)
@@ -253,44 +235,48 @@ class ProductInController extends Controller
 
     public function addStockKeToko(Request $request, $productInId)
     {
-        $productIn = ProductIn::with('product')->findOrFail($productInId);
-        $qty = (int) $request->input('qty', 1);
+        try {
+            $productIn = ProductIn::with('product')->findOrFail($productInId);
+            $qty = (int) $request->input('qty', 1);
 
-        if ($productIn->qty < $qty) {
-            $msg = 'Stok di gudang tidak mencukupi!';
-            return $request->ajax()
-                ? response()->json(['success' => false, 'message' => $msg])
-                : back()->with('error', $msg);
-        }
+            if ($productIn->qty < $qty) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Stok di gudang tidak mencukupi!'
+                ], 400);
+            }
 
-        $existingSales = Sales::where('product_ins_id', $productIn->id)->first();
+            $existingSales = Sales::where('product_ins_id', $productIn->id)->first();
 
-        if ($existingSales) {
-            $existingSales->qty += $qty;
-            $existingSales->save();
-        } else {
-            Sales::create([
-                'product_ins_id' => $productIn->id,
-                'qty' => $qty,
-            ]);
-        }
+            if ($existingSales) {
+                $existingSales->qty += $qty;
+                $existingSales->save();
+            } else {
+                Sales::create([
+                    'product_ins_id' => $productIn->id,
+                    'qty' => $qty,
+                ]);
+            }
 
-        $productIn->qty -= $qty;
-        $productIn->save();
-        $this->updateStatusPenjualan($productIn);
+            $productIn->qty -= $qty;
+            $productIn->save();
 
-
-
-        if ($request->ajax()) {
+            $this->updateStatusPenjualan($productIn);
 
             return response()->json([
                 'success' => true,
                 'message' => 'Stok berhasil ditambahkan ke toko.',
-                'redirect_url' => route('productin.index')
+                'stok_gudang' => $productIn->qty,
+                'stok_toko' => $productIn->sales()->sum('qty')
             ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage()
+            ], 500);
         }
-        return back()->with('success', 'Stok berhasil ditambahkan ke toko.');
     }
+
 
 
     public function bulkDelete(Request $request)
@@ -319,5 +305,62 @@ class ProductInController extends Controller
         }
 
         $productIn->save();
+    }
+
+    public function sale(Request $request, $id)
+    {
+        try {
+            $productIn = ProductIn::with('product', 'sales')->findOrFail($id);
+
+            $qty = (int) $request->input('qty', 0);
+
+            if ($qty < 1) {
+                return response()->json(['success' => false, 'message' => 'Qty minimal 1'], 400);
+            }
+
+            if ($qty > $productIn->qty) {
+                return response()->json(['success' => false, 'message' => 'Stok gudang tidak cukup'], 400);
+            }
+
+            // cek apakah produk sudah ada di sales (etalase toko)
+            $sales = Sales::where('product_ins_id', $productIn->id)->first();
+
+            if ($sales) {
+                $sales->qty += $qty;
+                $sales->save();
+            } else {
+                Sales::create([
+                    'product_ins_id' => $productIn->id,
+                    'qty' => $qty,
+                ]);
+            }
+
+            // kurangi stok gudang
+            $productIn->qty -= $qty;
+
+            // 🔥 Update status_penjualan
+            $stokToko = $productIn->sales->sum('qty') + $qty; // stok yang ada di toko setelah ditambah
+            if ($stokToko <= 0) {
+                $productIn->status_penjualan = 'stok habis terjual';
+            } elseif ($stokToko <= 3) { // misal threshold dikit = 3
+                $productIn->status_penjualan = 'stok tinggal dikit';
+            } else {
+                $productIn->status_penjualan = 'sedang dijual';
+            }
+
+            $productIn->save();
+
+            return response()->json([
+                'success' => true,
+                'message' => "Produk {$productIn->product->name} berhasil dipindahkan ke etalase penjualan (toko).",
+                'stokToko' => $stokToko,
+                'statusPenjualan' => $productIn->status_penjualan
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage()
+            ], 500);
+        }
     }
 }

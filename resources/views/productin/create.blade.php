@@ -5,20 +5,26 @@
 @endsection
 
 @section('content')
-    <section class="mb-6 rounded-lg bg-white p-6 shadow-sm">
+    <section class="mb-6 rounded-lg bg-white p-6 shadow-sm dark:bg-gray-800 dark:shadow-md transition-colors duration-300">
         <div class="mx-auto flex max-w-7xl flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
             <div>
-                <h1 class="text-2xl font-bold text-gray-800">Tambah Produk Masuk</h1>
-                <p class="mt-1 text-sm text-gray-500">
-                    kelola data produk yang masuk ke dalam penjualan
+                <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-100">
+                    Tambah Produk Masuk
+                </h1>
+                <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
+                    Kelola data produk yang masuk ke dalam penjualan
                 </p>
             </div>
         </div>
     </section>
 
+
     <div class="container mx-auto mt-6 px-4">
-        <div class="rounded-xl border border-gray-200 bg-white p-6 shadow-lg">
-            <h2 class="mb-6 text-xl font-semibold text-gray-800">Form Tambah Produk Masuk</h2>
+        <div
+            class="rounded-xl border border-gray-200 bg-white p-6 shadow-lg dark:border-gray-700 dark:bg-gray-800 transition-colors duration-300">
+            <h2 class="mb-6 text-xl font-semibold text-gray-800 dark:text-gray-100">
+                Form Tambah Produk Masuk
+            </h2>
 
             <form action="{{ route('productin.storeProductIn') }}" method="POST" enctype="multipart/form-data"
                 class="space-y-4">
@@ -26,15 +32,19 @@
 
                 <div id="dynamic-form" class="space-y-4">
                     <div
-                        class="grid grid-cols-2 md:grid-cols-12 gap-2 md:gap-4 items-end border-b border-gray-200 pb-4 overflow-x-auto">
+                        class="grid grid-cols-2 md:grid-cols-12 gap-2 md:gap-4 items-end border-b border-gray-200 dark:border-gray-700 pb-4 overflow-x-auto">
                         <div class="col-span-2 md:col-span-3">
-                            <label class="mb-1 block text-sm font-medium text-gray-700">Nama Produk</label>
+                            <label class="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300">
+                                Nama Produk
+                            </label>
                             <select name="product_id[]"
-                                class="product-select w-full rounded-md border border-gray-300 bg-white px-4 py-2 text-sm text-gray-700 shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-500"
+                                class="product-select w-full rounded-md border border-gray-300 bg-white px-4 py-2 text-sm text-gray-700 shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-500
+                            dark:border-gray-600 dark:bg-gray-900 dark:text-gray-100"
                                 required>
                                 <option value="" disabled selected>Pilih Produk</option>
                                 @foreach ($products as $product)
-                                    <option value="{{ $product->id }}">{{ $product->name }} (Stok: {{ $product->stock }})
+                                    <option value="{{ $product->id }}">
+                                        {{ $product->name }} (Stok: {{ $product->stock }})
                                     </option>
                                 @endforeach
                             </select>
@@ -44,23 +54,31 @@
                         <input type="hidden" name="category_id[]" class="hidden-category" />
 
                         <div class="col-span-1 md:col-span-2">
-                            <label class="mb-1 block text-sm font-medium text-gray-700">Tanggal Masuk</label>
+                            <label class="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300">
+                                Tanggal Masuk
+                            </label>
                             <input id="datepicker-actions" datepicker datepicker-buttons datepicker-autoselect-today
                                 type="text" name="date[]"
-                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full ps-10 p-2.5 focus:ring-blue-500 focus:border-blue-500
+                            dark:bg-gray-900 dark:border-gray-600 dark:text-gray-100"
                                 placeholder="Pilih tanggal" required>
                         </div>
 
                         <div class="col-span-1 md:col-span-2">
-                            <label class="mb-1 block text-sm font-medium text-gray-700">Jumlah</label>
+                            <label class="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300">
+                                Jumlah
+                            </label>
                             <input type="number" name="qty[]"
-                                class="w-full rounded-md border border-gray-300 bg-white px-4 py-2 text-sm text-gray-700 shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-500"
+                                class="w-full rounded-md border border-gray-300 bg-white px-4 py-2 text-sm text-gray-700 shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-500
+                            dark:border-gray-600 dark:bg-gray-900 dark:text-gray-100"
                                 required>
                         </div>
 
                         <div class="col-span-2 md:col-span-2 flex justify-end">
                             <button type="button"
-                                class="remove-row rounded-lg bg-red-500 px-4 py-2 text-sm text-white shadow hover:bg-red-600">Hapus</button>
+                                class="remove-row rounded-lg bg-red-500 px-4 py-2 text-sm text-white shadow hover:bg-red-600">
+                                Hapus
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -74,7 +92,8 @@
 
                 <div class="mt-6 flex justify-between">
                     <a href="{{ route('productin.index') }}"
-                        class="inline-flex items-center rounded-lg bg-gray-200 px-5 py-2 text-sm font-medium text-gray-700 shadow hover:bg-gray-300">
+                        class="inline-flex items-center rounded-lg bg-gray-200 px-5 py-2 text-sm font-medium text-gray-700 shadow hover:bg-gray-300
+                    dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600">
                         &lt; Kembali
                     </a>
                     <button type="submit"
@@ -86,6 +105,7 @@
         </div>
     </div>
 
+
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const formContainer = document.getElementById('dynamic-form');
@@ -93,9 +113,11 @@
 
             const generateRow = () => {
                 return `
-                <div class="grid grid-cols-2 md:grid-cols-12 gap-2 md:gap-4 items-end border-b border-gray-200 pb-4 overflow-x-auto">
+                <div class="grid grid-cols-2 md:grid-cols-12 gap-2 md:gap-4 items-end border-b border-gray-200 dark:border-gray-700 pb-4 overflow-x-auto">
                     <div class="col-span-2 md:col-span-3">
-                        <select name="product_id[]" class="product-select w-full rounded-md border border-gray-300 bg-white px-4 py-2 text-sm text-gray-700 shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-500" required>
+                        <select name="product_id[]"
+                            class="product-select w-full rounded-md border border-gray-300 bg-white px-4 py-2 text-sm text-gray-700 shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-500
+                            dark:border-gray-600 dark:bg-gray-900 dark:text-gray-100" required>
                             <option value="" disabled selected>Pilih Produk</option>
                             @foreach ($products as $product)
                                 <option value="{{ $product->id }}">{{ $product->name }} (Stok: {{ $product->stock }})</option>
@@ -107,21 +129,18 @@
                     <input type="hidden" name="category_id[]" class="hidden-category" />
 
                     <div class="col-span-1 md:col-span-2">
-                        <label class="mb-1 block text-sm font-medium text-gray-700">Tanggal Masuk</label>
-                        <input
-                            type="text"
-                            name="date[]"
-                            datepicker
-                            datepicker-buttons
-                            datepicker-autoselect-today
-                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5"
-                            placeholder="Pilih tanggal"
-                            required />
+                        <label class="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300">Tanggal Masuk</label>
+                        <input type="text" name="date[]" datepicker datepicker-buttons datepicker-autoselect-today
+                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full ps-10 p-2.5 focus:ring-blue-500 focus:border-blue-500
+                            dark:bg-gray-900 dark:border-gray-600 dark:text-gray-100"
+                            placeholder="Pilih tanggal" required />
                     </div>
 
                     <div class="col-span-1 md:col-span-2">
-                        <label class="mb-1 block text-sm font-medium text-gray-700">Jumlah</label>
-                        <input type="number" name="qty[]" class="w-full rounded-md border border-gray-300 bg-white px-4 py-2 text-sm text-gray-700 shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-500" required>
+                        <label class="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300">Jumlah</label>
+                        <input type="number" name="qty[]"
+                            class="w-full rounded-md border border-gray-300 bg-white px-4 py-2 text-sm text-gray-700 shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-500
+                            dark:border-gray-600 dark:bg-gray-900 dark:text-gray-100" required>
                     </div>
 
                     <div class="col-span-2 md:col-span-2 flex justify-end">

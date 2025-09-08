@@ -114,6 +114,13 @@
                                 Produk Masuk
                             </a>
                         </li>
+                        <li>
+                            <a href="{{ route('trackingtree.index') }}"
+                                class="{{ Request::is('trackingtree') ? 'bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-100' : 'text-gray-600 dark:text-gray-400' }} flex items-center rounded-lg p-2 text-sm hover:bg-gray-100 hover:dark:bg-gray-800 hover:text-gray-900 hover:dark:text-gray-100">
+                                <i class="fa fa-circle-o mr-2 text-xs"></i>
+                                Tracking Persetujuan
+                            </a>
+                        </li>
                     @endif
                 </ul>
             </li>

@@ -28,6 +28,7 @@ use App\Http\Controllers\ReportController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ActivityLogController;
+use App\Http\Controllers\TrackingTreeController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -102,6 +103,9 @@ Route::middleware(['auth', 'role:admin_gudang'])->group(function () {
     Route::post('/productin/add-stock/{id}', [ProductInController::class, 'addStock'])->name('productin.addStock');
     Route::post('/productin/add-stock-toko/{id}', [ProductInController::class, 'addStockKeToko'])->name('productin.addStockKeToko');
     Route::put('/productin/update-status/{id}', [ProductInController::class, 'updateStatus'])->name('productin.updateStatus');
+    Route::post('/productin/sale/{id}', [ProductInController::class, 'sale'])
+        ->name('productin.sale');
+    Route::resource('trackingtree', TrackingTreeController::class)->only(['index', 'show']);
 });
 
 

@@ -133,9 +133,12 @@
 
 
                 <!-- Table Produk -->
-                <div class="overflow-x-auto rounded-lg border border-gray-200 shadow">
-                    <table class="min-w-full divide-y divide-gray-200 bg-white text-sm dark:bg-gray-900 dark:text-gray-100">
-                        <thead class="bg-gray-50 text-left text-xs font-semibold uppercase tracking-wider text-gray-600">
+                <div
+                    class="overflow-x-auto overflow-y-visible rounded-lg border border-gray-200 dark:border-gray-700 shadow">
+                    <table
+                        class="min-w-full divide-y divide-gray-200 dark:divide-gray-700 bg-white dark:bg-gray-800 text-sm text-gray-700 dark:text-gray-200">
+                        <thead
+                            class="bg-gray-50 dark:bg-gray-700 text-left text-xs font-semibold uppercase tracking-wider text-gray-600 dark:text-gray-300">
                             <tr>
                                 <th class="px-4 py-3 text-center">
                                     <input type="checkbox" id="selectAll" class="form-checkbox text-blue-600" />
@@ -150,7 +153,7 @@
                                 <th class="px-4 py-3">Aksi</th>
                             </tr>
                         </thead>
-                        <tbody class="divide-y dark:bg-gray-900 dark:text-gray-100">
+                        <tbody class="divide-y divide-gray-100 dark:divide-gray-700">
                             @forelse ($products as $product)
                                 <tr class="dark:bg-gray-900 dark:text-gray-100">
                                     <td class="px-4 py-3 text-center">
@@ -185,7 +188,7 @@
                                         <div x-data="{ open: false }" class="relative inline-block text-left">
                                             <!-- Dropdown Toggle -->
                                             <button @click="open = !open" type="button"
-                                                class="inline-flex items-center rounded bg-gray-100 px-3 py-1.5 text-xs font-medium text-gray-700 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1">
+                                                class="inline-flex items-center rounded bg-gray-100 dark:bg-gray-700 px-3 py-1.5 text-xs font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1">
                                                 <i class="fas fa-cogs mr-1"></i>
                                                 Aksi
                                                 <svg class="ml-1 h-3 w-3" viewBox="0 0 20 20" fill="currentColor">
@@ -198,21 +201,22 @@
                                             <!-- Dropdown Menu -->
                                             <div x-show="open" @click.away="open = false" x-transition
                                                 class="class"="absolute bottom-full right-0 mb-2 w-52 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none z-50">
-                                                <div class="py-1 text-sm text-gray-700">
+                                                <div class="py-1 text-sm text-gray-700 dark:text-gray-200">
                                                     <a href="{{ route('product.show', $product->id) }}"
-                                                        class="flex items-center px-4 py-2 hover:bg-gray-100">
+                                                        class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600">
                                                         <i class="fas fa-eye mr-2 w-4 text-blue-500"></i>
                                                         Detail
                                                     </a>
                                                     <a href="{{ route('product.edit', $product->id) }}"
-                                                        class="flex items-center px-4 py-2 hover:bg-gray-100">
+                                                        class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600">
                                                         <i class="fas fa-edit mr-2 w-4 text-yellow-500"></i>
                                                         Edit
                                                     </a>
+
                                                     <!-- Tombol trigger modal -->
                                                     <button type="button"
                                                         onclick="openDeleteModal('{{ route('product.destroy', $product->id) }}', '{{ $product->name }}')"
-                                                        class="flex w-full items-center px-4 py-2 text-left text-red-600 hover:bg-gray-100">
+                                                        class="flex w-full items-center px-4 py-2 text-left text-red-600 dark:text-red-400 hover:bg-gray-100 dark:hover:bg-gray-600">
                                                         <i class="fas fa-trash-alt mr-2 w-4"></i>
                                                         Hapus
                                                     </button>
@@ -220,6 +224,7 @@
                                             </div>
                                         </div>
                                     </td>
+
                                 </tr>
                             @empty
                                 <tr>

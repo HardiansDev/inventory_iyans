@@ -109,8 +109,10 @@
 
                     {{-- Dropdown --}}
                     <div id="notificationMenu"
-                        class="absolute right-0 mt-2 hidden w-72 rounded-md bg-white dark:bg-gray-800 shadow-lg z-[60]">
-                        <div class="py-2 text-sm text-gray-700 max-h-72 overflow-y-auto">
+                        class="absolute right-0 mt-2 hidden w-72 rounded-xl border border-gray-200
+           dark:border-gray-700 bg-white dark:bg-gray-900 shadow-xl z-[60] overflow-hidden">
+
+                        <div class="py-2 text-sm max-h-72 overflow-y-auto">
 
                             {{-- Superadmin --}}
                             @if (Auth::user()->role === 'superadmin')
@@ -123,15 +125,20 @@
 
                                 @forelse ($notifs as $notif)
                                     <a href="{{ route('product.confirmation', $notif->id) }}"
-                                        class="block border-b dark:border-gray-700 px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700">
-                                        Permintaan: <strong>{{ $notif->requester_name }}</strong><br>
-                                        Produk: <strong>{{ $notif->product->name ?? '-' }}</strong><br>
-                                        <small class="text-gray-500 dark:text-gray-400">
+                                        class="block border-b border-gray-100 dark:border-gray-800 px-4 py-3
+                           hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors duration-200">
+                                        <p class="text-gray-800 dark:text-gray-100">
+                                            Permintaan: <strong>{{ $notif->requester_name }}</strong>
+                                        </p>
+                                        <p class="text-gray-600 dark:text-gray-300">
+                                            Produk: <strong>{{ $notif->product->name ?? '-' }}</strong>
+                                        </p>
+                                        <small class="text-gray-400 dark:text-gray-500">
                                             {{ $notif->created_at->diffForHumans() }}
                                         </small>
                                     </a>
                                 @empty
-                                    <p class="px-4 py-2 text-gray-500 dark:text-gray-400">Tidak ada notifikasi.</p>
+                                    <p class="px-4 py-3 text-gray-500 dark:text-gray-400">Tidak ada notifikasi.</p>
                                 @endforelse
 
                                 @if ($notifCount > 3)
@@ -144,13 +151,11 @@
                                 {{-- Admin Gudang --}}
                             @elseif (Auth::user()->role === 'admin_gudang')
                                 @php
-                                    // Hitung jumlah unread untuk badge
                                     $notifCount = \App\Models\ProductIn::where('requester_name', Auth::user()->name)
                                         ->whereIn('status', ['disetujui', 'ditolak'])
                                         ->where('is_read', false)
                                         ->count();
 
-                                    // Ambil 3 notifikasi terbaru (baik sudah dibaca atau belum)
                                     $notifs = \App\Models\ProductIn::where('requester_name', Auth::user()->name)
                                         ->whereIn('status', ['disetujui', 'ditolak'])
                                         ->latest()
@@ -160,26 +165,29 @@
 
                                 @forelse ($notifs as $notif)
                                     <a href="{{ route('notifications.admin_gudang.show', $notif->id) }}"
-                                        class="block border-b dark:border-gray-700 px-4 py-2
-                                        hover:bg-gray-100 dark:hover:bg-gray-800
-                                        {{ $notif->is_read ? 'bg-gray-100 text-gray-600' : 'bg-white text-gray-900' }}">
-                                        Feedback permintaan produk
-                                        <strong>{{ $notif->product->name ?? '-' }}</strong><br>
-                                        Status:
-                                        @if ($notif->status === 'disetujui')
-                                            <span class="text-green-600 font-semibold">Disetujui</span>
-                                        @else
-                                            <span class="text-red-600 font-semibold">Ditolak</span>
-                                        @endif
-                                        <br>
-                                        <small class="text-gray-500 dark:text-gray-400">
+                                        class="block border-b border-gray-100 dark:border-gray-800 px-4 py-3
+                           hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors duration-200
+                           {{ $notif->is_read ? 'bg-gray-50 dark:bg-gray-800 text-gray-600 dark:text-gray-400' : 'bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100' }}">
+                                        <p>
+                                            Feedback permintaan <strong>{{ $notif->product->name ?? '-' }}</strong>
+                                        </p>
+                                        <p>
+                                            Status:
+                                            @if ($notif->status === 'disetujui')
+                                                <span
+                                                    class="text-green-600 dark:text-green-400 font-semibold">Disetujui</span>
+                                            @else
+                                                <span
+                                                    class="text-red-600 dark:text-red-400 font-semibold">Ditolak</span>
+                                            @endif
+                                        </p>
+                                        <small class="text-gray-400 dark:text-gray-500">
                                             {{ $notif->updated_at->diffForHumans() }}
                                         </small>
                                     </a>
                                 @empty
-                                    <p class="px-4 py-2 text-gray-500 dark:text-gray-400">Tidak ada notifikasi.</p>
+                                    <p class="px-4 py-3 text-gray-500 dark:text-gray-400">Tidak ada notifikasi.</p>
                                 @endforelse
-
 
                                 <a href="{{ route('notifications.admin_gudang') }}"
                                     class="block text-center text-blue-600 dark:text-blue-400 font-semibold py-2 hover:underline">
@@ -188,10 +196,9 @@
 
                             @endif
 
-
-
                         </div>
                     </div>
+
                 </div>
             @endif
 

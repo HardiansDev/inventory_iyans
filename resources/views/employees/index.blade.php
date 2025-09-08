@@ -95,7 +95,7 @@
         </div>
 
         <div class="overflow-x-auto overflow-y-visible rounded-lg border border-gray-200 dark:border-gray-700 shadow">
-            <table id="example1"
+            <table
                 class="min-w-full divide-y divide-gray-200 dark:divide-gray-700 bg-white dark:bg-gray-800 text-sm text-gray-700 dark:text-gray-200">
                 <thead
                     class="bg-gray-50 dark:bg-gray-700 text-left text-xs font-semibold uppercase tracking-wider text-gray-600 dark:text-gray-300">

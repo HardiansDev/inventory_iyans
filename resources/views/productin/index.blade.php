@@ -300,7 +300,8 @@
                                                 @if ($statusPenjualan !== 'belum dijual')
                                                     <div class="mt-1 text-xs text-gray-500">
                                                         <i class="fas fa-box me-1"></i>
-                                                        Sisa Stok: {{ $stokToko }}
+                                                        Sisa Stok: <span>
+                                                            {{ $stokToko }}</span>
                                                     </div>
                                                 @endif
                                             </div>
@@ -322,43 +323,40 @@
                                                 <!-- Dropdown Menu -->
                                                 <div x-show="open" @click.away="open = false" x-transition
                                                     class="class"="absolute bottom-full right-0 mb-2 w-52 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none z-50">
-                                                    <div class="py-1 text-sm text-gray-700">
+                                                    <div class="py-1 text-sm text-gray-700 dark:text-gray-200">
                                                         @if ($productIn->status === 'disetujui' || session('status') === 'produk disetujui')
                                                             @if ($productIn->sales->isEmpty())
                                                                 <button type="button"
-                                                                    class="flex w-full items-center px-4 py-2 text-blue-600 hover:bg-gray-100"
+                                                                    class="flex w-full items-center px-4 py-2 text-blue-600 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
                                                                     @click="$dispatch('open-sale-modal', { productId: {{ $productIn->id }}, productName: '{{ optional($productIn->product)->name ?? 'Produk Dihapus' }}' })">
                                                                     🏪
-                                                                    <span class="ml-2">
-                                                                        Jual di Toko
-                                                                    </span>
+                                                                    <span class="ml-2">Jual di Toko</span>
                                                                 </button>
                                                             @else
                                                                 <button type="button"
-                                                                    class="btn-add-stock flex w-full items-center px-4 py-2 hover:bg-gray-100"
+                                                                    class="btn-add-stock flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
                                                                     @click="$dispatch('open-add-stock-modal', { id: {{ $productIn->id }}, name: '{{ optional($productIn->product)->name ?? 'Produk Dihapus' }}' })">
-
-                                                                    <span class="ml-2">
-                                                                        + Stok ke Gudang
-                                                                    </span>
+                                                                    <span class="ml-2">+ Stok ke Gudang</span>
                                                                 </button>
+
                                                                 @php
                                                                     $totalQtySales = $productIn->sales->sum('qty');
                                                                 @endphp
 
                                                                 <button type="button"
-                                                                    class="btn-add-stock flex w-full items-center px-4 py-2 hover:bg-gray-100"
+                                                                    class="btn-add-stock flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
                                                                     @click="$dispatch('open-stock-toko-modal', {
-                                                                    id: {{ $productIn->id }},
-                                                                    name: '{{ optional($productIn->product)->name ?? 'Produk Dihapus' }}',
-                                                                    max: {{ $productIn->qty }},
-                                                                    stokToko: {{ $totalQtySales }}
-                                                                })">
-                                                                    <span class="ml-2"> + Stok ke Toko</span>
+                    id: {{ $productIn->id }},
+                    name: '{{ optional($productIn->product)->name ?? 'Produk Dihapus' }}',
+                    max: {{ $productIn->qty }},
+                    stokToko: {{ $totalQtySales }}
+                })">
+                                                                    <span class="ml-2">+ Stok ke Toko</span>
                                                                 </button>
                                                             @endif
                                                         @endif
                                                     </div>
+
                                                 </div>
                                             </div>
                                         </td>
@@ -374,6 +372,106 @@
                         </table>
                     </div>
                 </div>
+            </div>
+        </div>
+
+        {{-- === SALE MODAL === --}}
+        <div x-data="saleModal()" x-init="init()" x-show="open" x-cloak
+            class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-70">
+            <div class="bg-gray-800 text-gray-200 rounded-2xl shadow-xl w-full max-w-md p-6">
+                <!-- Header -->
+                <div class="flex justify-between items-center border-b border-gray-700 pb-3 mb-4">
+                    <h2 class="text-lg font-semibold">🏪 Jual di Toko</h2>
+                    <button @click="closeModal()" class="text-gray-400 hover:text-white text-xl">&times;</button>
+                </div>
+                <!-- Body -->
+                <form @submit.prevent="submitForm" class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium">Produk</label>
+                        <input type="text" x-model="productName" readonly
+                            class="w-full mt-1 px-3 py-2 bg-gray-700 border border-gray-600 rounded-md" />
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium">Jumlah</label>
+                        <input type="number" x-model="qty" min="1"
+                            class="w-full mt-1 px-3 py-2 bg-gray-700 border border-gray-600 rounded-md" />
+                    </div>
+                    <!-- Footer -->
+                    <div class="flex justify-end space-x-2 pt-3">
+                        <button type="button" @click="closeModal()"
+                            class="px-4 py-2 rounded-md bg-gray-600 hover:bg-gray-500">Batal</button>
+                        <button type="submit" class="px-4 py-2 rounded-md bg-blue-600 hover:bg-blue-700">Simpan</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+
+        {{-- === ADD STOCK MODAL === --}}
+        <div x-data="addStockModal()" x-init="init()" x-show="open" x-cloak
+            class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-70">
+            <div class="bg-gray-800 text-gray-200 rounded-2xl shadow-xl w-full max-w-md p-6">
+                <!-- Header -->
+                <div class="flex justify-between items-center border-b border-gray-700 pb-3 mb-4">
+                    <h2 class="text-lg font-semibold">📦 Tambah Stok ke Gudang</h2>
+                    <button @click="closeModal()" class="text-gray-400 hover:text-white text-xl">&times;</button>
+                </div>
+                <!-- Body -->
+                <form @submit.prevent="submitForm" class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium">Produk</label>
+                        <input type="text" x-model="productName" readonly
+                            class="w-full mt-1 px-3 py-2 bg-gray-700 border border-gray-600 rounded-md" />
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium">Jumlah</label>
+                        <input type="number" x-model="qty" min="1"
+                            class="w-full mt-1 px-3 py-2 bg-gray-700 border border-gray-600 rounded-md" />
+                    </div>
+                    <!-- Footer -->
+                    <div class="flex justify-end space-x-2 pt-3">
+                        <button type="button" @click="closeModal()"
+                            class="px-4 py-2 rounded-md bg-gray-600 hover:bg-gray-500">Batal</button>
+                        <button type="submit"
+                            class="px-4 py-2 rounded-md bg-green-600 hover:bg-green-700">Simpan</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+
+        {{-- === STOCK TOKO MODAL === --}}
+        <div x-data="stokTokoModal()" x-init="init()" x-show="show" x-cloak
+            class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-70">
+            <div class="bg-gray-800 text-gray-200 rounded-2xl shadow-xl w-full max-w-md p-6">
+                <!-- Header -->
+                <div class="flex justify-between items-center border-b border-gray-700 pb-3 mb-4">
+                    <h2 class="text-lg font-semibold" x-text="modalTitle">🛒 Tambah Stok ke Toko</h2>
+                    <button @click="closeModal()" class="text-gray-400 hover:text-white text-xl">&times;</button>
+                </div>
+                <!-- Body -->
+                <form @submit.prevent="submitForm" class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium">Produk</label>
+                        <input type="text" x-model="productName" readonly
+                            class="w-full mt-1 px-3 py-2 bg-gray-700 border border-gray-600 rounded-md" />
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium">Jumlah</label>
+                        <input type="number" x-model="qty" min="1" :max="maxStok"
+                            class="w-full mt-1 px-3 py-2 bg-gray-700 border border-gray-600 rounded-md" />
+                        <p class="text-xs text-gray-400 mt-1">
+                            Stok Gudang: <span x-text="maxStok"></span> | Stok Toko: <span x-text="stokToko"></span>
+                        </p>
+                    </div>
+                    <!-- Footer -->
+                    <div class="flex justify-end space-x-2 pt-3">
+                        <button type="button" @click="closeModal()"
+                            class="px-4 py-2 rounded-md bg-gray-600 hover:bg-gray-500">Batal</button>
+                        <button type="submit"
+                            class="px-4 py-2 rounded-md bg-yellow-600 hover:bg-yellow-700">Simpan</button>
+                    </div>
+                </form>
             </div>
         </div>
     </section>
@@ -478,13 +576,71 @@
         })
 
 
+        function saleModal() {
+            return {
+                open: false,
+                productId: null,
+                productName: '',
+                qty: 1,
+                init() {
+                    window.addEventListener('open-sale-modal', e => this.openModal(e.detail));
+                },
+                openModal({
+                    productId,
+                    productName
+                }) {
+                    this.open = true;
+                    this.productId = productId;
+                    this.productName = productName;
+                    this.qty = 1;
+                },
+                closeModal() {
+                    this.open = false;
+                },
+                notify(msg, type = 'info') {
+                    window.dispatchEvent(new CustomEvent('notify', {
+                        detail: {
+                            message: msg,
+                            type
+                        }
+                    }));
+                },
+                async submitForm() {
+                    if (this.qty < 1) return this.notify('Jumlah minimal 1', 'warning');
+                    try {
+                        const res = await fetch(`/productin/sale/${this.productId}`, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+                            },
+                            body: JSON.stringify({
+                                qty: this.qty
+                            })
+                        });
+                        const data = await res.json();
+                        if (!res.ok || !data.success) return this.notify(data.message || 'Gagal jual produk', 'error');
+                        this.notify(data.message, 'success');
+                        setTimeout(() => {
+                            this.closeModal();
+                            window.location.reload();
+                        }, 800);
+                    } catch (e) {
+                        this.notify('Gagal terhubung ke server', 'error');
+                    }
+                }
+            }
+        }
+
         function addStockModal() {
             return {
                 open: false,
                 productInId: null,
                 productName: '',
                 qty: 1,
-
+                init() {
+                    window.addEventListener('open-add-stock-modal', e => this.openModal(e.detail));
+                },
                 openModal({
                     id,
                     name
@@ -494,63 +650,43 @@
                     this.productName = name;
                     this.qty = 1;
                 },
-
                 closeModal() {
                     this.open = false;
-                    this.productInId = null;
-                    this.productName = '';
-                    this.qty = 1;
                 },
-
-                notify(message, type = 'info') {
+                notify(msg, type = 'info') {
                     window.dispatchEvent(new CustomEvent('notify', {
                         detail: {
-                            message,
+                            message: msg,
                             type
                         }
                     }));
                 },
-
                 async submitForm() {
-                    if (this.qty < 1) {
-                        this.notify('Jumlah minimal 1', 'warning');
-                        return;
-                    }
-
+                    if (this.qty < 1) return this.notify('Jumlah minimal 1', 'warning');
                     try {
-                        const response = await fetch(`/productin/add-stock/${this.productInId}`, {
+                        const res = await fetch(`/productin/add-stock/${this.productInId}`, {
                             method: 'POST',
                             headers: {
                                 'Content-Type': 'application/json',
-                                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute(
-                                    'content'),
+                                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
                             },
                             body: JSON.stringify({
                                 tambah_qty: this.qty
                             })
                         });
-
-                        const data = await response.json();
-
-                        if (!response.ok) {
-                            this.notify(data.message || 'Terjadi kesalahan.', 'error');
-                            return;
-                        }
-
+                        const data = await res.json();
+                        if (!res.ok || !data.success) return this.notify(data.message || 'Gagal tambah stok', 'error');
                         this.notify(data.message, 'success');
-
                         setTimeout(() => {
                             this.closeModal();
                             window.location.reload();
-                        }, 1000);
-
-                    } catch (error) {
-                        this.notify('Gagal mengirim data.', 'error');
+                        }, 800);
+                    } catch (e) {
+                        this.notify('Gagal terhubung ke server', 'error');
                     }
                 }
             }
         }
-
 
         function stokTokoModal() {
             return {
@@ -561,7 +697,17 @@
                 stokToko: 0,
                 qty: 1,
                 modalTitle: '',
-
+                init() {
+                    window.addEventListener('open-stock-toko-modal', e => {
+                        const {
+                            id,
+                            name,
+                            max,
+                            stokToko
+                        } = e.detail;
+                        this.openModal(id, name, max, stokToko);
+                    });
+                },
                 openModal(id, name, max, stokToko) {
                     this.productInId = id;
                     this.productName = name;
@@ -571,67 +717,65 @@
                     this.modalTitle = `Tambah Stok ke Toko: ${name}`;
                     this.show = true;
                 },
-
                 closeModal() {
                     this.show = false;
                 },
-
-                notify(message, type = 'info') {
+                notify(msg, type = 'info') {
                     window.dispatchEvent(new CustomEvent('notify', {
                         detail: {
-                            message,
+                            message: msg,
                             type
                         }
                     }));
                 },
+                async submitForm() {
+                    if (this.qty < 1) return this.notify('Jumlah minimal 1', 'warning');
+                    if (this.qty > this.maxStok) return this.notify(
+                        `Jumlah melebihi stok gudang. Maksimum ${this.maxStok}`, 'warning'
+                    );
 
-                submitForm() {
-                    if (this.qty < 1) {
-                        this.notify('Jumlah minimal 1', 'warning');
-                        return;
-                    }
-
-                    if (this.qty > this.maxStok) {
-                        this.notify(`Jumlah melebihi stok gudang. Maksimum ${this.maxStok}`, 'warning');
-                        return;
-                    }
-
-                    fetch(`/productin/add-stock-toko/${this.productInId}`, {
+                    try {
+                        const res = await fetch(`/productin/add-stock-toko/${this.productInId}`, {
                             method: 'POST',
                             headers: {
-                                'X-Requested-With': 'XMLHttpRequest',
-                                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
-                                'Content-Type': 'application/json'
+                                'Content-Type': 'application/json',
+                                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
                             },
                             body: JSON.stringify({
                                 qty: this.qty
                             })
-                        })
-                        .then(async res => {
-                            const contentType = res.headers.get("content-type") || "";
-                            if (!res.ok || !contentType.includes("application/json")) {
-                                const text = await res.text();
-                                throw new Error('Terjadi kesalahan dari server.');
-                            }
-                            return res.json();
-                        })
-                        .then(data => {
-                            if (data.success) {
-                                this.notify(data.message, 'success');
-                                this.closeModal();
-                                setTimeout(() => {
-                                    window.location.href = data.redirect_url || '/productin';
-                                }, 800);
-                            } else {
-                                this.notify(data.message || 'Gagal menambahkan stok ke toko.', 'error');
-                            }
-                        })
-                        .catch(err => {
-                            console.error(err);
-                            this.notify(err.message || 'Gagal terhubung ke server.', 'error');
                         });
+
+                        const data = await res.json();
+
+                        if (!res.ok || !data.success) {
+                            return this.notify(data.message || 'Gagal tambah stok ke toko', 'error');
+                        }
+
+                        this.notify(data.message, 'success');
+                        this.closeModal();
+
+                        // 🔥 Update stok di state modal
+                        this.stokToko += this.qty;
+                        this.maxStok -= this.qty;
+
+                        // 🔥 Update tampilan stok langsung di DOM (realtime)
+                        const el = document.querySelector(`#stok-toko-${this.productInId}`);
+                        if (el) {
+                            el.textContent = this.stokToko;
+                        }
+
+                        // 🔄 Auto reload setelah 1.5 detik (opsional)
+                        setTimeout(() => {
+                            window.location.reload();
+                        }, 1500);
+
+                    } catch (e) {
+                        console.error(e);
+                        this.notify('Gagal terhubung ke server', 'error');
+                    }
                 }
-            };
+            }
         }
     </script>
 @endpush
