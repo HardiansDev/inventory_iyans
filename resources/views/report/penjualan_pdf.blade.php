@@ -38,11 +38,6 @@
             text-align: center;
             margin: 20px auto 30px auto;
             padding: 15px 20px;
-            border: 1px solid #ddd;
-            border-radius: 6px;
-            background: #f9f9f9;
-            width: 60%;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
         }
 
         .report-header h2 {

@@ -167,7 +167,7 @@
                     onclick="event.preventDefault(); this.closest('li').classList.toggle('menu-open-tailwind');"
                     class="{{ Request::is('employees*') || Request::is('employee-attendance*') || Request::is('employment_status*') || Request::is('department*') || Request::is('position*') ? 'bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-100' : 'text-gray-700 dark:text-gray-300' }} flex items-center justify-between rounded-lg p-2 text-sm hover:bg-gray-100 hover:dark:bg-gray-800 hover:text-gray-900 hover:dark:text-gray-100">
                     <span class="flex items-center">
-                        <i class="fas fa-users mr-3 text-lg"></i>
+                        <i class="fa fa-users mr-3 text-lg"></i>
                         Manajemen Pegawai
                     </span>
                     <i
@@ -219,7 +219,7 @@
             <li>
                 <a href="{{ route('user.index') }}"
                     class="{{ Request::is('user') ? 'bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-100' : 'text-gray-700 dark:text-gray-300' }} flex items-center rounded-lg p-2 text-sm hover:bg-gray-100 hover:dark:bg-gray-800 hover:text-gray-900 hover:dark:text-gray-100">
-                    <i class="fa fa-user mr-3 text-lg"></i>
+                    <i class="fa fa-user mr-5 text-lg"></i>
                     Manajemen Pengguna
                 </a>
             </li>
@@ -233,12 +233,12 @@
 
         {{-- CHATS --}}
         @if (in_array(Auth::user()->role, ['superadmin', 'admin_gudang', 'kasir']))
-            <li class="relative">
+            <li>
                 <a href="{{ route('chat.index') }}"
                     class="{{ Request::is('chat*')
                         ? 'bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-100'
-                        : 'text-gray-600 dark:text-gray-400' }} flex items-center rounded-lg p-2 text-sm hover:bg-gray-100 hover:dark:bg-gray-800 hover:text-gray-900 hover:dark:text-gray-100">
-                    <i class="fa fa-comments mr-2 text-xs"></i>
+                        : 'text-gray-700 dark:text-gray-300' }} flex items-center rounded-lg p-2 text-sm hover:bg-gray-100 hover:dark:bg-gray-800 hover:text-gray-900 hover:dark:text-gray-100">
+                    <i class="fa fa-comments mr-4 text-lg"></i>
                     Obrolan
 
                     @if ($unreadTotal > 0)
