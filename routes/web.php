@@ -29,6 +29,7 @@ use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ActivityLogController;
 use App\Http\Controllers\TrackingTreeController;
+use App\Http\Controllers\ChatController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -139,6 +140,8 @@ Route::middleware(['auth', 'role:kasir,superadmin,admin_gudang'])->group(functio
     Route::post('/store-sales-detail', [SalesDetailController::class, 'storeSalesDetail'])->name('store.sales.detail');
     Route::get('/print-receipt/{transaction_number}', [SalesDetailController::class, 'printReceipt'])->name('print.receipt');
     Route::resource('discounts', DiscountController::class);
+    Route::get('/chat/{receiverId?}', [ChatController::class, 'index'])->name('chat.index');
+    Route::post('/chat/{receiverId}', [ChatController::class, 'store'])->name('chat.store');
 });
 
 

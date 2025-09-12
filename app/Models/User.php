@@ -47,4 +47,23 @@ class User extends Authenticatable implements MustVerifyEmailContract
     /**
      * Boot method to handle model events.
      */
+
+    public function messagesSent()
+    {
+        return $this->hasMany(Message::class, 'sender_id');
+    }
+
+    public function messagesReceived()
+    {
+        return $this->hasMany(Message::class, 'receiver_id');
+    }
+
+    // Pesan yang belum dibaca dari user tertentu
+    public function unreadMessagesFrom($userId)
+    {
+        return $this->hasMany(Message::class, 'sender_id')
+            ->where('receiver_id', auth()->id())
+            ->where('is_read', false)
+            ->where('sender_id', $userId);
+    }
 }

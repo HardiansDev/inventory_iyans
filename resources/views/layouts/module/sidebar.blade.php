@@ -224,6 +224,35 @@
                 </a>
             </li>
         @endif
+
+        @php
+            $unreadTotal = \App\Models\Message::where('receiver_id', auth()->id())
+                ->where('is_read', false)
+                ->count();
+        @endphp
+
+        {{-- CHATS --}}
+        @if (in_array(Auth::user()->role, ['superadmin', 'admin_gudang', 'kasir']))
+            <li class="relative">
+                <a href="{{ route('chat.index') }}"
+                    class="{{ Request::is('chat*')
+                        ? 'bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-100'
+                        : 'text-gray-600 dark:text-gray-400' }} flex items-center rounded-lg p-2 text-sm hover:bg-gray-100 hover:dark:bg-gray-800 hover:text-gray-900 hover:dark:text-gray-100">
+                    <i class="fa fa-comments mr-2 text-xs"></i>
+                    Obrolan
+
+                    @if ($unreadTotal > 0)
+                        <span class="ml-auto bg-red-600 text-white text-xs font-semibold rounded-full px-2 py-0.5">
+                            {{ $unreadTotal }}
+                        </span>
+                    @endif
+                </a>
+            </li>
+        @endif
+
+
+
+
     </ul>
 
     <!-- Switch Mode (Fixed Bottom) -->
