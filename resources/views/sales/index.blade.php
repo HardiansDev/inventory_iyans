@@ -1,7 +1,7 @@
 @extends('layouts.master')
 
 @section('title')
-    <title>Sistem Inventory Iyan | Penjualan</title>
+    <title>KASIRIN.ID - Penjualan</title>
 @endsection
 
 @section('content')

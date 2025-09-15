@@ -1,12 +1,15 @@
 @extends('layouts.master')
 
 @section('title')
-    <title>Log Aktivitas</title>
+    <title>KASIRIN.ID - Log Aktivitas</title>
 @endsection
 
 @section('content')
     <div class="p-6">
-        <h2 class="text-2xl font-bold mb-4 dark:text-white">📜 Log Aktivitas</h2>
+        <h2 class="text-2xl font-bold mb-4 dark:text-white">
+            Log Aktivitas
+        </h2>
+
 
         <div class="overflow-x-auto rounded-lg shadow">
             <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">

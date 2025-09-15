@@ -1,7 +1,7 @@
 @extends('layouts.master')
 
 @section('title')
-    <title>Tambah Pegawai | Sistem Inventory Iyan</title>
+    <title>KASIRIN.ID - Tambah Pegawai</title>
 @endsection
 
 @section('content')
@@ -9,7 +9,7 @@
     <section class="mb-6 rounded-lg bg-white p-6 shadow-sm dark:bg-gray-800 dark:shadow-lg">
         <div class="flex flex-col items-start justify-between gap-2 sm:flex-row sm:items-center">
             <div>
-                <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-100">Tambah Pegawai</h1>
+                <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-100">Pegawai</h1>
                 <p class="text-sm text-gray-500 dark:text-gray-400">Tambah informasi pegawai di sistem</p>
             </div>
         </div>

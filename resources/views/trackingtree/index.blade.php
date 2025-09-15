@@ -1,7 +1,7 @@
 @extends('layouts.master')
 
 @section('title')
-    <title>Tracking Tree - Inventory Iyans</title>
+    <title>KASIRIN.ID - Tracking</title>
 @endsection
 
 @section('content')

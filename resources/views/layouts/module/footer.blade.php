@@ -6,7 +6,7 @@
            transition-all duration-300">
     <div class="mb-2 md:mb-0">
         <strong>
-            Powered by &copy; {{ date('Y') }}
+            KASIRIN.ID &copy; {{ date('Y') }}
             <a href="#"
                 class="font-semibold text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300">
                 Hardians

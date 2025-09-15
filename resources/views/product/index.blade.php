@@ -1,7 +1,7 @@
 @extends('layouts.master')
 
 @section('title')
-    <title>Sistem Inventory Iyan | Produk</title>
+    <title>KASIRIN.ID - Produk</title>
 @endsection
 
 @section('content')
@@ -296,15 +296,19 @@
 
                 <!-- Modal Overlay -->
                 <div id="addProductModal"
-                    class="fixed inset-0 z-50 flex hidden items-center justify-center bg-black bg-opacity-40 backdrop-blur-sm">
-                    <div class="relative max-h-[90vh] w-full max-w-4xl overflow-y-auto rounded-xl bg-white p-6 shadow-lg">
+                    class="fixed inset-0 z-50 flex hidden items-center justify-center bg-black/40 backdrop-blur-sm">
+                    <div
+                        class="relative max-h-[90vh] w-full max-w-4xl overflow-y-auto rounded-xl bg-white p-6 shadow-lg dark:bg-gray-900">
+
                         <!-- Header -->
-                        <div class="mb-4 flex items-center justify-between border-b pb-3">
-                            <h2 class="flex items-center gap-2 text-xl font-bold text-gray-800">
+                        <div
+                            class="mb-4 flex items-center justify-between border-b pb-3 border-gray-200 dark:border-gray-700">
+                            <h2 class="flex items-center gap-2 text-xl font-bold text-gray-800 dark:text-gray-100">
                                 <i class="fas fa-plus-circle text-green-500"></i>
                                 Tambah Produk
                             </h2>
-                            <button onclick="closeModal()" class="text-2xl text-gray-500 hover:text-red-600">
+                            <button onclick="closeModal()"
+                                class="text-2xl text-gray-500 hover:text-red-600 dark:text-gray-400 dark:hover:text-red-500">
                                 &times;
                             </button>
                         </div>
@@ -314,42 +318,52 @@
                             class="space-y-6">
                             @csrf
                             <div class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+
                                 <!-- Nama Produk -->
                                 <div>
-                                    <label class="mb-1 block text-sm font-medium text-gray-700">
+                                    <label class="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300">
                                         Nama Produk
                                     </label>
                                     <input type="text" name="name"
-                                        class="w-full rounded-lg border border-gray-300 px-3 py-2 focus:border-blue-500 focus:ring focus:ring-blue-200"
+                                        class="w-full rounded-lg border border-gray-300 px-3 py-2 text-gray-800 placeholder-gray-400
+                               focus:border-blue-500 focus:ring focus:ring-blue-200
+                               dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100 dark:placeholder-gray-500"
                                         placeholder="Contoh: Minyak Goreng" value="{{ old('name') }}" />
                                 </div>
 
                                 <!-- Kode Produk -->
                                 <div>
-                                    <label class="mb-1 block text-sm font-medium text-gray-700">
+                                    <label class="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300">
                                         Kode Produk
                                     </label>
                                     <input type="text" name="code" id="productCode"
-                                        class="w-full rounded-lg border border-gray-300 px-3 py-2 focus:border-blue-500 focus:ring focus:ring-blue-200"
+                                        class="w-full rounded-lg border border-gray-300 px-3 py-2 text-gray-800
+                               focus:border-blue-500 focus:ring focus:ring-blue-200
+                               dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100"
                                         readonly />
                                 </div>
 
                                 <!-- Foto Produk -->
                                 <div>
-                                    <label class="mb-1 block text-sm font-medium text-gray-700">
+                                    <label class="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300">
                                         Foto Produk
                                     </label>
                                     <input type="file" name="photo"
-                                        class="w-full rounded-lg border-gray-300 text-sm file:border-none file:bg-gray-100 file:px-3 file:py-2 file:text-gray-700" />
+                                        class="w-full rounded-lg border-gray-300 text-sm text-gray-700
+                               file:border-none file:bg-gray-100 file:px-3 file:py-2 file:text-gray-700
+                               dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200
+                               file:dark:bg-gray-700 file:dark:text-gray-200" />
                                 </div>
 
                                 <!-- Kategori -->
                                 <div>
-                                    <label class="mb-1 block text-sm font-medium text-gray-700">
+                                    <label class="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300">
                                         Kategori
                                     </label>
                                     <select name="category_id"
-                                        class="w-full rounded-lg border border-gray-300 px-3 py-2 focus:border-blue-500 focus:ring focus:ring-blue-200"
+                                        class="w-full rounded-lg border border-gray-300 px-3 py-2 text-gray-800
+                               focus:border-blue-500 focus:ring focus:ring-blue-200
+                               dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100"
                                         required>
                                         <option value="">Pilih Kategori</option>
                                         @foreach ($datacategory as $category)
@@ -363,11 +377,13 @@
 
                                 <!-- Harga -->
                                 <div>
-                                    <label class="mb-1 block text-sm font-medium text-gray-700">
+                                    <label class="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300">
                                         Harga Produk
                                     </label>
                                     <input type="text" name="price_display" id="productPrice"
-                                        class="w-full rounded-lg border border-gray-300 px-3 py-2 focus:border-blue-500 focus:ring focus:ring-blue-200"
+                                        class="w-full rounded-lg border border-gray-300 px-3 py-2 text-gray-800 placeholder-gray-400
+                               focus:border-blue-500 focus:ring focus:ring-blue-200
+                               dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100 dark:placeholder-gray-500"
                                         placeholder="Contoh: 100.000" value="{{ old('price') }}"
                                         oninput="formatPriceDisplay(this)" required />
                                     <input type="hidden" name="price" id="priceHidden"
@@ -376,24 +392,27 @@
 
                                 <!-- Stok -->
                                 <div>
-                                    <label class="mb-1 block text-sm font-medium text-gray-700">
+                                    <label class="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300">
                                         Stok
                                     </label>
                                     <input type="number" name="stock"
-                                        class="w-full rounded-lg border border-gray-300 px-3 py-2 focus:border-blue-500 focus:ring focus:ring-blue-200"
+                                        class="w-full rounded-lg border border-gray-300 px-3 py-2 text-gray-800 placeholder-gray-400
+                               focus:border-blue-500 focus:ring focus:ring-blue-200
+                               dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100 dark:placeholder-gray-500"
                                         placeholder="Contoh: 100" value="{{ old('stock') }}" required />
                                 </div>
                             </div>
 
                             <!-- Tombol Aksi -->
-                            <div class="flex justify-end gap-2 border-t pt-4">
+                            <div class="flex justify-end gap-2 border-t pt-4 border-gray-200 dark:border-gray-700">
                                 <button type="submit"
                                     class="inline-flex items-center rounded-md bg-green-600 px-4 py-2 text-sm font-semibold text-white shadow hover:bg-green-700">
                                     <i class="fas fa-save mr-2"></i>
                                     Simpan
                                 </button>
                                 <button type="button" onclick="closeModal()"
-                                    class="inline-flex items-center rounded-md bg-gray-200 px-4 py-2 text-sm font-semibold text-gray-800 shadow hover:bg-gray-300">
+                                    class="inline-flex items-center rounded-md bg-gray-200 px-4 py-2 text-sm font-semibold text-gray-800 shadow hover:bg-gray-300
+                           dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600">
                                     <i class="fas fa-times mr-2"></i>
                                     Batal
                                 </button>
@@ -401,6 +420,7 @@
                         </form>
                     </div>
                 </div>
+
             </div>
         </div>
     </section>

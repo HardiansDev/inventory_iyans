@@ -1,7 +1,7 @@
 @extends('layouts.master')
 
 @section('title')
-    <title>Edit Bahan Baku</title>
+    <title>KASIRIN.ID - Edit Bahan Baku</title>
 @endsection
 
 @section('content')

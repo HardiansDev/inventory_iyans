@@ -1,7 +1,7 @@
 @extends('layouts.master')
 
 @section('title')
-    <title>Sistem Inventory Iyan | Scan QR Absensi</title>
+    <title>KASIRIN.ID - Scan QR Absensi</title>
 @endsection
 
 @section('content')

@@ -1,5 +1,5 @@
 @section('title')
-    <title>Tracking Tree Detail - Inventory Iyans</title>
+    <title>KASIRIN.ID - Detail Tracking</title>
 @endsection
 
 <nav class="flex mb-6 text-sm text-gray-600 dark:text-gray-300" aria-label="Breadcrumb">

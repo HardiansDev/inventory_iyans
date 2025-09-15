@@ -1,12 +1,12 @@
 @extends('layouts.master')
 
 @section('title')
-    <title>Tambah Bahan Baku</title>
+    <title>KASIRIN.ID - Tambah Bahan Baku</title>
 @endsection
 
 @section('content')
     <section class="max-w-3xl mx-auto bg-white dark:bg-gray-800 rounded shadow p-6 mt-6">
-        <h1 class="text-2xl font-bold mb-6 text-gray-800 dark:text-gray-100">Tambah Bahan Baku</h1>
+        <h1 class="text-2xl font-bold mb-6 text-gray-800 dark:text-gray-100"> Bahan Baku</h1>
 
         <form action="{{ route('bahan_baku.store') }}" method="POST">
             @csrf

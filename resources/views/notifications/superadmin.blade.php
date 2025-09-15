@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="container mx-auto mt-6">
-        <h2 class="text-xl font-bold mb-4">Notifikasi Permintaan Produk (Superadmin)</h2>
+        <h2 class="text-xl font-bold mb-4">Notifikasi Permintaan Produk</h2>
         <table class="table-auto w-full border">
             <thead>
                 <tr class="bg-gray-200">

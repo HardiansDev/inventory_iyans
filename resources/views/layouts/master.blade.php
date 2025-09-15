@@ -70,7 +70,7 @@
     <nav id="navbar"
         class="fixed top-0 z-50 h-16 flex items-center justify-between bg-white dark:bg-gray-900  px-4 shadow-md transition-all duration-300"
         style="left: 15rem; right: 0;">
-        <button id="sidebar-toggle" class="p-2 text-gray-700 hover:text-gray-900">
+        <button id="sidebar-toggle" class="p-2 text-gray-700 dark:text-gray-300 focus:outline-none">
             <i id="sidebar-icon" class="fas fa-bars-staggered text-lg transition-all duration-300"></i>
         </button>
 
@@ -319,7 +319,7 @@
         message = e.detail.message;
         type = e.detail.type || 'info';
         show = true;
-
+    
         clearTimeout(timeout);
         timeout = setTimeout(() => show = false, 4000);
     });"

@@ -1,7 +1,7 @@
 @extends('layouts.master')
 
 @section('title')
-    <title>Sistem Inventory Iyan | Notifikasi Admin Gudang</title>
+    <title>KASIRIN.ID - Notifikasi</title>
 @endsection
 
 @section('content')

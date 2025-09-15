@@ -1,6 +1,6 @@
 @extends('layouts.master')
 @section('title')
-    <title>Sistem Inventory Iyan | Status Pegawai</title>
+    <title>KASIRIN.ID - Status Pegawai</title>
 @endsection
 
 @section('content')
