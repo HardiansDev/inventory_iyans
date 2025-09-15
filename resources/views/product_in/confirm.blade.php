@@ -13,12 +13,12 @@
 
         <div class="space-y-4 text-sm text-gray-700 dark:text-gray-300">
             <div class="flex justify-between border-b pb-2 border-gray-200 dark:border-gray-700">
-                <span class="font-medium text-gray-600 dark:text-gray-400">Nama Produk:</span>
+                <span class="font-medium text-gray-600 dark:text-gray-400">Nama Produk</span>
                 <span class="text-gray-900 dark:text-gray-100">{{ $permintaan->product->name }}</span>
             </div>
 
             <div class="flex justify-between border-b pb-2 border-gray-200 dark:border-gray-700">
-                <span class="font-medium text-gray-600 dark:text-gray-400">Tanggal Permohonan:</span>
+                <span class="font-medium text-gray-600 dark:text-gray-400">Tanggal Permohonan</span>
                 <span class="text-gray-900 dark:text-gray-100">{{ $permintaan->date }}</span>
             </div>
 
@@ -28,26 +28,39 @@
             </div>
 
             <div class="flex justify-between">
-                <span class="font-medium text-gray-600 dark:text-gray-400">Jumlah Diajukan:</span>
+                <span class="font-medium text-gray-600 dark:text-gray-400">Jumlah Diajukan</span>
                 <span class="text-gray-900 dark:text-gray-100">{{ $permintaan->qty }} pcs</span>
             </div>
         </div>
 
         <div class="mt-8 flex justify-end gap-4">
+            <!-- Tolak -->
             <button type="button"
                 class="inline-flex items-center gap-2 rounded-lg bg-red-600 px-4 py-2 text-sm font-medium text-white hover:bg-red-700 transition-all"
                 onclick="document.getElementById('rejectModal').classList.remove('hidden')">
-                ❌ Tolak
+                <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd"
+                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.536-11.536a1 1 0 00-1.414-1.414L10 7.586 7.879 5.465a1 1 0 10-1.414 1.414L8.586 9l-2.121 2.121a1 1 0 101.414 1.414L10 10.414l2.121 2.121a1 1 0 001.414-1.414L11.414 9l2.122-2.121z"
+                        clip-rule="evenodd"></path>
+                </svg>
+                Tolak
             </button>
 
-            <!-- Langsung Approve -->
+            <!-- Konfirmasi -->
             <form action="{{ route('product.approve', $permintaan->id) }}" method="POST">
                 @csrf
                 <button type="submit"
                     class="inline-flex items-center gap-2 rounded-lg bg-green-600 px-4 py-2 text-sm font-medium text-white hover:bg-green-700 transition-all">
-                    ✅ Konfirmasi
+                    <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd"
+                            d="M16.707 5.293a1 1 0 010 1.414l-7.414 7.414a1 1 0 01-1.414 0L3.293 9.414a1 1 0 011.414-1.414L8 11.293l7.293-7.293a1 1 0 011.414 0z"
+                            clip-rule="evenodd"></path>
+                    </svg>
+                    Konfirmasi
                 </button>
             </form>
+
         </div>
     </div>
 

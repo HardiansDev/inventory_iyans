@@ -23,62 +23,94 @@
     <section class="content">
         <div class="mt-6 grid grid-cols-2 gap-6 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-4">
             <!-- Modal Hari Ini -->
-            <div class="rounded-xl bg-teal-800 p-5 text-white shadow">
-                <div class="text-3xl font-bold"></div>
-                <div class="text-3xl font-bold">Rp {{ number_format($totalModal, 0, ',', '.') }}</div>
-                {{-- <div class="text-xl font-semibold mt-2">Modal Hari Ini</div> --}}
-                <div class="mt-1 text-sm">Total Modal </div>
+            <div class="rounded-xl bg-gradient-to-r from-teal-400 to-teal-600 p-5 text-white shadow flex items-center gap-4">
+                <i class="fas fa-wallet text-3xl opacity-80"></i>
+                <div>
+                    <div class="text-2xl font-bold">Rp {{ number_format($totalModal, 0, ',', '.') }}</div>
+                    <div class="mt-1 text-sm">Total Modal</div>
+                </div>
             </div>
 
             <!-- Data Produk -->
-            <div class="rounded-xl bg-blue-600 p-5 text-white shadow">
-                <div class="text-3xl font-bold">{{ $totalProduk }}</div>
-                <div class="mt-1 text-sm">Data Produk</div>
+            <div
+                class="rounded-xl bg-gradient-to-r from-blue-400 to-blue-600 p-5 text-white shadow flex items-center gap-4">
+                <i class="fas fa-boxes text-3xl opacity-80"></i>
+                <div>
+                    <div class="text-2xl font-bold">{{ $totalProduk }}</div>
+                    <div class="mt-1 text-sm">Data Produk</div>
+                </div>
             </div>
 
             <!-- Produk Masuk -->
-            <div class="rounded-xl bg-orange-500 p-5 text-white shadow">
-                <div class="text-3xl font-bold">{{ $produkMasuk }}</div>
-                <div class="mt-1 text-sm">Total Produk Masuk</div>
+            <div
+                class="rounded-xl bg-gradient-to-r from-emerald-400 to-emerald-600 p-5 text-white shadow flex items-center gap-4">
+                <i class="fas fa-truck-loading text-3xl opacity-80"></i>
+                <div>
+                    <div class="text-2xl font-bold">{{ $produkMasuk }}</div>
+                    <div class="mt-1 text-sm">Total Produk Masuk</div>
+                </div>
             </div>
 
             <!-- Produk Keluar -->
-            <div class="rounded-xl bg-red-500 p-5 text-white shadow">
-                <div class="text-3xl font-bold">{{ $produkKeluar }}</div>
-                <div class="mt-1 text-sm">Total Produk Keluar</div>
+            <div
+                class="rounded-xl bg-gradient-to-r from-rose-400 to-rose-600 p-5 text-white shadow flex items-center gap-4">
+                <i class="fas fa-dolly text-3xl opacity-80"></i>
+                <div>
+                    <div class="text-2xl font-bold">{{ $produkKeluar }}</div>
+                    <div class="mt-1 text-sm">Total Produk Keluar</div>
+                </div>
             </div>
 
             <!-- Pengguna -->
-            <div class="rounded-xl bg-green-500 p-5 text-white shadow">
-                <div class="text-3xl font-bold">{{ $totalUser }}</div>
-                <div class="mt-1 text-sm">Pengguna</div>
+            <div
+                class="rounded-xl bg-gradient-to-r from-green-400 to-green-600 p-5 text-white shadow flex items-center gap-4">
+                <i class="fas fa-users text-3xl opacity-80"></i>
+                <div>
+                    <div class="text-2xl font-bold">{{ $totalUser }}</div>
+                    <div class="mt-1 text-sm">Pengguna</div>
+                </div>
             </div>
 
             <!-- Penjualan Hari Ini -->
-            <div class="rounded-xl bg-indigo-500 p-5 text-white shadow">
-                <div class="text-3xl font-bold">
-                    Rp {{ number_format($penjualanHariIni, 0, ',', '.') }}
+            <div
+                class="rounded-xl bg-gradient-to-r from-indigo-400 to-indigo-600 p-5 text-white shadow flex items-center gap-4">
+                <i class="fas fa-cash-register text-3xl opacity-80"></i>
+                <div>
+                    <div class="text-2xl font-bold">Rp {{ number_format($penjualanHariIni, 0, ',', '.') }}</div>
+                    <div class="mt-1 text-sm">Pendapatan Hari Ini</div>
                 </div>
-                <div class="mt-1 text-sm">Pendapatan Hari Ini</div>
             </div>
 
             <!-- Transaksi Hari Ini -->
-            <div class="rounded-xl bg-cyan-600 p-5 text-white shadow">
-                <div class="text-3xl font-bold">{{ $transaksiHariIni }}</div>
-                <div class="mt-1 text-sm">Transaksi Hari Ini</div>
+            <div
+                class="rounded-xl bg-gradient-to-r from-cyan-400 to-cyan-600 p-5 text-white shadow flex items-center gap-4">
+                <i class="fas fa-receipt text-3xl opacity-80"></i>
+                <div>
+                    <div class="text-2xl font-bold">{{ $transaksiHariIni }}</div>
+                    <div class="mt-1 text-sm">Transaksi Hari Ini</div>
+                </div>
             </div>
 
             <!-- Pegawai Aktif -->
-            <div class="rounded-xl bg-teal-500 p-5 text-white shadow">
-                <div class="text-3xl font-bold">{{ $pegawaiAktif }}</div>
-                <div class="mt-1 text-sm">Pegawai Aktif</div>
+            <div
+                class="rounded-xl bg-gradient-to-r from-teal-400 to-teal-600 p-5 text-white shadow flex items-center gap-4">
+                <i class="fas fa-user-check text-3xl opacity-80"></i>
+                <div>
+                    <div class="text-2xl font-bold">{{ $pegawaiAktif }}</div>
+                    <div class="mt-1 text-sm">Pegawai Aktif</div>
+                </div>
             </div>
 
             <!-- Pegawai Tidak Aktif -->
-            <div class="rounded-xl bg-gray-500 p-5 text-white shadow">
-                <div class="text-3xl font-bold">{{ $pegawaiTidakAktif }}</div>
-                <div class="mt-1 text-sm">Pegawai Tidak Aktif</div>
+            <div
+                class="rounded-xl bg-gradient-to-r from-gray-400 to-gray-600 p-5 text-white shadow flex items-center gap-4">
+                <i class="fas fa-user-slash text-3xl opacity-80"></i>
+                <div>
+                    <div class="text-2xl font-bold">{{ $pegawaiTidakAktif }}</div>
+                    <div class="mt-1 text-sm">Pegawai Tidak Aktif</div>
+                </div>
             </div>
+
         </div>
 
 
@@ -168,8 +200,9 @@
                 <!-- TABS PENJUALAN -->
                 <div class="bg-white dark:bg-gray-800 rounded shadow p-4">
                     <h4 class="text-lg font-semibold mb-4">Trend Penjualan</h4>
-                    <!-- Tabs Navigation -->
-                    <div class="mb-4 border-b border-gray-200 dark:border-gray-700">
+                    <!-- Tabs Navigation + Export -->
+                    <div class="mb-4 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between">
+                        <!-- Tabs -->
                         <ul class="flex flex-wrap -mb-px text-sm font-medium text-center" id="chartTabs" role="tablist">
                             <li class="me-2">
                                 <button
@@ -201,6 +234,26 @@
                                 </button>
                             </li>
                         </ul>
+
+                        <!-- Export Buttons -->
+                        <div class="flex gap-2">
+                            <!-- Tombol Export Harian -->
+                            <button id="export-current"
+                                class="bg-blue-600 text-white px-3 py-1.5 rounded shadow hover:bg-blue-700 transition flex items-center gap-1 text-sm">
+                                <i class="fa-solid fa-download text-white text-base"></i>
+                                <span class="ml-1">Export Harian</span>
+                            </button>
+
+
+                            <!-- Tombol Export Semua -->
+                            <button id="export-all"
+                                class="bg-green-600 text-white px-3 py-1.5 rounded shadow hover:bg-green-700 transition flex items-center gap-1 text-sm">
+                                <!-- Icon download FontAwesome 6 -->
+                                <i class="fa-solid fa-download text-white text-base"></i>
+                                Export Semua
+                            </button>
+                        </div>
+
                     </div>
 
                     <!-- Tabs Content -->
@@ -218,6 +271,7 @@
                             <canvas id="chart-year" class="w-full h-80"></canvas>
                         </div>
                     </div>
+
                 </div>
 
                 <!-- TABEL AKTIVITAS TRANSAKSI HARI INI -->
@@ -591,5 +645,133 @@
             // Buka URL di tab baru supaya user bisa download atau lihat PDF
             window.open(url.toString(), '_blank');
         }
+    </script>
+
+
+
+
+    <script>
+        const {
+            jsPDF
+        } = window.jspdf;
+
+        function renderChartToPDF(pdf, canvasId, title, addNewPage = false) {
+            const canvas = document.getElementById(canvasId);
+            if (!canvas) return;
+
+            if (addNewPage) pdf.addPage();
+
+            // Ambil image dari canvas chart.js
+            const imgData = canvas.toDataURL("image/png", 1.0);
+
+            const pdfWidth = pdf.internal.pageSize.getWidth() - 20;
+            const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+
+            pdf.setFontSize(14);
+            pdf.text(title, 14, 20);
+            pdf.addImage(imgData, "PNG", 10, 30, pdfWidth, pdfHeight);
+        }
+
+        // Export tab aktif
+        document.getElementById("export-current").addEventListener("click", () => {
+            const activeTab = document.querySelector("#chart-tabs-content > div:not(.hidden)");
+            if (!activeTab) return alert("Tidak ada tab aktif");
+
+            const canvas = activeTab.querySelector("canvas");
+            if (!canvas) return alert("Tidak ada grafik di tab ini");
+
+            const pdf = new jsPDF("p", "mm", "a4");
+            const tabName = activeTab.id.replace("tab-content-", "");
+
+            // Map tabName ke label yang benar
+            let title = "Laporan ";
+            switch (tabName) {
+                case "day":
+                    title += "Harian";
+                    break;
+                case "week":
+                    title += "Mingguan";
+                    break;
+                case "month":
+                    title += "Bulanan";
+                    break;
+                case "year":
+                    title += "Tahunan"; // <--- fix di sini
+                    break;
+                default:
+                    title += tabName;
+            }
+
+            renderChartToPDF(pdf, canvas.id, title);
+            pdf.save("laporan-" + tabName + ".pdf");
+        });
+
+        // Export semua tab
+        document.getElementById("export-all").addEventListener("click", () => {
+            const pdf = new jsPDF("p", "mm", "a4");
+            const charts = [{
+                    id: "chart-day",
+                    title: "Laporan Harian"
+                },
+                {
+                    id: "chart-week",
+                    title: "Laporan Mingguan"
+                },
+                {
+                    id: "chart-month",
+                    title: "Laporan Bulanan"
+                },
+                {
+                    id: "chart-year",
+                    title: "Laporan Tahunan"
+                },
+            ];
+
+            charts.forEach((chart, index) => {
+                renderChartToPDF(pdf, chart.id, chart.title, index > 0);
+            });
+
+            pdf.save("laporan-semua.pdf");
+        });
+    </script>
+
+    <script>
+        const exportBtn = document.getElementById("export-current");
+
+        function updateExportButtonLabel() {
+            const activeTab = document.querySelector("#chart-tabs-content > div:not(.hidden)");
+            if (!activeTab) return;
+
+            const tabName = activeTab.id.replace("tab-content-", ""); // day, week, month, year
+            let label = "Export";
+
+            switch (tabName) {
+                case "day":
+                    label = "Export Harian";
+                    break;
+                case "week":
+                    label = "Export Mingguan";
+                    break;
+                case "month":
+                    label = "Export Bulanan";
+                    break;
+                case "year":
+                    label = "Export Tahunan";
+                    break;
+            }
+
+            exportBtn.querySelector("span").textContent = label;
+
+        }
+
+        // Jalankan saat pertama kali load
+        updateExportButtonLabel();
+
+        // Tambahkan event ke tombol tab biar update setiap klik
+        document.querySelectorAll("#chartTabs button").forEach(btn => {
+            btn.addEventListener("click", () => {
+                setTimeout(updateExportButtonLabel, 50); // delay dikit biar class hidden sudah berubah
+            });
+        });
     </script>
 @endpush

@@ -1,7 +1,7 @@
 @extends('layouts.master')
 
 @section('title')
-    <title>KASIRIN.ID - Input Produk Masuk</title>
+    <title>KASIRIN.ID - Pengajuan Produk Masuk</title>
 @endsection
 
 @section('content')

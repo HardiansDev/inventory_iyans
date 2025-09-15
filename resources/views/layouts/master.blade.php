@@ -9,13 +9,30 @@
     @yield('title')
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
+        // Tailwind dark mode pakai class
         tailwind.config = {
-            darkMode: 'class', // aktifkan dark mode berbasis class
+            darkMode: 'class',
             theme: {
                 extend: {}
             }
         }
     </script>
+
+    <!-- Anti-flicker: ini dipanggil duluan di <head> -->
+    <script>
+        if (
+            localStorage.getItem('color-theme') === 'dark' ||
+            (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)
+        ) {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+        }
+    </script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
 
     {{-- Chart.js (hanya sekali) --}}
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -60,6 +77,19 @@
             html.sidebar-open-mobile #sidebar {
                 transform: translateX(0);
             }
+        }
+
+        /* Hide scrollbar but keep scrolling */
+        #sidebar {
+            scrollbar-width: none;
+            /* Firefox */
+            -ms-overflow-style: none;
+            /* IE/Edge */
+        }
+
+        #sidebar::-webkit-scrollbar {
+            display: none;
+            /* Chrome, Safari, Opera */
         }
     </style>
 
@@ -319,7 +349,7 @@
         message = e.detail.message;
         type = e.detail.type || 'info';
         show = true;
-    
+
         clearTimeout(timeout);
         timeout = setTimeout(() => show = false, 4000);
     });"

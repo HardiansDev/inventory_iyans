@@ -15,7 +15,7 @@
             <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
                 <thead class="bg-gray-100 dark:bg-gray-800">
                     <tr>
-                        <th class="px-4 py-2 text-left text-sm font-semibold text-gray-700 dark:text-gray-300">#</th>
+
                         <th class="px-4 py-2 text-left text-sm font-semibold text-gray-700 dark:text-gray-300">User</th>
                         <th class="px-4 py-2 text-left text-sm font-semibold text-gray-700 dark:text-gray-300">Action</th>
                         <th class="px-4 py-2 text-left text-sm font-semibold text-gray-700 dark:text-gray-300">Description
@@ -30,8 +30,7 @@
                 <tbody class="divide-y divide-gray-200 dark:divide-gray-700 bg-white dark:bg-gray-900">
                     @forelse($logs as $index => $log)
                         <tr class="hover:bg-gray-50 dark:hover:bg-gray-800">
-                            <td class="px-4 py-2 text-sm text-gray-600 dark:text-gray-300">{{ $logs->firstItem() + $index }}
-                            </td>
+
                             <td class="px-4 py-2 text-sm text-gray-600 dark:text-gray-300">
                                 {{ $log->user ? $log->user->name : 'Guest' }}
                             </td>

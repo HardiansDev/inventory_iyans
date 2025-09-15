@@ -35,39 +35,6 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-
-// ==========================
-// Verifikasi Email
-// ==========================
-// Route::get('/email/verify', function () {
-//     return view('auth.verify-email');
-// })->middleware('auth')->name('verification.notice');
-
-// Route::get('/email/verify/{id}/{hash}', function (Request $request, $id, $hash) {
-//     $user = \App\Models\User::findOrFail($id);
-
-//     if (!hash_equals((string) $hash, sha1($user->getEmailForVerification()))) {
-//         abort(403, 'Link verifikasi tidak valid.');
-//     }
-
-//     Auth::login($user);
-
-//     if (!$user->hasVerifiedEmail()) {
-//         $user->markEmailAsVerified();
-//         event(new \Illuminate\Auth\Events\Verified($user));
-//     }
-
-//     // 🔄 Pakai method redirectByRole dari controller
-//     return app(AuthController::class)->redirectByRole($user)->with('success', 'Email berhasil diverifikasi!');
-// })->middleware(['signed'])->name('verification.verify');
-
-// Kirim ulang email verifikasi
-// Route::post('/email/verification-notification', function (Request $request) {
-//     $request->user()->sendEmailVerificationNotification();
-//     return back()->with('success', 'Link verifikasi email telah dikirim ulang.');
-// })->middleware(['auth', 'throttle:6,1'])->name('verification.send');
-
-
 // ==========================
 // Halaman Dashboard
 // ==========================
