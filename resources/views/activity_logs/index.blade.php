@@ -6,16 +6,32 @@
 
 @section('content')
     <div class="p-6">
-        <h2 class="text-2xl font-bold mb-4 dark:text-white">
-            Log Aktivitas
-        </h2>
+        <div class="flex flex-wrap items-center justify-between mb-4 gap-3">
+            <h2 class="text-2xl font-bold dark:text-white">
+                Log Aktivitas
+            </h2>
 
+            <!-- Show Per Page Dropdown -->
+            <div class="flex items-center gap-2">
+
+                <select id="showPerPage" name="showPerPage"
+                    class="w-auto rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm font-medium text-gray-700 shadow-sm
+                       focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all duration-200
+                       hover:border-gray-400
+                       dark:bg-gray-800 dark:text-gray-200 dark:border-gray-600 dark:placeholder-gray-400
+                       dark:hover:border-gray-500 dark:focus:border-blue-400 dark:focus:ring-blue-400">
+
+                    <option value="10" {{ $perPage == 10 ? 'selected' : '' }}>10</option>
+                    <option value="50" {{ $perPage == 50 ? 'selected' : '' }}>50</option>
+                    <option value="100" {{ $perPage == 100 ? 'selected' : '' }}>100</option>
+                </select>
+            </div>
+        </div>
 
         <div class="overflow-x-auto rounded-lg shadow">
             <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
                 <thead class="bg-gray-100 dark:bg-gray-800">
                     <tr>
-
                         <th class="px-4 py-2 text-left text-sm font-semibold text-gray-700 dark:text-gray-300">User</th>
                         <th class="px-4 py-2 text-left text-sm font-semibold text-gray-700 dark:text-gray-300">Action</th>
                         <th class="px-4 py-2 text-left text-sm font-semibold text-gray-700 dark:text-gray-300">Description
@@ -28,9 +44,8 @@
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-200 dark:divide-gray-700 bg-white dark:bg-gray-900">
-                    @forelse($logs as $index => $log)
+                    @forelse($logs as $log)
                         <tr class="hover:bg-gray-50 dark:hover:bg-gray-800">
-
                             <td class="px-4 py-2 text-sm text-gray-600 dark:text-gray-300">
                                 {{ $log->user ? $log->user->name : 'Guest' }}
                             </td>
@@ -51,7 +66,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="7" class="px-4 py-4 text-center text-sm text-gray-500 dark:text-gray-400">
+                            <td colspan="6" class="px-4 py-4 text-center text-sm text-gray-500 dark:text-gray-400">
                                 Tidak ada data log aktivitas.
                             </td>
                         </tr>
@@ -60,8 +75,19 @@
             </table>
         </div>
 
+        <!-- Pagination -->
         <div class="mt-4">
-            {{ $logs->links('pagination::tailwind') }}
+            {{ $logs->appends(request()->query())->links('pagination::tailwind') }}
         </div>
     </div>
+
+    <!-- JS untuk Show Per Page -->
+    <script>
+        document.getElementById('showPerPage').addEventListener('change', function() {
+            const perPage = this.value;
+            const url = new URL(window.location.href);
+            url.searchParams.set('perPage', perPage);
+            window.location.href = url.toString();
+        });
+    </script>
 @endsection

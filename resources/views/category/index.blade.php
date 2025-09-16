@@ -32,24 +32,36 @@
             <!-- Form Pencarian -->
             <div class="w-full md:w-auto">
                 <form action="{{ route('category.index') }}" method="GET"
-                    class="flex flex-col gap-2 sm:flex-row sm:items-center">
-                    <input type="search" name="search" value="{{ $search }}" placeholder="Cari..."
-                        class="w-full rounded-md border border-gray-300 px-3 py-2 text-sm text-gray-700 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:w-72" />
+                    class="flex flex-col gap-3 sm:flex-row sm:items-center">
 
-                    <div class="flex gap-2">
+                    <!-- Input Search -->
+                    <input type="search" name="search" value="{{ $search }}" placeholder="Cari..."
+                        class="w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm text-gray-700 shadow-sm
+                   focus:border-blue-500 focus:ring-1 focus:ring-blue-500
+                   dark:bg-gray-800 dark:text-gray-200 dark:border-gray-600 dark:placeholder-gray-400
+                   sm:w-72 transition-colors duration-200" />
+
+                    <!-- Buttons -->
+                    <div class="flex gap-2 sm:flex-none">
                         <button type="submit"
-                            class="flex flex-1 items-center justify-center rounded-md bg-blue-600 px-4 py-2 text-sm text-white shadow-sm hover:bg-blue-700 sm:flex-none">
+                            class="flex items-center justify-center rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm
+                       hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1
+                       dark:bg-blue-500 dark:hover:bg-blue-600 dark:focus:ring-blue-400 transition-colors duration-200">
                             <i class="fas fa-search mr-2"></i>
                             Cari
                         </button>
+
                         <a href="{{ route('category.index') }}"
-                            class="flex flex-1 items-center justify-center rounded-md bg-gray-300 px-4 py-2 text-sm text-gray-800 shadow-sm hover:bg-gray-400 sm:flex-none">
+                            class="flex items-center justify-center rounded-md bg-gray-300 px-4 py-2 text-sm font-medium text-gray-800 shadow-sm
+                       hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-1
+                       dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600 dark:focus:ring-gray-500 transition-colors duration-200">
                             <i class="fas fa-redo-alt mr-2"></i>
                             Reset
                         </a>
                     </div>
                 </form>
             </div>
+
         </div>
 
 

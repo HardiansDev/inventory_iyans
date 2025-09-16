@@ -5,8 +5,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Product;
 use App\Models\Category;
-// use App\Models\Supplier;
-// use Cloudinary\Cloudinary;
+
 use Illuminate\Http\Request;
 use App\Exports\ProductsExport;
 use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
@@ -29,7 +28,6 @@ class ProductController extends Controller
         $categoryName = $request->query('category');
 
         $datacategory = Category::all();
-        // $datasupplier = Supplier::all();
 
         $query = Product::with(['category', 'productins']);
 
@@ -45,8 +43,12 @@ class ProductController extends Controller
             $query->where('name', 'like', '%' . $search . '%');
         }
 
+        // Ambil nilai perPage dari query string, default 5
+        $perPage = request()->query('perPage', 5);
+
         // Ambil produk sesuai filter, urut terbaru
-        $products = $query->orderBy('created_at', 'DESC')->paginate(5);
+        $products = $query->orderBy('created_at', 'DESC')->paginate($perPage);
+
 
         // Hitung qty diterima dan ditolak
         $products->getCollection()->transform(function ($product) {

@@ -28,11 +28,32 @@
                 <div class="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                     <!-- Kiri: Tombol Aksi -->
                     <div class="flex flex-col gap-2 sm:flex-row">
-                        <button type="button" onclick="openModal()"
-                            class="inline-flex w-full sm:w-auto items-center gap-2 rounded bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-blue-700">
-                            <i class="fas fa-plus-circle"></i>
-                            Tambah Produk
-                        </button>
+                        <div class="flex flex-wrap items-center justify-between mb-4 gap-3">
+                            <!-- Tombol Tambah Produk -->
+                            <button type="button" onclick="openModal()"
+                                class="inline-flex items-center gap-2 rounded bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-blue-700">
+                                <i class="fas fa-plus-circle"></i>
+                                Tambah Produk
+                            </button>
+
+                            <!-- Dropdown Show Per Page -->
+                            @php
+                                $perPage = request()->query('perPage', 5); // default 5
+                            @endphp
+                            <div class="flex items-center gap-2">
+                                <select id="showPerPage" name="showPerPage"
+                                    class="w-auto rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm font-medium text-gray-700 shadow-sm
+                   focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all duration-200
+                   hover:border-gray-400 dark:bg-gray-800 dark:text-gray-200 dark:border-gray-600 dark:hover:border-gray-500
+               dark:focus:border-blue-400 dark:focus:ring-blue-400">
+                                    <option value="5" {{ $perPage == 5 ? 'selected' : '' }}>5</option>
+                                    <option value="10" {{ $perPage == 10 ? 'selected' : '' }}>10</option>
+                                    <option value="50" {{ $perPage == 50 ? 'selected' : '' }}>50</option>
+                                    <option value="100" {{ $perPage == 100 ? 'selected' : '' }}>100</option>
+                                </select>
+                            </div>
+                        </div>
+
 
                         <form id="bulkDeleteForm" method="POST" action="{{ route('product.bulkDelete') }}"
                             class="w-full sm:w-auto">
@@ -47,6 +68,7 @@
                             </button>
                         </form>
                     </div>
+
 
                     <!-- Kanan: Dropdown Unduh Data -->
                     <div class="flex flex-col gap-2 sm:flex-row sm:items-center">
@@ -238,8 +260,14 @@
 
                 </div>
                 <div class="mt-4">
-                    {{ $products->links('pagination::tailwind') }}
+                    <div class="pagination-wrapper">
+                        {{ $products->appends(request()->query())->links('pagination::tailwind') }}
+                    </div>
                 </div>
+
+
+
+
                 <!-- Modal Konfirmasi Hapus -->
                 <div id="deleteModal"
                     class="fixed inset-0 z-50 hidden items-center justify-center bg-black bg-opacity-50">
@@ -564,5 +592,12 @@
             modal.classList.remove('flex')
             modal.classList.add('hidden')
         }
+
+        document.getElementById('showPerPage').addEventListener('change', function() {
+            const perPage = this.value;
+            const url = new URL(window.location.href);
+            url.searchParams.set('perPage', perPage);
+            window.location.href = url.toString();
+        });
     </script>
 @endpush

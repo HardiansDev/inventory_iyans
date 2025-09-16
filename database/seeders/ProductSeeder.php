@@ -10,8 +10,7 @@ class ProductSeeder extends Seeder
 {
     public function run()
     {
-        $categories = [1, 2, 3]; // ID kategori
-        $suppliers = [1, 2, 3];  // ID supplier
+        $categories = [1, 2]; // ID kategori
 
         $products = [];
         $uniqueCodes = [];
