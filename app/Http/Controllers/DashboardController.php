@@ -25,12 +25,20 @@ class DashboardController extends Controller
         $produkMasuk = ProductIn::sum('qty');
         $produkKeluar = SalesDetail::sum('qty');
         $totalUser = User::count();
+        // Hitung pendapatan hari ini (termasuk diskon kalau ada)
         $penjualanHariIni = SalesDetail::join('sales', 'sales.id', '=', 'salesdetails.sales_id')
             ->leftJoin('discounts', 'salesdetails.discount_id', '=', 'discounts.id')
             ->whereDate('salesdetails.created_at', Carbon::today())
             ->select(DB::raw('SUM((salesdetails.price * salesdetails.qty) - ((salesdetails.price * salesdetails.qty) * (COALESCE(discounts.nilai, 0) / 100))) as total'))
             ->value('total');
 
+        $penjualanHariIni = $penjualanHariIni ?? 0; // fallback biar gak null
+        $totalModal = $totalModal ?? 0;
+
+        // Hitung keuntungan hari ini
+        $keuntunganHariIni = $penjualanHariIni > $totalModal
+            ? $penjualanHariIni - $totalModal
+            : 0;
         $transaksiHariIni = SalesDetail::whereDate('created_at', today())->count();
         $pegawaiAktif = Employee::where('is_active', 1)->count();
         $pegawaiTidakAktif = Employee::where('is_active', 0)->count();
@@ -297,7 +305,8 @@ class DashboardController extends Controller
             'aktivitasHariIni',
             'performaKasirHariIni',
             'totalBahanBaku',
-            'totalModal'
+            'totalModal',
+            'keuntunganHariIni'
         ));
     }
 }

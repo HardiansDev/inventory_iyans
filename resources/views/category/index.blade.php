@@ -18,12 +18,12 @@
     </section>
 
     <!-- Konten -->
-    <section class="rounded dark:bg-gray-900 dark:text-gray-100 p-6 shadow-sm">
+    <section class="rounded dark:bg-gray-800 dark:text-gray-100 p-6 shadow-sm">
         <div class="mb-4 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
             <!-- Tombol Tambah Kategori -->
             <div class="w-full md:w-auto">
                 <button onclick="openCategoryModal()"
-                    class="flex w-full items-center justify-center gap-2 rounded bg-blue-600 px-4 py-2 text-white hover:bg-blue-700 md:w-auto">
+                    class="flex w-full items-center justify-center gap-2 rounded-lg bg-blue-600 px-4 py-2 text-white hover:bg-blue-700 md:w-auto">
                     <i class="fas fa-plus-circle"></i>
                     <span>Tambah Kategori</span>
                 </button>
@@ -36,7 +36,7 @@
 
                     <!-- Input Search -->
                     <input type="search" name="search" value="{{ $search }}" placeholder="Cari..."
-                        class="w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm text-gray-700 shadow-sm
+                        class="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-700 shadow-sm
                    focus:border-blue-500 focus:ring-1 focus:ring-blue-500
                    dark:bg-gray-800 dark:text-gray-200 dark:border-gray-600 dark:placeholder-gray-400
                    sm:w-72 transition-colors duration-200" />
@@ -44,7 +44,7 @@
                     <!-- Buttons -->
                     <div class="flex gap-2 sm:flex-none">
                         <button type="submit"
-                            class="flex items-center justify-center rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm
+                            class="flex items-center justify-center rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm
                        hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1
                        dark:bg-blue-500 dark:hover:bg-blue-600 dark:focus:ring-blue-400 transition-colors duration-200">
                             <i class="fas fa-search mr-2"></i>
@@ -52,7 +52,7 @@
                         </button>
 
                         <a href="{{ route('category.index') }}"
-                            class="flex items-center justify-center rounded-md bg-gray-300 px-4 py-2 text-sm font-medium text-gray-800 shadow-sm
+                            class="flex items-center justify-center rounded-lg bg-gray-300 px-4 py-2 text-sm font-medium text-gray-800 shadow-sm
                        hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-1
                        dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600 dark:focus:ring-gray-500 transition-colors duration-200">
                             <i class="fas fa-redo-alt mr-2"></i>
@@ -65,43 +65,45 @@
         </div>
 
 
-        <!-- Tabel Data -->
+        <!-- Tabel Data Kategori -->
         <div class="overflow-x-auto rounded-lg border border-gray-200 shadow dark:border-gray-700">
             <table
                 class="min-w-full divide-y divide-gray-200 dark:divide-gray-700 text-sm text-gray-700 dark:text-gray-200">
-                <thead class="bg-gray-50 dark:bg-gray-800">
+                <thead class="bg-gray-50 dark:bg-gray-700">
                     <tr>
-                        <th class="px-4 py-2">Nama Kategori</th>
-                        <th class="px-4 py-2 text-center">Aksi</th>
+                        <th
+                            class="px-4 py-3 text-left text-gray-700 dark:text-gray-200 font-medium uppercase tracking-wider">
+                            Nama Kategori
+                        </th>
+                        <th
+                            class="px-4 py-3 text-center text-gray-700 dark:text-gray-200 font-medium uppercase tracking-wider">
+                            Aksi
+                        </th>
                     </tr>
                 </thead>
+
                 <tbody>
-                    @forelse ($categories as $index => $item)
+                    @forelse ($categories as $item)
                         <tr class="hover:bg-gray-50 dark:hover:bg-gray-700">
                             <td class="px-4 py-2">{{ $item->name }}</td>
                             <td class="px-4 py-2 text-center">
                                 <div class="flex justify-center gap-2">
-                                    <!-- Tombol trigger modal -->
                                     <button type="button"
                                         onclick="openEditModal({{ $item->id }}, '{{ $item->name }}')"
-                                        class="rounded bg-yellow-400 px-3 py-1 text-sm text-white hover:bg-yellow-500 dark:bg-yellow-500 dark:hover:bg-yellow-600">
-                                        <i class="fas fa-edit"></i>
-                                        Edit
+                                        class="rounded-lg bg-yellow-400 px-3 py-1 text-sm text-white hover:bg-yellow-500 dark:bg-yellow-500 dark:hover:bg-yellow-600">
+                                        <i class="fas fa-edit"></i> Edit
                                     </button>
-
-                                    <!-- Trigger button -->
                                     <button type="button"
                                         onclick="openDeleteModal({{ $item->id }}, '{{ $item->name }}')"
-                                        class="rounded bg-red-500 px-3 py-1 text-sm text-white hover:bg-red-600 dark:bg-red-600 dark:hover:bg-red-700">
-                                        <i class="fas fa-trash-alt"></i>
-                                        Hapus
+                                        class="rounded-lg bg-red-600 px-3 py-1 text-sm text-white hover:bg-red-700 dark:bg-red-500 dark:hover:bg-red-600">
+                                        <i class="fas fa-trash-alt"></i> Hapus
                                     </button>
                                 </div>
                             </td>
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="3" class="px-4 py-6 text-center text-gray-500 dark:text-gray-400">
+                            <td colspan="2" class="px-4 py-6 text-center text-gray-500 dark:text-gray-400">
                                 Kategori tidak ditemukan.
                             </td>
                         </tr>
@@ -109,68 +111,59 @@
                 </tbody>
             </table>
 
-            <!-- Modal Edit Kategori -->
-            <div id="editCategoryModal"
-                class="fixed inset-0 z-50 hidden items-center justify-center bg-black bg-opacity-50">
-                <div class="w-full max-w-md rounded-lg bg-white p-6 shadow-lg dark:bg-gray-800 dark:text-gray-200">
-                    <h2 class="mb-4 text-lg font-semibold text-gray-800 dark:text-gray-100">Edit Kategori</h2>
-                    <form id="editCategoryForm" method="POST">
+            <!-- Modal Tambah Kategori -->
+            <div id="categoryModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black bg-opacity-50">
+                <div
+                    class="w-full max-w-md rounded-xl bg-white dark:bg-gray-800 p-6 shadow-lg transform transition-all duration-300">
+                    <h2 class="mb-4 text-lg font-semibold text-gray-900 dark:text-gray-100">Tambah Kategori</h2>
+                    <form action="{{ route('category.store') }}" method="POST">
                         @csrf
-                        @method('PUT')
                         <div class="mb-4">
-                            <label for="editCategoryName"
-                                class="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                                Nama Kategori
-                            </label>
-                            <input type="text" name="name" id="editCategoryName"
-                                class="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2
-                        focus:border-blue-500 focus:outline-none focus:ring-blue-500
-                        dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200"
+                            <label for="name" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Nama
+                                Kategori</label>
+                            <input type="text" name="name" id="name" placeholder="Masukkan kategori..."
+                                class="mt-1 block w-full rounded border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200
+                        {{ $errors->has('name') ? 'border-red-500 dark:border-red-400' : '' }}"
                                 required />
                         </div>
                         <div class="flex justify-end gap-2">
-                            <button type="button" onclick="closeEditModal()"
-                                class="rounded bg-gray-300 px-4 py-2 text-gray-800 hover:bg-gray-400
-                        dark:bg-gray-600 dark:text-gray-200 dark:hover:bg-gray-500">
+                            <button type="button" onclick="closeCategoryModal()"
+                                class="px-4 py-2 rounded-lg bg-gray-300 text-gray-800 hover:bg-gray-400 dark:bg-gray-600 dark:text-gray-200 dark:hover:bg-gray-500">
                                 Batal
                             </button>
                             <button type="submit"
-                                class="rounded bg-blue-600 px-4 py-2 text-white hover:bg-blue-700
-                        dark:bg-blue-500 dark:hover:bg-blue-600">
-                                Simpan
+                                class="px-4 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600">
+                                Tambah
                             </button>
                         </div>
                     </form>
                 </div>
             </div>
 
-            <!-- Modal Tambah Kategori -->
-            <div id="categoryModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black bg-opacity-50">
-                <div class="w-full max-w-md rounded-lg bg-white p-6 shadow-lg dark:bg-gray-800 dark:text-gray-200">
-                    <h2 class="mb-4 text-lg font-semibold text-gray-800 dark:text-gray-100">Tambah Kategori</h2>
-                    <form action="{{ route('category.store') }}" method="POST">
+            <!-- Modal Edit Kategori -->
+            <div id="editCategoryModal"
+                class="fixed inset-0 z-50 hidden items-center justify-center bg-black bg-opacity-50">
+                <div
+                    class="w-full max-w-md rounded-xl bg-white dark:bg-gray-800 p-6 shadow-lg transform transition-all duration-300">
+                    <h2 class="mb-4 text-lg font-semibold text-gray-900 dark:text-gray-100">Edit Kategori</h2>
+                    <form id="editCategoryForm" method="POST">
                         @csrf
+                        @method('PUT')
                         <div class="mb-4">
-                            <label for="name" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                                Nama Kategori
-                            </label>
-                            <input type="text" name="name" id="name"
-                                class="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2
-                        focus:border-blue-500 focus:outline-none focus:ring-blue-500
-                        dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200
-                        {{ $errors->has('name') ? 'border-red-500 dark:border-red-400' : '' }}"
-                                placeholder="Masukkan kategori..." required />
+                            <label for="editCategoryName"
+                                class="block text-sm font-medium text-gray-700 dark:text-gray-300">Nama Kategori</label>
+                            <input type="text" name="name" id="editCategoryName"
+                                class="mt-1 block w-full rounded border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200"
+                                required />
                         </div>
                         <div class="flex justify-end gap-2">
-                            <button type="button" onclick="closeCategoryModal()"
-                                class="rounded bg-gray-300 px-4 py-2 text-gray-800 hover:bg-gray-400
-                        dark:bg-gray-600 dark:text-gray-200 dark:hover:bg-gray-500">
+                            <button type="button" onclick="closeEditModal()"
+                                class="px-4 py-2 rounded-lg bg-gray-300 text-gray-800 hover:bg-gray-400 dark:bg-gray-600 dark:text-gray-200 dark:hover:bg-gray-500">
                                 Batal
                             </button>
                             <button type="submit"
-                                class="rounded bg-blue-600 px-4 py-2 text-white hover:bg-blue-700
-                        dark:bg-blue-500 dark:hover:bg-blue-600">
-                                Tambah
+                                class="px-4 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600">
+                                Simpan
                             </button>
                         </div>
                     </form>
@@ -179,24 +172,23 @@
 
             <!-- Modal Konfirmasi Hapus -->
             <div id="deleteModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black bg-opacity-50">
-                <div class="w-full max-w-md rounded-lg bg-white p-6 shadow-lg dark:bg-gray-800 dark:text-gray-200">
-                    <h2 class="mb-4 text-lg font-semibold text-gray-800 dark:text-gray-100">Konfirmasi Hapus</h2>
+                <div
+                    class="w-full max-w-md rounded-xl bg-white dark:bg-gray-800 p-6 shadow-lg transform transition-all duration-300">
+                    <h2 class="mb-4 text-lg font-semibold text-gray-900 dark:text-gray-100">Konfirmasi Hapus</h2>
                     <p class="mb-6 text-gray-700 dark:text-gray-300">
-                        Yakin ingin menghapus kategori
-                        <span id="categoryName" class="font-bold"></span>?
+                        Yakin ingin menghapus kategori <span id="categoryName"
+                            class="font-bold text-red-600 dark:text-red-400"></span>?
                     </p>
                     <form id="deleteForm" method="POST">
                         @csrf
                         @method('DELETE')
                         <div class="flex justify-end gap-2">
                             <button type="button" onclick="closeDeleteModal()"
-                                class="rounded bg-gray-300 px-4 py-2 text-gray-800 hover:bg-gray-400
-                        dark:bg-gray-600 dark:text-gray-200 dark:hover:bg-gray-500">
+                                class="px-4 py-2 rounded-lg bg-gray-300 text-gray-800 hover:bg-gray-400 dark:bg-gray-600 dark:text-gray-200 dark:hover:bg-gray-500">
                                 Batal
                             </button>
                             <button type="submit"
-                                class="rounded bg-red-600 px-4 py-2 text-white hover:bg-red-700
-                        dark:bg-red-500 dark:hover:bg-red-600">
+                                class="px-4 py-2 rounded-lg bg-red-600 text-white hover:bg-red-700 dark:bg-red-500 dark:hover:bg-red-600">
                                 Hapus
                             </button>
                         </div>
@@ -204,6 +196,7 @@
                 </div>
             </div>
         </div>
+
 
         <!-- Pagination -->
         <div class="mt-4 flex justify-end">

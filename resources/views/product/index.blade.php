@@ -31,7 +31,7 @@
                         <div class="flex flex-wrap items-center justify-between mb-4 gap-3">
                             <!-- Tombol Tambah Produk -->
                             <button type="button" onclick="openModal()"
-                                class="inline-flex items-center gap-2 rounded bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-blue-700">
+                                class="inline-flex items-center gap-2 rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-blue-700">
                                 <i class="fas fa-plus-circle"></i>
                                 Tambah Produk
                             </button>
@@ -61,10 +61,10 @@
                             @method('DELETE')
                             <input type="hidden" name="ids" id="bulkDeleteIds" />
                             <button id="deleteAllBtn" type="submit"
-                                class="inline-flex w-full sm:w-auto hidden items-center gap-2 rounded bg-red-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-red-700 disabled:opacity-50"
+                                class="inline-flex w-full sm:w-auto hidden items-center gap-2 rounded-lg bg-red-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-red-700 disabled:opacity-50"
                                 disabled>
                                 <i class="fas fa-trash-alt"></i>
-                                Pilih Menghapus
+                                Hapus
                             </button>
                         </form>
                     </div>
@@ -74,7 +74,7 @@
                     <div class="flex flex-col gap-2 sm:flex-row sm:items-center">
                         <div x-data="{ open: false }" class="relative w-full sm:w-auto">
                             <button @click="open = !open"
-                                class="inline-flex w-full sm:w-auto items-center gap-2 rounded bg-teal-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-teal-700">
+                                class="inline-flex w-full sm:w-auto items-center gap-2 rounded-lg bg-teal-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-teal-700">
                                 <i class="fas fa-download"></i>
                                 Unduh Data
                                 <svg class="ml-1 h-4 w-4" fill="currentColor" viewBox="0 0 20 20">
@@ -116,7 +116,7 @@
                             Filter Kategori
                         </label>
                         <select name="category" id="filtername"
-                            class="w-full sm:w-72 rounded-md border border-gray-300 px-3 py-2 text-sm dark:bg-gray-800 dark:text-gray-100 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                            class="w-full sm:w-72 rounded-lg border border-gray-300 px-3 py-2 text-sm dark:bg-gray-800 dark:text-gray-100 shadow-sm focus:border-blue-500 focus:ring-blue-500">
                             <option value="">Pilih Kategori</option>
                             @foreach ($datacategory as $category)
                                 <option value="{{ $category->name }}"
@@ -135,18 +135,18 @@
                         </label>
                         <input type="text" name="search" id="search" placeholder="Nama produk..."
                             value="{{ request('search') }}"
-                            class="w-full sm:w-72 rounded-md border border-gray-300 px-3 py-2 text-sm dark:bg-gray-800 dark:text-gray-100 shadow-sm focus:border-blue-500 focus:ring-blue-500" />
+                            class="w-full sm:w-72 rounded-lg border border-gray-300 px-3 py-2 text-sm dark:bg-gray-800 dark:text-gray-100 shadow-sm focus:border-blue-500 focus:ring-blue-500" />
                     </div>
 
                     <!-- Tombol Filter & Reset -->
                     <div class="flex w-full sm:w-auto gap-2 sm:mt-0">
                         <button type="submit"
-                            class="flex-1 sm:flex-none inline-flex items-center justify-center rounded-md bg-blue-600 px-4 py-2 text-sm text-white shadow-sm hover:bg-blue-700">
+                            class="flex-1 sm:flex-none inline-flex items-center justify-center rounded-lg bg-blue-600 px-4 py-2 text-sm text-white shadow-sm hover:bg-blue-700">
                             <i class="fas fa-search mr-2"></i>
                             Filter
                         </button>
                         <a href="{{ route('product.index') }}"
-                            class="flex-1 sm:flex-none inline-flex items-center justify-center rounded-md bg-gray-300 px-4 py-2 text-sm text-gray-800 shadow-sm hover:bg-gray-400">
+                            class="flex-1 sm:flex-none inline-flex items-center justify-center rounded-lg bg-gray-300 px-4 py-2 text-sm text-gray-800 shadow-sm hover:bg-gray-400">
                             <i class="fas fa-redo-alt mr-2"></i>
                             Reset
                         </a>
@@ -160,26 +160,26 @@
                     <table
                         class="min-w-full divide-y divide-gray-200 dark:divide-gray-700 bg-white dark:bg-gray-800 text-sm text-gray-700 dark:text-gray-200">
                         <thead
-                            class="bg-gray-50 dark:bg-gray-700 text-left text-xs font-semibold uppercase tracking-wider text-gray-600 dark:text-gray-300">
+                            class="bg-gray-50 dark:bg-gray-700 text-left uppercase tracking-wider text-gray-600 dark:text-gray-300">
                             <tr>
                                 <th class="px-4 py-3 text-center">
-                                    <input type="checkbox" id="selectAll" class="form-checkbox text-blue-600" />
+                                    <input type="checkbox" id="selectAll" class="form-checkbox text-blue-600 rounded-lg" />
                                 </th>
-                                <th class="px-4 py-3">Nama</th>
-                                <th class="px-4 py-3">Kode</th>
-                                <th class="px-4 py-3">Gambar</th>
-                                <th class="px-4 py-3">Kategori</th>
-                                <th class="px-4 py-3">Harga</th>
-                                <th class="px-4 py-3">Stok</th>
+                                <th class="px-4 py-3 font-medium">Nama</th>
+                                <th class="px-4 py-3 font-medium">Kode</th>
+                                <th class="px-4 py-3 font-medium">Gambar</th>
+                                <th class="px-4 py-3 font-medium">Kategori</th>
+                                <th class="px-4 py-3 font-medium">Harga</th>
+                                <th class="px-4 py-3 font-medium">Stok</th>
 
-                                <th class="px-4 py-3">Aksi</th>
+                                <th class="px-4 py-3 font-medium">Aksi</th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-gray-100 dark:divide-gray-700">
                             @forelse ($products as $product)
                                 <tr class="dark:bg-gray-900 dark:text-gray-100">
                                     <td class="px-4 py-3 text-center">
-                                        <input type="checkbox" class="form-checkbox select-item text-blue-600"
+                                        <input type="checkbox" class="form-checkbox select-item text-blue-600 rounded-lg"
                                             value="{{ $product->id }}" name="ids[]" />
                                     </td>
 
@@ -271,23 +271,27 @@
                 <!-- Modal Konfirmasi Hapus -->
                 <div id="deleteModal"
                     class="fixed inset-0 z-50 hidden items-center justify-center bg-black bg-opacity-50">
-                    <div class="w-full max-w-md rounded-lg bg-white p-6 shadow-lg">
-                        <h2 class="text-lg font-semibold text-gray-800">Konfirmasi Hapus</h2>
-                        <p class="mt-2 text-sm text-gray-600">
+
+                    <div
+                        class="w-full max-w-md rounded-xl bg-white dark:bg-gray-800 p-6 shadow-lg transform transition-all duration-300">
+                        <h2 class="text-lg font-semibold text-gray-900 dark:text-gray-100">Konfirmasi Hapus</h2>
+                        <p class="mt-2 text-sm text-gray-700 dark:text-gray-300">
                             Apakah kamu yakin ingin menghapus
-                            <span id="itemName" class="font-semibold text-red-600"></span>
+                            <span id="itemName" class="font-semibold text-red-600 dark:text-red-400"></span>
                             ?
                         </p>
+
                         <form id="deleteForm" method="POST" class="mt-6">
                             @csrf
                             @method('DELETE')
                             <div class="flex justify-end gap-3">
                                 <button type="button" onclick="closeDeleteModal()"
-                                    class="rounded bg-gray-200 px-4 py-2 text-sm hover:bg-gray-300">
+                                    class="px-4 py-2 rounded-lg bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200
+                               hover:bg-gray-300 dark:hover:bg-gray-600 transition">
                                     Batal
                                 </button>
                                 <button type="submit"
-                                    class="rounded bg-red-600 px-4 py-2 text-sm text-white hover:bg-red-700">
+                                    class="px-4 py-2 rounded-lg bg-red-600 text-white hover:bg-red-700 transition">
                                     Hapus
                                 </button>
                             </div>
@@ -295,32 +299,6 @@
                     </div>
                 </div>
 
-                <div x-data="{ modalId: null }" x-init="window.addEventListener('open-modal', (e) => {
-                    modalId = e.detail
-                })">
-                    @foreach ($products as $product)
-                        <div x-show="modalId === {{ $product->id }}" x-cloak
-                            class="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-                            <div class="mx-4 w-full max-w-2xl overflow-hidden rounded-xl bg-white shadow-xl"
-                                @click.outside="modalId = null" @keydown.escape.window="modalId = null">
-                                <!-- Modal Header -->
-                                <div class="flex items-center justify-between border-b border-gray-200 px-6 py-4">
-                                    <h2 class="text-xl font-bold text-gray-800">
-                                        Masukkin Produk - {{ $product->name }}
-                                    </h2>
-
-                                    <button @click="modalId = null"
-                                        class="text-gray-500 transition duration-200 hover:text-red-600">
-                                        <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                d="M6 18L18 6M6 6l12 12" />
-                                        </svg>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    @endforeach
-                </div>
 
                 <!-- Modal Overlay -->
                 <div id="addProductModal"

@@ -1,7 +1,7 @@
 @extends('layouts.master')
 
 @section('title')
-    <title>KASIRIN.ID - Penjualan</title>
+    <title>KASIRIN.ID - Toko</title>
 @endsection
 
 @section('content')
@@ -50,16 +50,8 @@
                             Rp {{ number_format($product?->price ?? 0, 0, ',', '.') }}
                         </p>
 
-                        <!-- Qty + Pesan -->
+                        <!-- Pesan -->
                         <div class="flex items-center gap-2">
-                            <button @click="if (qty > 1) qty--"
-                                class="flex h-8 w-8 items-center justify-center rounded-full bg-red-500 font-bold text-white hover:bg-red-600">-</button>
-                            <input type="number" x-model="qty"
-                                class="qty-input w-14 rounded-md border border-gray-300 text-center text-sm dark:bg-gray-800 dark:border-gray-600 dark:text-white"
-                                min="1" />
-                            <button @click="if (qty < {{ $sale->qty }}) qty++"
-                                class="flex h-8 w-8 items-center justify-center rounded-full bg-green-500 font-bold text-white hover:bg-green-600">+</button>
-
                             <button
                                 @click="$dispatch('add-wishlist', {
                                     salesId: '{{ $sale->id }}',
@@ -67,10 +59,11 @@
                                     price: {{ $product->price ?? 0 }},
                                     qty: qty
                                 })"
-                                class="ml-auto rounded bg-yellow-500 px-4 py-2 text-sm text-white hover:bg-yellow-600 disabled:opacity-50"
+                                class="w-full rounded-lg bg-yellow-500 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:ring-offset-1 disabled:opacity-50 disabled:cursor-not-allowed transition"
                                 :disabled="{{ $product && $sale->qty > 0 ? 'false' : 'true' }}">
                                 {{ $product && $sale->qty > 0 ? 'Pesan' : 'Tidak Tersedia' }}
                             </button>
+
                         </div>
                     </div>
                 </div>
@@ -93,31 +86,67 @@
 
         <!-- Modal Wishlist -->
         <div x-show="openCart" @click.outside="openCart = false"
-            class="fixed bottom-20 right-4 z-50 w-80 rounded-lg border bg-white p-4 shadow-xl dark:bg-gray-800 dark:border-gray-700">
-            <h2 class="mb-2 text-lg font-bold text-gray-800 dark:text-white">Pesanan Anda</h2>
-            <ul class="max-h-60 space-y-2 overflow-y-auto">
-                <template x-for="(item, index) in wishlist" :key="index">
-                    <li class="border-b pb-2 dark:border-gray-600">
-                        <div class="flex justify-between">
-                            <span x-text="item.name" class="dark:text-gray-200"></span>
+            class="fixed bottom-20 right-4 z-50 w-80 max-w-full rounded-lg border bg-white p-4 shadow-xl dark:bg-gray-800 dark:border-gray-700">
+
+            <h2 class="mb-4 text-lg font-semibold text-gray-800 dark:text-white">Pesanan Anda</h2>
+
+            <ul class="max-h-60 space-y-3 overflow-y-auto scroll-hidden">
+                <template x-for="(item, index) in wishlist" :key="item.sales_id">
+                    <li class="flex flex-col border-b pb-3 dark:border-gray-600">
+                        <!-- Nama & Hapus -->
+                        <div class="flex justify-between items-center mb-1">
+                            <span x-text="item.name" class="font-medium text-gray-800 dark:text-gray-200"></span>
                             <button @click="removeFromWishlist(index)"
                                 class="text-xs text-red-500 hover:underline">Hapus</button>
                         </div>
-                        <div class="text-sm text-gray-600 dark:text-gray-400">
-                            Qty: <span x-text="item.qty"></span> × Rp <span
-                                x-text="item.price.toLocaleString('id-ID')"></span>
+
+                        <!-- Qty & Harga -->
+                        <div class="flex items-center justify-between gap-2">
+                            <div class="flex items-center gap-2">
+                                <!-- Button minus -->
+                                <button @click="if(item.qty > 1) item.qty--"
+                                    class="flex h-8 w-8 items-center justify-center rounded-full text-gray-700 dark:text-gray-200 hover:text-red-500 transition">
+                                    <i class="fas fa-minus"></i>
+                                </button>
+
+                                <!-- Input qty -->
+                                <input type="number" x-model.number="item.qty" min="1"
+                                    class="w-16 rounded-md border border-gray-300 text-center text-sm
+                                    dark:bg-gray-700 dark:border-gray-600 dark:text-white
+                                    focus:ring-2 focus:ring-blue-500 focus:outline-none" />
+
+                                <!-- Button plus -->
+                                <button @click="item.qty++"
+                                    class="flex h-8 w-8 items-center justify-center rounded-full text-gray-700 dark:text-gray-200 hover:text-green-500 transition">
+                                    <i class="fas fa-plus"></i>
+                                </button>
+                            </div>
+
+                            <!-- Harga subtotal -->
+                            <div class="font-medium text-gray-800 dark:text-gray-200">
+                                Rp <span x-text="(item.price * item.qty).toLocaleString('id-ID')"></span>
+                            </div>
                         </div>
                     </li>
                 </template>
             </ul>
-            <div class="mt-3 text-right font-semibold text-gray-800 dark:text-white">
-                Total: <span x-text="totalFormatted"></span>
+
+            <!-- Total -->
+            <div class="mt-4 flex justify-between items-center font-semibold text-gray-800 dark:text-white">
+                <span>Total:</span>
+                <span x-text="totalFormatted"></span>
             </div>
-            <div class="mt-4 text-right">
+
+            <!-- Checkout Button -->
+            <div class="mt-4">
                 <button x-show="wishlist.length > 0" @click="checkout()"
-                    class="w-full rounded bg-teal-600 px-4 py-2 text-white hover:bg-teal-700">Checkout</button>
+                    class="w-full rounded bg-teal-600 px-4 py-2 text-white hover:bg-teal-700 dark:bg-teal-500 dark:hover:bg-teal-600 transition">
+                    Checkout
+                </button>
             </div>
         </div>
+
+
     </section>
 @endsection
 
@@ -126,7 +155,6 @@
         function wishlistHandler() {
             return {
                 wishlist: [],
-                totalPrice: 0,
                 openCart: false,
 
                 init() {
@@ -150,18 +178,16 @@
                             price: product.price
                         });
                     }
-
-                    this.updateTotalPrice();
                 },
 
                 removeFromWishlist(index) {
                     this.wishlist.splice(index, 1);
-                    this.updateTotalPrice();
+                    if (this.wishlist.length === 0) this.openCart = false;
                 },
 
-                updateTotalPrice() {
-                    this.totalPrice = this.wishlist.reduce((sum, item) => sum + (item.price * item.qty), 0);
-                    if (this.wishlist.length === 0) this.openCart = false;
+                // Getter reactive total
+                get totalPrice() {
+                    return this.wishlist.reduce((sum, item) => sum + (item.price * item.qty), 0);
                 },
 
                 get totalFormatted() {
@@ -191,7 +217,7 @@
                             alert("Terjadi kesalahan saat menyimpan wishlist.");
                         });
                 }
-            };
+            }
         }
     </script>
 @endpush

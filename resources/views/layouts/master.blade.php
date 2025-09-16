@@ -91,6 +91,19 @@
             display: none;
             /* Chrome, Safari, Opera */
         }
+
+        /* Untuk semua browser modern */
+        .scroll-hidden::-webkit-scrollbar {
+            display: none;
+            /* Chrome, Safari, Opera */
+        }
+
+        .scroll-hidden {
+            -ms-overflow-style: none;
+            /* IE 10+ */
+            scrollbar-width: none;
+            /* Firefox */
+        }
     </style>
 
 </head>
@@ -98,29 +111,32 @@
 <body x-data class="bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-200 min-h-screen"
     style="font-family: 'Poppins', sans-serif;">
     <nav id="navbar"
-        class="fixed top-0 z-50 h-16 flex items-center justify-between bg-white dark:bg-gray-900  px-4 shadow-md transition-all duration-300"
+        class="fixed top-0 z-50 h-16 flex items-center justify-between bg-white dark:bg-gray-900 px-6 shadow-md transition-all duration-300"
         style="left: 15rem; right: 0;">
-        <button id="sidebar-toggle" class="p-2 text-gray-700 dark:text-gray-300 focus:outline-none">
+
+        <!-- Sidebar Toggle -->
+        <button id="sidebar-toggle"
+            class="p-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-md transition-colors duration-200 focus:outline-none">
             <i id="sidebar-icon" class="fas fa-bars-staggered text-lg transition-all duration-300"></i>
         </button>
 
-
+        <!-- Right Section -->
         <div class="flex items-center space-x-4 ml-auto">
 
-            {{-- Notifikasi untuk Superadmin & Admin Gudang --}}
+            {{-- Notifikasi --}}
             @if (Auth::user()->role === 'superadmin' || Auth::user()->role === 'admin_gudang')
                 <div class="relative">
-                    {{-- Tombol Bell --}}
-                    <button id="notifBtn" class="relative p-2 text-gray-800 focus:outline-none dark:text-white">
+                    <!-- Tombol Bell -->
+                    <button id="notifBtn"
+                        class="relative p-2 rounded-full text-gray-800 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors duration-200 focus:outline-none">
                         <i class="fas fa-bell text-lg"></i>
                         @php
+                            $notifCount = 0;
                             if (Auth::user()->role === 'superadmin') {
-                                // Notif untuk superadmin = permintaan menunggu
                                 $notifCount = \App\Models\ProductIn::where('status', 'menunggu')
                                     ->where('is_read', false)
                                     ->count();
                             } else {
-                                // Notif untuk admin gudang = feedback permintaan
                                 $notifCount = \App\Models\ProductIn::where('requester_name', Auth::user()->name)
                                     ->whereIn('status', ['disetujui', 'ditolak'])
                                     ->where('is_read', false)
@@ -128,159 +144,112 @@
                             }
                         @endphp
 
-                        {{-- Badge --}}
                         @if ($notifCount > 0)
                             <span
-                                class="absolute -right-1 -top-1 h-4 w-4 flex items-center justify-center rounded-full bg-red-500 text-xs text-white">
+                                class="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-xs font-semibold text-white">
                                 {{ $notifCount }}
                             </span>
                         @endif
                     </button>
 
-                    {{-- Dropdown --}}
+                    <!-- Dropdown Notifikasi -->
                     <div id="notificationMenu"
-                        class="absolute right-0 mt-2 hidden w-72 rounded-xl border border-gray-200
-           dark:border-gray-700 bg-white dark:bg-gray-900 shadow-xl z-[60] overflow-hidden">
+                        class="absolute right-0 mt-2 hidden w-80 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 shadow-xl z-[60] overflow-hidden">
 
                         <div class="py-2 text-sm max-h-72 overflow-y-auto">
-
-                            {{-- Superadmin --}}
-                            @if (Auth::user()->role === 'superadmin')
-                                @php
+                            @php
+                                if (Auth::user()->role === 'superadmin') {
                                     $notifs = \App\Models\ProductIn::where('status', 'menunggu')
                                         ->latest()
                                         ->take(3)
                                         ->get();
-                                @endphp
-
-                                @forelse ($notifs as $notif)
-                                    <a href="{{ route('product.confirmation', $notif->id) }}"
-                                        class="block border-b border-gray-100 dark:border-gray-800 px-4 py-3
-                           hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors duration-200">
-                                        <p class="text-gray-800 dark:text-gray-100">
-                                            Permintaan: <strong>{{ $notif->requester_name }}</strong>
-                                        </p>
-                                        <p class="text-gray-600 dark:text-gray-300">
-                                            Produk: <strong>{{ $notif->product->name ?? '-' }}</strong>
-                                        </p>
-                                        <small class="text-gray-400 dark:text-gray-500">
-                                            {{ $notif->created_at->diffForHumans() }}
-                                        </small>
-                                    </a>
-                                @empty
-                                    <p class="px-4 py-3 text-gray-500 dark:text-gray-400">Tidak ada notifikasi.</p>
-                                @endforelse
-
-                                @if ($notifCount > 3)
-                                    <a href="{{ route('notifications.superadmin') }}"
-                                        class="block text-center text-blue-600 dark:text-blue-400 font-semibold py-2 hover:underline">
-                                        Lihat semua notifikasi
-                                    </a>
-                                @endif
-
-                                {{-- Admin Gudang --}}
-                            @elseif (Auth::user()->role === 'admin_gudang')
-                                @php
-                                    $notifCount = \App\Models\ProductIn::where('requester_name', Auth::user()->name)
-                                        ->whereIn('status', ['disetujui', 'ditolak'])
-                                        ->where('is_read', false)
-                                        ->count();
-
+                                } else {
                                     $notifs = \App\Models\ProductIn::where('requester_name', Auth::user()->name)
                                         ->whereIn('status', ['disetujui', 'ditolak'])
                                         ->latest()
                                         ->take(3)
                                         ->get();
-                                @endphp
+                                }
+                            @endphp
 
-                                @forelse ($notifs as $notif)
-                                    <a href="{{ route('notifications.admin_gudang.show', $notif->id) }}"
-                                        class="block border-b border-gray-100 dark:border-gray-800 px-4 py-3
-                           hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors duration-200
-                           {{ $notif->is_read ? 'bg-gray-50 dark:bg-gray-800 text-gray-600 dark:text-gray-400' : 'bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100' }}">
-                                        <p>
-                                            Feedback permintaan <strong>{{ $notif->product->name ?? '-' }}</strong>
+                            @forelse ($notifs as $notif)
+                                @if (Auth::user()->role === 'superadmin')
+                                    <a href="{{ route('product.confirmation', $notif->id) }}"
+                                        class="block border-b border-gray-100 dark:border-gray-800 px-4 py-3 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors duration-200">
+                                        <p class="text-gray-800 dark:text-gray-100 font-medium">
+                                            Permintaan: <strong>{{ $notif->requester_name }}</strong>
                                         </p>
-                                        <p>
-                                            Status:
-                                            @if ($notif->status === 'disetujui')
-                                                <span
-                                                    class="text-green-600 dark:text-green-400 font-semibold">Disetujui</span>
-                                            @else
-                                                <span
-                                                    class="text-red-600 dark:text-red-400 font-semibold">Ditolak</span>
-                                            @endif
+                                        <p class="text-gray-600 dark:text-gray-300">
+                                            Produk: <strong>{{ $notif->product->name ?? '-' }}</strong>
                                         </p>
-                                        <small class="text-gray-400 dark:text-gray-500">
-                                            {{ $notif->updated_at->diffForHumans() }}
-                                        </small>
+                                        <small
+                                            class="text-gray-400 dark:text-gray-500">{{ $notif->created_at->diffForHumans() }}</small>
                                     </a>
-                                @empty
-                                    <p class="px-4 py-3 text-gray-500 dark:text-gray-400">Tidak ada notifikasi.</p>
-                                @endforelse
+                                @else
+                                    <a href="{{ route('notifications.admin_gudang.show', $notif->id) }}"
+                                        class="block border-b border-gray-100 dark:border-gray-800 px-4 py-3 transition-colors duration-200
+                                        {{ $notif->is_read ? 'bg-gray-50 dark:bg-gray-800 text-gray-600 dark:text-gray-400' : 'bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100' }}
+                                        hover:bg-gray-50 dark:hover:bg-gray-800">
+                                        <p class="font-medium">Feedback:
+                                            <strong>{{ $notif->product->name ?? '-' }}</strong>
+                                        </p>
+                                        <p>Status:
+                                            <span
+                                                class="{{ $notif->status === 'disetujui' ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400' }} font-semibold">
+                                                {{ ucfirst($notif->status) }}
+                                            </span>
+                                        </p>
+                                        <small
+                                            class="text-gray-400 dark:text-gray-500">{{ $notif->updated_at->diffForHumans() }}</small>
+                                    </a>
+                                @endif
+                            @empty
+                                <p class="px-4 py-3 text-gray-500 dark:text-gray-400">Tidak ada notifikasi.</p>
+                            @endforelse
 
-                                <a href="{{ route('notifications.admin_gudang') }}"
-                                    class="block text-center text-blue-600 dark:text-blue-400 font-semibold py-2 hover:underline">
+                            @if ($notifCount > 3)
+                                <a href="{{ Auth::user()->role === 'superadmin' ? route('notifications.superadmin') : route('notifications.admin_gudang') }}"
+                                    class="block text-center text-blue-600 dark:text-blue-400 font-semibold py-2 hover:underline transition-colors duration-200">
                                     Lihat semua notifikasi
                                 </a>
-
                             @endif
-
                         </div>
                     </div>
-
                 </div>
             @endif
 
-
-
-
-
             {{-- User Menu --}}
             <div class="relative inline-block text-left">
-                <!-- Button User -->
                 <button id="userMenuButton"
-                    class="flex items-center text-sm focus:outline-none px-3 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700">
+                    class="flex items-center text-sm focus:outline-none px-3 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors duration-200">
                     <i class="fas fa-user-circle text-2xl text-gray-600 dark:text-gray-300"></i>
                     <span class="ml-2 text-gray-800 dark:text-gray-200">{{ Auth::user()->name }}</span>
                     <i class="fas fa-chevron-down ml-2 text-gray-500 dark:text-gray-400 text-xs"></i>
                 </button>
 
-                <!-- Dropdown User -->
                 <div id="userMenu"
-                    class="absolute right-0 mt-2 hidden w-52 rounded-lg border border-gray-200 dark:border-gray-700
-               bg-white dark:bg-gray-800 shadow-lg z-50 overflow-hidden">
-
-                    <!-- Edit Profile -->
+                    class="absolute right-0 mt-2 hidden w-52 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 shadow-lg z-50 overflow-hidden">
                     <a href="{{ route('profile.edit') }}"
-                        class="flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-200
-                   hover:bg-gray-100 dark:hover:bg-gray-700">
+                        class="flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors duration-200">
                         <i class="fas fa-cog mr-2 text-gray-500 dark:text-gray-400"></i>
                         Pengaturan Profil
                     </a>
-
-                    <!-- Log Aktivitas -->
                     <a href="{{ route('activity.log') }}"
-                        class="flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-200
-                   hover:bg-gray-100 dark:hover:bg-gray-700">
+                        class="flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors duration-200">
                         <i class="fas fa-history mr-2 text-gray-500 dark:text-gray-400"></i>
                         Log Aktivitas
                     </a>
-
-                    <!-- Logout -->
                     <a href="#" @click.prevent="$dispatch('open-logout-modal')"
-                        class="flex items-center px-4 py-2 text-sm text-red-600 dark:text-red-400
-                   hover:bg-gray-100 dark:hover:bg-gray-700">
+                        class="flex items-center px-4 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors duration-200">
                         <i class="fas fa-power-off mr-2"></i>
                         Keluar
                     </a>
                 </div>
             </div>
 
-
-
         </div>
     </nav>
+
 
 
     @include('layouts.module.sidebar')
@@ -289,23 +258,29 @@
     <div x-data="{ show: false }" @open-logout-modal.window="show = true" x-show="show" x-transition x-cloak
         class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
 
-        <div @click.away="show = false" class="w-full max-w-md rounded-lg bg-white p-6 shadow-lg">
-            <h2 class="mb-4 text-lg font-semibold text-gray-800 ">Konfirmasi Logout</h2>
-            <p class="mb-6 text-gray-600 dark:text-gray-400">Apakah Anda yakin ingin keluar dari akun?</p>
+        <div @click.away="show = false"
+            class="w-full max-w-md rounded-xl bg-white dark:bg-gray-800 p-6 shadow-lg transform transition-all duration-300">
+
+            <h2 class="mb-3 text-xl font-semibold text-gray-900 dark:text-gray-100">Konfirmasi Logout</h2>
+            <p class="mb-6 text-gray-700 dark:text-gray-300">Apakah Anda yakin ingin keluar dari akun?</p>
+
             <div class="flex justify-end space-x-4">
                 <button @click="show = false"
-                    class="rounded bg-gray-200 px-4 py-2 text-sm text-gray-700 hover:bg-gray-300 ">
+                    class="px-4 py-2 rounded-lg bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200
+                           hover:bg-gray-300 dark:hover:bg-gray-600 transition">
                     Batal
                 </button>
                 <form method="POST" action="{{ route('logout') }}">
                     @csrf
-                    <button type="submit" class="rounded bg-red-600 px-4 py-2 text-sm text-white hover:bg-red-700">
+                    <button type="submit"
+                        class="px-4 py-2 rounded-lg bg-red-600 text-white hover:bg-red-700 transition">
                         Ya, Keluar
                     </button>
                 </form>
             </div>
         </div>
     </div>
+
 
     {{-- MAIN CONTENT --}}
     <main id="mainContent"

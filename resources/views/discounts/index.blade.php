@@ -25,7 +25,7 @@
             <!-- Tombol Tambah -->
             <div x-data="{ open: false }" class="w-full md:w-auto">
                 <button @click="open = true"
-                    class="flex w-full items-center justify-center gap-2 rounded bg-blue-600 px-4 py-2 text-white hover:bg-blue-700 md:w-auto">
+                    class="flex w-full items-center justify-center gap-2 rounded-lg bg-blue-600 px-4 py-2 text-white hover:bg-blue-700 md:w-auto">
                     <i class="fas fa-plus-circle"></i>
                     Tambah Diskon
                 </button>
@@ -59,9 +59,9 @@
                                 </div>
                                 <div class="mt-6 flex justify-end gap-2">
                                     <button type="button" @click="open = false"
-                                        class="rounded bg-gray-200 px-4 py-2 hover:bg-gray-300 dark:bg-gray-600 dark:hover:bg-gray-500 dark:text-gray-200">Batal</button>
+                                        class="rounded-lg bg-gray-200 px-4 py-2 hover:bg-gray-300 dark:bg-gray-600 dark:hover:bg-gray-500 dark:text-gray-200">Batal</button>
                                     <button type="submit"
-                                        class="rounded bg-green-600 px-4 py-2 text-white hover:bg-green-700">
+                                        class="rounded-lg bg-green-600 px-4 py-2 text-white hover:bg-green-700">
                                         <i class="fas fa-save mr-1"></i> Simpan
                                     </button>
                                 </div>
@@ -76,16 +76,16 @@
                 <form action="{{ route('discounts.index') }}" method="GET"
                     class="flex flex-col gap-2 sm:flex-row sm:items-center">
                     <input type="search" name="search" value="{{ request('search') }}" placeholder="Cari diskon..."
-                        class="w-full rounded-md border border-gray-300 px-3 py-2 text-sm text-gray-700 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:w-72 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200" />
+                        class="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm text-gray-700 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:w-72 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200" />
 
                     <div class="flex gap-2">
                         <button type="submit"
-                            class="flex flex-1 items-center justify-center rounded-md bg-blue-600 px-4 py-2 text-sm text-white shadow-sm hover:bg-blue-700 sm:flex-none">
+                            class="flex flex-1 items-center justify-center rounded-lg bg-blue-600 px-4 py-2 text-sm text-white shadow-sm hover:bg-blue-700 sm:flex-none">
                             <i class="fas fa-search mr-2"></i>
                             Cari
                         </button>
                         <a href="{{ route('discounts.index') }}"
-                            class="flex flex-1 items-center justify-center rounded-md bg-gray-300 px-4 py-2 text-sm text-gray-800 shadow-sm hover:bg-gray-400 sm:flex-none dark:bg-gray-600 dark:text-gray-200 dark:hover:bg-gray-500">
+                            class="flex flex-1 items-center justify-center rounded-lg bg-gray-300 px-4 py-2 text-sm text-gray-800 shadow-sm hover:bg-gray-400 sm:flex-none dark:bg-gray-600 dark:text-gray-200 dark:hover:bg-gray-500">
                             <i class="fas fa-redo-alt mr-2"></i>
                             Reset
                         </a>
@@ -99,11 +99,11 @@
             <table
                 class="min-w-full divide-y divide-gray-200 bg-white text-sm text-gray-700 dark:divide-gray-700 dark:bg-gray-800 dark:text-gray-200">
                 <thead
-                    class="bg-gray-50 text-left text-xs font-semibold uppercase tracking-wider text-gray-600 dark:bg-gray-700 dark:text-gray-300">
+                    class="bg-gray-50 text-left uppercase tracking-wider text-gray-600 dark:bg-gray-700 dark:text-gray-300">
                     <tr>
-                        <th class="px-4 py-2">Nama Diskon</th>
-                        <th class="px-4 py-2">Nilai (%)</th>
-                        <th class="w-40 px-4 py-2 text-center">Aksi</th>
+                        <th class="px-4 py-2 font-medium">Nama Diskon</th>
+                        <th class="px-4 py-2 font-medium">Nilai (%)</th>
+                        <th class="w-40 px-4 py-2 text-center font-medium">Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
