@@ -81,7 +81,7 @@
         </div>
     </div>
 
-    <!-- JS untuk Show Per Page -->
+    
     <script>
         document.getElementById('showPerPage').addEventListener('change', function() {
             const perPage = this.value;
