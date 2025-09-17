@@ -56,6 +56,29 @@
         rel="stylesheet" />
 
     <style>
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow-x: hidden;
+            /* cegah scrollbar horizontal */
+            overflow-y: auto;
+            /* biar scroll vertikal tetap bisa */
+            -ms-overflow-style: none;
+            /* Edge lama */
+            scrollbar-width: none;
+            /* Firefox */
+        }
+
+        /* Brave / Chrome / Edge */
+        html::-webkit-scrollbar,
+        body::-webkit-scrollbar {
+            display: none;
+        }
+
+
         [x-cloak] {
             display: none !important;
         }
@@ -324,7 +347,7 @@
         message = e.detail.message;
         type = e.detail.type || 'info';
         show = true;
-
+    
         clearTimeout(timeout);
         timeout = setTimeout(() => show = false, 4000);
     });"

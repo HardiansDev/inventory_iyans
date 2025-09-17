@@ -43,9 +43,9 @@
                             <div class="flex items-center gap-2">
                                 <select id="showPerPage" name="showPerPage"
                                     class="w-auto rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm font-medium text-gray-700 shadow-sm
-                   focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all duration-200
-                   hover:border-gray-400 dark:bg-gray-800 dark:text-gray-200 dark:border-gray-600 dark:hover:border-gray-500
-               dark:focus:border-blue-400 dark:focus:ring-blue-400">
+                                    focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all duration-200
+                                    hover:border-gray-400 dark:bg-gray-800 dark:text-gray-200 dark:border-gray-600 dark:hover:border-gray-500
+                                    dark:focus:border-blue-400 dark:focus:ring-blue-400">
                                     <option value="5" {{ $perPage == 5 ? 'selected' : '' }}>5</option>
                                     <option value="10" {{ $perPage == 10 ? 'selected' : '' }}>10</option>
                                     <option value="50" {{ $perPage == 50 ? 'selected' : '' }}>50</option>
@@ -171,7 +171,6 @@
                                 <th class="px-4 py-3 font-medium">Kategori</th>
                                 <th class="px-4 py-3 font-medium">Harga</th>
                                 <th class="px-4 py-3 font-medium">Stok</th>
-
                                 <th class="px-4 py-3 font-medium">Aksi</th>
                             </tr>
                         </thead>
@@ -205,7 +204,7 @@
                                     <td class="px-4 py-3">
                                         Rp {{ number_format($product->price, 0, ',', '.') }}
                                     </td>
-                                    <td class="px-4 py-3">{{ $product->stock }} cup</td>
+                                    <td class="px-4 py-3">{{ $product->stock }}</td>
                                     <td class="relative whitespace-nowrap px-4 py-3">
                                         <div x-data="{ open: false }" class="relative inline-block text-left">
                                             <!-- Dropdown Toggle -->

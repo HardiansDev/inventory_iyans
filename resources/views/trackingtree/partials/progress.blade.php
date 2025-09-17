@@ -13,7 +13,7 @@
                 </svg>
                 <a href="{{ route('trackingtree.index') }}"
                     class="ml-1 text-gray-600 hover:text-blue-600 dark:hover:text-blue-400 md:ml-2">
-                    Tracking Tree
+                    Tracking Produk
                 </a>
             </div>
         </li>
@@ -75,12 +75,20 @@
 <!-- Keterangan Status -->
 <div class="mt-6 rounded-lg border border-gray-200 dark:border-gray-700 p-6">
     @if ($status === 'menunggu')
-        <p class="text-yellow-600 dark:text-yellow-400">⏳ Produk masih menunggu persetujuan.</p>
+        <p class="text-yellow-600 dark:text-yellow-400">
+            <i class="fas fa-hourglass-half"></i> Produk masih menunggu persetujuan.
+        </p>
     @elseif ($status === 'disetujui')
-        <p class="text-green-600 dark:text-green-400">✅ Produk sudah disetujui dan bisa dijual.</p>
+        <p class="text-green-600 dark:text-green-400">
+            <i class="fas fa-check-circle"></i> Produk sudah disetujui dan bisa dijual.
+        </p>
     @elseif ($status === 'ditolak')
-        <p class="text-red-600 dark:text-red-400">❌ Produk ditolak. Silakan periksa kembali data produk.</p>
+        <p class="text-red-600 dark:text-red-400">
+            <i class="fas fa-times-circle"></i> Produk ditolak. Silakan periksa kembali data produk.
+        </p>
     @else
-        <p class="text-gray-600 dark:text-gray-300">🚧 Status produk belum diketahui.</p>
+        <p class="text-gray-600 dark:text-gray-300">
+            <i class="fas fa-question-circle"></i> Status produk belum diketahui.
+        </p>
     @endif
 </div>
