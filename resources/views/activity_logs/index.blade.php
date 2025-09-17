@@ -7,9 +7,9 @@
 @section('content')
     <div class="p-6">
         <div class="flex flex-wrap items-center justify-between mb-4 gap-3">
-            {{-- <h2 class="text-2xl font-bold dark:text-white">
+            <h2 class="text-2xl font-bold dark:text-white">
                 Log Aktivitas
-            </h2> --}}
+            </h2>
 
             <!-- Show Per Page Dropdown -->
             <div class="flex items-center gap-2">
