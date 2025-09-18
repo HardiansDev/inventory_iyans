@@ -65,6 +65,26 @@
                     @enderror
                 </div>
 
+                <!-- Satuan -->
+                <div>
+                    <label class="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300">
+                        Satuan
+                    </label>
+                    <select name="satuan_id"
+                        class="w-full rounded-lg border border-gray-300 px-3 py-2 text-gray-800
+               focus:border-blue-500 focus:ring focus:ring-blue-200
+               dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100"
+                        required>
+                        <option value="">Pilih Satuan</option>
+                        @foreach ($satuans as $satuan)
+                            <option value="{{ $satuan->id }}" {{ old('satuan_id') == $satuan->id ? 'selected' : '' }}>
+                                {{ $satuan->nama_satuan }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+
+
                 <!-- Stok & Harga -->
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>

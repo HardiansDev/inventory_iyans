@@ -61,7 +61,7 @@
                             </tr>
                             <tr class="border-b">
                                 <th class="py-2 text-left font-medium">Stok</th>
-                                <td class="py-2">: {{ $product->stock }}</td>
+                                <td class="py-2">: {{ $product->stock }} {{ $product->satuan->nama_satuan }} </td>
                             </tr>
 
 

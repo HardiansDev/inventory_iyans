@@ -9,7 +9,7 @@
     <section class="mb-6 rounded-lg bg-white p-6 shadow-sm dark:bg-gray-800 dark:text-gray-200">
         <div class="mx-auto flex max-w-7xl flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
             <div>
-                <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-100">Manajemen Supplier</h1>
+                <h1 class="text-3xl font-bold text-gray-800 dark:text-gray-100">Manajemen Supplier</h1>
                 <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
                     Kelola data supplier dalam sistem inventory Anda
                 </p>
@@ -55,49 +55,66 @@
         </div>
 
         <!-- Tabel Data -->
-        <div class="overflow-x-auto rounded-lg border border-gray-200 shadow dark:border-gray-700">
-            <table id="example1"
-                class="min-w-full divide-y divide-gray-200 bg-white text-sm text-gray-700 dark:bg-gray-800 dark:text-gray-200 dark:divide-gray-700">
-                <thead
-                    class="bg-gray-50 text-left font-semibold uppercase tracking-wider text-gray-600 dark:bg-gray-700 dark:text-gray-300">
+        <div class="overflow-x-auto rounded-lg shadow-md">
+            <table
+                class="min-w-full divide-y divide-gray-200 dark:divide-gray-700 text-sm text-gray-700 dark:text-gray-200">
+                <thead class="bg-gray-100 dark:bg-gray-700 uppercase font-medium">
                     <tr>
-                        <th class="px-4 py-2 font-medium">Supplier</th>
-                        <th class="px-4 py-2 font-medium">Produk</th>
-                        <th class="px-4 py-2 font-medium">Alamat</th>
-                        <th class="px-4 py-2 font-medium">No Telp</th>
-                        <th class="px-4 py-2 font-medium">Email</th>
-                        <th class="px-4 py-2 text-center font-medium">Aksi</th>
+                        <th class="px-4 py-3 text-left font-medium">Supplier</th>
+                        <th class="px-4 py-3 text-left font-medium">Produk</th>
+                        <th class="px-4 py-3 text-left font-medium">Alamat</th>
+                        <th class="px-4 py-3 text-left font-medium">No Telp</th>
+                        <th class="px-4 py-3 text-left font-medium">Email</th>
+                        <th class="px-4 py-3 text-center font-medium">Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
                     @forelse ($suppliers as $index => $item)
-                        <tr class="hover:bg-gray-50 dark:hover:bg-gray-700">
+                        <tr class="hover:bg-gray-50 dark:hover:bg-gray-600 transition">
                             <td class="px-4 py-2">{{ $item->name }}</td>
                             <td class="px-4 py-2">{{ $item->name_prod }}</td>
                             <td class="px-4 py-2">{{ $item->address }}</td>
                             <td class="px-4 py-2">{{ $item->telp }}</td>
                             <td class="px-4 py-2">{{ $item->email_sup }}</td>
                             <td class="px-4 py-2 text-center">
-                                <div class="flex justify-center gap-2">
-                                    <button type="button"
-                                        onclick="openEditModal(
-                                            {{ $item->id }},
-                                            '{{ addslashes($item->name) }}',
-                                            '{{ addslashes($item->name_prod) }}',
-                                            '{{ addslashes($item->address) }}',
-                                            '{{ $item->telp }}',
-                                            '{{ $item->email_sup }}'
-                                        )"
-                                        class="rounded-lg bg-yellow-400 px-3 py-1 text-sm text-white hover:bg-yellow-500 dark:bg-yellow-500 dark:hover:bg-yellow-600">
-                                        <i class="fas fa-edit"></i>
-                                        Edit
+                                <div x-data="{ open: false, confirmDelete: false }" class="relative inline-block text-left">
+                                    <!-- Dropdown Trigger -->
+                                    <button @click="open = !open"
+                                        class="p-2 rounded-md hover:bg-gray-200 dark:hover:bg-gray-700 transition focus:outline-none">
+                                        <svg class="w-5 h-5 text-gray-600 dark:text-gray-300" fill="currentColor"
+                                            viewBox="0 0 20 20">
+                                            <path
+                                                d="M10 3a1.5 1.5 0 110 3 1.5 1.5 0 010-3zm0 5a1.5 1.5 0 110 3 1.5 1.5 0 010-3zm0 5a1.5 1.5 0 110 3 1.5 1.5 0 010-3z" />
+                                        </svg>
                                     </button>
-                                    <button type="button"
-                                        onclick="openDeleteModal({{ $item->id }}, '{{ $item->name }}')"
-                                        class="rounded-lg bg-red-500 px-3 py-1 text-sm text-white hover:bg-red-600 dark:bg-red-600 dark:hover:bg-red-700">
-                                        <i class="fas fa-trash-alt"></i>
-                                        Hapus
-                                    </button>
+                                    <!-- Dropdown Menu -->
+                                    <div x-show="open" @click.away="open = false" x-transition
+                                        class="class"="absolute bottom-full right-0 mb-2 w-52 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none z-50">
+                                        <div class="py-1">
+                                            <!-- Edit -->
+                                            <button type="button"
+                                                onclick="openEditModal(
+                                                {{ $item->id }},
+                                                '{{ addslashes($item->name) }}',
+                                                '{{ addslashes($item->name_prod) }}',
+                                                '{{ addslashes($item->address) }}',
+                                                '{{ $item->telp }}',
+                                                '{{ $item->email_sup }}'
+                                            )"
+                                                class="w-full flex items-center px-3 py-2 text-sm text-yellow-500 dark:text-yellow-400 
+                                                hover:bg-yellow-50 dark:hover:bg-gray-700 transition">
+                                                <i class="fas fa-pencil-alt mr-2"></i> Edit
+                                            </button>
+
+                                            <!-- Hapus -->
+                                            <button type="button"
+                                                onclick="openDeleteModal({{ $item->id }}, '{{ addslashes($item->name) }}')"
+                                                class="w-full flex items-center px-3 py-2 text-sm text-red-600 dark:text-red-400 
+                                                hover:bg-red-50 dark:hover:bg-gray-700 transition">
+                                                <i class="fas fa-trash mr-2"></i> Hapus
+                                            </button>
+                                        </div>
+                                    </div>
                                 </div>
                             </td>
                         </tr>
@@ -154,11 +171,12 @@
                             <label for="addSupplierTelp" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
                                 No Telepon Supplier
                             </label>
-                            <input type="tel" name="telp" id="addSupplierTelp"
+                            <input type="number" name="telp" id="addSupplierTelp"
                                 class="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2
-                                focus:border-blue-500 focus:ring-blue-500
-                                dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200"
-                                placeholder="08xxxxx" required />
+           focus:border-blue-500 focus:ring-blue-500
+           dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200"
+                                placeholder="08xxxxx" required pattern="[0-9]*" inputmode="numeric" min="0" />
+
                         </div>
                         <div class="mb-4">
                             <label for="addSupplierEmail"

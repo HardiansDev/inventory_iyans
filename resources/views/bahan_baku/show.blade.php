@@ -9,11 +9,13 @@
         {{-- Header --}}
         <div class="flex items-center justify-between mb-6">
             <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-100">
-                📦 {{ $bahanBaku->name }}
+                <i class="fas fa-box text-blue-600"></i>
+                {{ $bahanBaku->name }}
             </h1>
             <a href="{{ route('bahan_baku.index') }}"
                 class="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg shadow hover:bg-blue-700 transition">
-                ⬅ Kembali
+                <i class="fas fa-arrow-left"></i>
+                Kembali
             </a>
         </div>
 
@@ -31,7 +33,7 @@
                     </tr>
                     <tr class="hover:bg-gray-50 dark:hover:bg-gray-800">
                         <th class="text-left py-3 px-4 font-semibold">Stok</th>
-                        <td class="py-3 px-4">{{ $bahanBaku->stock }}</td>
+                        <td class="py-3 px-4">{{ $bahanBaku->stock }} {{ $bahanBaku->satuan?->nama_satuan }}</td>
                     </tr>
                     <tr class="hover:bg-gray-50 dark:hover:bg-gray-800">
                         <th class="text-left py-3 px-4 font-semibold">Harga</th>

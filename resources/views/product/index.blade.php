@@ -10,7 +10,7 @@
         <div class="mx-auto flex max-w-7xl flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
             <!-- Title -->
             <div>
-                <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-100">Manajemen Produk</h1>
+                <h1 class="text-3xl font-bold text-gray-800 dark:text-gray-100">Manajemen Produk</h1>
                 <p class="mt-1 text-sm text-gray-500">
                     Kelola data produk dalam sistem inventory Anda
                 </p>
@@ -155,12 +155,10 @@
 
 
                 <!-- Table Produk -->
-                <div
-                    class="overflow-x-auto overflow-y-visible rounded-lg border border-gray-200 dark:border-gray-700 shadow">
+                <div class="overflow-x-auto rounded-lg shadow-md">
                     <table
-                        class="min-w-full divide-y divide-gray-200 dark:divide-gray-700 bg-white dark:bg-gray-800 text-sm text-gray-700 dark:text-gray-200">
-                        <thead
-                            class="bg-gray-50 dark:bg-gray-700 text-left uppercase tracking-wider text-gray-600 dark:text-gray-300">
+                        class="min-w-full divide-y divide-gray-200 dark:divide-gray-700 text-sm text-gray-700 dark:text-gray-200">
+                        <thead class="bg-gray-100 dark:bg-gray-700 uppercase font-medium">
                             <tr>
                                 <th class="px-4 py-3 text-center">
                                     <input type="checkbox" id="selectAll" class="form-checkbox text-blue-600 rounded-lg" />
@@ -176,15 +174,15 @@
                         </thead>
                         <tbody class="divide-y divide-gray-100 dark:divide-gray-700">
                             @forelse ($products as $product)
-                                <tr class="dark:bg-gray-900 dark:text-gray-100">
+                                <tr class="hover:bg-gray-50 dark:hover:bg-gray-600 transition">
                                     <td class="px-4 py-3 text-center">
                                         <input type="checkbox" class="form-checkbox select-item text-blue-600 rounded-lg"
                                             value="{{ $product->id }}" name="ids[]" />
                                     </td>
 
-                                    <td class="px-4 py-3">{{ $product->name }}</td>
-                                    <td class="px-4 py-3">{{ $product->code }}</td>
-                                    <td class="px-4 py-3">
+                                    <td class="px-4 py-3 text-center">{{ $product->name }}</td>
+                                    <td class="px-4 py-3 text-center">{{ $product->code }}</td>
+                                    <td class="px-4 py-3 text-center">
                                         <img src="{{ $product->photo }}" alt="Gambar Produk"
                                             class="h-14 w-14 cursor-pointer rounded-md border object-cover transition-transform duration-200 hover:scale-105"
                                             onclick="zoomImage('{{ $product->photo }}')" />
@@ -200,25 +198,23 @@
                                             class="max-h-full max-w-full rounded shadow-lg" />
                                     </div>
 
-                                    <td class="px-4 py-3">{{ $product->category->name }}</td>
-                                    <td class="px-4 py-3">
+                                    <td class="px-4 py-3 text-center">{{ $product->category->name }}</td>
+                                    <td class="px-4 py-3 text-center">
                                         Rp {{ number_format($product->price, 0, ',', '.') }}
                                     </td>
-                                    <td class="px-4 py-3">
+                                    <td class="px-4 py-3 text-center">
                                         {{ $product->stock . ' ' . ($product->satuan?->nama_satuan ?? '') }}
                                     </td>
 
-                                    <td class="relative whitespace-nowrap px-4 py-3">
+                                    <td class="relative whitespace-nowrap px-4 py-3 text-center">
                                         <div x-data="{ open: false }" class="relative inline-block text-left">
                                             <!-- Dropdown Toggle -->
                                             <button @click="open = !open" type="button"
-                                                class="inline-flex items-center rounded bg-gray-100 dark:bg-gray-700 px-3 py-1.5 text-xs font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1">
-                                                <i class="fas fa-cogs mr-1"></i>
-                                                Aksi
-                                                <svg class="ml-1 h-3 w-3" viewBox="0 0 20 20" fill="currentColor">
-                                                    <path fill-rule="evenodd"
-                                                        d="M5.23 7.21a.75.75 0 011.06.02L10 11.585l3.71-4.355a.75.75 0 111.14.976l-4.25 5a.75.75 0 01-1.14 0l-4.25-5a.75.75 0 01.02-1.06z"
-                                                        clip-rule="evenodd" />
+                                                class="p-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition focus:outline-none">
+                                                <svg class="w-5 h-5 text-gray-600 dark:text-gray-300" fill="currentColor"
+                                                    viewBox="0 0 20 20">
+                                                    <path
+                                                        d="M10 3a1.5 1.5 0 110 3 1.5 1.5 0 010-3zm0 5a1.5 1.5 0 110 3 1.5 1.5 0 010-3zm0 5a1.5 1.5 0 110 3 1.5 1.5 0 010-3z" />
                                                 </svg>
                                             </button>
 
@@ -227,12 +223,12 @@
                                                 class="class"="absolute bottom-full right-0 mb-2 w-52 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none z-50">
                                                 <div class="py-1 text-sm text-gray-700 dark:text-gray-200">
                                                     <a href="{{ route('product.show', $product->id) }}"
-                                                        class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600">
+                                                        class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700">
                                                         <i class="fas fa-eye mr-2 w-4 text-blue-500"></i>
                                                         Detail
                                                     </a>
                                                     <a href="{{ route('product.edit', $product->id) }}"
-                                                        class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600">
+                                                        class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700">
                                                         <i class="fas fa-edit mr-2 w-4 text-yellow-500"></i>
                                                         Edit
                                                     </a>
@@ -240,7 +236,7 @@
                                                     <!-- Tombol trigger modal -->
                                                     <button type="button"
                                                         onclick="openDeleteModal('{{ route('product.destroy', $product->id) }}', '{{ $product->name }}')"
-                                                        class="flex w-full items-center px-4 py-2 text-left text-red-600 dark:text-red-400 hover:bg-gray-100 dark:hover:bg-gray-600">
+                                                        class="flex w-full items-center px-4 py-2 text-left text-red-600 dark:text-red-400 hover:bg-gray-100 dark:hover:bg-gray-700">
                                                         <i class="fas fa-trash-alt mr-2 w-4"></i>
                                                         Hapus
                                                     </button>

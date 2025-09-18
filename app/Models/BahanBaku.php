@@ -12,6 +12,7 @@ class BahanBaku extends Model
         'name',
         'supplier_id',
         'category_id',
+        'satuan_id',
         'stock',
         'price',
         'description',
@@ -25,5 +26,10 @@ class BahanBaku extends Model
     public function category()
     {
         return $this->belongsTo(Category::class);
+    }
+
+    public function satuan()
+    {
+        return $this->belongsTo(Satuan::class, 'satuan_id');
     }
 }

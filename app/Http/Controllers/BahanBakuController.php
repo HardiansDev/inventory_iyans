@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\BahanBaku;
 use App\Models\Supplier;
 use App\Models\Category;
+use App\Models\Satuan;
 use Illuminate\Http\Request;
 
 class BahanBakuController extends Controller
@@ -13,12 +14,13 @@ class BahanBakuController extends Controller
     {
         $search = $request->query('search');
 
-        $query = BahanBaku::with(['supplier', 'category']);
+        $query = BahanBaku::with(['supplier', 'category', 'satuan']);
 
         if ($search) {
             $query->where('name', 'LIKE', "%{$search}%")
                 ->orWhereHas('supplier', fn($q) => $q->where('name', 'LIKE', "%{$search}%"))
-                ->orWhereHas('category', fn($q) => $q->where('name', 'LIKE', "%{$search}%"));
+                ->orWhereHas('category', fn($q) => $q->where('name', 'LIKE', "%{$search}%"))
+                ->orWhereHas('satuan', fn($q) => $q->where('nama_satuan', 'LIKE', "%{$search}%"));
         }
 
         $bahanBakus = $query->paginate(10);
@@ -30,8 +32,9 @@ class BahanBakuController extends Controller
     {
         $suppliers = Supplier::all();
         $categories = Category::all();
+        $satuans = Satuan::all();
 
-        return view('bahan_baku.create', compact('suppliers', 'categories'));
+        return view('bahan_baku.create', compact('suppliers', 'categories', 'satuans'));
     }
 
     public function store(Request $request)
@@ -40,6 +43,7 @@ class BahanBakuController extends Controller
             'name' => 'required|string|max:255',
             'supplier_id' => 'nullable|exists:suppliers,id',
             'category_id' => 'nullable|exists:categories,id',
+            'satuan_id' => 'nullable|exists:satuans,id',
             'stock' => 'required|integer|min:0',
             'price' => 'required|numeric|min:0',
             'description' => 'nullable|string',
@@ -52,7 +56,7 @@ class BahanBakuController extends Controller
 
     public function show($id)
     {
-        $bahanBaku = BahanBaku::with(['supplier', 'category'])->findOrFail($id);
+        $bahanBaku = BahanBaku::with(['supplier', 'category', 'satuan'])->findOrFail($id);
         return view('bahan_baku.show', compact('bahanBaku'));
     }
 
@@ -61,8 +65,9 @@ class BahanBakuController extends Controller
         $bahanBaku = BahanBaku::findOrFail($id);
         $suppliers = Supplier::all();
         $categories = Category::all();
+        $satuans = Satuan::all();
 
-        return view('bahan_baku.edit', compact('bahanBaku', 'suppliers', 'categories'));
+        return view('bahan_baku.edit', compact('bahanBaku', 'suppliers', 'categories', 'satuans'));
     }
 
     public function update(Request $request, $id)
@@ -71,6 +76,7 @@ class BahanBakuController extends Controller
             'name' => 'required|string|max:255',
             'supplier_id' => 'nullable|exists:suppliers,id',
             'category_id' => 'nullable|exists:categories,id',
+            'satuan_id' => 'nullable|exists:satuans,id',
             'stock' => 'required|integer|min:0',
             'price' => 'required|numeric|min:0',
             'description' => 'nullable|string',

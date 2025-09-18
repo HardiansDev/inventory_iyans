@@ -7,9 +7,14 @@
 @section('content')
     <!-- Header -->
     <section class="mb-6 rounded-lg bg-white dark:bg-gray-800 p-6 shadow">
-        <div class="flex justify-between items-center max-w-7xl mx-auto">
-            <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-100">Data Bahan Baku</h1>
-
+        <div class="mx-auto flex max-w-7xl flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
+            <!-- Title -->
+            <div>
+                <h1 class="text-3xl font-bold text-gray-800 dark:text-gray-100">Manajemen Bahan Baku</h1>
+                <p class="mt-1 text-sm text-gray-500">
+                    Kelola data Bahan Baku dalam sistem inventory Anda
+                </p>
+            </div>
         </div>
     </section>
 
@@ -63,7 +68,7 @@
                             <td class="px-4 py-2">{{ $bahan->name }}</td>
                             <td class="px-4 py-2">{{ $bahan->supplier?->name ?? '-' }}</td>
                             <td class="px-4 py-2">{{ $bahan->category?->name ?? '-' }}</td>
-                            <td class="px-4 py-2 text-right">{{ $bahan->stock }}</td>
+                            <td class="px-4 py-2 text-right">{{ $bahan->stock }} {{ $bahan->satuan?->nama_satuan }}</td>
                             <td class="px-4 py-2 text-right">Rp {{ number_format($bahan->price, 0, ',', '.') }}</td>
 
                             <td class="px-4 py-2 text-center">

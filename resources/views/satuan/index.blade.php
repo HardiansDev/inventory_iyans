@@ -6,26 +6,34 @@
 
 @section('content')
     <div x-data="satuanIndex()" x-init="init()" class="p-6">
-        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-4">
-            <h2 class="text-xl font-bold text-gray-800 dark:text-gray-100">Data Satuan</h2>
-
-            <div class="flex items-center gap-2">
-                <button @click="openCreate = true" type="button"
-                    class="px-4 py-2 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700 transition">
-                    + Tambah Satuan
-                </button>
+        <!-- Header -->
+        <section class="mb-6 rounded-lg bg-white p-6 shadow-sm dark:bg-gray-800 dark:text-gray-200">
+            <div class="mx-auto flex max-w-7xl flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
+                <div>
+                    <h1 class="text-3xl font-bold text-gray-800 dark:text-gray-100">Manajemen Satuan</h1>
+                    <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
+                        Kelola data satuan produk agar stok lebih terorganisir
+                    </p>
+                </div>
+                <div class="flex items-center gap-2">
+                    <button @click="openCreate = true" type="button"
+                        class="px-4 py-2 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700 transition">
+                        <i class="fas fa-plus-circle mr-2"></i> Tambah Satuan
+                    </button>
+                </div>
             </div>
-        </div>
+        </section>
+
 
         {{-- Table --}}
-        <div
-            class="overflow-x-auto bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
-            <table class="min-w-full">
-                <thead class="bg-gray-50 dark:bg-gray-700 text-gray-700 dark:text-gray-200">
+        <div class="overflow-x-auto rounded-lg shadow-md">
+            <table
+                class="min-w-full divide-y divide-gray-200 dark:divide-gray-700 text-sm text-gray-700 dark:text-gray-200">
+                <thead class="bg-gray-100 dark:bg-gray-700 uppercase font-medium">
                     <tr>
-                        <th class="px-3 py-2 text-left">Nama Satuan</th>
-                        <th class="px-3 py-2 text-left">Keterangan</th>
-                        <th class="px-3 py-2 text-center">Aksi</th>
+                        <th class="px-4 py-3 text-left font-medium">Nama Satuan</th>
+                        <th class="px-4 py-3 text-left font-medium">Keterangan</th>
+                        <th class="px-4 py-3 text-center font-medium">Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -34,20 +42,39 @@
                             <td class="px-3 py-3">{{ $satuan->nama_satuan }}</td>
                             <td class="px-3 py-3">{{ $satuan->keterangan ?? '-' }}</td>
                             <td class="px-3 py-3 text-center">
-                                <div class="inline-flex gap-2">
-                                    <button
-                                        @click="openEditModal({ id: {{ $satuan->id }}, nama_satuan: '{{ addslashes($satuan->nama_satuan) }}', keterangan: '{{ addslashes($satuan->keterangan ?? '') }}' })"
-                                        class="px-3 py-1 rounded-lg bg-yellow-500 text-white hover:bg-yellow-600 transition">
-                                        Edit
+                                <div x-data="{ open: false }" class="relative inline-block text-left">
+                                    <!-- Trigger Dropdown -->
+                                    <button @click="open = !open"
+                                        class="p-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition focus:outline-none">
+                                        <svg class="w-5 h-5 text-gray-600 dark:text-gray-300" fill="currentColor"
+                                            viewBox="0 0 20 20">
+                                            <path
+                                                d="M10 3a1.5 1.5 0 110 3 1.5 1.5 0 010-3zm0 5a1.5 1.5 0 110 3 1.5 1.5 0 010-3zm0 5a1.5 1.5 0 110 3 1.5 1.5 0 010-3z" />
+                                        </svg>
                                     </button>
 
-                                    <button
-                                        @click="openDeleteModal({ id: {{ $satuan->id }}, nama_satuan: '{{ addslashes($satuan->nama_satuan) }}' })"
-                                        class="px-3 py-1 rounded-lg bg-red-600 text-white hover:bg-red-700 transition">
-                                        Hapus
-                                    </button>
+                                    <!-- Dropdown Menu -->
+                                    <div x-show="open" @click.away="open = false" x-transition
+                                        class="class"="absolute bottom-full right-0 mb-2 w-52 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none z-50">
+                                        <div class="py-1">
+                                            <!-- Edit -->
+                                            <button
+                                                @click="openEditModal({ id: {{ $satuan->id }}, nama_satuan: '{{ addslashes($satuan->nama_satuan) }}', keterangan: '{{ addslashes($satuan->keterangan ?? '') }}' }); open = false"
+                                                class="flex w-full items-center px-3 py-2 text-sm text-yellow-500 dark:text-yellow-400 hover:bg-gray-100 dark:hover:bg-gray-700 transition">
+                                                <i class="fas fa-pencil-alt mr-2"></i> Edit
+                                            </button>
+
+                                            <!-- Hapus -->
+                                            <button
+                                                @click="openDeleteModal({ id: {{ $satuan->id }}, nama_satuan: '{{ addslashes($satuan->nama_satuan) }}' }); open = false"
+                                                class="flex w-full items-center px-3 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-gray-100 dark:hover:bg-gray-700 transition">
+                                                <i class="fas fa-trash mr-2"></i> Hapus
+                                            </button>
+                                        </div>
+                                    </div>
                                 </div>
                             </td>
+
                         </tr>
                     @empty
                         <tr>
@@ -58,10 +85,6 @@
                     @endforelse
                 </tbody>
             </table>
-
-            <div class="p-4">
-                {{ $satuans->links() }}
-            </div>
         </div>
 
         <!-- CREATE MODAL -->
