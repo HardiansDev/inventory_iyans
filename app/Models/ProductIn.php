@@ -31,6 +31,17 @@ class ProductIn extends Model
         return $this->belongsTo(Product::class, 'product_id');
     }
 
+    public function satuan()
+    {
+        return $this->hasOneThrough(
+            Satuan::class,
+            Product::class,
+            'id',        // Foreign key di product
+            'id',        // Foreign key di satuan
+            'product_id',// Foreign key di product_in
+            'satuan_id'  // Foreign key di product
+        );
+    }
     /**
      * Relasi ke data penjualan (jika produk ini sudah diproses ke sales).
      */

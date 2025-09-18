@@ -6,6 +6,7 @@ namespace App\Http\Controllers;
 use App\Models\ProductIn;
 use App\Models\Product;
 use App\Models\Sales;
+// use App\Models\Satuan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
@@ -17,6 +18,7 @@ class ProductInController extends Controller
 
     public function showConfirmation($id)
     {
+
         $permintaan = ProductIn::with('product')->findOrFail($id);
         return view('product_in.confirm', compact('permintaan'));
     }

@@ -243,7 +243,8 @@
                                             Rp
                                             {{ number_format(optional($productIn->product)->price ?? 0, 0, ',', '.') }}
                                         </td>
-                                        <td class="px-4 py-2">{{ $productIn->qty }}</td>
+                                        <td class="px-4 py-2">{{ $productIn->qty }}
+                                            {{ $productIn->product?->satuan?->nama_satuan }}</td>
                                         <td class="px-4 py-2">
                                             {{ $productIn->status === 'ditolak' ? 'Sistem' : $productIn->recipient }}
                                         </td>

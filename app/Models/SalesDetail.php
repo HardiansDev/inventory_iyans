@@ -55,4 +55,16 @@ class SalesDetail extends Model
     {
         return $this->belongsTo(Discount::class);
     }
+
+    public function satuan()
+    {
+        return $this->hasOneThrough(
+            Satuan::class,
+            Product::class,
+            'id',
+            'id',
+            'product_id',
+            'satuan_id'
+        );
+    }
 }

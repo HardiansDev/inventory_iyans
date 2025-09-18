@@ -22,12 +22,12 @@
                 <div class="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
                     <p class="text-sm text-gray-500 dark:text-gray-400">Jumlah</p>
                     <p class="text-lg font-semibold text-gray-900 dark:text-gray-100">
-                        {{ $notif->qty }}
+                        {{ $notif->qty }} {{ $notif->product?->satuan?->nama_satuan }}
                     </p>
                 </div>
 
                 <div class="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
-                    <p class="text-sm text-gray-500 dark:text-gray-400">Requester</p>
+                    <p class="text-sm text-gray-500 dark:text-gray-400">Pemohon</p>
                     <p class="text-lg font-semibold text-gray-900 dark:text-gray-100">
                         {{ $notif->requester_name }}
                     </p>

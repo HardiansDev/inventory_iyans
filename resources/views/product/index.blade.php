@@ -204,7 +204,10 @@
                                     <td class="px-4 py-3">
                                         Rp {{ number_format($product->price, 0, ',', '.') }}
                                     </td>
-                                    <td class="px-4 py-3">{{ $product->stock }}</td>
+                                    <td class="px-4 py-3">
+                                        {{ $product->stock . ' ' . ($product->satuan?->nama_satuan ?? '') }}
+                                    </td>
+
                                     <td class="relative whitespace-nowrap px-4 py-3">
                                         <div x-data="{ open: false }" class="relative inline-block text-left">
                                             <!-- Dropdown Toggle -->
@@ -406,6 +409,27 @@
                                dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100 dark:placeholder-gray-500"
                                         placeholder="Contoh: 100" value="{{ old('stock') }}" required />
                                 </div>
+
+                                <!-- Satuan -->
+                                <div>
+                                    <label class="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300">
+                                        Satuan
+                                    </label>
+                                    <select name="satuan_id"
+                                        class="w-full rounded-lg border border-gray-300 px-3 py-2 text-gray-800
+                                        focus:border-blue-500 focus:ring focus:ring-blue-200
+                                        dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100"
+                                        required>
+                                        <option value="">Pilih Satuan</option>
+                                        @foreach ($satuans as $satuan)
+                                            <option value="{{ $satuan->id }}"
+                                                {{ old('satuan_id') == $satuan->id ? 'selected' : '' }}>
+                                                {{ $satuan->nama_satuan }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+
                             </div>
 
                             <!-- Tombol Aksi -->

@@ -25,9 +25,10 @@
 
     <!-- Main content -->
     <section class="content">
-        <div class="mt-6 grid grid-cols-2 gap-6 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-4">
-            <!-- Modal Hari Ini -->
-            <div class="rounded-xl bg-gradient-to-r from-teal-400 to-teal-600 p-5 text-white shadow flex items-center gap-4">
+        <div class="mt-6 grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 items-stretch">
+            <!-- Card -->
+            <div
+                class="rounded-xl bg-gradient-to-r from-teal-400 to-teal-600 p-5 text-white shadow flex items-center gap-4 h-full">
                 <i class="fas fa-wallet text-3xl opacity-80"></i>
                 <div>
                     <div class="text-2xl font-bold">Rp {{ number_format($totalModal, 0, ',', '.') }}</div>
@@ -35,9 +36,8 @@
                 </div>
             </div>
 
-            <!-- Data Produk -->
             <div
-                class="rounded-xl bg-gradient-to-r from-blue-400 to-blue-600 p-5 text-white shadow flex items-center gap-4">
+                class="rounded-xl bg-gradient-to-r from-blue-400 to-blue-600 p-5 text-white shadow flex items-center gap-4 h-full">
                 <i class="fas fa-boxes text-3xl opacity-80"></i>
                 <div>
                     <div class="text-2xl font-bold">{{ $totalProduk }}</div>
@@ -45,9 +45,8 @@
                 </div>
             </div>
 
-            <!-- Produk Masuk -->
             <div
-                class="rounded-xl bg-gradient-to-r from-emerald-400 to-emerald-600 p-5 text-white shadow flex items-center gap-4">
+                class="rounded-xl bg-gradient-to-r from-emerald-400 to-emerald-600 p-5 text-white shadow flex items-center gap-4 h-full">
                 <i class="fas fa-truck-loading text-3xl opacity-80"></i>
                 <div>
                     <div class="text-2xl font-bold">{{ $produkMasuk }}</div>
@@ -55,9 +54,8 @@
                 </div>
             </div>
 
-            <!-- Produk Keluar -->
             <div
-                class="rounded-xl bg-gradient-to-r from-rose-400 to-rose-600 p-5 text-white shadow flex items-center gap-4">
+                class="rounded-xl bg-gradient-to-r from-rose-400 to-rose-600 p-5 text-white shadow flex items-center gap-4 h-full">
                 <i class="fas fa-dolly text-3xl opacity-80"></i>
                 <div>
                     <div class="text-2xl font-bold">{{ $produkKeluar }}</div>
@@ -65,9 +63,8 @@
                 </div>
             </div>
 
-            <!-- Pengguna -->
             <div
-                class="rounded-xl bg-gradient-to-r from-green-400 to-green-600 p-5 text-white shadow flex items-center gap-4">
+                class="rounded-xl bg-gradient-to-r from-green-400 to-green-600 p-5 text-white shadow flex items-center gap-4 h-full">
                 <i class="fas fa-users text-3xl opacity-80"></i>
                 <div>
                     <div class="text-2xl font-bold">{{ $totalUser }}</div>
@@ -75,17 +72,17 @@
                 </div>
             </div>
 
-            <!-- Penjualan Hari Ini -->
             <div
-                class="rounded-xl bg-gradient-to-r from-indigo-400 to-indigo-600 p-5 text-white shadow flex items-center gap-4">
+                class="rounded-xl bg-gradient-to-r from-indigo-400 to-indigo-600 p-5 text-white shadow flex items-center gap-4 h-full">
                 <i class="fas fa-cash-register text-3xl opacity-80"></i>
                 <div>
                     <div class="text-2xl font-bold">Rp {{ number_format($penjualanHariIni, 0, ',', '.') }}</div>
                     <div class="mt-1 text-sm">Pendapatan Hari Ini</div>
                 </div>
             </div>
+
             <div
-                class="rounded-xl bg-gradient-to-r from-emerald-400 to-emerald-600 p-5 text-white shadow flex items-center gap-4 mt-4">
+                class="rounded-xl bg-gradient-to-r from-emerald-400 to-emerald-600 p-5 text-white shadow flex items-center gap-4 h-full">
                 <i class="fas fa-coins text-3xl opacity-80"></i>
                 <div>
                     <div class="text-2xl font-bold">Rp {{ number_format($keuntunganHariIni, 0, ',', '.') }}</div>
@@ -93,9 +90,8 @@
                 </div>
             </div>
 
-            <!-- Transaksi Hari Ini -->
             <div
-                class="rounded-xl bg-gradient-to-r from-cyan-400 to-cyan-600 p-5 text-white shadow flex items-center gap-4">
+                class="rounded-xl bg-gradient-to-r from-cyan-400 to-cyan-600 p-5 text-white shadow flex items-center gap-4 h-full">
                 <i class="fas fa-receipt text-3xl opacity-80"></i>
                 <div>
                     <div class="text-2xl font-bold">{{ $transaksiHariIni }}</div>
@@ -103,9 +99,8 @@
                 </div>
             </div>
 
-            <!-- Pegawai Aktif -->
             <div
-                class="rounded-xl bg-gradient-to-r from-teal-400 to-teal-600 p-5 text-white shadow flex items-center gap-4">
+                class="rounded-xl bg-gradient-to-r from-teal-400 to-teal-600 p-5 text-white shadow flex items-center gap-4 h-full">
                 <i class="fas fa-user-check text-3xl opacity-80"></i>
                 <div>
                     <div class="text-2xl font-bold">{{ $pegawaiAktif }}</div>
@@ -113,16 +108,14 @@
                 </div>
             </div>
 
-            <!-- Pegawai Tidak Aktif -->
             <div
-                class="rounded-xl bg-gradient-to-r from-gray-400 to-gray-600 p-5 text-white shadow flex items-center gap-4">
+                class="rounded-xl bg-gradient-to-r from-gray-400 to-gray-600 p-5 text-white shadow flex items-center gap-4 h-full">
                 <i class="fas fa-user-slash text-3xl opacity-80"></i>
                 <div>
                     <div class="text-2xl font-bold">{{ $pegawaiTidakAktif }}</div>
                     <div class="mt-1 text-sm">Pegawai Tidak Aktif</div>
                 </div>
             </div>
-
         </div>
 
 

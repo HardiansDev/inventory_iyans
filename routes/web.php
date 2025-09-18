@@ -29,6 +29,7 @@ use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ActivityLogController;
 use App\Http\Controllers\TrackingTreeController;
+use App\Http\Controllers\SatuanController;
 use App\Http\Controllers\ChatController;
 
 Route::get('/', function () {
@@ -88,6 +89,7 @@ Route::middleware(['auth', 'role:superadmin,admin_gudang'])->group(function () {
 
     Route::get('/notifications/admin-gudang', [NotificationController::class, 'adminGudangIndex'])->name('notifications.admin_gudang');
     Route::get('/notifications/admin-gudang/{id}', [NotificationController::class, 'showAdminGudang'])->name('notifications.admin_gudang.show');
+    Route::resource('satuan', SatuanController::class);
 });
 
 

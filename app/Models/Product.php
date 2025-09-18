@@ -21,6 +21,7 @@ class Product extends Model
         'category_id',    // ID kategori
         'price',          // Harga produk
         'stock',          // Informasi stok
+        'satuan_id',      // ID satuan
 
     ];
 
@@ -34,7 +35,10 @@ class Product extends Model
         ]);
     }
 
-
+    public function satuan()
+    {
+        return $this->belongsTo(Satuan::class, 'satuan_id');
+    }
 
     public function productIns()
     {

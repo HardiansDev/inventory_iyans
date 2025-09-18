@@ -76,7 +76,7 @@
         {{-- INVENTORY --}}
         @if (in_array(Auth::user()->role, ['superadmin', 'admin_gudang']))
             <li
-                class="{{ Request::is('inventory*') || Request::is('product') || Request::is('bahan_baku') || Request::is('category') || Request::is('supplier') || Request::is('productin') || Request::is('trackingtree') ? 'menu-open-tailwind' : '' }} group">
+                class="{{ Request::is('inventory*') || Request::is('product') || Request::is('bahan_baku') || Request::is('category') || Request::is('supplier') || Request::is('productin') || Request::is('trackingtree') || Request::is('satuan') ? 'menu-open-tailwind' : '' }} group">
 
                 {{-- Parent --}}
                 <a href="#"
@@ -88,7 +88,8 @@
                 Request::is('category') ||
                 Request::is('supplier') ||
                 Request::is('productin') ||
-                Request::is('trackingtree')
+                Request::is('trackingtree') ||
+                Request::is('satuan')
                     ? 'bg-blue-50 dark:bg-gray-700 text-blue-600 dark:text-blue-400 shadow-sm'
                     : 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 hover:dark:bg-gray-700 hover:text-gray-900 hover:dark:text-gray-100' }}">
                     <span class="flex items-center gap-2">
@@ -143,6 +144,16 @@
                                 : 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 hover:dark:bg-gray-700 hover:text-gray-900 hover:dark:text-gray-100' }}">
                                 <i class="fa fa-circle text-[6px]"></i>
                                 Supplier
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ route('satuan.index') }}"
+                                class="flex items-center gap-2 rounded-lg p-2 text-sm transition-colors duration-200
+                                {{ Request::is('satuan*')
+                                    ? 'bg-blue-50 dark:bg-gray-700 text-blue-600 dark:text-blue-400 font-medium'
+                                    : 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 hover:dark:bg-gray-700 hover:text-gray-900 hover:dark:text-gray-100' }}">
+                                <i class="fa fa-circle text-[6px]"></i>
+                                Satuan
                             </a>
                         </li>
                     @endif

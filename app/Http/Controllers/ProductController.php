@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Product;
 use App\Models\Category;
+use App\Models\Satuan;
 
 use Illuminate\Http\Request;
 use App\Exports\ProductsExport;
@@ -28,6 +29,7 @@ class ProductController extends Controller
         $categoryName = $request->query('category');
 
         $datacategory = Category::all();
+        $satuans = Satuan::all();
 
         $query = Product::with(['category', 'productins']);
 
@@ -57,33 +59,19 @@ class ProductController extends Controller
             return $product;
         });
 
-        return view('product.index', compact('products', 'search', 'datacategory'));
+        return view('product.index', compact('products', 'search', 'datacategory', 'satuans'));
     }
-
-
-
-
-
-
-
-
-
-
 
     public function getProductDetails($productId)
     {
         // Ambil data produk berdasarkan ID
         $product = Product::findOrFail($productId);
 
-        // Kirimkan data supplier_id dan category_id sebagai response JSON
+        // Kirimkan data category_id sebagai response JSON
         return response()->json([
             'category_id' => $product->category_id,
         ]);
     }
-
-
-
-
 
     /**
      * Show the form for creating a new resource.
@@ -91,8 +79,9 @@ class ProductController extends Controller
     public function create()
     {
         $datacategory = Category::all();
+        $satuans = Satuan::all();
 
-        return view('product.create', compact('datacategory'));
+        return view('product.create', compact('datacategory', 'satuans'));
     }
 
     /**
@@ -108,6 +97,7 @@ class ProductController extends Controller
                 'category_id' => 'nullable|exists:categories,id',
                 'price' => 'required|numeric',
                 'stock' => 'required|string|max:50',
+                'satuan_id' => 'nullable|exists:satuans,id',
             ],
             [
                 'name.required' => 'Nama produk wajib diisi.',
@@ -130,6 +120,7 @@ class ProductController extends Controller
                 'stock.required' => 'Stok wajib diisi.',
                 'stock.string' => 'Stok harus berupa teks.',
                 'stock.max' => 'Stok tidak boleh lebih dari 50 karakter.',
+                'satuan_id.exists' => 'Satuan yang dipilih tidak valid.',
 
             ]
         );
@@ -162,9 +153,9 @@ class ProductController extends Controller
     {
         $product = Product::findOrFail($id);
         $datacategory = Category::all();
-        // $datasupplier = Supplier::all();
+        $satuans = Satuan::all();
 
-        return view('product.edit', compact('product', 'datacategory'));
+        return view('product.edit', compact('product', 'datacategory', 'satuans'));
     }
 
     /**
@@ -180,6 +171,7 @@ class ProductController extends Controller
             'category_id' => 'nullable|exists:categories,id',
             'price' => 'required|numeric',
             'stock' => 'required|string|max:50',
+            'satuan_id' => 'nullable|exists:satuans,id', 
         ]);
 
         $product = Product::findOrFail($id);

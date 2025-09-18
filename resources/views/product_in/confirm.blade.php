@@ -29,7 +29,8 @@
 
             <div class="flex justify-between">
                 <span class="font-medium text-gray-600 dark:text-gray-400">Jumlah Diajukan</span>
-                <span class="text-gray-900 dark:text-gray-100">{{ $permintaan->qty }} pcs</span>
+                <span class="text-gray-900 dark:text-gray-100">{{ $permintaan->qty }}
+                    {{ $permintaan->product->satuan?->nama_satuan }}</span>
             </div>
         </div>
 
