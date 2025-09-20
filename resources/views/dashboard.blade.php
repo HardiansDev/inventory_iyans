@@ -220,28 +220,31 @@
                             role="tablist">
                             <li>
                                 <button
-                                    class="inline-block p-3 border-b-2 rounded-t-lg active text-blue-600 border-blue-600"
+                                    class="inline-block p-3 border-b-2 border-transparent rounded-t-lg active text-blue-600 border-blue-600 hover:text-blue-700"
                                     id="tab-day" data-tabs-target="#tab-content-day" type="button" role="tab"
                                     aria-controls="tab-content-day" aria-selected="true">
                                     Harian
                                 </button>
                             </li>
                             <li>
-                                <button class="inline-block p-3 border-b-2 rounded-t-lg text-gray-600 dark:text-gray-300"
+                                <button
+                                    class="inline-block p-3 border-b-2 border-transparent rounded-t-lg text-gray-700 dark:text-white hover:text-blue-600 dark:hover:text-blue-400"
                                     id="tab-week" data-tabs-target="#tab-content-week" type="button" role="tab"
                                     aria-controls="tab-content-week" aria-selected="false">
                                     Mingguan
                                 </button>
                             </li>
                             <li>
-                                <button class="inline-block p-3 border-b-2 rounded-t-lg text-gray-600 dark:text-gray-300"
+                                <button
+                                    class="inline-block p-3 border-b-2 border-transparent rounded-t-lg text-gray-700 dark:text-white hover:text-blue-600 dark:hover:text-blue-400"
                                     id="tab-month" data-tabs-target="#tab-content-month" type="button" role="tab"
                                     aria-controls="tab-content-month" aria-selected="false">
                                     Bulanan
                                 </button>
                             </li>
                             <li>
-                                <button class="inline-block p-3 border-b-2 rounded-t-lg text-gray-600 dark:text-gray-300"
+                                <button
+                                    class="inline-block p-3 border-b-2 border-transparent rounded-t-lg text-gray-700 dark:text-white hover:text-blue-600 dark:hover:text-blue-400"
                                     id="tab-year" data-tabs-target="#tab-content-year" type="button" role="tab"
                                     aria-controls="tab-content-year" aria-selected="false">
                                     Tahunan
@@ -249,20 +252,23 @@
                             </li>
                         </ul>
 
+
+
                         <!-- Export Buttons -->
                         <div class="flex gap-2 mt-3 lg:mt-0">
                             <button id="export-current"
-                                class="bg-blue-600 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-700 transition flex items-center gap-2 text-sm">
+                                class="bg-blue-600 text-white dark:bg-blue-500 dark:hover:bg-blue-600 px-4 py-2 rounded-lg shadow hover:bg-blue-700 transition flex items-center gap-2 text-sm">
                                 <i class="fa-solid fa-download text-base"></i>
                                 <span>Export Harian</span>
                             </button>
                             <button id="export-all"
-                                class="bg-green-600 text-white px-4 py-2 rounded-lg shadow hover:bg-green-700 transition flex items-center gap-2 text-sm">
+                                class="bg-green-600 text-white dark:bg-green-500 dark:hover:bg-green-600 px-4 py-2 rounded-lg shadow hover:bg-green-700 transition flex items-center gap-2 text-sm">
                                 <i class="fa-solid fa-download text-base"></i>
-                                Export Semua
+                                <span>Export Semua</span>
                             </button>
                         </div>
                     </div>
+
 
                     <!-- Tabs Content -->
                     <div id="chart-tabs-content">
@@ -523,10 +529,17 @@
             button.addEventListener('click', () => {
                 const targetId = button.getAttribute('data-tabs-target');
 
-                tabButtons.forEach(btn => btn.classList.remove("text-blue-600", "border-blue-600",
-                    "active"));
-                button.classList.add("text-blue-600", "border-blue-600", "active");
+                tabButtons.forEach(btn => {
+                    // Reset semua tombol → non-aktif
+                    btn.classList.remove("text-blue-600", "border-blue-600", "active");
+                    btn.classList.add("text-gray-700", "dark:text-white");
+                });
 
+                // Tombol yang diklik → aktif
+                button.classList.add("text-blue-600", "border-blue-600", "active");
+                button.classList.remove("text-gray-700", "dark:text-white");
+
+                // Konten tab
                 tabContents.forEach(content => {
                     content.classList.add('hidden');
                     if ("#" + content.id === targetId) {
@@ -550,10 +563,12 @@
             });
         });
 
-        // Render default
+
+        // Render default → aktif tab "Harian"
         window.addEventListener('DOMContentLoaded', () => {
             initChartDay();
         });
+
 
         window.addEventListener('resize', () => {
             chartDay?.resize();
