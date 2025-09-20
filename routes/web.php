@@ -46,6 +46,7 @@ Route::middleware(['auth', 'role:superadmin,manager'])->group(function () {
     Route::resource('position', PositionController::class);
     Route::get('report/penjualan', [ReportController::class, 'penjualan'])->name('report.penjualan');
     Route::get('report/penjualan/pdf', [ReportController::class, 'penjualanPdf'])->name('report.penjualan.pdf');
+    
 });
 
 // User Management (hanya Superadmin)
@@ -98,6 +99,8 @@ Route::middleware(['auth', 'role:superadmin'])->group(function () {
     Route::resource('category', CategoryController::class);
     Route::resource('supplier', SupplierController::class);
     Route::resource('bahan_baku', BahanBakuController::class);
+    Route::get('/bahan-baku/report/pdf', [BahanBakuController::class, 'reportPdf'])->name('bahan_baku.reportPdf');
+
 });
 
 // Penjualan & Diskon (Kasir & Superadmin)

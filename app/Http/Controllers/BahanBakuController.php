@@ -6,6 +6,8 @@ use App\Models\BahanBaku;
 use App\Models\Supplier;
 use App\Models\Category;
 use App\Models\Satuan;
+use Barryvdh\DomPDF\Facade\Pdf;
+
 use Illuminate\Http\Request;
 
 class BahanBakuController extends Controller
@@ -94,5 +96,13 @@ class BahanBakuController extends Controller
         $bahanBaku->delete();
 
         return redirect()->route('bahan_baku.index')->with('success', 'Bahan Baku berhasil dihapus.');
+    }
+
+    public function reportPdf()
+    {
+        $bahanBaku = BahanBaku::all();
+
+        $pdf = PDF::loadView('bahan_baku.report_pdf', compact('bahanBaku'));
+        return $pdf->stream('laporan-bahan-baku.pdf'); // bisa diganti ->download()
     }
 }

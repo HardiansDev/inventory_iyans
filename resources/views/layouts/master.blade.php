@@ -8,6 +8,7 @@
 
     @yield('title')
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
     <script>
         // Tailwind dark mode pakai class
         tailwind.config = {
@@ -30,7 +31,20 @@
         }
     </script>
 
+    <script>
+        (function() {
+            const theme = localStorage.getItem('theme');
+            if (theme === 'dark') {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+        })();
+    </script>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
 
@@ -145,6 +159,12 @@
 
         <!-- Right Section -->
         <div class="flex items-center space-x-4 ml-auto">
+            <div class="p-4 flex justify-center">
+                <button id="theme-toggle" class="focus:outline-none">
+                    <i id="theme-icon" class="fas fa-moon text-lg transition-transform duration-500"></i>
+                </button>
+            </div>
+
 
             {{-- Notifikasi --}}
             @if (Auth::user()->role === 'superadmin' || Auth::user()->role === 'admin_gudang')
@@ -460,6 +480,46 @@
                 notifMenu?.classList.add('hidden');
                 userMenu?.classList.add('hidden');
             });
+        });
+    </script>
+
+    <script>
+        const toggleBtn = document.getElementById('theme-toggle');
+        const themeIcon = document.getElementById('theme-icon');
+        const html = document.documentElement;
+
+        // fungsi untuk set icon sesuai tema
+        function updateIcon() {
+            if (html.classList.contains('dark')) {
+                themeIcon.classList.remove('fa-moon');
+                themeIcon.classList.add('fa-sun');
+            } else {
+                themeIcon.classList.remove('fa-sun');
+                themeIcon.classList.add('fa-moon');
+            }
+        }
+
+        // load preferensi dari localStorage
+        if (localStorage.getItem('theme') === 'dark') {
+            html.classList.add('dark');
+        } else {
+            html.classList.remove('dark');
+        }
+        updateIcon();
+
+        toggleBtn.addEventListener('click', () => {
+            // kasih animasi scale + rotate
+            themeIcon.classList.add('rotate-180', 'scale-125');
+            setTimeout(() => {
+                themeIcon.classList.remove('rotate-180', 'scale-125');
+            }, 500);
+
+            // toggle dark mode
+            html.classList.toggle('dark');
+            localStorage.setItem('theme', html.classList.contains('dark') ? 'dark' : 'light');
+
+            // update icon langsung sesuai kondisi terbaru
+            updateIcon();
         });
     </script>
 </body>

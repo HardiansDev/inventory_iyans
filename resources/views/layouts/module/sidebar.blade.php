@@ -67,8 +67,10 @@
                 {{ Request::is('dashboard')
                     ? 'bg-blue-50 dark:bg-gray-700 text-blue-600 dark:text-blue-400 shadow-sm'
                     : 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 hover:dark:bg-gray-700 hover:text-gray-900 hover:dark:text-gray-100' }}">
-                    <i class="fas fa-dashboard text-base"></i>
-                    <span>Dashboard</span>
+                    <span class="flex items-center gap-2">
+                        <i class="fa fa-dashboard text-base"></i>
+                        <span>Dashboard</span>
+                    </span>
                 </a>
             </li>
         @endif
@@ -350,69 +352,4 @@
             </li>
         @endif
     </ul>
-
-
-    <!-- Switch Mode (Fixed Bottom) -->
-    <div class="p-4 border-t border-gray-200 dark:border-gray-700 flex justify-center">
-        <label class="inline-flex items-center cursor-pointer bg-white dark:bg-gray-800 px-4 py-2 rounded-lg shadow-md">
-            <!-- Input Switch -->
-            <input type="checkbox" id="theme-toggle" class="sr-only peer">
-            <div
-                class="relative w-11 h-6 bg-gray-200 rounded-full peer dark:bg-gray-700
-             peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800
-             peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full
-             peer-checked:after:border-white
-             after:content-[''] after:absolute after:top-[2px] after:start-[2px]
-             after:bg-white after:border-gray-300 dark:after:border-gray-600
-             after:border after:rounded-full after:w-5 after:h-5 after:transition-all
-             peer-checked:bg-blue-600 dark:peer-checked:bg-blue-600">
-            </div>
-            <span id="theme-label" class="ms-3 text-lg">
-                🌙
-            </span>
-        </label>
-    </div>
-
 </aside>
-
-@push('scripts')
-    <!-- Toggle button -->
-    <script>
-        const themeToggleBtn = document.getElementById('theme-toggle');
-        const themeLabel = document.getElementById('theme-label');
-        const html = document.documentElement;
-
-        function setThemeIcon(isDark) {
-            if (themeLabel) {
-                themeLabel.textContent = isDark ? '🌙' : '☀️';
-            }
-        }
-
-        // Set awal
-        if (localStorage.getItem('color-theme') === 'dark' ||
-            (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-            html.classList.add('dark');
-            if (themeToggleBtn) themeToggleBtn.checked = true;
-            setThemeIcon(true);
-        } else {
-            html.classList.remove('dark');
-            if (themeToggleBtn) themeToggleBtn.checked = false;
-            setThemeIcon(false);
-        }
-
-        // Event toggle
-        if (themeToggleBtn) {
-            themeToggleBtn.addEventListener('change', () => {
-                if (themeToggleBtn.checked) {
-                    html.classList.add('dark');
-                    localStorage.setItem('color-theme', 'dark');
-                    setThemeIcon(true);
-                } else {
-                    html.classList.remove('dark');
-                    localStorage.setItem('color-theme', 'light');
-                    setThemeIcon(false);
-                }
-            });
-        }
-    </script>
-@endpush

@@ -1,6 +1,6 @@
 <footer id="mainFooter"
     class="fixed bottom-0 z-30 flex w-full items-center justify-between
-           bg-white dark:bg-gray-800
+           bg-white dark:bg-gray-900
            px-4 py-4 text-sm
            text-gray-600 dark:text-gray-300
            transition-all duration-300">

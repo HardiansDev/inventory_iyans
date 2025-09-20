@@ -279,6 +279,13 @@
                             <canvas id="chart-year" class="w-full h-80"></canvas>
                         </div>
                     </div>
+
+                    <input type="hidden" id="daily-totals" value='@json($dailyTotals)'>
+                    <input type="hidden" id="weekly-totals" value='@json($weeklyTotals)'>
+                    <input type="hidden" id="monthly-totals" value='@json($monthlyTotals)'>
+                    <input type="hidden" id="yearly-totals" value='@json($yearlyTotals)'>
+
+
                 </div>
 
                 <!-- TABEL AKTIVITAS TRANSAKSI HARI INI -->
@@ -386,17 +393,21 @@
 
 
 
+
+
+
     </section>
 @endsection
 
 @push('scripts')
     <script>
+        // ===================== Charts =====================
         let chartDay, chartWeek, chartMonth, chartYear;
+        let donutSold, donutIn;
 
         function initChartDay() {
             const ctx = document.getElementById("chart-day").getContext("2d");
             if (chartDay) chartDay.destroy();
-
             chartDay = new Chart(ctx, {
                 type: "line",
                 data: {
@@ -427,7 +438,6 @@
         function initChartWeek() {
             const ctx = document.getElementById("chart-week").getContext("2d");
             if (chartWeek) chartWeek.destroy();
-
             chartWeek = new Chart(ctx, {
                 type: "bar",
                 data: {
@@ -458,7 +468,6 @@
         function initChartMonth() {
             const ctx = document.getElementById("chart-month").getContext("2d");
             if (chartMonth) chartMonth.destroy();
-
             chartMonth = new Chart(ctx, {
                 type: "bar",
                 data: {
@@ -479,7 +488,6 @@
         function initChartYear() {
             const ctx = document.getElementById("chart-year").getContext("2d");
             if (chartYear) chartYear.destroy();
-
             chartYear = new Chart(ctx, {
                 type: "line",
                 data: {
@@ -496,8 +504,7 @@
                     plugins: {
                         legend: {
                             position: 'top'
-                        },
-
+                        }
                     },
                     scales: {
                         y: {
@@ -508,7 +515,7 @@
             });
         }
 
-        // === Tabs Handling ===
+        // ===================== Tabs Handling =====================
         const tabButtons = document.querySelectorAll('[data-tabs-target]');
         const tabContents = document.querySelectorAll('#chart-tabs-content > div');
 
@@ -522,11 +529,8 @@
 
                 tabContents.forEach(content => {
                     content.classList.add('hidden');
-
                     if ("#" + content.id === targetId) {
                         content.classList.remove('hidden');
-
-                        // Render chart sesuai tab yang aktif
                         switch (targetId) {
                             case '#tab-content-day':
                                 initChartDay();
@@ -546,12 +550,11 @@
             });
         });
 
-        // Render chart default saat halaman dimuat
+        // Render default
         window.addEventListener('DOMContentLoaded', () => {
             initChartDay();
         });
 
-        // Resize otomatis saat window diubah
         window.addEventListener('resize', () => {
             chartDay?.resize();
             chartWeek?.resize();
@@ -561,21 +564,16 @@
             donutIn?.resize();
         });
 
-
-        // Definisikan variabel chart global
-        let donutSold;
-        let donutIn;
-
-        // Donut Chart Produk Keluar (Terjual)
+        // ===================== Donut Charts =====================
         const ctxSold = document.getElementById('donut-product-sold');
-        if (donutSold) donutSold.destroy(); // Destroy jika chart sudah ada
+        if (donutSold) donutSold.destroy();
         donutSold = new Chart(ctxSold, {
             type: 'doughnut',
             data: {
                 labels: @json($outLabels),
                 datasets: [{
                     data: @json($outQtys),
-                    backgroundColor: ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6'],
+                    backgroundColor: ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6']
                 }]
             },
             options: {
@@ -588,16 +586,15 @@
             }
         });
 
-        // Donut Chart Produk Masuk
         const ctxIn = document.getElementById('donut-product-in');
-        if (donutIn) donutIn.destroy(); // Destroy jika chart sudah ada
+        if (donutIn) donutIn.destroy();
         donutIn = new Chart(ctxIn, {
             type: 'doughnut',
             data: {
                 labels: @json($inLabels),
                 datasets: [{
                     data: @json($inQtys),
-                    backgroundColor: ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6'],
+                    backgroundColor: ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6']
                 }]
             },
             options: {
@@ -609,6 +606,20 @@
                 }
             }
         });
+
+        // ===================== Data from Controller =====================
+        const dailyData = @json(collect($dailyLabels)->map(function ($label, $i) use ($dailyValues) {
+                return ['tanggal' => $label, 'total' => $dailyValues[$i] ?? 0];
+            }));
+        const weekData = @json(collect($weekLabels)->map(function ($label, $i) use ($weekValues) {
+                return ['minggu' => $label, 'total' => collect($weekValues)->pluck('data')->sum(fn($arr) => $arr[$i] ?? 0)];
+            }));
+        const monthData = @json(collect($monthLabels)->map(function ($label, $i) use ($monthValues) {
+                return ['bulan' => $label, 'total' => collect($monthValues)->pluck('data')->sum(fn($arr) => $arr[$i] ?? 0)];
+            }));
+        const yearData = @json(collect($yearLabels)->map(function ($label, $i) use ($yearValues) {
+                return ['tahun' => $label, 'total' => collect($yearValues)->pluck('data')->sum(fn($arr) => $arr[$i] ?? 0)];
+            }));
 
 
         function resetDateRange() {
@@ -643,20 +654,16 @@
         }
     </script>
 
-
-
-
     <script>
+        // ===================== PDF Export =====================
         const {
             jsPDF
         } = window.jspdf;
         const exportBtn = document.getElementById("export-current");
 
-        // Fungsi render chart ke PDF
-        function renderChartToPDF(pdf, canvasId, title, addNewPage = false) {
+        function renderChartToPDF(pdf, canvasId, title, tableData = null, addNewPage = false) {
             const canvas = document.getElementById(canvasId);
             if (!canvas) return;
-
             if (addNewPage) pdf.addPage();
 
             const imgData = canvas.toDataURL("image/png", 1.0);
@@ -666,16 +673,27 @@
             pdf.setFontSize(14);
             pdf.text(title, 14, 20);
             pdf.addImage(imgData, "PNG", 10, 30, pdfWidth, pdfHeight);
+
+            if (tableData && tableData.rows.length > 0) {
+                pdf.autoTable({
+                    head: [tableData.headers],
+                    body: tableData.rows,
+                    startY: pdfHeight + 50,
+                    styles: {
+                        fontSize: 10
+                    },
+                    headStyles: {
+                        fillColor: [41, 128, 185]
+                    }
+                });
+            }
         }
 
-        // Fungsi update label export sesuai tab aktif
         function updateExportButtonLabel() {
             const activeTab = document.querySelector("#chart-tabs-content > div:not(.hidden)");
             if (!activeTab) return;
-
-            const tabName = activeTab.id.replace("tab-content-", ""); // day, week, month, year
+            const tabName = activeTab.id.replace("tab-content-", "");
             let label = "Export";
-
             switch (tabName) {
                 case "day":
                     label = "Export Harian";
@@ -690,90 +708,152 @@
                     label = "Export Tahunan";
                     break;
             }
-
             exportBtn.querySelector("span").textContent = label;
         }
 
-        // Inisialisasi label saat load
         updateExportButtonLabel();
 
-        // Handle klik tab
         document.querySelectorAll("#chartTabs button").forEach(tab => {
             tab.addEventListener("click", () => {
-                // Toggle class aktif
-                document.querySelectorAll("#chartTabs button").forEach(t => {
-                    t.classList.remove("active", "text-blue-600", "border-blue-600");
-                    t.classList.add("text-gray-600", "dark:text-gray-300");
-                });
-                tab.classList.add("active", "text-blue-600", "border-blue-600");
-                tab.classList.remove("text-gray-600", "dark:text-gray-300");
-
-                // Toggle konten tab
-                document.querySelectorAll("#chart-tabs-content > div").forEach(c => c.classList.add(
-                    "hidden"));
-                document.querySelector(tab.dataset.tabsTarget).classList.remove("hidden");
-
-                // Update export label
                 setTimeout(updateExportButtonLabel, 50);
             });
         });
 
-        // Export tab aktif
         exportBtn.addEventListener("click", () => {
             const activeTab = document.querySelector("#chart-tabs-content > div:not(.hidden)");
             if (!activeTab) return alert("Tidak ada tab aktif");
-
             const canvas = activeTab.querySelector("canvas");
             if (!canvas) return alert("Tidak ada grafik di tab ini");
 
             const pdf = new jsPDF("p", "mm", "a4");
             const tabName = activeTab.id.replace("tab-content-", "");
             let title = "Laporan ";
+            let tableData = null;
 
             switch (tabName) {
                 case "day":
                     title += "Harian";
+                    const dailyTotals = JSON.parse(document.getElementById('daily-totals').value);
+                    tableData = {
+                        headers: ["Tanggal", "Produk", "Total"],
+                        rows: dailyTotals.map(d => [
+                            d.tanggal,
+                            d.product,
+                            Number(d.total).toLocaleString('id-ID')
+                        ])
+                    };
                     break;
                 case "week":
                     title += "Mingguan";
+                    const weeklyTotals = JSON.parse(document.getElementById('weekly-totals').value);
+                    console.log("weeklyTotals:", weeklyTotals);
+                    tableData = {
+                        headers: ["Periode", "Produk", "Total"],
+                        rows: weeklyTotals.map(d => [
+                            d.week, // pakai langsung field 'week'
+                            d.product,
+                            Number(d.total).toLocaleString('id-ID')
+                        ])
+                    };
                     break;
+
+
                 case "month":
                     title += "Bulanan";
+                    const monthlyTotals = JSON.parse(document.getElementById('monthly-totals').value);
+                    console.log("monthlyTotals:", monthlyTotals);
+                    tableData = {
+                        headers: ["Bulan", "Produk", "Total"],
+                        rows: monthlyTotals.map(d => [
+                            d.month, // pakai langsung field 'month'
+                            d.product,
+                            Number(d.total).toLocaleString('id-ID')
+                        ])
+                    };
                     break;
+
+
                 case "year":
                     title += "Tahunan";
+                    const yearlyTotals = JSON.parse(document.getElementById('yearly-totals').value);
+                    console.log("yearlyTotals:", yearlyTotals);
+                    tableData = {
+                        headers: ["Tahun", "Produk", "Total"],
+                        rows: yearlyTotals.map(d => [
+                            d.year, // pakai langsung field 'year'
+                            d.product,
+                            Number(d.total).toLocaleString('id-ID')
+                        ])
+                    };
                     break;
-                default:
-                    title += tabName;
             }
 
-            renderChartToPDF(pdf, canvas.id, title);
+            renderChartToPDF(pdf, canvas.id, title, tableData);
             pdf.save("laporan-" + tabName + ".pdf");
         });
 
-        // Export semua tab
         document.getElementById("export-all").addEventListener("click", () => {
             const pdf = new jsPDF("p", "mm", "a4");
+
+            // Ambil data dari DOM
+            const dailyData = JSON.parse(document.getElementById('daily-totals').value);
+            const weekData = JSON.parse(document.getElementById('weekly-totals').value);
+            const monthData = JSON.parse(document.getElementById('monthly-totals').value);
+            const yearData = JSON.parse(document.getElementById('yearly-totals').value);
+
             const charts = [{
                     id: "chart-day",
-                    title: "Laporan Harian"
+                    title: "Laporan Harian",
+                    data: {
+                        headers: ["Tanggal", "Produk", "Total"],
+                        rows: dailyData.map(d => [
+                            d.tanggal,
+                            d.product,
+                            Number(d.total).toLocaleString('id-ID')
+                        ])
+                    }
                 },
                 {
                     id: "chart-week",
-                    title: "Laporan Mingguan"
+                    title: "Laporan Mingguan",
+                    data: {
+                        headers: ["Minggu", "Produk", "Total"],
+                        rows: weekData.map(d => [
+                            d.week,
+                            d.product,
+                            Number(d.total).toLocaleString('id-ID')
+                        ])
+                    }
                 },
                 {
                     id: "chart-month",
-                    title: "Laporan Bulanan"
+                    title: "Laporan Bulanan",
+                    data: {
+                        headers: ["Bulan", "Produk", "Total"],
+                        rows: monthData.map(d => [
+                            d.month,
+                            d.product,
+                            Number(d.total).toLocaleString('id-ID')
+                        ])
+                    }
                 },
                 {
                     id: "chart-year",
-                    title: "Laporan Tahunan"
-                }
+                    title: "Laporan Tahunan",
+                    data: {
+                        headers: ["Tahun", "Produk", "Total"],
+                        rows: yearData.map(d => [
+                            d.year,
+                            d.product,
+                            Number(d.total).toLocaleString('id-ID')
+                        ])
+                    }
+                },
             ];
 
             charts.forEach((chart, index) => {
-                renderChartToPDF(pdf, chart.id, chart.title, index > 0);
+                // index > 0 => tambah halaman baru
+                renderChartToPDF(pdf, chart.id, chart.title, chart.data, index > 0);
             });
 
             pdf.save("laporan-semua.pdf");

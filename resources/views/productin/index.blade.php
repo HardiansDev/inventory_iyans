@@ -42,7 +42,7 @@
                                     class="inline-flex hidden items-center gap-2 rounded bg-red-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-red-700 disabled:opacity-50 whitespace-nowrap"
                                     disabled>
                                     <i class="fas fa-trash-alt"></i>
-                                    Pilih Menghapus
+                                    Hapus
                                 </button>
                             </form>
 
@@ -165,6 +165,22 @@
                                     </form>
                                 </div>
                             </div>
+                            <!-- Dropdown Show Per Page -->
+                            @php
+                                $perPage = request()->query('perPage', 10); // default 5
+                            @endphp
+                            <div class="flex items-center gap-2">
+                                <select id="showPerPage" name="showPerPage"
+                                    class="w-auto rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm font-medium text-gray-700 shadow-sm
+                                    focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all duration-200
+                                    hover:border-gray-400 dark:bg-gray-800 dark:text-gray-200 dark:border-gray-600 dark:hover:border-gray-500
+                                    dark:focus:border-blue-400 dark:focus:ring-blue-400">
+
+                                    <option value="10" {{ $perPage == 10 ? 'selected' : '' }}>10</option>
+                                    <option value="50" {{ $perPage == 50 ? 'selected' : '' }}>50</option>
+                                    <option value="100" {{ $perPage == 100 ? 'selected' : '' }}>100</option>
+                                </select>
+                            </div>
                         </div>
 
                         <!-- KANAN: Form Pencarian -->
@@ -188,30 +204,30 @@
                                 </div>
                             </form>
                         </div>
+
                     </div>
 
                     <!-- Table -->
-                    <div class="overflow-x-auto rounded-lg border border-gray-200 shadow dark:border-gray-700">
+                    <div class="overflow-x-auto rounded-lg shadow-md">
                         <table
-                            class="min-w-full divide-y divide-gray-200 bg-white text-sm text-gray-700 dark:divide-gray-700 dark:bg-gray-900 dark:text-gray-300">
-                            <thead
-                                class="bg-gray-50 text-left text-xs font-semibold uppercase tracking-wider text-gray-600 dark:bg-gray-800 dark:text-gray-400">
+                            class="min-w-full divide-y divide-gray-200 dark:divide-gray-700 text-sm text-gray-700 dark:text-gray-200">
+                            <thead class="bg-gray-100 dark:bg-gray-700 uppercase font-medium">
                                 <tr>
                                     <th class="px-4 py-3 text-center">
                                         <input type="checkbox" id="selectAll"
                                             class="form-checkbox text-blue-600 dark:text-blue-400" />
                                     </th>
-                                    <th class="px-4 py-3">Nama Produk</th>
-                                    <th class="px-4 py-3">Kode Produk</th>
-                                    <th class="px-4 py-3">Tanggal Masuk</th>
-                                    <th class="px-4 py-3">Gambar Produk</th>
-                                    <th class="px-4 py-3">Kategori Produk</th>
-                                    <th class="px-4 py-3">Harga</th>
-                                    <th class="px-4 py-3">Qty</th>
-                                    <th class="px-4 py-3">PPIC</th>
-                                    <th class="px-4 py-3">Status</th>
-                                    <th class="px-4 py-3">Status Penjualan</th>
-                                    <th class="px-4 py-3">Aksi</th>
+                                    <th class="px-4 py-3 font-medium">Nama Produk</th>
+                                    <th class="px-4 py-3 font-medium">Kode Produk</th>
+                                    <th class="px-4 py-3 font-medium">Tanggal Masuk</th>
+                                    <th class="px-4 py-3 font-medium">Gambar Produk</th>
+                                    <th class="px-4 py-3 font-medium">Kategori Produk</th>
+                                    <th class="px-4 py-3 font-medium">Harga</th>
+                                    <th class="px-4 py-3 font-medium">Qty</th>
+                                    <th class="px-4 py-3 font-medium">PPIC</th>
+                                    <th class="px-4 py-3 font-medium">Status</th>
+                                    <th class="px-4 py-3 font-medium">Status Penjualan</th>
+                                    <th class="px-4 py-3 font-medium">Aksi</th>
                                 </tr>
                             </thead>
                             <tbody class="divide-y divide-gray-100 dark:divide-gray-800">
@@ -347,17 +363,16 @@
                                                                 <button type="button"
                                                                     class="btn-add-stock flex w-full items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
                                                                     @click="$dispatch('open-stock-toko-modal', {
-                    id: {{ $productIn->id }},
-                    name: '{{ optional($productIn->product)->name ?? 'Produk Dihapus' }}',
-                    max: {{ $productIn->qty }},
-                    stokToko: {{ $totalQtySales }}
-                })">
+                                                                    id: {{ $productIn->id }},
+                                                                    name: '{{ optional($productIn->product)->name ?? 'Produk Dihapus' }}',
+                                                                    max: {{ $productIn->qty }},
+                                                                    stokToko: {{ $totalQtySales }}
+                                                                })">
                                                                     <span class="ml-2">+ Stok ke Toko</span>
                                                                 </button>
                                                             @endif
                                                         @endif
                                                     </div>
-
                                                 </div>
                                             </div>
                                         </td>
@@ -371,6 +386,11 @@
                                 @endforelse
                             </tbody>
                         </table>
+                    </div>
+                    <div class="mt-4">
+                        <div class="pagination-wrapper">
+                            {{ $productIns->links('pagination::tailwind') }}
+                        </div>
                     </div>
                 </div>
             </div>
@@ -778,5 +798,12 @@
                 }
             }
         }
+
+        document.getElementById('showPerPage').addEventListener('change', function() {
+            const perPage = this.value;
+            const url = new URL(window.location.href);
+            url.searchParams.set('perPage', perPage);
+            window.location.href = url.toString();
+        });
     </script>
 @endpush

@@ -83,6 +83,7 @@ class ProductInController extends Controller
 
     public function index()
     {
+        $perPage = request()->query('perPage', 10);
         $query = ProductIn::with(['product.category', 'sales'])->orderBy('date', 'desc');
 
         // Filter Kategori
@@ -127,7 +128,7 @@ class ProductInController extends Controller
             });
         }
 
-        $productIns = $query->get();
+        $productIns = $query->paginate($perPage)->appends(request()->query());
         $categories = \App\Models\Category::all();
 
         return view('productin.index', compact('productIns', 'categories'));

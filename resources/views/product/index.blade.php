@@ -118,12 +118,15 @@
                         <select name="category" id="filtername"
                             class="w-full sm:w-72 rounded-lg border border-gray-300 px-3 py-2 text-sm dark:bg-gray-800 dark:text-gray-100 shadow-sm focus:border-blue-500 focus:ring-blue-500">
                             <option value="">Pilih Kategori</option>
-                            @foreach ($datacategory as $category)
+                            @forelse ($datacategory as $category)
                                 <option value="{{ $category->name }}"
                                     {{ request('category') == $category->name ? 'selected' : '' }}>
                                     {{ $category->name }}
                                 </option>
-                            @endforeach
+                            @empty
+                                <option value="" disabled>Tidak ada kategori tersedia</option>
+                            @endforelse
+
                         </select>
                     </div>
 
@@ -255,7 +258,6 @@
                             @endforelse
                         </tbody>
                     </table>
-
                 </div>
                 <div class="mt-4">
                     <div class="pagination-wrapper">

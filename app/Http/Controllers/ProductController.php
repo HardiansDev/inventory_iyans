@@ -27,9 +27,21 @@ class ProductController extends Controller
     {
         $search = $request->query('search');
         $categoryName = $request->query('category');
-
-        $datacategory = Category::all();
+        
         $satuans = Satuan::all();
+
+        // Ambil semua kategori
+        $datacategory = Category::query();
+
+        // Ambil kategori yang dipakai oleh bahan baku
+        $excludedCategoryIds = \App\Models\BahanBaku::pluck('category_id')->toArray();
+
+        // Filter supaya kategori bahan baku tidak muncul di dropdown product
+        if (!empty($excludedCategoryIds)) {
+            $datacategory->whereNotIn('id', $excludedCategoryIds);
+        }
+
+        $datacategory = $datacategory->get();
 
         $query = Product::with(['category', 'productins']);
 

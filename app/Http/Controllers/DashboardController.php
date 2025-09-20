@@ -11,6 +11,8 @@ use App\Models\BahanBaku;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
+use Barryvdh\DomPDF\Facade\Pdf;
+
 use Illuminate\Http\Request;
 
 class DashboardController extends Controller
@@ -113,6 +115,7 @@ class DashboardController extends Controller
             ->groupBy(DB::raw('DATE(salesdetails.created_at)'), 'products.name')
             ->orderBy('date')
             ->get();
+
 
         $groupedDaily = [];
         foreach ($dailySales as $sale) {
@@ -270,6 +273,51 @@ class DashboardController extends Controller
                 break;
         }
 
+        $dailyTotals = collect($dailyByProduct)->flatMap(function($dataset) use ($dailyLabels) {
+            return collect($dataset['data'])->map(function($val, $index) use ($dataset, $dailyLabels) {
+                return [
+                    'tanggal' => $dailyLabels[$index],
+                    'product' => $dataset['label'],
+                    'total' => $val,
+                ];
+            });
+        });
+
+        // Mingguan per produk
+        $weeklyTotals = collect($weeklyByProduct)->flatMap(function($dataset) use ($weekLabels) {
+            return collect($dataset['data'])->map(function($val, $index) use ($dataset, $weekLabels) {
+                return [
+                    'week' => $weekLabels[$index],
+                    'product' => $dataset['label'],
+                    'total' => $val,
+                ];
+            });
+        });
+
+        // Bulanan per produk
+        $monthlyTotals = collect($monthlyByProduct)->flatMap(function($dataset) use ($monthLabels) {
+            return collect($dataset['data'])->map(function($val, $index) use ($dataset, $monthLabels) {
+                return [
+                    'month' => $monthLabels[$index],
+                    'product' => $dataset['label'],
+                    'total' => $val,
+                ];
+            });
+        });
+
+        // Tahunan per produk
+        $yearlyTotals = collect($yearlyByProduct)->flatMap(function($dataset) use ($yearLabels) {
+            return collect($dataset['data'])->map(function($val, $index) use ($dataset, $yearLabels) {
+                return [
+                    'year' => $yearLabels[$index],
+                    'product' => $dataset['label'],
+                    'total' => $val,
+                ];
+            });
+        });
+
+
+
 
         return view('dashboard', compact(
             'totalProduk',
@@ -306,7 +354,15 @@ class DashboardController extends Controller
             'performaKasirHariIni',
             'totalBahanBaku',
             'totalModal',
-            'keuntunganHariIni'
+            'keuntunganHariIni',
+            'dailyTotals',
+            'weeklyTotals',
+            'monthlyTotals',
+            'yearlyTotals',
+            
         ));
     }
+
+
+    
 }

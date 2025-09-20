@@ -20,32 +20,44 @@
 
     <!-- Content -->
     <section class="max-w-7xl mx-auto bg-white dark:bg-gray-800 rounded shadow p-6">
-        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-4">
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-3">
             <!-- Tombol Tambah -->
             <a href="{{ route('bahan_baku.create') }}"
-                class="inline-flex items-center gap-2 rounded-lg bg-blue-600 px-4 py-2 text-white font-medium shadow hover:bg-blue-700 transition">
-                <i class="fas fa-plus"></i>
-                Tambah Bahan Baku
+                class="inline-flex items-center gap-1 rounded-md bg-blue-600 px-3 py-1.5 text-sm text-white font-medium shadow hover:bg-blue-700 transition">
+                <i class="fas fa-plus text-xs"></i>
+                Tambah
             </a>
 
             <!-- Form Pencarian -->
-            <form method="GET" action="{{ route('bahan_baku.index') }}" class="flex gap-2 w-full sm:w-auto">
+            <form method="GET" action="{{ route('bahan_baku.index') }}"
+                class="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
                 <input type="search" name="search" value="{{ $search ?? '' }}" placeholder="Cari bahan baku..."
-                    class="flex-grow border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 bg-white dark:bg-gray-700 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition" />
+                    class="flex-grow border border-gray-300 dark:border-gray-600 rounded-md px-2.5 py-1.5 text-sm bg-white dark:bg-gray-700 dark:text-gray-200 
+            focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition" />
 
-                <button type="submit"
-                    class="inline-flex items-center gap-1 bg-blue-600 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-700 transition font-medium">
-                    <i class="fas fa-search"></i>
-                    Cari
-                </button>
+                <div class="flex gap-2">
+                    <button type="submit"
+                        class="inline-flex items-center gap-1 bg-blue-600 text-white px-3 py-1.5 rounded-md shadow hover:bg-blue-700 transition text-sm font-medium">
+                        <i class="fas fa-search text-xs"></i>
+                        Cari
+                    </button>
 
-                <a href="{{ route('bahan_baku.index') }}"
-                    class="inline-flex items-center gap-1 bg-gray-400 text-white px-4 py-2 rounded-lg shadow hover:bg-gray-500 transition font-medium">
-                    <i class="fas fa-rotate-left"></i>
-                    Reset
-                </a>
+                    <a href="{{ route('bahan_baku.index') }}"
+                        class="inline-flex items-center gap-1 bg-gray-400 text-white px-3 py-1.5 rounded-md shadow hover:bg-gray-500 transition text-sm font-medium">
+                        <i class="fas fa-rotate-left text-xs"></i>
+                        Reset
+                    </a>
+
+                    <a href="{{ route('bahan_baku.reportPdf') }}" target="_blank"
+                        class="inline-flex items-center gap-1 bg-red-600 text-white px-3 py-1.5 rounded-md shadow hover:bg-red-700 transition text-sm font-medium">
+                        <i class="fas fa-file-pdf text-xs"></i>
+                        PDF
+                    </a>
+                </div>
             </form>
         </div>
+
+
 
 
         <!-- Table -->
