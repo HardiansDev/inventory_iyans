@@ -212,7 +212,7 @@
                             ? 'bg-blue-50 dark:bg-gray-700 text-blue-600 dark:text-blue-400 font-medium'
                             : 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 hover:dark:bg-gray-700 hover:text-gray-900 hover:dark:text-gray-100' }}">
                             <i class="fa fa-circle text-[6px]"></i>
-                            Penjualan
+                            Etalase Toko
                         </a>
                     </li>
                     <li>

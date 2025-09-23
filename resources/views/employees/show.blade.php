@@ -44,7 +44,9 @@
                     </div>
                     <div>
                         <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Tanggal Lahir</dt>
-                        <dd class="text-base text-gray-800 dark:text-gray-100">{{ $employee->birth_date ?? '-' }}</dd>
+                        <dd class="text-base text-gray-800 dark:text-gray-100">
+                            {{ $employee->birth_date ? \Carbon\Carbon::parse($employee->birth_date)->format('d/m/Y') : '-' }}
+                        </dd>
                     </div>
                     <div>
                         <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Alamat</dt>
@@ -79,7 +81,9 @@
                     </div>
                     <div>
                         <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Tanggal Masuk</dt>
-                        <dd class="text-base text-gray-800 dark:text-gray-100">{{ $employee->date_joined ?? '-' }}</dd>
+                        <dd class="text-base text-gray-800 dark:text-gray-100">
+                            {{ $employee->date_joined ? \Carbon\Carbon::parse($employee->date_joined)->format('d/m/Y') : '-' }}
+                        </dd>
                     </div>
                     <div>
                         <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Status Aktif</dt>

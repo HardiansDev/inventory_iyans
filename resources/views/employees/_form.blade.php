@@ -83,7 +83,7 @@
                 </svg>
             </div>
             <input id="birth_date" name="birth_date" type="text" datepicker datepicker-autoselect-today
-                value="{{ old('birth_date', $employee->birth_date ?? '') }}" placeholder="Pilih tanggal"
+                value="{{ old('birth_date', $employee?->birth_date ? \Carbon\Carbon::parse($employee->birth_date)->format('d/m/Y') : '') }}"
                 class="bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-gray-100 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 @error('birth_date') border-red-500 @enderror" />
         </div>
         @error('birth_date')
@@ -200,7 +200,7 @@
                 </svg>
             </div>
             <input id="date_joined" name="date_joined" type="text" datepicker datepicker-autoselect-today
-                value="{{ old('date_joined', $employee->date_joined ?? '') }}"
+                value="{{ old('date_joined', $employee?->date_joined ? \Carbon\Carbon::parse($employee->date_joined)->format('d/m/Y') : '') }}"
                 class="bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-gray-100 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 @error('date_joined') border-red-500 @enderror"
                 placeholder="Pilih tanggal" required>
         </div>

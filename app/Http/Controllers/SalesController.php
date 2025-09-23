@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Sales;
 use App\Models\ProductIn;
-use App\Models\SalesDetail;
+use App\Models\Category;
 use Illuminate\Http\Request;
 
 class SalesController extends Controller
@@ -14,17 +14,42 @@ class SalesController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        // Ambil hanya produk yang belum dihapus (softdelete) dari product_in
-        $sales = Sales::with(['productIn' => function ($query) {
-            $query->whereNull('deleted_at'); // Ambil product_in yang belum di-soft-delete
-        }])->whereHas('productIn', function ($query) {
-            $query->whereNull('deleted_at');
-        })->get();
+        // Ambil kategori hanya yang dipakai produk (exclude bahan_baku)
+        $datacategory = Category::whereHas('products')->get();
 
-        return view('sales.index', compact('sales'));
+        // Buat query builder dulu
+        $query = Sales::with(['productIn.product.category'])
+            ->whereHas('productIn', function ($q) {
+                $q->whereNull('deleted_at');
+            });
+
+        // 🔍 Filter search produk
+        if ($request->filled('search')) {
+            $query->whereHas('productIn.product', function ($q) use ($request) {
+                $q->where('name', 'like', '%' . $request->search . '%');
+            });
+        }
+
+        // 🎯 Filter kategori
+        if ($request->filled('category')) {
+            $query->whereHas('productIn.product', function ($q) use ($request) {
+                $q->where('category_id', $request->category);
+            });
+        }
+
+        /** @var \Illuminate\Contracts\Pagination\LengthAwarePaginator $sales */
+        $sales = $query->paginate(8);
+
+        return view('sales.index', compact('sales', 'datacategory'));
     }
+
+
+
+
+
+
 
 
 

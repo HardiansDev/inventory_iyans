@@ -74,7 +74,8 @@ class EmployeeController extends Controller
         $departments = Department::all();
         $positions = Position::all();
         $statuses = EmploymentStatus::all();
-        return view('employees.create', compact('departments', 'positions', 'statuses'));
+        $employee = null;
+        return view('employees.create', compact('departments', 'positions', 'statuses', 'employee'));
     }
 
     public function store(Request $request)

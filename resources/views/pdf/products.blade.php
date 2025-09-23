@@ -58,7 +58,7 @@
     <div class="header">
         <div class="company-info">
             <p style="font-size: 24px; font-weight: bold; color: rgb(24, 24, 163); margin: 0">
-                HDTECH.ID
+                KASIRIN.ID
             </p>
             <p style="font-size: 11px; margin-top: 5px">Bekasi, Jawa Barat</p>
         </div>

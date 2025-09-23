@@ -10,7 +10,7 @@
         <div class="mx-auto flex max-w-7xl flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
             <!-- Title -->
             <div>
-                <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-100">Manajemen Diskon</h1>
+                <h1 class="text-3xl font-bold text-gray-800 dark:text-gray-100">Manajemen Diskon</h1>
                 <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
                     Kelola data diskon yang tersedia dalam sistem inventory Anda
                 </p>
@@ -112,23 +112,72 @@
                             <td class="px-4 py-2">{{ $discount->name }}</td>
                             <td class="px-4 py-2">{{ $discount->nilai ?? '-' }}</td>
                             <td class="px-4 py-2 text-center">
-                                <div class="flex justify-center gap-2">
-                                    <button type="button"
-                                        @click="openEdit({{ $discount->id }}, '{{ $discount->name }}', {{ $discount->nilai }})"
-                                        class="flex items-center gap-1 rounded bg-yellow-400 px-2 py-1 text-sm text-white hover:bg-yellow-500">
-                                        <i class="fas fa-edit text-xs"></i> Edit
+                                <div x-data="{ open: false, confirmDelete: false }" class="relative inline-block text-left">
+                                    <!-- Dropdown Trigger -->
+                                    <button @click="open = !open"
+                                        class="p-2 rounded-md hover:bg-gray-200 dark:hover:bg-gray-600 transition focus:outline-none">
+                                        <svg class="w-5 h-5 text-gray-600 dark:text-gray-300" fill="currentColor"
+                                            viewBox="0 0 20 20">
+                                            <path
+                                                d="M10 3a1.5 1.5 0 110 3 1.5 1.5 0 010-3zm0 5a1.5 1.5 0 110 3 1.5 1.5 0 010-3zm0 5a1.5 1.5 0 110 3 1.5 1.5 0 010-3z" />
+                                        </svg>
                                     </button>
-                                    <button type="button"
-                                        @click="openDelete({{ $discount->id }}, '{{ $discount->name }}')"
-                                        class="flex items-center gap-1 rounded bg-red-500 px-2 py-1 text-sm text-white hover:bg-red-600">
-                                        <i class="fas fa-trash-alt text-xs"></i> Hapus
-                                    </button>
+
+
+                                    <!-- Dropdown Menu -->
+                                    <div x-show="open" @click.away="open = false" x-transition
+                                        class="class"="absolute bottom-full right-0 mb-2 w-52 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none z-50">
+                                        <div class="py-1">
+                                            <button type="button"
+                                                @click="openEdit({{ $discount->id }}, '{{ $discount->name }}', {{ $discount->nilai }}); open=false"
+                                                class="flex items-center w-full px-3 py-2 text-sm text-yellow-500 dark:text-yellow-400 hover:bg-gray-200 dark:hover:bg-gray-600 transition">
+                                                <i class="fas fa-pencil-alt mr-2"></i> Edit
+                                            </button>
+
+                                            <button @click="confirmDelete = true; open = false"
+                                                class="flex items-center w-full px-3 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-gray-200 dark:hover:bg-gray-600 transition">
+                                                <i class="fas fa-trash mr-2"></i> Hapus
+                                            </button>
+
+                                        </div>
+                                    </div>
+
+                                    <!-- Modal Delete -->
+                                    <div x-show="confirmDelete" x-cloak
+                                        class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-30">
+                                        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 max-w-sm w-full">
+                                            <h2 class="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-3">
+                                                Konfirmasi Hapus
+                                            </h2>
+                                            <p class="text-sm text-gray-600 dark:text-gray-300 mb-4">
+                                                Apakah kamu yakin ingin menghapus <span
+                                                    class="font-bold">{{ $discount->name }}</span>?
+                                            </p>
+                                            <div class="flex justify-end space-x-2">
+                                                <button @click="confirmDelete = false"
+                                                    class="px-4 py-2 bg-gray-300 dark:bg-gray-700 rounded-md hover:bg-gray-400 dark:hover:bg-gray-600 transition">
+                                                    Batal
+                                                </button>
+                                                <form action="{{ route('discounts.destroy', $discount->id) }}"
+                                                    method="POST">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit"
+                                                        class="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition">
+                                                        Hapus
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
+
                             </td>
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="3" class="px-4 py-6 text-center text-gray-500 dark:text-gray-400">Belum ada data
+                            <td colspan="3" class="px-4 py-6 text-center text-gray-500 dark:text-gray-400">Belum ada
+                                data
                                 diskon.</td>
                         </tr>
                     @endforelse

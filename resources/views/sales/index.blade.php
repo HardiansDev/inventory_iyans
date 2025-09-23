@@ -6,7 +6,7 @@
 
 @section('content')
     <section class="mb-6 rounded-lg bg-white p-6 shadow-sm dark:bg-gray-800">
-        <div class="mx-auto flex max-w-7xl flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
+        <div class="mx-auto flex max-w-7xl flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <!-- Judul dan Deskripsi -->
             <div>
                 <h1 class="text-2xl font-bold text-gray-800 dark:text-white">Menu Jualan</h1>
@@ -14,8 +14,47 @@
                     Kelola dan proses transaksi penjualan produk secara efisien
                 </p>
             </div>
+
+            <form method="GET" action="{{ route('sales.index') }}" class="flex flex-col gap-2 sm:flex-row sm:items-center">
+                <!-- Search Produk -->
+                <div class="relative">
+                    <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari produk..."
+                        class="w-full rounded-md border border-gray-300 bg-gray-50 px-3 py-2 text-sm text-gray-700 
+                   focus:border-blue-500 focus:ring focus:ring-blue-300 focus:ring-opacity-40 
+                   dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200 dark:focus:border-blue-500" />
+                    <span class="absolute right-3 top-2.5 text-gray-400 dark:text-gray-300">
+                        <i class="fas fa-search"></i>
+                    </span>
+                </div>
+
+                <select name="category"
+                    class="rounded-md border border-gray-300 bg-gray-50 px-3 py-2 text-sm 
+                    dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200 dark:focus:border-blue-500">
+                    <option value="">Semua Kategori</option>
+                    @forelse ($datacategory as $category)
+                        <option value="{{ $category->id }}" {{ request('category') == $category->id ? 'selected' : '' }}>
+                            {{ $category->name }}
+                        </option>
+                    @empty
+                        <option value="" disabled>Tidak ada kategori tersedia</option>
+                    @endforelse
+                </select>
+
+
+
+                <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition">
+                    Filter
+                </button>
+                <!-- Tombol Reset -->
+                <a href="{{ route('sales.index') }}"
+                    class="px-4 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600 transition">
+                    Reset
+                </a>
+            </form>
+
         </div>
     </section>
+
 
     <section x-data="wishlistHandler()" x-init="init()" class="relative mx-auto mb-6 max-w-7xl px-4">
         <!-- GRID PRODUK -->
@@ -68,6 +107,10 @@
                     </div>
                 </div>
             @endforeach
+        </div>
+        <!-- Pagination -->
+        <div class="mt-6 flex justify-end">
+            {{ $sales->links('pagination::tailwind') }}
         </div>
 
         <!-- Floating Cart Icon -->
