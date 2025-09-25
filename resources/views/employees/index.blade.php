@@ -94,19 +94,18 @@
             </a>
         </div>
 
-        <div class="overflow-x-auto overflow-y-visible rounded-lg border border-gray-200 dark:border-gray-700 shadow">
+        <div class="overflow-x-auto rounded-lg shadow-md">
             <table
-                class="min-w-full divide-y divide-gray-200 dark:divide-gray-700 bg-white dark:bg-gray-800 text-sm text-gray-700 dark:text-gray-200">
-                <thead
-                    class="bg-gray-50 dark:bg-gray-700 text-left text-xs font-semibold uppercase tracking-wider text-gray-600 dark:text-gray-300">
+                class="min-w-full divide-y divide-gray-200 dark:divide-gray-700 text-sm text-gray-700 dark:text-gray-200">
+                <thead class="bg-gray-100 dark:bg-gray-700 uppercase font-medium">
                     <tr>
-                        <th class="px-4 py-3">NIP</th>
-                        <th class="px-4 py-3">Nama</th>
-                        <th class="px-4 py-3">Departemen</th>
-                        <th class="px-4 py-3">Posisi</th>
-                        <th class="px-4 py-3">Status</th>
-                        <th class="px-4 py-3 text-center">QR Code</th>
-                        <th class="px-4 py-3 text-center">Aksi</th>
+                        <th class="px-4 py-3 text-left font-medium">NIP</th>
+                        <th class="px-4 py-3 text-left font-medium">Nama</th>
+                        <th class="px-4 py-3 text-left font-medium">Departemen</th>
+                        <th class="px-4 py-3 text-left font-medium">Posisi</th>
+                        <th class="px-4 py-3 text-left font-medium">Status</th>
+                        <th class="px-4 py-3 font-medium text-center">QR Code</th>
+                        <th class="px-4 py-3 text-center font-medium">Aksi</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-100 dark:divide-gray-700">
@@ -129,17 +128,15 @@
                                     Download QR
                                 </a>
                             </td>
-                            <td class="relative whitespace-nowrap px-4 py-3">
+                            <td class="px-4 py-2 text-center">
                                 <div x-data="{ open: false }" class="relative inline-block text-left">
-                                    <!-- Dropdown Toggle -->
-                                    <button @click="open = !open" type="button"
-                                        class="inline-flex items-center rounded bg-gray-100 dark:bg-gray-700 px-3 py-1.5 text-xs font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1">
-                                        <i class="fas fa-cogs mr-1"></i>
-                                        Aksi
-                                        <svg class="ml-1 h-3 w-3" viewBox="0 0 20 20" fill="currentColor">
-                                            <path fill-rule="evenodd"
-                                                d="M5.23 7.21a.75.75 0 011.06.02L10 11.585l3.71-4.355a.75.75 0 111.14.976l-4.25 5a.75.75 0 01-1.14 0l-4.25-5a.75.75 0 01.02-1.06z"
-                                                clip-rule="evenodd" />
+                                    <!-- Dropdown Trigger -->
+                                    <button @click="open = !open"
+                                        class="p-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition focus:outline-none">
+                                        <svg class="w-5 h-5 text-gray-600 dark:text-gray-300" fill="currentColor"
+                                            viewBox="0 0 20 20">
+                                            <path
+                                                d="M10 3a1.5 1.5 0 110 3 1.5 1.5 0 010-3zm0 5a1.5 1.5 0 110 3 1.5 1.5 0 010-3zm0 5a1.5 1.5 0 110 3 1.5 1.5 0 010-3z" />
                                         </svg>
                                     </button>
 

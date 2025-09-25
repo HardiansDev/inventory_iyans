@@ -124,12 +124,6 @@
 </head>
 
 <body>
-    <!-- Kop Surat -->
-    <div class="kop">
-        <h1>PT. KASIRIN.ID</h1>
-        <p>Jl. Contoh Alamat No. 123, Jakarta</p>
-        <p>Telp: (021) 1234567 | Email: info@company.com</p>
-    </div>
 
     <!-- Judul Laporan -->
     <div class="report-header">

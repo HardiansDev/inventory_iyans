@@ -23,25 +23,27 @@
                 <!-- Toolbar -->
                 <div class="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                     <div class="flex gap-2">
+                        <!-- Scan QR Absen -->
                         <a href="{{ route('employee-attendance.scan') }}"
-                            class="inline-flex items-center rounded bg-blue-600 px-4 py-2 text-sm font-medium text-white transition hover:bg-blue-700">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="mr-2 h-5 w-5" fill="none" viewBox="0 0 24 24"
-                                stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M9 5h6M9 12h6m-7 7h8" />
+                            class="inline-flex items-center gap-2 rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white transition hover:bg-blue-700">
+                            <!-- Camera Icon -->
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                                stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M3 7h2l2-3h10l2 3h2a2 2 0 012 2v9a2 2 0 01-2
+                                             2H3a2 2 0 01-2-2V9a2 2 0 012-2z" />
+                                <circle cx="12" cy="13" r="3" />
                             </svg>
-                            Scan QR Absen
+                            <span>Scan QR Absen</span>
                         </a>
+
 
                         <!-- Export PDF -->
                         <a href="{{ route('employee-attendance.export-pdf') }}"
-                            class="inline-flex items-center rounded bg-red-600 px-4 py-2 text-sm font-medium text-white transition hover:bg-red-700">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="mr-2 h-5 w-5" fill="none" viewBox="0 0 24 24"
-                                stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-                            </svg>
-                            Export PDF
+                            class="inline-flex items-center gap-2 rounded-lg bg-red-600 px-4 py-2 text-sm font-medium text-white transition hover:bg-red-700">
+                            <i class="fa-solid fa-file-pdf text-lg"></i>
+                            <span>Export PDF</span>
                         </a>
+
                     </div>
 
                     <!-- Search -->
@@ -57,19 +59,22 @@
                 </div>
 
                 <!-- Table -->
-                <div class="overflow-x-auto">
-                    <table class="min-w-full border border-gray-200 text-sm dark:border-gray-700">
-                        <thead class="bg-gray-100 text-xs uppercase text-gray-700 dark:bg-gray-800 dark:text-gray-200">
-                            <tr>
-                                <th class="border-b px-4 py-3">No</th>
-                                <th class="border-b px-4 py-3">Nama Pegawai</th>
-                                <th class="border-b px-4 py-3">NIP</th>
-                                <th class="border-b px-4 py-3">Tanggal</th>
-                                <th class="border-b px-4 py-3">Check In</th>
-                                <th class="border-b px-4 py-3">Check Out</th>
-                                <th class="border-b px-4 py-3">Status</th>
-                                <th class="border-b px-4 py-3">Aksi</th>
+                <div class="overflow-x-auto rounded-lg shadow">
+                    <table class="min-w-full text-sm text-left border-collapse">
+                        <thead
+                            class="bg-gray-100 text-xs font-semibold uppercase text-gray-700 dark:bg-gray-800 dark:text-gray-200">
+                            <tr
+                                class="bg-gray-100 text-xs font-semibold uppercase text-gray-700 dark:bg-gray-800 dark:text-gray-200">
+
+                                <th scope="col" class="px-4 py-3 text-left">Nama Pegawai</th>
+                                <th scope="col" class="px-4 py-3 text-left">NIP</th>
+                                <th scope="col" class="px-4 py-3 text-left">Tanggal</th>
+                                <th scope="col" class="px-4 py-3 text-left">Check In</th>
+                                <th scope="col" class="px-4 py-3 text-left">Check Out</th>
+                                <th scope="col" class="px-4 py-3 text-left">Status</th>
+                                <th scope="col" class="px-4 py-3 text-center">Aksi</th>
                             </tr>
+
                         </thead>
                         <tbody class="divide-y divide-gray-200 bg-white dark:divide-gray-700 dark:bg-gray-900">
                             @foreach ($attendances as $item)
@@ -79,7 +84,6 @@
                                     '{{ strtolower($item->employee->name) }}'.includes(search.toLowerCase()) ||
                                     '{{ strtolower($item->employee->employee_number) }}'.includes(search.toLowerCase())
                                 ">
-                                    <td class="px-4 py-3 text-center">{{ $loop->iteration }}</td>
                                     <td class="px-4 py-3">{{ $item->employee->name }}</td>
                                     <td class="px-4 py-3">{{ $item->employee->employee_number }}</td>
                                     <td class="px-4 py-3">{{ \Carbon\Carbon::parse($item->date)->format('d/m/Y') }}</td>
@@ -101,7 +105,7 @@
                                                 Absen Pulang
                                             </a>
                                         @else
-                                            <span class="text-xs font-medium text-green-600">✓ Selesai</span>
+                                            <span class="text-xs font-medium text-green-600"> Selesai</span>
                                         @endif
                                     </td>
                                 </tr>

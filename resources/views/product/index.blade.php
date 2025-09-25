@@ -111,10 +111,6 @@
                     class="mb-6 flex flex-col gap-4 sm:flex-row sm:items-end sm:gap-6">
                     <!-- Filter Kategori -->
                     <div class="w-full sm:w-auto">
-                        <label for="filtername" class="mb-1 block text-sm font-medium dark:bg-gray-800 dark:text-gray-100">
-                            <i class="fas fa-filter mr-1 text-gray-500"></i>
-                            Filter Kategori
-                        </label>
                         <select name="category" id="filtername"
                             class="w-full sm:w-72 rounded-lg border border-gray-300 px-3 py-2 text-sm dark:bg-gray-800 dark:text-gray-100 shadow-sm focus:border-blue-500 focus:ring-blue-500">
                             <option value="">Pilih Kategori</option>
@@ -126,16 +122,11 @@
                             @empty
                                 <option value="" disabled>Tidak ada kategori tersedia</option>
                             @endforelse
-
                         </select>
                     </div>
 
                     <!-- Search Produk -->
                     <div class="w-full sm:w-auto">
-                        <label for="search" class="mb-1 block text-sm font-medium dark:bg-gray-800 dark:text-gray-100">
-                            <i class="fas fa-search mr-1 text-gray-500"></i>
-                            Cari Produk
-                        </label>
                         <input type="text" name="search" id="search" placeholder="Nama produk..."
                             value="{{ request('search') }}"
                             class="w-full sm:w-72 rounded-lg border border-gray-300 px-3 py-2 text-sm dark:bg-gray-800 dark:text-gray-100 shadow-sm focus:border-blue-500 focus:ring-blue-500" />

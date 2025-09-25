@@ -55,9 +55,17 @@
 
     <ul class="space-y-2 p-2">
         {{-- Label --}}
-        <li class="mt-4 px-2 text-xs font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400">
-            Menu Utama
+        <li
+            class="mt-4 flex items-center justify-between px-2 text-xs font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400">
+            <span>Menu Utama</span>
+
+            <!-- Tombol collapse semua -->
+            <button onclick="closeAllDropdowns()"
+                class="ml-2 rounded p-1 text-gray-500 hover:bg-gray-200 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-200 transition">
+                <i class="fa fa-minus"></i>
+            </button>
         </li>
+
 
         {{-- DASHBOARD --}}
         @if (in_array(Auth::user()->role, ['superadmin', 'manager']))
@@ -352,4 +360,13 @@
             </li>
         @endif
     </ul>
+
+    <script>
+        function closeAllDropdowns() {
+            document.querySelectorAll("li.menu-open-tailwind").forEach(el => {
+                el.classList.remove("menu-open-tailwind");
+            });
+        }
+    </script>
+
 </aside>

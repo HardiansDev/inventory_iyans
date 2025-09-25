@@ -220,7 +220,7 @@
                             role="tablist">
                             <li>
                                 <button
-                                    class="inline-block p-3 border-b-2 border-transparent rounded-t-lg active text-blue-600 border-blue-600 hover:text-blue-700"
+                                    class="inline-block p-3 border-b-2 border-transparent rounded-t-lg active text-blue-600 border-blue-600 hover:text-blue-600 dark:hover:text-blue-400"
                                     id="tab-day" data-tabs-target="#tab-content-day" type="button" role="tab"
                                     aria-controls="tab-content-day" aria-selected="true">
                                     Harian

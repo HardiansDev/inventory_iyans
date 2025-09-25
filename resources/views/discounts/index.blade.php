@@ -95,22 +95,21 @@
         </div>
 
         <!-- Tabel Data -->
-        <div class="overflow-x-auto rounded-lg border border-gray-200 shadow dark:border-gray-700">
+        <div class="overflow-x-auto rounded-lg shadow-md">
             <table
-                class="min-w-full divide-y divide-gray-200 bg-white text-sm text-gray-700 dark:divide-gray-700 dark:bg-gray-800 dark:text-gray-200">
-                <thead
-                    class="bg-gray-50 text-left uppercase tracking-wider text-gray-600 dark:bg-gray-700 dark:text-gray-300">
+                class="min-w-full divide-y divide-gray-200 dark:divide-gray-700 text-sm text-gray-700 dark:text-gray-200">
+                <thead class="bg-gray-100 dark:bg-gray-700 uppercase font-medium">
                     <tr>
                         <th class="px-4 py-2 font-medium">Nama Diskon</th>
                         <th class="px-4 py-2 font-medium">Nilai (%)</th>
                         <th class="w-40 px-4 py-2 text-center font-medium">Aksi</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody class="divide-y divide-gray-100 dark:divide-gray-700">
                     @forelse ($discounts as $discount)
                         <tr class="hover:bg-gray-50 dark:hover:bg-gray-700">
-                            <td class="px-4 py-2">{{ $discount->name }}</td>
-                            <td class="px-4 py-2">{{ $discount->nilai ?? '-' }}</td>
+                            <td class="px-4 py-2 text-center">{{ $discount->name }}</td>
+                            <td class="px-4 py-2 text-center">{{ $discount->nilai ?? '-' }}</td>
                             <td class="px-4 py-2 text-center">
                                 <div x-data="{ open: false, confirmDelete: false }" class="relative inline-block text-left">
                                     <!-- Dropdown Trigger -->
