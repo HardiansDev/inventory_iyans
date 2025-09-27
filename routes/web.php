@@ -8,7 +8,6 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\SalesController;
-use App\Http\Controllers\ExportController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CheckoutController;
@@ -46,6 +45,9 @@ Route::middleware(['auth', 'role:superadmin,manager'])->group(function () {
     Route::resource('position', PositionController::class);
     Route::get('report/penjualan', [ReportController::class, 'penjualan'])->name('report.penjualan');
     Route::get('report/penjualan/pdf', [ReportController::class, 'penjualanPdf'])->name('report.penjualan.pdf');
+    Route::get('/report/export-excel', [App\Http\Controllers\DashboardController::class, 'exportExcel'])->name('report.export.excel');
+
+
     
 });
 
@@ -59,10 +61,6 @@ Route::middleware(['auth', 'role:superadmin'])->group(function () {
     Route::resource('product', ProductController::class);
     Route::post('/product/export', [ProductController::class, 'export'])->name('product.export');
     Route::delete('/products/bulk-delete', [ProductController::class, 'bulkDelete'])->name('product.bulkDelete');
-    Route::post('/product/download-pdf', [ProductController::class, 'downloadPdf'])->name('product.downloadPdf');
-    Route::post('/product/download-excel', [ProductController::class, 'downloadExcel'])->name('product.downloadExcel');
-    Route::get('/export/pdf', [ExportController::class, 'pdf'])->name('export.pdf');
-    Route::get('/export/excel', [ExportController::class, 'excel'])->name('export.excel');
     Route::get('/get-product-details/{productId}', [ProductController::class, 'getProductDetails']);
 });
 

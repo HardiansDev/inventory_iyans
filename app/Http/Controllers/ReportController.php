@@ -87,4 +87,7 @@ class ReportController extends Controller
 
         return $pdf->download("laporan_penjualan_{$start}_to_{$end}.pdf");
     }
+
+
+    
 }

@@ -73,37 +73,45 @@
                     <!-- Kanan: Dropdown Unduh Data -->
                     <div class="flex flex-col gap-2 sm:flex-row sm:items-center">
                         <div x-data="{ open: false }" class="relative w-full sm:w-auto">
+                            <!-- Trigger Button -->
                             <button @click="open = !open"
-                                class="inline-flex w-full sm:w-auto items-center gap-2 rounded-lg bg-teal-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-teal-700">
+                                class="inline-flex w-full sm:w-auto items-center justify-center gap-2 rounded-xl bg-teal-600 px-4 py-2 text-sm font-semibold text-white shadow-md hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-teal-400 dark:bg-teal-500 dark:hover:bg-teal-600 dark:focus:ring-teal-300 transition">
                                 <i class="fas fa-download"></i>
                                 Unduh Data
-                                <svg class="ml-1 h-4 w-4" fill="currentColor" viewBox="0 0 20 20">
+                                <svg class="ml-1 h-4 w-4 transition-transform duration-200" :class="{ 'rotate-180': open }"
+                                    fill="currentColor" viewBox="0 0 20 20">
                                     <path fill-rule="evenodd"
                                         d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 111.06 1.06l-4.24 4.24a.75.75 0 01-1.06 0L5.25 8.29a.75.75 0 01-.02-1.06z"
                                         clip-rule="evenodd" />
                                 </svg>
                             </button>
-                            <div x-show="open" @click.away="open = false"
-                                class="absolute z-10 mt-2 w-full sm:w-52 overflow-hidden rounded border border-gray-200 bg-white shadow-lg">
+
+                            <!-- Dropdown -->
+                            <div x-show="open" @click.away="open = false" x-transition
+                                class="absolute right-0 mt-2 w-full sm:w-52 overflow-hidden rounded-xl border border-gray-200 bg-white shadow-lg dark:border-gray-700 dark:bg-gray-800">
+                                <!-- Excel -->
                                 <form action="{{ route('product.export') }}" method="POST">
                                     @csrf
                                     <button type="submit" name="export_type" value="excel"
-                                        class="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100">
-                                        <i class="fas fa-file-excel mr-2 text-green-600"></i>
-                                        Unduh Excel
+                                        class="flex w-full items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-700 transition">
+                                        <i class="fas fa-file-excel text-green-600"></i>
+                                        <span>Export Excel</span>
                                     </button>
                                 </form>
+
+                                <!-- PDF -->
                                 <form action="{{ route('product.export') }}" method="POST">
                                     @csrf
                                     <button type="submit" name="export_type" value="pdf"
-                                        class="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100">
-                                        <i class="fas fa-file-pdf mr-2 text-red-500"></i>
-                                        Unduh PDF
+                                        class="flex w-full items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-700 transition">
+                                        <i class="fas fa-file-pdf text-red-500"></i>
+                                        <span>Export PDF</span>
                                     </button>
                                 </form>
                             </div>
                         </div>
                     </div>
+
                 </div>
 
                 <!-- Bagian Filter & Search -->

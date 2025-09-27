@@ -213,61 +213,105 @@
 
                     <!-- Tabs Navigation + Export -->
                     <div
-                        class="mb-4 border-b border-gray-200 dark:border-gray-700 flex flex-col lg:flex-row lg:items-center justify-between gap-3 lg:gap-0">
+                        class="mb-4 border-b border-gray-200 dark:border-gray-700 flex flex-wrap items-center justify-between gap-3">
 
                         <!-- Tabs -->
-                        <ul class="flex flex-wrap -mb-px text-sm font-medium text-center gap-2 lg:gap-0" id="chartTabs"
-                            role="tablist">
+                        <ul class="flex flex-wrap text-sm font-medium text-center gap-2" id="chartTabs" role="tablist">
                             <li>
                                 <button
                                     class="inline-block p-3 border-b-2 border-transparent rounded-t-lg active text-blue-600 border-blue-600 hover:text-blue-600 dark:hover:text-blue-400"
-                                    id="tab-day" data-tabs-target="#tab-content-day" type="button" role="tab"
-                                    aria-controls="tab-content-day" aria-selected="true">
+                                    id="tab-day" data-tab="daily" data-tabs-target="#tab-content-day" type="button"
+                                    role="tab" aria-controls="tab-content-day" aria-selected="true">
                                     Harian
                                 </button>
                             </li>
                             <li>
                                 <button
                                     class="inline-block p-3 border-b-2 border-transparent rounded-t-lg text-gray-700 dark:text-white hover:text-blue-600 dark:hover:text-blue-400"
-                                    id="tab-week" data-tabs-target="#tab-content-week" type="button" role="tab"
-                                    aria-controls="tab-content-week" aria-selected="false">
+                                    id="tab-week" data-tab="weekly" data-tabs-target="#tab-content-week" type="button"
+                                    role="tab" aria-controls="tab-content-week" aria-selected="false">
                                     Mingguan
                                 </button>
                             </li>
                             <li>
                                 <button
                                     class="inline-block p-3 border-b-2 border-transparent rounded-t-lg text-gray-700 dark:text-white hover:text-blue-600 dark:hover:text-blue-400"
-                                    id="tab-month" data-tabs-target="#tab-content-month" type="button" role="tab"
-                                    aria-controls="tab-content-month" aria-selected="false">
+                                    id="tab-month" data-tab="monthly" data-tabs-target="#tab-content-month"
+                                    type="button" role="tab" aria-controls="tab-content-month"
+                                    aria-selected="false">
                                     Bulanan
                                 </button>
                             </li>
                             <li>
                                 <button
                                     class="inline-block p-3 border-b-2 border-transparent rounded-t-lg text-gray-700 dark:text-white hover:text-blue-600 dark:hover:text-blue-400"
-                                    id="tab-year" data-tabs-target="#tab-content-year" type="button" role="tab"
-                                    aria-controls="tab-content-year" aria-selected="false">
+                                    id="tab-year" data-tab="yearly" data-tabs-target="#tab-content-year" type="button"
+                                    role="tab" aria-controls="tab-content-year" aria-selected="false">
                                     Tahunan
                                 </button>
                             </li>
                         </ul>
 
-
-
                         <!-- Export Buttons -->
-                        <div class="flex gap-2 mt-3 lg:mt-0">
-                            <button id="export-current"
-                                class="bg-blue-600 text-white dark:bg-blue-500 dark:hover:bg-blue-600 px-4 py-2 rounded-lg shadow hover:bg-blue-700 transition flex items-center gap-2 text-sm">
-                                <i class="fa-solid fa-download text-base"></i>
-                                <span>Export Harian</span>
-                            </button>
-                            <button id="export-all"
-                                class="bg-green-600 text-white dark:bg-green-500 dark:hover:bg-green-600 px-4 py-2 rounded-lg shadow hover:bg-green-700 transition flex items-center gap-2 text-sm">
-                                <i class="fa-solid fa-download text-base"></i>
-                                <span>Export Semua</span>
-                            </button>
+                        <div class="flex-shrink-0">
+                            <!-- Export Dropdown -->
+                            <div x-data="{ open: false }" class="relative inline-block text-left">
+                                <!-- Trigger button -->
+                                <button @click="open = !open"
+                                    class="bg-blue-600 text-white dark:bg-blue-500 dark:hover:bg-blue-600 px-3 py-1.5 rounded-md shadow hover:bg-blue-700 transition flex items-center gap-2 text-xs">
+                                    <i class="fa-solid fa-download text-sm"></i>
+                                    <span>Export</span>
+                                    <i class="fa-solid fa-caret-down text-[10px]"></i>
+                                </button>
+
+                                <!-- Dropdown menu -->
+                                <div x-show="open" @click.outside="open = false"
+                                    class="absolute right-0 mt-2 w-44 bg-white divide-y divide-gray-100 rounded-md shadow dark:bg-gray-700 z-20"
+                                    x-transition>
+                                    <ul class="py-1 text-sm text-gray-700 dark:text-gray-200">
+                                        <!-- Export Harian (Label dinamis) -->
+                                        <li>
+                                            <button id="export-current"
+                                                class="w-full flex items-center gap-3 px-3 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                                                <i class="fa-solid fa-file-pdf text-blue-500 text-base w-5"></i>
+                                                <span id="export-current-label">Export Harian</span>
+                                            </button>
+                                        </li>
+
+                                        <!-- Export Semua -->
+                                        <li>
+                                            <button id="export-all"
+                                                class="w-full flex items-center gap-3 px-3 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                                                <i class="fa-solid fa-file-pdf text-green-600 text-base w-5"></i>
+                                                <span>Export Semua</span>
+                                            </button>
+                                        </li>
+
+                                        <!-- Export Excel -->
+                                        <li>
+                                            <a id="export-excel-btn" href="#"
+                                                class="w-full flex items-center gap-3 px-3 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                                                <i class="fa-solid fa-file-excel text-yellow-500 text-base w-5"></i>
+                                                <span>Export Excel</span>
+                                            </a>
+                                        </li>
+
+                                        <!-- Export CSV -->
+                                        <li>
+                                            <button onclick="exportToCSV()"
+                                                class="w-full flex items-center gap-3 px-3 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                                                <i class="fa-solid fa-file-csv text-orange-500 text-base w-5"></i>
+                                                <span>Export CSV</span>
+                                            </button>
+                                        </li>
+
+                                    </ul>
+
+                                </div>
+                            </div>
                         </div>
                     </div>
+
 
 
                     <!-- Tabs Content -->
@@ -670,11 +714,11 @@
     </script>
 
     <script>
-        // ===================== PDF Export =====================
         const {
             jsPDF
         } = window.jspdf;
-        const exportBtn = document.getElementById("export-current");
+        const exportCurrentBtn = document.getElementById("export-current");
+        const exportAllBtn = document.getElementById("export-all");
 
         function renderChartToPDF(pdf, canvasId, title, tableData = null, addNewPage = false) {
             const canvas = document.getElementById(canvasId);
@@ -704,37 +748,8 @@
             }
         }
 
-        function updateExportButtonLabel() {
-            const activeTab = document.querySelector("#chart-tabs-content > div:not(.hidden)");
-            if (!activeTab) return;
-            const tabName = activeTab.id.replace("tab-content-", "");
-            let label = "Export";
-            switch (tabName) {
-                case "day":
-                    label = "Export Harian";
-                    break;
-                case "week":
-                    label = "Export Mingguan";
-                    break;
-                case "month":
-                    label = "Export Bulanan";
-                    break;
-                case "year":
-                    label = "Export Tahunan";
-                    break;
-            }
-            exportBtn.querySelector("span").textContent = label;
-        }
-
-        updateExportButtonLabel();
-
-        document.querySelectorAll("#chartTabs button").forEach(tab => {
-            tab.addEventListener("click", () => {
-                setTimeout(updateExportButtonLabel, 50);
-            });
-        });
-
-        exportBtn.addEventListener("click", () => {
+        // Export sesuai tab aktif
+        exportCurrentBtn.addEventListener("click", () => {
             const activeTab = document.querySelector("#chart-tabs-content > div:not(.hidden)");
             if (!activeTab) return alert("Tidak ada tab aktif");
             const canvas = activeTab.querySelector("canvas");
@@ -751,54 +766,35 @@
                     const dailyTotals = JSON.parse(document.getElementById('daily-totals').value);
                     tableData = {
                         headers: ["Tanggal", "Produk", "Total"],
-                        rows: dailyTotals.map(d => [
-                            d.tanggal,
-                            d.product,
-                            Number(d.total).toLocaleString('id-ID')
-                        ])
+                        rows: dailyTotals.map(d => [d.tanggal, d.product, Number(d.total).toLocaleString(
+                            'id-ID')])
                     };
                     break;
                 case "week":
                     title += "Mingguan";
                     const weeklyTotals = JSON.parse(document.getElementById('weekly-totals').value);
-                    console.log("weeklyTotals:", weeklyTotals);
                     tableData = {
                         headers: ["Periode", "Produk", "Total"],
-                        rows: weeklyTotals.map(d => [
-                            d.week, // pakai langsung field 'week'
-                            d.product,
-                            Number(d.total).toLocaleString('id-ID')
-                        ])
+                        rows: weeklyTotals.map(d => [d.week, d.product, Number(d.total).toLocaleString(
+                            'id-ID')])
                     };
                     break;
-
-
                 case "month":
                     title += "Bulanan";
                     const monthlyTotals = JSON.parse(document.getElementById('monthly-totals').value);
-                    console.log("monthlyTotals:", monthlyTotals);
                     tableData = {
                         headers: ["Bulan", "Produk", "Total"],
-                        rows: monthlyTotals.map(d => [
-                            d.month, // pakai langsung field 'month'
-                            d.product,
-                            Number(d.total).toLocaleString('id-ID')
-                        ])
+                        rows: monthlyTotals.map(d => [d.month, d.product, Number(d.total).toLocaleString(
+                            'id-ID')])
                     };
                     break;
-
-
                 case "year":
                     title += "Tahunan";
                     const yearlyTotals = JSON.parse(document.getElementById('yearly-totals').value);
-                    console.log("yearlyTotals:", yearlyTotals);
                     tableData = {
                         headers: ["Tahun", "Produk", "Total"],
-                        rows: yearlyTotals.map(d => [
-                            d.year, // pakai langsung field 'year'
-                            d.product,
-                            Number(d.total).toLocaleString('id-ID')
-                        ])
+                        rows: yearlyTotals.map(d => [d.year, d.product, Number(d.total).toLocaleString(
+                            'id-ID')])
                     };
                     break;
             }
@@ -807,10 +803,46 @@
             pdf.save("laporan-" + tabName + ".pdf");
         });
 
-        document.getElementById("export-all").addEventListener("click", () => {
+        function updateExportButtonLabel() {
+            const activeTab = document.querySelector("#chart-tabs-content > div:not(.hidden)");
+            if (!activeTab) return;
+
+            const tabName = activeTab.id.replace("tab-content-", "");
+            let label = "Export Harian"; // default
+
+            switch (tabName) {
+                case "day":
+                    label = "Export Harian";
+                    break;
+                case "week":
+                    label = "Export Mingguan";
+                    break;
+                case "month":
+                    label = "Export Bulanan";
+                    break;
+                case "year":
+                    label = "Export Tahunan";
+                    break;
+            }
+
+            document.getElementById("export-current-label").textContent = label;
+        }
+
+        // pertama kali load
+        updateExportButtonLabel();
+
+        // setiap kali ganti tab
+        document.querySelectorAll("#chartTabs button").forEach(tab => {
+            tab.addEventListener("click", () => {
+                setTimeout(updateExportButtonLabel, 50);
+            });
+        });
+
+
+        // Export semua
+        exportAllBtn.addEventListener("click", () => {
             const pdf = new jsPDF("p", "mm", "a4");
 
-            // Ambil data dari DOM
             const dailyData = JSON.parse(document.getElementById('daily-totals').value);
             const weekData = JSON.parse(document.getElementById('weekly-totals').value);
             const monthData = JSON.parse(document.getElementById('monthly-totals').value);
@@ -821,11 +853,8 @@
                     title: "Laporan Harian",
                     data: {
                         headers: ["Tanggal", "Produk", "Total"],
-                        rows: dailyData.map(d => [
-                            d.tanggal,
-                            d.product,
-                            Number(d.total).toLocaleString('id-ID')
-                        ])
+                        rows: dailyData.map(d => [d.tanggal, d.product, Number(d.total).toLocaleString(
+                            'id-ID')])
                     }
                 },
                 {
@@ -833,11 +862,7 @@
                     title: "Laporan Mingguan",
                     data: {
                         headers: ["Minggu", "Produk", "Total"],
-                        rows: weekData.map(d => [
-                            d.week,
-                            d.product,
-                            Number(d.total).toLocaleString('id-ID')
-                        ])
+                        rows: weekData.map(d => [d.week, d.product, Number(d.total).toLocaleString('id-ID')])
                     }
                 },
                 {
@@ -845,11 +870,7 @@
                     title: "Laporan Bulanan",
                     data: {
                         headers: ["Bulan", "Produk", "Total"],
-                        rows: monthData.map(d => [
-                            d.month,
-                            d.product,
-                            Number(d.total).toLocaleString('id-ID')
-                        ])
+                        rows: monthData.map(d => [d.month, d.product, Number(d.total).toLocaleString('id-ID')])
                     }
                 },
                 {
@@ -857,21 +878,102 @@
                     title: "Laporan Tahunan",
                     data: {
                         headers: ["Tahun", "Produk", "Total"],
-                        rows: yearData.map(d => [
-                            d.year,
-                            d.product,
-                            Number(d.total).toLocaleString('id-ID')
-                        ])
+                        rows: yearData.map(d => [d.year, d.product, Number(d.total).toLocaleString('id-ID')])
                     }
                 },
             ];
 
             charts.forEach((chart, index) => {
-                // index > 0 => tambah halaman baru
                 renderChartToPDF(pdf, chart.id, chart.title, chart.data, index > 0);
             });
 
             pdf.save("laporan-semua.pdf");
+        });
+    </script>
+
+    <script>
+        // Dataset dari controller
+        window.exportDataSets = {
+            daily: @json($dailyTotals),
+            weekly: @json($weeklyTotals),
+            monthly: @json($monthlyTotals),
+            yearly: @json($yearlyTotals)
+        };
+
+        function getActiveDataset() {
+            const activeTab = document.querySelector('button[data-tab].active');
+            const active = activeTab ? activeTab.dataset.tab : "daily";
+            return window.exportDataSets[active] || [];
+        }
+
+        // Export ke Excel (JS / XLSX, hanya data)
+        function exportToExcel() {
+            const data = getActiveDataset();
+            if (!data || data.length === 0) {
+                alert("Tidak ada data untuk diexport.");
+                return;
+            }
+
+            const worksheet = XLSX.utils.json_to_sheet(data);
+
+            const colWidths = Object.keys(data[0]).map(key => ({
+                wch: Math.max(
+                    key.length,
+                    ...data.map(row => (row[key] ? row[key].toString().length : 0))
+                )
+            }));
+            worksheet['!cols'] = colWidths;
+
+            const workbook = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(workbook, worksheet, "Data");
+
+            XLSX.writeFile(workbook, `laporan-${Date.now()}.xlsx`);
+        }
+
+        // Export ke CSV
+        function exportToCSV() {
+            const data = getActiveDataset();
+            if (!data || data.length === 0) {
+                alert("Tidak ada data untuk diexport.");
+                return;
+            }
+
+            let csvContent = "data:text/csv;charset=utf-8,";
+            const headers = Object.keys(data[0]).join(",") + "\n";
+            csvContent += headers;
+
+            data.forEach(row => {
+                const values = Object.values(row).map(v => `"${v}"`).join(",");
+                csvContent += values + "\n";
+            });
+
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", `laporan-${Date.now()}.csv`);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        // ===============================
+        // Update tombol Export Excel + Chart
+        // ===============================
+        function updateExcelExportLink() {
+            const activeTab = document.querySelector('button[data-tab].active');
+            const type = activeTab ? activeTab.dataset.tab : "daily";
+            const btn = document.getElementById('export-excel-btn');
+            btn.setAttribute('href', `/report/export-excel?type=${type}`);
+        }
+
+        // Panggil saat pertama kali halaman load
+        updateExcelExportLink();
+
+        // Update setiap kali tab berganti
+        document.querySelectorAll('button[data-tab]').forEach(tab => {
+            tab.addEventListener('click', () => {
+                setTimeout(updateExcelExportLink, 100); // delay kecil supaya class 'active' sudah berubah
+            });
         });
     </script>
 @endpush

@@ -5,53 +5,63 @@ namespace App\Exports;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithColumnFormatting;
+use Maatwebsite\Excel\Concerns\WithEvents;
+use Maatwebsite\Excel\Events\AfterSheet;
 use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
-use App\Models\Product;
 
-class ProductsExport implements FromCollection, WithHeadings, WithColumnFormatting
+class ProductsExport implements FromCollection, WithHeadings, WithColumnFormatting, WithEvents
 {
     protected $products;
 
-    // Constructor to accept products data
     public function __construct($products)
     {
         $this->products = $products;
     }
 
-    // This method returns the collection of products to be exported
     public function collection()
     {
         return $this->products->map(function ($product) {
             return [
-                'name' => $product->name,
-                'code' => $product->code,
-                'category' => $product->category->name ?? 'No Category',
-                'supplier' => $product->supplier->name ?? 'No Supplier',
-                'price' => number_format($product->price, 2), // Format price as decimal with two decimal places
-                'stock' => (string) $product->stock, // Ensure stock is treated as a string
+                'name'     => $product->name,
+                'code'     => $product->code,
+                'category' => $product->category->name ?? '-',
+                'satuan'   => $product->satuan->nama_satuan ?? '-',
+                'price'    => $product->price, // biar Excel yg formatin, jangan di number_format
+                'stock'    => $product->stock,
             ];
         });
     }
 
-    // This method defines the column headings for the Excel export
     public function headings(): array
     {
         return [
             'Nama Produk',
             'Kode Produk',
             'Kategori',
-            'Supplier',
+            'Satuan',
             'Harga',
             'Stok',
         ];
     }
 
-    // Column formatting: apply formatting to specific columns
     public function columnFormats(): array
     {
         return [
-            'E' => NumberFormat::FORMAT_NUMBER_00,  // Apply decimal format (2 decimal places) to 'Harga' column
-            'F' => '@',  // Treat 'Stok' as string (no numeric formatting)
+            'E' => NumberFormat::FORMAT_NUMBER_00, // Harga: 2 decimal
+            'F' => NumberFormat::FORMAT_NUMBER,    // Stok: angka biasa
+        ];
+    }
+
+    // 👉 AutoFit kolom setelah sheet dibuat
+    public function registerEvents(): array
+    {
+        return [
+            AfterSheet::class => function (AfterSheet $event) {
+                $sheet = $event->sheet->getDelegate();
+                foreach (range('A', 'F') as $col) {
+                    $sheet->getColumnDimension($col)->setAutoSize(true);
+                }
+            },
         ];
     }
 }

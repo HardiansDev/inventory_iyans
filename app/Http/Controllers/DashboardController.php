@@ -11,7 +11,17 @@ use App\Models\BahanBaku;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
-use Barryvdh\DomPDF\Facade\Pdf;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use PhpOffice\PhpSpreadsheet\Chart\Chart;
+use PhpOffice\PhpSpreadsheet\Chart\DataSeries;
+use PhpOffice\PhpSpreadsheet\Chart\DataSeriesValues;
+use PhpOffice\PhpSpreadsheet\Chart\PlotArea;
+use PhpOffice\PhpSpreadsheet\Chart\Legend;
+use PhpOffice\PhpSpreadsheet\Chart\Title;
+use PhpOffice\PhpSpreadsheet\Style\Fill;
+use PhpOffice\PhpSpreadsheet\Style\Alignment;
+
 
 use Illuminate\Http\Request;
 
@@ -123,7 +133,7 @@ class DashboardController extends Controller
         }
         Carbon::setLocale('id');
         $allDates = $dailySales->pluck('date')->unique()->sort()->values();
-        $dailyLabels = $allDates->map(fn($d) => Carbon::parse($d)->isoFormat('dddd, D MMMM'));
+        $dailyLabels = $allDates->map(fn($d) => Carbon::parse($d)->format('d/m/Y'));
         $dailyByProduct = [];
         foreach ($groupedDaily as $product => $data) {
             $values = [];
@@ -361,6 +371,122 @@ class DashboardController extends Controller
             'yearlyTotals',
             
         ));
+    }
+
+   
+    public function exportExcel(Request $request)
+    {
+        $filter = $request->query('type', 'daily'); // daily|weekly|monthly|yearly
+
+        // Ambil data dari session / service / method index
+        // Bisa dioptimalkan dengan memanggil method yang sama atau service class
+        $dashboardData = app()->call('App\Http\Controllers\DashboardController@index');
+
+        switch ($filter) {
+            case 'weekly':
+                $labels = $dashboardData['weekLabels'];
+                $datasets = $dashboardData['weeklyByProduct'];
+                $title = 'Penjualan per Minggu';
+                break;
+            case 'monthly':
+                $labels = $dashboardData['monthLabels'];
+                $datasets = $dashboardData['monthlyByProduct'];
+                $title = 'Penjualan per Bulan';
+                break;
+            case 'yearly':
+                $labels = $dashboardData['yearLabels'];
+                $datasets = $dashboardData['yearlyByProduct'];
+                $title = 'Penjualan per Tahun';
+                break;
+            default:
+                $labels = $dashboardData['dailyLabels'];
+                $datasets = $dashboardData['dailyByProduct'];
+                $title = 'Penjualan per Hari';
+                break;
+        }
+
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+        $sheetTitle = $sheet->getTitle();
+
+        // === Header ===
+        $sheet->setCellValue('A1', ucfirst($filter === 'daily' ? 'Tanggal' : ($filter === 'weekly' ? 'Minggu' : ($filter === 'monthly' ? 'Bulan' : 'Tahun'))));
+
+        $colIndex = 2;
+        $productColumns = [];
+        foreach ($datasets as $ds) {
+            $colLetter = \PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex($colIndex);
+            $sheet->setCellValue($colLetter.'1', $ds['label']);
+            $productColumns[] = $colLetter;
+            $colIndex++;
+        }
+
+        // === Isi data ===
+        $row = 2;
+        foreach ($labels as $i => $label) {
+            $sheet->setCellValue('A'.$row, $label);
+            foreach ($datasets as $pIndex => $ds) {
+                $col = $productColumns[$pIndex];
+                $sheet->setCellValue($col.$row, $ds['data'][$i] ?? 0);
+            }
+            $row++;
+        }
+        $lastRow = $row - 1;
+
+        // === Styling header ===
+        $headerRange = 'A1:'.end($productColumns).'1';
+        $sheet->getStyle($headerRange)->getFont()->setBold(true);
+        $sheet->getStyle($headerRange)->getFill()->setFillType(Fill::FILL_SOLID)->getStartColor()->setRGB('F3F4F6');
+        $sheet->getStyle($headerRange)->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+        foreach (range('A', end($productColumns)) as $col) {
+            $sheet->getColumnDimension($col)->setAutoSize(true);
+        }
+
+        // === Chart ===
+        $dataSeriesLabels = [];
+        foreach ($productColumns as $col) {
+            $dataSeriesLabels[] = new DataSeriesValues('String', $sheetTitle.'!$'.$col.'$1', null, 1);
+        }
+
+        $xAxisTickValues = [new DataSeriesValues('String', $sheetTitle.'!$A$2:$A$'.$lastRow, null, (int)($lastRow-1))];
+
+        $dataSeriesValues = [];
+        foreach ($productColumns as $col) {
+            $dataSeriesValues[] = new DataSeriesValues('Number', $sheetTitle.'!$'.$col.'$2:$'.$col.'$'.$lastRow, null, (int)($lastRow-1));
+        }
+
+        $series = new DataSeries(
+            DataSeries::TYPE_BARCHART,
+            DataSeries::GROUPING_CLUSTERED,
+            range(0, count($dataSeriesValues) - 1),
+            $dataSeriesLabels,
+            $xAxisTickValues,
+            $dataSeriesValues
+        );
+        $series->setPlotDirection(DataSeries::DIRECTION_COL);
+
+        $plotArea = new PlotArea(null, [$series]);
+        $legend = new Legend(Legend::POSITION_RIGHT, null, false);
+        $chartTitle = new Title($title);
+
+        $chart = new Chart('chart1', $chartTitle, $legend, $plotArea);
+        $chart->setTopLeftPosition('A'.($lastRow + 2));
+        $chart->setBottomRightPosition('M'.($lastRow + 20));
+        $sheet->addChart($chart);
+
+        // === Save file ===
+        $fileName = "laporan-{$filter}-".now()->format('Ymd_His').".xlsx";
+        $filePath = storage_path('app/public/exports/'.$fileName);
+
+        if (!file_exists(dirname($filePath))) {
+            mkdir(dirname($filePath), 0755, true);
+        }
+
+        $writer = new Xlsx($spreadsheet);
+        $writer->setIncludeCharts(true);
+        $writer->save($filePath);
+
+        return response()->download($filePath)->deleteFileAfterSend(true);
     }
 
 

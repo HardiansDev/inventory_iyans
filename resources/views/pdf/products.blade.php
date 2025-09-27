@@ -97,7 +97,6 @@
                     <td>{{ $product->category->name }}</td>
                     <td>Rp. {{ number_format($product->price, 0, ',', '.') }}</td>
                     <td>{{ $product->stock . ' ' . ($product->satuan?->nama_satuan ?? '') }}</td>
-
                 </tr>
             @endforeach
         </tbody>

@@ -37,7 +37,7 @@ class Product extends Model
 
     public function satuan()
     {
-        return $this->belongsTo(Satuan::class, 'satuan_id');
+        return $this->belongsTo(Satuan::class, 'satuan_id', 'id');
     }
 
     public function productIns()

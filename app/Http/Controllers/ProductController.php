@@ -218,21 +218,35 @@ class ProductController extends Controller
         $category = $request->input('category');
         $exportType = $request->input('export_type');
 
-        // Ambil data produk, dengan atau tanpa filter kategori
-        $products = $category ? Product::whereHas('category', function ($query) use ($category) {
-            $query->where('name', $category);
-        })->get() : Product::all();
+        // Ambil data produk + relasi
+        $products = Product::with(['category', 'satuan'])
+            ->when($category, function ($query) use ($category) {
+                $query->whereHas('category', function ($q) use ($category) {
+                    $q->where('name', $category);
+                });
+            })
+            ->get();
 
-        // Ekspor ke Excel atau PDF sesuai dengan permintaan
-        if ($exportType == 'excel') {
-            return Excel::download(new ProductsExport($products), 'products.xlsx');
+        // Cek dulu apakah relasi sudah jalan
+        // dd($products->first()->satuan);
+
+        // Ekspor ke Excel
+        if ($exportType === 'excel') {
+            return \Maatwebsite\Excel\Facades\Excel::download(
+                new \App\Exports\ProductsExport($products),
+                'products.xlsx'
+            );
         }
 
-        if ($exportType == 'pdf') {
-            // Render ke view PDF
-            return PDF::loadView('pdf.products', compact('products'))->download('products.pdf');
+        // Ekspor ke PDF
+        if ($exportType === 'pdf') {
+            $pdf = PDF::loadView('pdf.products', compact('products'));
+            return $pdf->download('products.pdf');
         }
+
+        return back()->with('error', 'Jenis export tidak valid.');
     }
+
 
     public function bulkDelete(Request $request)
     {
@@ -243,38 +257,5 @@ class ProductController extends Controller
     }
 
 
-    // ini pdf per showing data
-    public function downloadPdf(Request $request)
-    {
-        // Validasi input
-        $ids = $request->input('ids');
-        if (empty($ids)) {
-            return response()->json(['success' => false, 'message' => 'Tidak ada data terpilih.'], 400);
-        }
-
-        // Ambil data berdasarkan ID yang dikirim
-        $products = Product::whereIn('id', $ids)->get();
-
-        // Render PDF menggunakan view
-        $pdf = PDF::loadView('pdf.products', ['products' => $products]);
-
-        // Kirim file PDF ke browser
-        return $pdf->download('Produk_Terpilih.pdf');
-    }
-
-    // ini excel per showing data
-    public function downloadExcel(Request $request)
-    {
-        // Validasi input
-        $ids = $request->input('ids');
-        if (empty($ids)) {
-            return response()->json(['success' => false, 'message' => 'Tidak ada data terpilih.'], 400);
-        }
-
-        // Ambil data berdasarkan ID yang dikirim
-        $products = Product::whereIn('id', $ids)->get();
-
-        // Gunakan Export untuk membuat file Excel
-        return Excel::download(new ProductsExport($products), 'Produk_Terpilih.xlsx');
-    }
+    
 }
