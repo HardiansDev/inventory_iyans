@@ -2,14 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\Position;
+use Illuminate\Http\Request;
 
 class PositionController extends Controller
 {
     public function index()
     {
         $positions = Position::all();
+
         return view('positions.index', compact('positions'));
     }
 
@@ -40,6 +41,7 @@ class PositionController extends Controller
     public function destroy(Position $position)
     {
         $position->delete();
+
         return redirect()->back()->with('success', 'Posisi berhasil dihapus.');
     }
 }

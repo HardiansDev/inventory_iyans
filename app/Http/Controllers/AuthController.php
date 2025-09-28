@@ -27,7 +27,7 @@ class AuthController extends Controller
         ]);
 
         // Cek apakah sudah ada Super Admin
-        $superadminExists = \App\Models\User::where('role', 'superadmin')->exists();
+        $superadminExists = User::where('role', 'superadmin')->exists();
 
         return view('auth.form', compact('superadminExists'));
     }
@@ -42,7 +42,7 @@ class AuthController extends Controller
         ]);
 
         // Cek jawaban captcha
-        if ((int)$validated['captcha_answer'] !== session('captcha_answer')) {
+        if ((int) $validated['captcha_answer'] !== session('captcha_answer')) {
             return back()->with('error', 'Jawaban captcha salah.')->withInput();
         }
 
@@ -65,6 +65,7 @@ class AuthController extends Controller
     public function showRegister()
     {
         $superadminExists = User::where('role', 'superadmin')->exists();
+
         return view('auth.form', compact('superadminExists'));
     }
 
@@ -80,7 +81,7 @@ class AuthController extends Controller
 
         if ($validated['role'] === 'superadmin' && User::where('role', 'superadmin')->exists()) {
             return back()->withErrors([
-                'role' => 'Role Super Admin sudah digunakan dan tidak bisa dipilih lagi.'
+                'role' => 'Role Super Admin sudah digunakan dan tidak bisa dipilih lagi.',
             ])->withInput();
         }
 

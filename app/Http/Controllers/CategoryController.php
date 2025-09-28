@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\Category;
 use App\Models\Product;
+use Illuminate\Http\Request;
 
 class CategoryController extends Controller
 {
@@ -13,13 +13,14 @@ class CategoryController extends Controller
     {
         $search = $request->query('search');
         if (!empty($search)) {
-            $categories = Category::where('name', 'LIKE', '%' . $request->search . '%')->paginate(5)->onEachSide(2);
+            $categories = Category::where('name', 'LIKE', '%'.$request->search.'%')->paginate(5)->onEachSide(2);
         } else {
             $categories = Category::orderBy('created_at', 'DESC')->paginate(5)->onEachSide(2);
         }
+
         return view('category.index', [
             'categories' => $categories,
-            'search' => $search
+            'search' => $search,
         ]);
     }
 
@@ -33,11 +34,11 @@ class CategoryController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            'name' => 'required'
+            'name' => 'required',
         ]);
 
         Category::create([
-            'name' => $request->name
+            'name' => $request->name,
         ]);
 
         return redirect()->route('category.index')->with('success', 'Kategori Telah ditambah!');
@@ -47,6 +48,7 @@ class CategoryController extends Controller
     public function show($id)
     {
         $category = Category::find($id);
+
         return view('category.show', compact('category'));
     }
 
@@ -54,6 +56,7 @@ class CategoryController extends Controller
     public function edit($id)
     {
         $category = Category::find($id);
+
         return view('category.edit', compact('category'));
     }
 
@@ -61,7 +64,7 @@ class CategoryController extends Controller
     public function update($id, Request $request)
     {
         $this->validate($request, [
-            'name' => 'required'
+            'name' => 'required',
         ]);
 
         $category = Category::find($id);

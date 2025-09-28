@@ -11,11 +11,16 @@ use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable implements MustVerifyEmailContract
 {
-    use HasApiTokens, HasFactory, Notifiable, MustVerifyEmail;
+    use HasApiTokens;
+    use HasFactory;
+    use Notifiable;
+    use MustVerifyEmail;
 
     /**
      * The attributes that are mass assignable.
-     *@method bool hasVerifiedEmail()
+     *
+     * @method bool hasVerifiedEmail()
+     *
      * @var array<int, string>
      */
     protected $fillable = [
@@ -47,7 +52,6 @@ class User extends Authenticatable implements MustVerifyEmailContract
     /**
      * Boot method to handle model events.
      */
-
     public function messagesSent()
     {
         return $this->hasMany(Message::class, 'sender_id');

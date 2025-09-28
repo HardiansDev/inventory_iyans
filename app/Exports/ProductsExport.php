@@ -3,9 +3,9 @@
 namespace App\Exports;
 
 use Maatwebsite\Excel\Concerns\FromCollection;
-use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithColumnFormatting;
 use Maatwebsite\Excel\Concerns\WithEvents;
+use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Events\AfterSheet;
 use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 
@@ -22,12 +22,12 @@ class ProductsExport implements FromCollection, WithHeadings, WithColumnFormatti
     {
         return $this->products->map(function ($product) {
             return [
-                'name'     => $product->name,
-                'code'     => $product->code,
+                'name' => $product->name,
+                'code' => $product->code,
                 'category' => $product->category->name ?? '-',
-                'satuan'   => $product->satuan->nama_satuan ?? '-',
-                'price'    => $product->price, // biar Excel yg formatin, jangan di number_format
-                'stock'    => $product->stock,
+                'satuan' => $product->satuan->nama_satuan ?? '-',
+                'price' => $product->price, // biar Excel yg formatin, jangan di number_format
+                'stock' => $product->stock,
             ];
         });
     }

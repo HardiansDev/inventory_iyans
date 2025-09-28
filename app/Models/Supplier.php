@@ -9,7 +9,7 @@ class Supplier extends Model
 {
     use HasFactory;
 
-    protected $table = "suppliers";
+    protected $table = 'suppliers';
     protected $fillable = ['name', 'address', 'telp', 'email_sup', 'name_prod'];
 
     public function productIns()

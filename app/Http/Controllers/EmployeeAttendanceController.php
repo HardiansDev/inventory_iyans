@@ -4,21 +4,22 @@ namespace App\Http\Controllers;
 
 use App\Models\Attendance;
 use App\Models\Employee;
-use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
-
+use Illuminate\Http\Request;
 
 class EmployeeAttendanceController extends Controller
 {
     public function index()
     {
         $attendances = Attendance::with('employee')->latest()->get();
+
         return view('employee_attendance.index', compact('attendances'));
     }
 
     public function scanQR(Request $request)
     {
         $type = $request->query('type', 'check_in');
+
         return view('employee_attendance.scan', compact('type'));
     }
 
@@ -29,7 +30,7 @@ class EmployeeAttendanceController extends Controller
         ]);
 
         $imagePath = $request->file('qr_image')->store('temp');
-        $fullPath = storage_path('app/' . $imagePath);
+        $fullPath = storage_path('app/'.$imagePath);
 
         $qrcode = new \Zxing\QrReader($fullPath);
         $text = $qrcode->text();
@@ -51,16 +52,17 @@ class EmployeeAttendanceController extends Controller
                 $attendance->check_in = now()->format('H:i:s');
                 $attendance->save();
                 $attendance->load('employee'); // <<=== Tambahkan baris ini
-                return back()->with('success', 'Absen masuk berhasil untuk ' . $attendance->employee->name . ' (NIP: ' . $attendance->employee->employee_number . ')');
+
+                return back()->with('success', 'Absen masuk berhasil untuk '.$attendance->employee->name.' (NIP: '.$attendance->employee->employee_number.')');
             }
 
             if (!$attendance->check_out) {
                 $attendance->check_out = now()->format('H:i:s');
                 $attendance->save();
                 $attendance->load('employee'); // <<=== Tambahkan baris ini
-                return back()->with('success', 'Absen pulang berhasil untuk ' . $attendance->employee->name . ' (NIP: ' . $attendance->employee->employee_number . ')');
-            }
 
+                return back()->with('success', 'Absen pulang berhasil untuk '.$attendance->employee->name.' (NIP: '.$attendance->employee->employee_number.')');
+            }
 
             return back()->with('error', 'Anda sudah absen masuk dan pulang hari ini.');
         } else {
@@ -84,12 +86,14 @@ class EmployeeAttendanceController extends Controller
         if (!$attendance->check_in) {
             $attendance->check_in = now()->format('H:i:s');
             $attendance->save();
+
             return response()->json(['message' => 'Absen masuk berhasil']);
         }
 
         if (!$attendance->check_out) {
             $attendance->check_out = now()->format('H:i:s');
             $attendance->save();
+
             return response()->json(['message' => 'Absen pulang berhasil']);
         }
 
@@ -122,6 +126,7 @@ class EmployeeAttendanceController extends Controller
             }
             $attendance->check_in = now()->format('H:i:s');
             $attendance->save();
+
             return response()->json(['message' => 'Absen masuk berhasil.']);
         }
 
@@ -131,6 +136,7 @@ class EmployeeAttendanceController extends Controller
             }
             $attendance->check_out = now()->format('H:i:s');
             $attendance->save();
+
             return response()->json(['message' => 'Absen pulang berhasil.']);
         }
 
@@ -141,6 +147,7 @@ class EmployeeAttendanceController extends Controller
     {
         $attendances = Attendance::with('employee')->get();
         $pdf = Pdf::loadView('employee_attendance.export-pdf', compact('attendances'));
+
         return $pdf->download('absensi_pegawai.pdf');
     }
 }

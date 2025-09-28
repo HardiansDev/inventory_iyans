@@ -19,7 +19,7 @@ class CreateSalesDetailsTable extends Migration
             $table->foreignId('sales_id')
                 ->nullable()
                 ->constrained('sales')
-                ->nullOnDelete(); //key ke tabel sales
+                ->nullOnDelete(); // key ke tabel sales
             $table->dateTime('date_order');
             $table->foreignId('discount_id')->nullable()->constrained('discounts')->nullOnDelete('set null'); // Foreign key ke tabel discounts, nullable
             $table->decimal('amount', 15, 2)->nullable();

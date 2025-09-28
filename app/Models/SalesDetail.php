@@ -14,7 +14,7 @@ class SalesDetail extends Model
     protected $fillable = [
         'sales_id',
         'date_order',
-        'discount_id', //nullable
+        'discount_id', // nullable
         'amount',
         'total',
         'subtotal',
@@ -38,14 +38,13 @@ class SalesDetail extends Model
 
     public function product()
     {
-        return $this->belongsTo(\App\Models\ProductIn::class, 'sales_id');
+        return $this->belongsTo(ProductIn::class, 'sales_id');
     }
 
     public function productin()
     {
-        return $this->belongsTo(\App\Models\ProductIn::class, 'sales_id');
+        return $this->belongsTo(ProductIn::class, 'sales_id');
     }
-
 
     /**
      * Relasi ke model Discount

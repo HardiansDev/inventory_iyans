@@ -8,16 +8,17 @@ use Illuminate\Http\Request;
 class SatuanController extends Controller
 {
     /**
-     * Tampilkan semua data satuan
+     * Tampilkan semua data satuan.
      */
     public function index()
     {
         $satuans = Satuan::latest()->paginate(10);
+
         return view('satuan.index', compact('satuans'));
     }
 
     /**
-     * Form tambah satuan
+     * Form tambah satuan.
      */
     public function create()
     {
@@ -25,7 +26,7 @@ class SatuanController extends Controller
     }
 
     /**
-     * Simpan data satuan baru
+     * Simpan data satuan baru.
      */
     public function store(Request $request)
     {
@@ -41,7 +42,7 @@ class SatuanController extends Controller
     }
 
     /**
-     * Form edit satuan
+     * Form edit satuan.
      */
     public function edit(Satuan $satuan)
     {
@@ -49,12 +50,12 @@ class SatuanController extends Controller
     }
 
     /**
-     * Update data satuan
+     * Update data satuan.
      */
     public function update(Request $request, Satuan $satuan)
     {
         $request->validate([
-            'nama_satuan' => 'required|unique:satuans,nama_satuan,' . $satuan->id,
+            'nama_satuan' => 'required|unique:satuans,nama_satuan,'.$satuan->id,
             'keterangan' => 'nullable|string',
         ]);
 
@@ -65,7 +66,7 @@ class SatuanController extends Controller
     }
 
     /**
-     * Hapus data satuan
+     * Hapus data satuan.
      */
     public function destroy(Satuan $satuan)
     {

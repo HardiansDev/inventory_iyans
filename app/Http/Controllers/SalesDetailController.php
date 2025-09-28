@@ -5,9 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\Sales;
 use App\Models\SalesDetail;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Auth;
 use Midtrans\Config;
 use Midtrans\Snap;
 
@@ -42,7 +42,7 @@ class SalesDetailController extends Controller
             $itemsToInsert = [];
 
             foreach ($validated['sales'] as $item) {
-                $sales = Sales::with(['productIn' => fn($q) => $q->withTrashed()->with('product')])->findOrFail($item['sales_id']);
+                $sales = Sales::with(['productIn' => fn ($q) => $q->withTrashed()->with('product')])->findOrFail($item['sales_id']);
 
                 if ($sales->qty < $item['qty']) {
                     $stokKurang[] = optional(optional($sales->productIn)->product)->name ?? 'Produk tidak ditemukan';
@@ -51,11 +51,12 @@ class SalesDetailController extends Controller
 
             if (!empty($stokKurang)) {
                 DB::rollBack();
-                return response()->json(['success' => false, 'message' => 'Stok tidak cukup untuk: ' . implode(', ', $stokKurang)], 422);
+
+                return response()->json(['success' => false, 'message' => 'Stok tidak cukup untuk: '.implode(', ', $stokKurang)], 422);
             }
 
             foreach ($validated['sales'] as $item) {
-                $sales = Sales::with(['productIn' => fn($q) => $q->withTrashed()->with('product')])->findOrFail($item['sales_id']);
+                $sales = Sales::with(['productIn' => fn ($q) => $q->withTrashed()->with('product')])->findOrFail($item['sales_id']);
                 $product = optional(optional($sales->productIn)->product);
 
                 if (!$product || !$product->price) {
@@ -69,7 +70,7 @@ class SalesDetailController extends Controller
                 $sales->qty -= $qty;
                 $sales->save();
 
-                app(\App\Http\Controllers\ProductInController::class)->updateStatusPenjualan($sales->productIn);
+                app(ProductInController::class)->updateStatusPenjualan($sales->productIn);
 
                 $itemsToInsert[] = [
                     'sales_id' => $sales->id,
@@ -94,7 +95,7 @@ class SalesDetailController extends Controller
 
             // Jika metode QRIS, generate Snap token
             if ($validated['metode_pembayaran'] === 'qris') {
-                $orderId = 'TRX-' . uniqid();
+                $orderId = 'TRX-'.uniqid();
 
                 $params = [
                     'transaction_details' => [
@@ -102,14 +103,13 @@ class SalesDetailController extends Controller
                         'gross_amount' => max(1000, (int) $validated['total']),
                     ],
                     'callbacks' => [
-                        'finish' => route('print.receipt', ['transaction_number' => $validated['transaction_number']])
-                    ]
-
+                        'finish' => route('print.receipt', ['transaction_number' => $validated['transaction_number']]),
+                    ],
                 ];
 
                 try {
-                    Log::info("ORDER ID:", [$orderId]);
-                    Log::info("GROSS:", [$validated['total']]);
+                    Log::info('ORDER ID:', [$orderId]);
+                    Log::info('GROSS:', [$validated['total']]);
 
                     $snapToken = Snap::getSnapToken($params);
                     DB::commit();
@@ -123,9 +123,10 @@ class SalesDetailController extends Controller
                     ]);
                 } catch (\Exception $e) {
                     DB::rollBack();
+
                     return response()->json([
                         'success' => false,
-                        'message' => 'Midtrans Snap error: ' . $e->getMessage(),
+                        'message' => 'Midtrans Snap error: '.$e->getMessage(),
                     ]);
                 }
             }
@@ -140,6 +141,7 @@ class SalesDetailController extends Controller
             ]);
         } catch (\Exception $e) {
             DB::rollBack();
+
             return response()->json([
                 'success' => false,
                 'message' => 'Terjadi kesalahan saat memproses transaksi.',
@@ -160,7 +162,7 @@ class SalesDetailController extends Controller
 
         $invoice = $salesDetails->first();
 
-        $subtotal = $salesDetails->sum(fn($item) => $item->qty * $item->price);
+        $subtotal = $salesDetails->sum(fn ($item) => $item->qty * $item->price);
 
         $discountPercentage = optional($invoice->discount)->nilai ?? 0;
         $discount = ($subtotal * $discountPercentage) / 100;
@@ -185,7 +187,7 @@ class SalesDetailController extends Controller
     }
 
     /**
-     * Fungsi ini digunakan untuk menyimpan data detail penjualan secara manual jika dibutuhkan
+     * Fungsi ini digunakan untuk menyimpan data detail penjualan secara manual jika dibutuhkan.
      */
     public function storeSalesDetail(Request $request)
     {

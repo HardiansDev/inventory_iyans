@@ -8,7 +8,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class ProductIn extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory;
+    use SoftDeletes;
 
     protected $table = 'product_ins';
 
@@ -42,6 +43,7 @@ class ProductIn extends Model
             'satuan_id'  // Foreign key di product
         );
     }
+
     /**
      * Relasi ke data penjualan (jika produk ini sudah diproses ke sales).
      */
@@ -56,6 +58,7 @@ class ProductIn extends Model
     public function getRemainingStock()
     {
         $used = $this->sales()->sum('qty');
+
         return $this->qty - $used;
     }
 
@@ -82,8 +85,6 @@ class ProductIn extends Model
     {
         return $this->status === 'ditolak';
     }
-
-
 
     public function scopeNotifForUser($query)
     {

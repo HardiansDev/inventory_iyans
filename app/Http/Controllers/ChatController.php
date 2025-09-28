@@ -30,10 +30,9 @@ class ChatController extends Controller
                 'messagesSent as unread_count' => function ($query) use ($user) {
                     $query->where('receiver_id', $user->id)
                         ->where('is_read', false);
-                }
+                },
             ])
             ->get();
-
 
         // dd($users->toArray());
 
@@ -66,7 +65,6 @@ class ChatController extends Controller
         return view('chat.index', compact('users', 'messages', 'receiver'));
     }
 
-
     public function store(Request $request, $receiverId)
     {
         $request->validate([
@@ -74,10 +72,10 @@ class ChatController extends Controller
         ]);
 
         Message::create([
-            'sender_id'   => Auth::id(),
+            'sender_id' => Auth::id(),
             'receiver_id' => $receiverId,
-            'message'     => $request->message,
-            'is_read'     => false, // default belum dibaca
+            'message' => $request->message,
+            'is_read' => false, // default belum dibaca
         ]);
 
         return redirect()->route('chat.index', $receiverId)->with('success', 'Pesan terkirim!');

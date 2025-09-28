@@ -12,7 +12,7 @@ class DiscountController extends Controller
         $query = Discount::query();
 
         if ($request->has('search') && $request->search !== null) {
-            $query->where('name', 'like', '%' . $request->search . '%');
+            $query->where('name', 'like', '%'.$request->search.'%');
         }
 
         $discounts = $query->latest()->get(); // atau paginate jika kamu gunakan pagination

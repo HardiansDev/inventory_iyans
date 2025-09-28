@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Sales;
-use App\Models\ProductIn;
 use App\Models\Category;
+use App\Models\ProductIn;
+use App\Models\Sales;
 use Illuminate\Http\Request;
 
 class SalesController extends Controller
@@ -28,7 +28,7 @@ class SalesController extends Controller
         // 🔍 Filter search produk
         if ($request->filled('search')) {
             $query->whereHas('productIn.product', function ($q) use ($request) {
-                $q->where('name', 'like', '%' . $request->search . '%');
+                $q->where('name', 'like', '%'.$request->search.'%');
             });
         }
 
@@ -44,14 +44,6 @@ class SalesController extends Controller
 
         return view('sales.index', compact('sales', 'datacategory'));
     }
-
-
-
-
-
-
-
-
 
     public function store(Request $request)
     {
@@ -75,19 +67,14 @@ class SalesController extends Controller
             // Kurangi stok produk di tabel productin
             $productIn->qty -= $validatedData['qty'];
             $productIn->save();
-            app(\App\Http\Controllers\ProductInController::class)
+            app(ProductInController::class)
                 ->updateStatusPenjualan($productIn);
 
             return redirect()->route('productin.index')->with('success', 'Produknya Berhasil Ditambahkan.');
         } else {
-
             return redirect()->back()->with('error', 'Stok produk tidak cukup.');
         }
     }
-
-
-
-
 
     /**
      * Show the form for creating a new resource.
@@ -96,62 +83,58 @@ class SalesController extends Controller
      */
     public function create()
     {
-        //
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
     public function s(Request $request)
     {
-        //
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function show($id)
     {
-        //
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
     {
-        //
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param int $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
     {
-        //
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param int $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
     {
-        //
     }
 }

@@ -1,9 +1,6 @@
 <?php
 
-use App\Models\Category;
-use App\Models\Pic;
 use App\Models\Product;
-use App\Models\Supplier;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;

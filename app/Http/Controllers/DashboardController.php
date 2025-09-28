@@ -2,28 +2,25 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\BahanBaku;
+use App\Models\Employee;
 use App\Models\Product;
 use App\Models\ProductIn;
 use App\Models\SalesDetail;
 use App\Models\User;
-use App\Models\Employee;
-use App\Models\BahanBaku;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
-use PhpOffice\PhpSpreadsheet\Spreadsheet;
-use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use PhpOffice\PhpSpreadsheet\Chart\Chart;
 use PhpOffice\PhpSpreadsheet\Chart\DataSeries;
 use PhpOffice\PhpSpreadsheet\Chart\DataSeriesValues;
-use PhpOffice\PhpSpreadsheet\Chart\PlotArea;
 use PhpOffice\PhpSpreadsheet\Chart\Legend;
+use PhpOffice\PhpSpreadsheet\Chart\PlotArea;
 use PhpOffice\PhpSpreadsheet\Chart\Title;
-use PhpOffice\PhpSpreadsheet\Style\Fill;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
-
-
-use Illuminate\Http\Request;
+use PhpOffice\PhpSpreadsheet\Style\Fill;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 class DashboardController extends Controller
 {
@@ -55,7 +52,6 @@ class DashboardController extends Controller
         $pegawaiAktif = Employee::where('is_active', 1)->count();
         $pegawaiTidakAktif = Employee::where('is_active', 0)->count();
 
-
         // Data Produk (stok per produk)
         $products = Product::select('name', 'stock')->get();
         $productNames = $products->pluck('name');
@@ -67,7 +63,7 @@ class DashboardController extends Controller
             ->groupBy('product_id')
             ->get();
 
-        $inLabels = $inData->map(fn($item) => $item->product->name ?? 'Produk Tidak Ditemukan');
+        $inLabels = $inData->map(fn ($item) => $item->product->name ?? 'Produk Tidak Ditemukan');
         $inQtys = $inData->pluck('total_qty');
 
         // Produk Keluar (group by sales -> productIn -> product)
@@ -77,8 +73,7 @@ class DashboardController extends Controller
             ->get();
 
         $outLabels = $outData->map(
-            fn($item) =>
-            $item->sales->productIn->product->name ?? 'Produk Tidak Ditemukan'
+            fn ($item) => $item->sales->productIn->product->name ?? 'Produk Tidak Ditemukan'
         );
         $outQtys = $outData->pluck('total_qty');
 
@@ -96,7 +91,6 @@ class DashboardController extends Controller
                 DB::raw('SUM((salesdetails.price * salesdetails.qty) - ((salesdetails.price * salesdetails.qty) * (COALESCE(discounts.nilai, 0) / 100))) as total_penjualan')
             )
             ->get();
-
 
         $aktivitasHariIni = SalesDetail::with(['sales.productIn.product', 'sales.user'])
             ->whereDate('salesdetails.created_at', Carbon::today())
@@ -126,14 +120,13 @@ class DashboardController extends Controller
             ->orderBy('date')
             ->get();
 
-
         $groupedDaily = [];
         foreach ($dailySales as $sale) {
             $groupedDaily[$sale->product_name][$sale->date] = $sale->total;
         }
         Carbon::setLocale('id');
         $allDates = $dailySales->pluck('date')->unique()->sort()->values();
-        $dailyLabels = $allDates->map(fn($d) => Carbon::parse($d)->format('d/m/Y'));
+        $dailyLabels = $allDates->map(fn ($d) => Carbon::parse($d)->format('d/m/Y'));
         $dailyByProduct = [];
         foreach ($groupedDaily as $product => $data) {
             $values = [];
@@ -143,8 +136,8 @@ class DashboardController extends Controller
             $dailyByProduct[] = [
                 'label' => $product,
                 'data' => $values,
-                'borderColor' => 'rgba(' . rand(50, 255) . ',' . rand(50, 255) . ',' . rand(50, 255) . ',1)',
-                'backgroundColor' => 'rgba(' . rand(50, 255) . ',' . rand(50, 255) . ',' . rand(50, 255) . ',0.4)',
+                'borderColor' => 'rgba('.rand(50, 255).','.rand(50, 255).','.rand(50, 255).',1)',
+                'backgroundColor' => 'rgba('.rand(50, 255).','.rand(50, 255).','.rand(50, 255).',0.4)',
                 'fill' => false,
                 'tension' => 0.4,
                 'pointRadius' => 4,
@@ -170,7 +163,7 @@ class DashboardController extends Controller
             $groupedWeekly[$sale->product_name][$sale->week] = $sale->total;
         }
         $allWeeks = $weeklySales->pluck('week')->unique()->sort()->values();
-        $weekLabels = $allWeeks->map(fn($w) => 'Minggu ke-' . intval(substr($w, -2)) . ' - ' . Carbon::now()->year);
+        $weekLabels = $allWeeks->map(fn ($w) => 'Minggu ke-'.intval(substr($w, -2)).' - '.Carbon::now()->year);
         $weeklyByProduct = [];
         foreach ($groupedWeekly as $product => $data) {
             $values = [];
@@ -180,7 +173,7 @@ class DashboardController extends Controller
             $weeklyByProduct[] = [
                 'label' => $product,
                 'data' => $values,
-                'backgroundColor' => 'rgba(' . rand(50, 255) . ',' . rand(50, 255) . ',' . rand(50, 255) . ',0.6)'
+                'backgroundColor' => 'rgba('.rand(50, 255).','.rand(50, 255).','.rand(50, 255).',0.6)',
             ];
         }
         $weekValues = $weeklyByProduct;
@@ -201,7 +194,7 @@ class DashboardController extends Controller
             $groupedMonthly[$sale->product_name][$sale->month] = $sale->total;
         }
         $allMonths = $monthlySales->pluck('month')->unique()->sort()->values();
-        $monthLabels = $allMonths->map(fn($m) => Carbon::parse($m . '-01')->translatedFormat('F Y'));
+        $monthLabels = $allMonths->map(fn ($m) => Carbon::parse($m.'-01')->translatedFormat('F Y'));
         $monthlyByProduct = [];
         foreach ($groupedMonthly as $product => $data) {
             $values = [];
@@ -211,7 +204,7 @@ class DashboardController extends Controller
             $monthlyByProduct[] = [
                 'label' => $product,
                 'data' => $values,
-                'backgroundColor' => 'rgba(' . rand(50, 255) . ',' . rand(50, 255) . ',' . rand(50, 255) . ',0.6)'
+                'backgroundColor' => 'rgba('.rand(50, 255).','.rand(50, 255).','.rand(50, 255).',0.6)',
             ];
         }
         $monthValues = $monthlyByProduct;
@@ -283,8 +276,8 @@ class DashboardController extends Controller
                 break;
         }
 
-        $dailyTotals = collect($dailyByProduct)->flatMap(function($dataset) use ($dailyLabels) {
-            return collect($dataset['data'])->map(function($val, $index) use ($dataset, $dailyLabels) {
+        $dailyTotals = collect($dailyByProduct)->flatMap(function ($dataset) use ($dailyLabels) {
+            return collect($dataset['data'])->map(function ($val, $index) use ($dataset, $dailyLabels) {
                 return [
                     'tanggal' => $dailyLabels[$index],
                     'product' => $dataset['label'],
@@ -294,8 +287,8 @@ class DashboardController extends Controller
         });
 
         // Mingguan per produk
-        $weeklyTotals = collect($weeklyByProduct)->flatMap(function($dataset) use ($weekLabels) {
-            return collect($dataset['data'])->map(function($val, $index) use ($dataset, $weekLabels) {
+        $weeklyTotals = collect($weeklyByProduct)->flatMap(function ($dataset) use ($weekLabels) {
+            return collect($dataset['data'])->map(function ($val, $index) use ($dataset, $weekLabels) {
                 return [
                     'week' => $weekLabels[$index],
                     'product' => $dataset['label'],
@@ -305,8 +298,8 @@ class DashboardController extends Controller
         });
 
         // Bulanan per produk
-        $monthlyTotals = collect($monthlyByProduct)->flatMap(function($dataset) use ($monthLabels) {
-            return collect($dataset['data'])->map(function($val, $index) use ($dataset, $monthLabels) {
+        $monthlyTotals = collect($monthlyByProduct)->flatMap(function ($dataset) use ($monthLabels) {
+            return collect($dataset['data'])->map(function ($val, $index) use ($dataset, $monthLabels) {
                 return [
                     'month' => $monthLabels[$index],
                     'product' => $dataset['label'],
@@ -316,8 +309,8 @@ class DashboardController extends Controller
         });
 
         // Tahunan per produk
-        $yearlyTotals = collect($yearlyByProduct)->flatMap(function($dataset) use ($yearLabels) {
-            return collect($dataset['data'])->map(function($val, $index) use ($dataset, $yearLabels) {
+        $yearlyTotals = collect($yearlyByProduct)->flatMap(function ($dataset) use ($yearLabels) {
+            return collect($dataset['data'])->map(function ($val, $index) use ($dataset, $yearLabels) {
                 return [
                     'year' => $yearLabels[$index],
                     'product' => $dataset['label'],
@@ -325,9 +318,6 @@ class DashboardController extends Controller
                 ];
             });
         });
-
-
-
 
         return view('dashboard', compact(
             'totalProduk',
@@ -369,11 +359,9 @@ class DashboardController extends Controller
             'weeklyTotals',
             'monthlyTotals',
             'yearlyTotals',
-            
         ));
     }
 
-   
     public function exportExcel(Request $request)
     {
         $filter = $request->query('type', 'daily'); // daily|weekly|monthly|yearly
@@ -418,7 +406,7 @@ class DashboardController extends Controller
             $colLetter = \PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex($colIndex);
             $sheet->setCellValue($colLetter.'1', $ds['label']);
             $productColumns[] = $colLetter;
-            $colIndex++;
+            ++$colIndex;
         }
 
         // === Isi data ===
@@ -429,7 +417,7 @@ class DashboardController extends Controller
                 $col = $productColumns[$pIndex];
                 $sheet->setCellValue($col.$row, $ds['data'][$i] ?? 0);
             }
-            $row++;
+            ++$row;
         }
         $lastRow = $row - 1;
 
@@ -448,11 +436,11 @@ class DashboardController extends Controller
             $dataSeriesLabels[] = new DataSeriesValues('String', $sheetTitle.'!$'.$col.'$1', null, 1);
         }
 
-        $xAxisTickValues = [new DataSeriesValues('String', $sheetTitle.'!$A$2:$A$'.$lastRow, null, (int)($lastRow-1))];
+        $xAxisTickValues = [new DataSeriesValues('String', $sheetTitle.'!$A$2:$A$'.$lastRow, null, (int) ($lastRow - 1))];
 
         $dataSeriesValues = [];
         foreach ($productColumns as $col) {
-            $dataSeriesValues[] = new DataSeriesValues('Number', $sheetTitle.'!$'.$col.'$2:$'.$col.'$'.$lastRow, null, (int)($lastRow-1));
+            $dataSeriesValues[] = new DataSeriesValues('Number', $sheetTitle.'!$'.$col.'$2:$'.$col.'$'.$lastRow, null, (int) ($lastRow - 1));
         }
 
         $series = new DataSeries(
@@ -475,7 +463,7 @@ class DashboardController extends Controller
         $sheet->addChart($chart);
 
         // === Save file ===
-        $fileName = "laporan-{$filter}-".now()->format('Ymd_His').".xlsx";
+        $fileName = "laporan-{$filter}-".now()->format('Ymd_His').'.xlsx';
         $filePath = storage_path('app/public/exports/'.$fileName);
 
         if (!file_exists(dirname($filePath))) {
@@ -488,7 +476,4 @@ class DashboardController extends Controller
 
         return response()->download($filePath)->deleteFileAfterSend(true);
     }
-
-
-    
 }

@@ -3,9 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\BahanBaku;
-use Illuminate\Http\Request;
 use App\Models\Supplier;
-use App\Models\Product;
+use Illuminate\Http\Request;
 
 class SupplierController extends Controller
 {
@@ -14,8 +13,8 @@ class SupplierController extends Controller
     {
         $search = $request->query('search');
         if (!empty($search)) {
-            $suppliers = Supplier::where('name', 'LIKE', '%' . $search . '%')
-                ->orWhere('name_prod', 'LIKE', '%' . $search . '%')
+            $suppliers = Supplier::where('name', 'LIKE', '%'.$search.'%')
+                ->orWhere('name_prod', 'LIKE', '%'.$search.'%')
                 ->paginate(5)
                 ->onEachSide(2);
         } else {
@@ -23,6 +22,7 @@ class SupplierController extends Controller
                 ->paginate(5)
                 ->onEachSide(2);
         }
+
         return view('supplier.index', compact('suppliers', 'search'));
     }
 
@@ -50,6 +50,7 @@ class SupplierController extends Controller
             'telp' => $request->telp,
             'email_sup' => $request->email_sup,
         ]);
+
         return redirect(route('supplier.index'))->with('success', 'Supplier ditambah!');
     }
 
@@ -57,6 +58,7 @@ class SupplierController extends Controller
     public function show($id)
     {
         $supplier = Supplier::findOrFail($id);
+
         return view('supplier.show', compact('supplier'));
     }
 
@@ -64,6 +66,7 @@ class SupplierController extends Controller
     public function edit($id)
     {
         $supplier = Supplier::findOrFail($id);
+
         return view('supplier.edit', compact('supplier'));
     }
 

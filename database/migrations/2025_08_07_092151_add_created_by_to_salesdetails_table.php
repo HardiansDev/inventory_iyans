@@ -26,7 +26,6 @@ class AddCreatedByToSalesdetailsTable extends Migration
     public function down()
     {
         Schema::table('salesdetails', function (Blueprint $table) {
-            //
         });
     }
 }

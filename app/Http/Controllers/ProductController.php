@@ -2,32 +2,26 @@
 
 namespace App\Http\Controllers;
 
-
-use App\Models\Product;
-use App\Models\Category;
-use App\Models\Satuan;
-
-use Illuminate\Http\Request;
 use App\Exports\ProductsExport;
-use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
-
+use App\Models\Category;
+use App\Models\Product;
+use App\Models\Satuan;
 use Barryvdh\DomPDF\Facade\Pdf;
-use Maatwebsite\Excel\Facades\Excel;
+use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
-
-
+use Maatwebsite\Excel\Facades\Excel;
 
 class ProductController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-
     public function index(Request $request)
     {
         $search = $request->query('search');
         $categoryName = $request->query('category');
-        
+
         $satuans = Satuan::all();
 
         // Ambil semua kategori
@@ -54,7 +48,7 @@ class ProductController extends Controller
 
         // Filter pencarian nama produk jika diisi
         if (!empty($search)) {
-            $query->where('name', 'like', '%' . $search . '%');
+            $query->where('name', 'like', '%'.$search.'%');
         }
 
         // Ambil nilai perPage dari query string, default 5
@@ -63,11 +57,11 @@ class ProductController extends Controller
         // Ambil produk sesuai filter, urut terbaru
         $products = $query->orderBy('created_at', 'DESC')->paginate($perPage);
 
-
         // Hitung qty diterima dan ditolak
         $products->getCollection()->transform(function ($product) {
             $product->qty_diterima = $product->productins->where('status', 'diterima')->sum('qty');
             $product->qty_ditolak = $product->productins->where('status', 'ditolak')->sum('qty');
+
             return $product;
         });
 
@@ -133,7 +127,6 @@ class ProductController extends Controller
                 'stock.string' => 'Stok harus berupa teks.',
                 'stock.max' => 'Stok tidak boleh lebih dari 50 karakter.',
                 'satuan_id.exists' => 'Satuan yang dipilih tidak valid.',
-
             ]
         );
 
@@ -146,7 +139,6 @@ class ProductController extends Controller
 
         return redirect()->route('product.index')->with('success', 'Produk ditambahkan!');
     }
-
 
     /**
      * Display the specified resource.
@@ -178,16 +170,15 @@ class ProductController extends Controller
         // Validasi input
         $validatedData = $request->validate([
             'name' => 'required|string|max:50',
-            'code' => 'required|string|max:50|unique:products,code,' . $id,
+            'code' => 'required|string|max:50|unique:products,code,'.$id,
             'photo' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
             'category_id' => 'nullable|exists:categories,id',
             'price' => 'required|numeric',
             'stock' => 'required|string|max:50',
-            'satuan_id' => 'nullable|exists:satuans,id', 
+            'satuan_id' => 'nullable|exists:satuans,id',
         ]);
 
         $product = Product::findOrFail($id);
-
 
         if ($request->hasFile('photo')) {
             // Hapus foto lama (kalau sebelumnya pakai Cloudinary juga)
@@ -232,21 +223,21 @@ class ProductController extends Controller
 
         // Ekspor ke Excel
         if ($exportType === 'excel') {
-            return \Maatwebsite\Excel\Facades\Excel::download(
-                new \App\Exports\ProductsExport($products),
+            return Excel::download(
+                new ProductsExport($products),
                 'products.xlsx'
             );
         }
 
         // Ekspor ke PDF
         if ($exportType === 'pdf') {
-            $pdf = PDF::loadView('pdf.products', compact('products'));
+            $pdf = Pdf::loadView('pdf.products', compact('products'));
+
             return $pdf->download('products.pdf');
         }
 
         return back()->with('error', 'Jenis export tidak valid.');
     }
-
 
     public function bulkDelete(Request $request)
     {
@@ -255,7 +246,4 @@ class ProductController extends Controller
 
         return redirect()->route('product.index')->with('success', 'Produk terpilih berhasil dihapus.');
     }
-
-
-    
 }

@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\SalesDetail;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class ReportController extends Controller
@@ -13,14 +13,14 @@ class ReportController extends Controller
     public function penjualan(Request $request)
     {
         $start = $request->query('start');
-        $end   = $request->query('end');
+        $end = $request->query('end');
 
         $query = SalesDetail::query();
 
         if ($start && $end) {
             $query->whereBetween('salesdetails.created_at', [
-                $start . ' 00:00:00',
-                $end . ' 23:59:59',
+                $start.' 00:00:00',
+                $end.' 23:59:59',
             ]);
         }
 
@@ -35,8 +35,8 @@ class ReportController extends Controller
 
         if ($start && $end) {
             $total->whereBetween('salesdetails.created_at', [
-                $start . ' 00:00:00',
-                $end . ' 23:59:59',
+                $start.' 00:00:00',
+                $end.' 23:59:59',
             ]);
         }
 
@@ -51,13 +51,13 @@ class ReportController extends Controller
     public function penjualanPdf(Request $request)
     {
         $start = $request->query('start');
-        $end   = $request->query('end');
+        $end = $request->query('end');
 
         $query = SalesDetail::query();
 
         if ($start && $end) {
             $startDate = Carbon::createFromFormat('m/d/Y', $start)->startOfDay()->format('Y-m-d H:i:s');
-            $endDate   = Carbon::createFromFormat('m/d/Y', $end)->endOfDay()->format('Y-m-d H:i:s');
+            $endDate = Carbon::createFromFormat('m/d/Y', $end)->endOfDay()->format('Y-m-d H:i:s');
 
             $query->whereBetween('salesdetails.date_order', [$startDate, $endDate]);
         }
@@ -73,7 +73,7 @@ class ReportController extends Controller
 
         if ($start && $end) {
             $startDate = Carbon::createFromFormat('m/d/Y', $start)->startOfDay()->format('Y-m-d H:i:s');
-            $endDate   = Carbon::createFromFormat('m/d/Y', $end)->endOfDay()->format('Y-m-d H:i:s');
+            $endDate = Carbon::createFromFormat('m/d/Y', $end)->endOfDay()->format('Y-m-d H:i:s');
 
             $total->whereBetween('salesdetails.date_order', [$startDate, $endDate]);
         }
@@ -87,7 +87,4 @@ class ReportController extends Controller
 
         return $pdf->download("laporan_penjualan_{$start}_to_{$end}.pdf");
     }
-
-
-    
 }

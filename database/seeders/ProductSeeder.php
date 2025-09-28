@@ -2,8 +2,8 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
 use App\Models\Product;
+use Illuminate\Database\Seeder;
 use Illuminate\Support\Str;
 
 class ProductSeeder extends Seeder
@@ -15,10 +15,10 @@ class ProductSeeder extends Seeder
         $products = [];
         $uniqueCodes = [];
 
-        for ($i = 1; $i <= 10; $i++) {
+        for ($i = 1; $i <= 10; ++$i) {
             // Pastikan kode unik
             do {
-                $code = 'P-' . strtoupper(Str::random(8));
+                $code = 'P-'.strtoupper(Str::random(8));
             } while (in_array($code, $uniqueCodes));
             $uniqueCodes[] = $code;
 

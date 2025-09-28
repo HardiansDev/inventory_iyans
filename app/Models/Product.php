@@ -22,7 +22,6 @@ class Product extends Model
         'price',          // Harga produk
         'stock',          // Informasi stok
         'satuan_id',      // ID satuan
-
     ];
 
     /**
@@ -44,7 +43,6 @@ class Product extends Model
     {
         return $this->hasMany(ProductIn::class, 'product_id', 'id');
     }
-
 
     public function latestApprovedProductIn()
     {

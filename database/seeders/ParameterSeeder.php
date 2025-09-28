@@ -2,10 +2,8 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
 use App\Models\Category;
-use App\Models\Supplier;
-use App\Models\Pic;
+use Illuminate\Database\Seeder;
 
 class ParameterSeeder extends Seeder
 {

@@ -3,9 +3,9 @@
 namespace App\Providers;
 
 use Illuminate\Pagination\Paginator;
+use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
 use Midtrans\Config;
-use Illuminate\Support\Facades\URL;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -16,7 +16,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
     }
 
     /**
@@ -30,7 +29,6 @@ class AppServiceProvider extends ServiceProvider
             URL::forceScheme('https');
         }
         Paginator::useBootstrap();
-
 
         Config::$serverKey = config('midtrans.serverKey');
         Config::$clientKey = config('midtrans.clientKey');

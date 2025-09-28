@@ -2,20 +2,19 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Employee;
 use App\Models\Department;
-use App\Models\Position;
+use App\Models\Employee;
 use App\Models\EmploymentStatus;
-use Illuminate\Http\Request;
+use App\Models\Position;
+use Carbon\Carbon;
+use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
 use Endroid\QrCode\QrCode;
 use Endroid\QrCode\Writer\PngWriter;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
-use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
-use Carbon\Carbon;
 
 class EmployeeController extends Controller
 {
-
     public function downloadQrCode($id)
     {
         $employee = Employee::findOrFail($id);
@@ -25,14 +24,14 @@ class EmployeeController extends Controller
 
         $result = $writer->write($qrCode);
 
-        $filename = 'qr_pegawai_' . $employee->id . '.png';
-        $path = 'public/qrcodes/' . $filename;
+        $filename = 'qr_pegawai_'.$employee->id.'.png';
+        $path = 'public/qrcodes/'.$filename;
 
         // Simpan ke storage
         Storage::put($path, $result->getString());
 
         // Kembalikan response file untuk download
-        return response()->download(storage_path('app/' . $path));
+        return response()->download(storage_path('app/'.$path));
     }
 
     public function index(Request $request)
@@ -53,8 +52,8 @@ class EmployeeController extends Controller
 
         if ($request->filled('search')) {
             $query->where(function ($q) use ($request) {
-                $q->where('name', 'like', '%' . $request->search . '%')
-                    ->orWhere('employee_number', 'like', '%' . $request->search . '%');
+                $q->where('name', 'like', '%'.$request->search.'%')
+                    ->orWhere('employee_number', 'like', '%'.$request->search.'%');
             });
         }
 
@@ -68,13 +67,13 @@ class EmployeeController extends Controller
         ]);
     }
 
-
     public function create()
     {
         $departments = Department::all();
         $positions = Position::all();
         $statuses = EmploymentStatus::all();
         $employee = null;
+
         return view('employees.create', compact('departments', 'positions', 'statuses', 'employee'));
     }
 
@@ -127,19 +126,17 @@ class EmployeeController extends Controller
         }
         $validated['date_joined'] = Carbon::createFromFormat('m/d/Y', $validated['date_joined'])->format('Y-m-d');
 
-
         Employee::create($validated);
-
 
         return redirect()->route('employees.index')->with('success', 'Pegawai berhasil ditambahkan.');
     }
-
 
     public function edit(Employee $employee)
     {
         $departments = Department::all();
         $positions = Position::all();
         $statuses = EmploymentStatus::all();
+
         return view('employees.edit', compact('employee', 'departments', 'positions', 'statuses'));
     }
 
@@ -167,7 +164,7 @@ class EmployeeController extends Controller
         ];
 
         $validated = $request->validate([
-            'employee_number' => 'required|unique:employees,employee_number,' . $employee->id,
+            'employee_number' => 'required|unique:employees,employee_number,'.$employee->id,
             'name' => 'required',
             'email' => 'nullable|email',
             'phone' => 'nullable|numeric',
@@ -199,23 +196,21 @@ class EmployeeController extends Controller
 
         $employee->update($validated);
 
-
         return redirect()->route('employees.index')->with('success', 'Data pegawai diperbarui.');
     }
-
-
 
     public function show($id)
     {
         $employee = Employee::with(['department', 'position', 'status'])->findOrFail($id);
+
         return view('employees.show', compact('employee'));
     }
 
     public function destroy(Employee $employee)
     {
         // Hapus foto jika ada
-        if ($employee->photo && Storage::disk('public')->exists('photos/' . $employee->photo)) {
-            Storage::disk('public')->delete('photos/' . $employee->photo);
+        if ($employee->photo && Storage::disk('public')->exists('photos/'.$employee->photo)) {
+            Storage::disk('public')->delete('photos/'.$employee->photo);
         }
 
         $employee->delete();
@@ -223,11 +218,11 @@ class EmployeeController extends Controller
         return back()->with('success', 'Pegawai dihapus.');
     }
 
-
     private function extractCloudinaryPublicId($url)
     {
         $path = parse_url($url, PHP_URL_PATH);
         $filename = pathinfo($path, PATHINFO_FILENAME);
+
         return $filename;
     }
 }

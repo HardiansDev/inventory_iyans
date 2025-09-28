@@ -12,7 +12,6 @@ class UpdateProductsForeignKeys extends Migration
             // Drop the existing foreign keys
             $table->dropForeign(['category_id']);
 
-
             // Add new foreign keys with `set null` behavior
             $table->foreign('category_id')->references('id')->on('categories')->onDelete('set null');
         });

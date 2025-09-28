@@ -3,11 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\BahanBaku;
-use App\Models\Supplier;
 use App\Models\Category;
 use App\Models\Satuan;
+use App\Models\Supplier;
 use Barryvdh\DomPDF\Facade\Pdf;
-
 use Illuminate\Http\Request;
 
 class BahanBakuController extends Controller
@@ -20,9 +19,9 @@ class BahanBakuController extends Controller
 
         if ($search) {
             $query->where('name', 'LIKE', "%{$search}%")
-                ->orWhereHas('supplier', fn($q) => $q->where('name', 'LIKE', "%{$search}%"))
-                ->orWhereHas('category', fn($q) => $q->where('name', 'LIKE', "%{$search}%"))
-                ->orWhereHas('satuan', fn($q) => $q->where('nama_satuan', 'LIKE', "%{$search}%"));
+                ->orWhereHas('supplier', fn ($q) => $q->where('name', 'LIKE', "%{$search}%"))
+                ->orWhereHas('category', fn ($q) => $q->where('name', 'LIKE', "%{$search}%"))
+                ->orWhereHas('satuan', fn ($q) => $q->where('nama_satuan', 'LIKE', "%{$search}%"));
         }
 
         $bahanBakus = $query->paginate(10);
@@ -59,6 +58,7 @@ class BahanBakuController extends Controller
     public function show($id)
     {
         $bahanBaku = BahanBaku::with(['supplier', 'category', 'satuan'])->findOrFail($id);
+
         return view('bahan_baku.show', compact('bahanBaku'));
     }
 
@@ -102,7 +102,8 @@ class BahanBakuController extends Controller
     {
         $bahanBaku = BahanBaku::all();
 
-        $pdf = PDF::loadView('bahan_baku.report_pdf', compact('bahanBaku'));
-        return $pdf->stream('laporan-bahan-baku.pdf'); // bisa diganti ->download()
+        $pdf = Pdf::loadView('bahan_baku.report_pdf', compact('bahanBaku'));
+
+        return $pdf->stream('laporan-bahan-baku.pdf');
     }
 }

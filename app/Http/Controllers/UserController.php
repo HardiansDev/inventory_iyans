@@ -36,10 +36,10 @@ class UserController extends Controller
     public function store(Request $request)
     {
         $validatedData = $request->validate([
-            'name'     => 'required|string|max:255',
-            'email'    => 'required|email|unique:users,email|max:255',
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email|max:255',
             'password' => 'required|string|min:6',
-            'role'     => 'required|in:superadmin,admin_gudang,kasir,manager',
+            'role' => 'required|in:superadmin,admin_gudang,kasir,manager',
         ]);
 
         $validatedData['password'] = Hash::make($validatedData['password']); // Hash password
@@ -48,7 +48,6 @@ class UserController extends Controller
 
         return redirect()->route('user.index')->with('success', 'User berhasil ditambah!.');
     }
-
 
     /**
      * Display the specified resource.
