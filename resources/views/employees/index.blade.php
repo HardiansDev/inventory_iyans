@@ -132,7 +132,7 @@
                                 <div x-data="{ open: false }" class="relative inline-block text-left">
                                     <!-- Dropdown Trigger -->
                                     <button @click="open = !open"
-                                        class="p-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition focus:outline-none">
+                                        class="p-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-500 transition focus:outline-none">
                                         <svg class="w-5 h-5 text-gray-600 dark:text-gray-300" fill="currentColor"
                                             viewBox="0 0 20 20">
                                             <path

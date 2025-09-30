@@ -168,11 +168,12 @@
 
             {{-- Notifikasi --}}
             @if (Auth::user()->role === 'superadmin' || Auth::user()->role === 'admin_gudang')
-                <div class="relative">
+                <div x-data="{ open: false }" class="relative">
                     <!-- Tombol Bell -->
-                    <button id="notifBtn"
+                    <button @click="open = !open"
                         class="relative p-2 rounded-full text-gray-800 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors duration-200 focus:outline-none">
                         <i class="fas fa-bell text-lg"></i>
+
                         @php
                             $notifCount = 0;
                             if (Auth::user()->role === 'superadmin') {
@@ -196,10 +197,11 @@
                     </button>
 
                     <!-- Dropdown Notifikasi -->
-                    <div id="notificationMenu"
-                        class="absolute right-0 mt-2 hidden w-80 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 shadow-xl z-[60] overflow-hidden">
+                    <div x-show="open" @click.away="open = false" x-transition
+                        class="absolute right-0 mt-2 w-80 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 shadow-xl z-50 overflow-hidden">
+                        <div
+                            class="py-2 text-sm max-h-72 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-700">
 
-                        <div class="py-2 text-sm max-h-72 overflow-y-auto">
                             @php
                                 if (Auth::user()->role === 'superadmin') {
                                     $notifs = \App\Models\ProductIn::where('status', 'menunggu')
@@ -231,8 +233,8 @@
                                 @else
                                     <a href="{{ route('notifications.admin_gudang.show', $notif->id) }}"
                                         class="block border-b border-gray-100 dark:border-gray-800 px-4 py-3 transition-colors duration-200
-                                        {{ $notif->is_read ? 'bg-gray-50 dark:bg-gray-800 text-gray-600 dark:text-gray-400' : 'bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100' }}
-                                        hover:bg-gray-50 dark:hover:bg-gray-800">
+                            {{ $notif->is_read ? 'bg-gray-50 dark:bg-gray-800 text-gray-600 dark:text-gray-400' : 'bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100' }}
+                            hover:bg-gray-50 dark:hover:bg-gray-800">
                                         <p class="font-medium">Feedback:
                                             <strong>{{ $notif->product->name ?? '-' }}</strong>
                                         </p>
@@ -256,32 +258,44 @@
                                     Lihat semua notifikasi
                                 </a>
                             @endif
+
                         </div>
                     </div>
                 </div>
             @endif
 
+
             {{-- User Menu --}}
-            <div class="relative inline-block text-left">
-                <button id="userMenuButton"
+            <div x-data="{ open: false }" class="relative inline-block text-left">
+                <!-- Trigger -->
+                <button @click="open = !open"
                     class="flex items-center text-sm focus:outline-none px-3 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors duration-200">
                     <i class="fas fa-user-circle text-2xl text-gray-600 dark:text-gray-300"></i>
                     <span class="ml-2 text-gray-800 dark:text-gray-200">{{ Auth::user()->name }}</span>
                     <i class="fas fa-chevron-down ml-2 text-gray-500 dark:text-gray-400 text-xs"></i>
                 </button>
 
-                <div id="userMenu"
-                    class="absolute right-0 mt-2 hidden w-52 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 shadow-lg z-50 overflow-hidden">
+                <!-- Dropdown Menu -->
+                <div x-show="open" @click.away="open = false" x-transition:enter="transition ease-out duration-200"
+                    x-transition:enter-start="opacity-0 transform scale-95"
+                    x-transition:enter-end="opacity-100 transform scale-100"
+                    x-transition:leave="transition ease-in duration-150"
+                    x-transition:leave-start="opacity-100 transform scale-100"
+                    x-transition:leave-end="opacity-0 transform scale-95"
+                    class="absolute right-0 mt-2 w-52 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 shadow-lg z-50 overflow-hidden">
+
                     <a href="{{ route('profile.edit') }}"
                         class="flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors duration-200">
                         <i class="fas fa-cog mr-2 text-gray-500 dark:text-gray-400"></i>
                         Pengaturan Profil
                     </a>
+
                     <a href="{{ route('activity.log') }}"
                         class="flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors duration-200">
                         <i class="fas fa-history mr-2 text-gray-500 dark:text-gray-400"></i>
                         Log Aktivitas
                     </a>
+
                     <a href="#" @click.prevent="$dispatch('open-logout-modal')"
                         class="flex items-center px-4 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors duration-200">
                         <i class="fas fa-power-off mr-2"></i>
@@ -289,6 +303,7 @@
                     </a>
                 </div>
             </div>
+
 
         </div>
     </nav>

@@ -70,10 +70,10 @@ class ProductInController extends Controller
         // Cek jumlah notifikasi tersisa
         $pendingRequests = ProductIn::where('status', 'menunggu')->count();
         if ($pendingRequests > 3) {
-            return redirect()->route('notifications.superadmin')->with('error', 'Permintaan ditolak.');
+            return redirect()->route('notifications.superadmin');
         }
 
-        return redirect()->route('product.index')->with('error', 'Permintaan ditolak.');
+        return redirect()->route('product.index');
     }
 
     public function index()

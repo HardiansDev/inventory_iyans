@@ -34,8 +34,8 @@
                 class="min-w-full divide-y divide-gray-200 dark:divide-gray-700 text-sm text-gray-700 dark:text-gray-200">
                 <thead class="bg-gray-100 dark:bg-gray-700 uppercase font-medium">
                     <tr>
-                        <th class="px-4 py-2">Nama Status</th>
-                        <th class="px-4 py-2 text-center">Aksi</th>
+                        <th class="px-4 py-3 text-left font-medium">Nama Status</th>
+                        <th class="px-4 py-3 text-center font-medium">Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -46,7 +46,7 @@
                                 <div x-data="{ open: false }" class="relative inline-block text-left">
                                     <!-- Dropdown Trigger -->
                                     <button @click="open = !open"
-                                        class="p-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition focus:outline-none">
+                                        class="p-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-500 transition focus:outline-none">
                                         <svg class="w-5 h-5 text-gray-600 dark:text-gray-300" fill="currentColor"
                                             viewBox="0 0 20 20">
                                             <path

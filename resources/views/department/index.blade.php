@@ -21,7 +21,7 @@
         <div class="mb-4 grid grid-cols-1 gap-4 md:grid-cols-2">
             <div>
                 <button onclick="openDepartmentModal()"
-                    class="flex w-full items-center gap-2 rounded bg-blue-600 px-4 py-2 text-white hover:bg-blue-700 md:w-auto">
+                    class="flex w-full items-center gap-2 rounded-lg bg-blue-600 px-4 py-2 text-white hover:bg-blue-700 md:w-auto">
                     <i class="fas fa-plus-circle"></i>
                     <span>Tambah Departemen</span>
                 </button>
@@ -29,14 +29,13 @@
         </div>
 
         <!-- Tabel -->
-        <div class="overflow-x-auto rounded-lg border border-gray-200 shadow dark:border-gray-700">
+        <div class="overflow-x-auto rounded-lg shadow-md">
             <table
-                class="min-w-full divide-y divide-gray-200 bg-white text-sm text-gray-700 dark:divide-gray-700 dark:bg-gray-900 dark:text-gray-200">
-                <thead
-                    class="bg-gray-50 text-left text-xs font-semibold uppercase tracking-wider text-gray-600 dark:bg-gray-700 dark:text-gray-300">
+                class="min-w-full divide-y divide-gray-200 dark:divide-gray-700 text-sm text-gray-700 dark:text-gray-200">
+                <thead class="bg-gray-100 dark:bg-gray-700 uppercase font-medium">
                     <tr>
-                        <th class="px-4 py-2">Nama Departemen</th>
-                        <th class="px-4 py-2 text-center">Aksi</th>
+                        <th class="px-4 py-3 text-left font-medium">Nama Departemen</th>
+                        <th class="px-4 py-3 text-center font-medium">Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -44,16 +43,44 @@
                         <tr class="hover:bg-gray-50 dark:hover:bg-gray-700">
                             <td class="px-4 py-2">{{ $department->name }}</td>
                             <td class="px-4 py-2 text-center">
-                                <div class="flex justify-center gap-2">
-                                    <button onclick="openEditModal({{ $department->id }}, '{{ $department->name }}')"
-                                        class="rounded bg-yellow-400 px-3 py-1 text-sm text-white hover:bg-yellow-500">
-                                        <i class="fas fa-edit"></i> Edit
+                                <div x-data="{ open: false }" class="relative inline-block text-left">
+                                    <!-- Dropdown Trigger -->
+                                    <button @click="open = !open"
+                                        class="p-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-500 transition focus:outline-none">
+                                        <svg class="w-5 h-5 text-gray-600 dark:text-gray-300" fill="currentColor"
+                                            viewBox="0 0 20 20">
+                                            <path
+                                                d="M10 3a1.5 1.5 0 110 3 1.5 1.5 0 010-3zm0 5a1.5 1.5 0 110 3 1.5 1.5 0 010-3zm0 5a1.5 1.5 0 110 3 1.5 1.5 0 010-3z" />
+                                        </svg>
                                     </button>
-                                    <button onclick="openDeleteModal({{ $department->id }}, '{{ $department->name }}')"
-                                        class="rounded bg-red-500 px-3 py-1 text-sm text-white hover:bg-red-600">
-                                        <i class="fas fa-trash-alt"></i> Hapus
-                                    </button>
+
+                                    <!-- Dropdown Menu -->
+                                    <div x-show="open" @click.away="open = false" x-transition
+                                        class="class"="absolute bottom-full right-0 mb-2 w-52 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none z-50">
+                                        <div class="py-1">
+                                            <!-- Edit -->
+                                            <button
+                                                onclick="openEditModal({{ $department->id }}, '{{ $department->name }}')"
+                                                class="flex w-full items-center gap-2 px-4 py-2 text-sm 
+                                                text-gray-700 hover:bg-gray-100 hover:text-gray-900 
+                                                dark:text-gray-200 dark:hover:bg-gray-600 dark:hover:text-white transition">
+                                                <i class="fas fa-edit text-yellow-500"></i>
+                                                Edit
+                                            </button>
+
+                                            <!-- Hapus -->
+                                            <button
+                                                onclick="openDeleteModal({{ $department->id }}, '{{ $department->name }}')"
+                                                class="flex w-full items-center gap-2 px-4 py-2 text-sm 
+                                                text-gray-700 hover:bg-gray-100 hover:text-gray-900 
+                                                dark:text-gray-200 dark:hover:bg-gray-600 dark:hover:text-white transition">
+                                                <i class="fas fa-trash-alt text-red-500"></i>
+                                                Hapus
+                                            </button>
+                                        </div>
+                                    </div>
                                 </div>
+
                             </td>
                         </tr>
                     @empty

@@ -15,20 +15,19 @@
 
     <section class="rounded bg-white p-6 shadow-sm dark:bg-gray-800 dark:text-gray-100">
         <div class="mb-4">
-            <button onclick="openPositionModal()" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded">
+            <button onclick="openPositionModal()" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg">
                 <i class="fas fa-plus-circle"></i> Tambah Jabatan
             </button>
         </div>
 
-        <div class="overflow-x-auto rounded-lg border border-gray-200 shadow dark:border-gray-700">
+        <div class="overflow-x-auto rounded-lg shadow-md">
             <table
-                class="min-w-full divide-y divide-gray-200 bg-white text-sm text-gray-700 dark:bg-gray-900 dark:text-gray-200 dark:divide-gray-700">
-                <thead
-                    class="bg-gray-50 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider dark:bg-gray-700 dark:text-gray-300">
+                class="min-w-full divide-y divide-gray-200 dark:divide-gray-700 text-sm text-gray-700 dark:text-gray-200">
+                <thead class="bg-gray-100 dark:bg-gray-700 uppercase font-medium">
                     <tr>
-                        <th class="px-4 py-2">Nama Jabatan</th>
-                        <th class="px-4 py-2">Gaji Pokok</th>
-                        <th class="px-4 py-2 text-center">Aksi</th>
+                        <th class="px-4 py-3 text-left font-medium">Nama Jabatan</th>
+                        <th class="px-4 py-3 text-left font-medium">Gaji Pokok</th>
+                        <th class="px-4 py-3 text-center">Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -37,17 +36,43 @@
                             <td class="px-4 py-2">{{ $position->name }}</td>
                             <td class="px-4 py-2">Rp {{ number_format($position->base_salary, 0, ',', '.') }}</td>
                             <td class="px-4 py-2 text-center">
-                                <div class="flex justify-center gap-2">
-                                    <button
-                                        onclick="openEditModal({{ $position->id }}, '{{ $position->name }}', '{{ $position->base_salary }}')"
-                                        class="bg-yellow-400 hover:bg-yellow-500 text-white px-3 py-1 rounded text-sm">
-                                        <i class="fas fa-edit"></i> Edit
+                                <div x-data="{ open: false }" class="relative inline-block text-left">
+                                    <!-- Dropdown Trigger -->
+                                    <button @click="open = !open"
+                                        class="p-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-500 transition focus:outline-none">
+                                        <svg class="w-5 h-5 text-gray-600 dark:text-gray-300" fill="currentColor"
+                                            viewBox="0 0 20 20">
+                                            <path
+                                                d="M10 3a1.5 1.5 0 110 3 1.5 1.5 0 010-3zm0 5a1.5 1.5 0 110 3 1.5 1.5 0 010-3zm0 5a1.5 1.5 0 110 3 1.5 1.5 0 010-3z" />
+                                        </svg>
                                     </button>
-                                    <button onclick="openDeleteModal({{ $position->id }}, '{{ $position->name }}')"
-                                        class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded text-sm">
-                                        <i class="fas fa-trash-alt"></i> Hapus
-                                    </button>
+
+                                    <!-- Dropdown Menu -->
+                                    <div x-show="open" @click.away="open = false" x-transition
+                                        class="class"="absolute bottom-full right-0 mb-2 w-52 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none z-50">
+                                        <div class="py-1">
+                                            <!-- Edit -->
+                                            <button
+                                                onclick="openEditModal({{ $position->id }}, '{{ $position->name }}', '{{ $position->base_salary }}')"
+                                                class="flex w-full items-center gap-2 px-4 py-2 text-sm 
+                                                text-gray-700 hover:bg-gray-100 hover:text-gray-900 
+                                                dark:text-gray-200 dark:hover:bg-gray-600 dark:hover:text-white transition">
+                                                <i class="fas fa-edit text-yellow-500"></i>
+                                                Edit
+                                            </button>
+
+                                            <!-- Hapus -->
+                                            <button onclick="openDeleteModal({{ $position->id }}, '{{ $position->name }}')"
+                                                class="flex w-full items-center gap-2 px-4 py-2 text-sm 
+                                                text-gray-700 hover:bg-gray-100 hover:text-gray-900 
+                                                dark:text-gray-200 dark:hover:bg-gray-600 dark:hover:text-white transition">
+                                                <i class="fas fa-trash-alt text-red-500"></i>
+                                                Hapus
+                                            </button>
+                                        </div>
+                                    </div>
                                 </div>
+
                             </td>
                         </tr>
                     @empty
