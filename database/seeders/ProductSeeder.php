@@ -10,7 +10,8 @@ class ProductSeeder extends Seeder
 {
     public function run()
     {
-        $categories = [1, 2]; // ID kategori
+        $categories = [1, 2, 3]; // ID kategori
+        $satuans = [1, 2, 3, 4, 5]; // ID satuan (hasil dari SatuanSeeder)
 
         $products = [];
         $uniqueCodes = [];
@@ -27,8 +28,9 @@ class ProductSeeder extends Seeder
                 'code' => $code,
                 'photo' => "product_$i.jpg", // Lokasi foto dummy
                 'category_id' => $categories[array_rand($categories)],
+                'satuan_id' => $satuans[array_rand($satuans)],
 
-                'price' => mt_rand(1000, 100000) / 100, // Harga antara 10.00 hingga 1000.00
+                'price' => mt_rand(5, 50) * 1000,
                 'stock' => mt_rand(0, 500), // Stok antara 0 hingga 500
                 'created_at' => now(),
                 'updated_at' => now(),

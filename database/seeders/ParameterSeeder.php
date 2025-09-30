@@ -19,6 +19,7 @@ class ParameterSeeder extends Seeder
             ['name' => 'Electronics'],
             ['name' => 'Furniture'],
             ['name' => 'Clothing'],
+            ['name' => 'Bahan Baku'],
         ];
 
         foreach ($categories as $category) {

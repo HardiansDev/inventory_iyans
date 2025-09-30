@@ -196,6 +196,28 @@ class ProductController extends Controller
         return redirect()->route('product.index')->with('success', 'Produk Telah di Update.');
     }
 
+    public function deletePhoto($id)
+    {
+        $product = Product::findOrFail($id);
+
+        if ($product->photo) {
+            try {
+                $publicId = pathinfo($product->photo, PATHINFO_FILENAME);
+                Cloudinary::destroy($publicId);
+            } catch (\Exception $e) {
+                // tetap lanjut
+            }
+
+            $product->photo = null;
+            $product->save();
+        }
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Foto produk berhasil dihapus.',
+        ]);
+    }
+
     public function destroy($id)
     {
         $product = Product::findOrFail($id);

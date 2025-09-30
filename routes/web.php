@@ -1,35 +1,33 @@
 <?php
 
+use App\Http\Controllers\ActivityLogController;
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\BahanBakuController;
+use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\ChatController;
+use App\Http\Controllers\CheckoutController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\DepartmentController;
+use App\Http\Controllers\DiscountController;
+use App\Http\Controllers\EmployeeAttendanceController;
+use App\Http\Controllers\EmployeeController;
+use App\Http\Controllers\EmploymentStatusController;
+use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\PositionController;
+use App\Http\Controllers\ProductController;
+use App\Http\Controllers\ProductInController;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ReportController;
+use App\Http\Controllers\SalesController;
+use App\Http\Controllers\SalesDetailController;
+use App\Http\Controllers\SatuanController;
+use App\Http\Controllers\SupplierController;
+use App\Http\Controllers\TrackingTreeController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\WorkScheduleController;
 use App\Models\User;
-use Illuminate\Http\Request;
-use Illuminate\Auth\Events\Verified;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\AuthController;
-use App\Http\Controllers\UserController;
-use App\Http\Controllers\SalesController;
-use App\Http\Controllers\ProductController;
-use App\Http\Controllers\CategoryController;
-use App\Http\Controllers\CheckoutController;
-use App\Http\Controllers\DiscountController;
-use App\Http\Controllers\EmployeeController;
-use App\Http\Controllers\SupplierController;
-use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\ProductInController;
-use App\Http\Controllers\SalesDetailController;
-use App\Http\Controllers\WorkScheduleController;
-use App\Http\Controllers\EmployeeAttendanceController;
-use App\Http\Controllers\EmploymentStatusController;
-use App\Http\Controllers\DepartmentController;
-use App\Http\Controllers\PositionController;
-use App\Http\Controllers\BahanBakuController;
-use App\Http\Controllers\ReportController;
-use App\Http\Controllers\NotificationController;
-use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\ActivityLogController;
-use App\Http\Controllers\TrackingTreeController;
-use App\Http\Controllers\SatuanController;
-use App\Http\Controllers\ChatController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -45,10 +43,7 @@ Route::middleware(['auth', 'role:superadmin,manager'])->group(function () {
     Route::resource('position', PositionController::class);
     Route::get('report/penjualan', [ReportController::class, 'penjualan'])->name('report.penjualan');
     Route::get('report/penjualan/pdf', [ReportController::class, 'penjualanPdf'])->name('report.penjualan.pdf');
-    Route::get('/report/export-excel', [App\Http\Controllers\DashboardController::class, 'exportExcel'])->name('report.export.excel');
-
-
-    
+    Route::get('/report/export-excel', [DashboardController::class, 'exportExcel'])->name('report.export.excel');
 });
 
 // User Management (hanya Superadmin)
@@ -58,7 +53,14 @@ Route::middleware(['auth', 'role:superadmin'])->group(function () {
 
 // Produk (Superadmin)
 Route::middleware(['auth', 'role:superadmin'])->group(function () {
+    // Route untuk deletePhoto (letakkan **sebelum** resource)
+    Route::delete('/product/delete-photo/{id}', [ProductController::class, 'deletePhoto'])
+         ->name('product.deletePhoto');
+
+    // Resource product
     Route::resource('product', ProductController::class);
+
+    // Route lain
     Route::post('/product/export', [ProductController::class, 'export'])->name('product.export');
     Route::delete('/products/bulk-delete', [ProductController::class, 'bulkDelete'])->name('product.bulkDelete');
     Route::get('/get-product-details/{productId}', [ProductController::class, 'getProductDetails']);
@@ -76,8 +78,6 @@ Route::middleware(['auth', 'role:admin_gudang'])->group(function () {
     Route::resource('trackingtree', TrackingTreeController::class)->only(['index', 'show']);
 });
 
-
-
 Route::middleware(['auth', 'role:superadmin,admin_gudang'])->group(function () {
     Route::get('/product-in/{id}/confirm', [ProductInController::class, 'showConfirmation'])->name('product.confirmation');
     Route::post('/product-in/{id}/approve', [ProductInController::class, 'approve'])->name('product.approve');
@@ -91,14 +91,12 @@ Route::middleware(['auth', 'role:superadmin,admin_gudang'])->group(function () {
     Route::resource('satuan', SatuanController::class);
 });
 
-
 // Kategori & Supplier
 Route::middleware(['auth', 'role:superadmin'])->group(function () {
     Route::resource('category', CategoryController::class);
     Route::resource('supplier', SupplierController::class);
     Route::resource('bahan_baku', BahanBakuController::class);
     Route::get('/bahan-baku/report/pdf', [BahanBakuController::class, 'reportPdf'])->name('bahan_baku.reportPdf');
-
 });
 
 // Penjualan & Diskon (Kasir & Superadmin)
@@ -114,8 +112,6 @@ Route::middleware(['auth', 'role:kasir,superadmin,admin_gudang'])->group(functio
     Route::post('/chat/{receiverId}', [ChatController::class, 'store'])->name('chat.store');
 });
 
-
-
 // Karyawan & Absensi
 Route::middleware(['auth', 'role:superadmin'])->group(function () {
     Route::resource('employees', EmployeeController::class);
@@ -129,7 +125,6 @@ Route::middleware(['auth', 'role:superadmin'])->group(function () {
     Route::resource('work-schedules', WorkScheduleController::class);
 });
 
-
 // ==========================
 // Auth: Login & Register
 // ==========================
@@ -141,7 +136,6 @@ Route::middleware('guest')->group(function () {
 });
 
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
-
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
