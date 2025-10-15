@@ -6,12 +6,8 @@
 
 @section('content')
     <!-- Content Header (Page header) -->
-    <section
-        class="mb-6 rounded-xl bg-white p-6 shadow-md transition-colors duration-300 dark:bg-gray-900"
-    >
-        <div
-            class="mx-auto flex max-w-7xl flex-col items-start justify-between gap-4 sm:flex-row sm:items-center"
-        >
+    <section class="mb-6 rounded-xl bg-white p-6 shadow-md transition-colors duration-300 dark:bg-gray-900">
+        <div class="mx-auto flex max-w-7xl flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
             <!-- Title -->
             <div class="flex flex-col gap-1">
                 <h1 class="text-3xl leading-tight font-extrabold text-gray-900 dark:text-white">
@@ -26,13 +22,10 @@
 
     <!-- Main content -->
     <section class="content">
-        <div
-            class="mt-6 grid grid-cols-2 items-stretch gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4"
-        >
+        <div class="mt-6 grid grid-cols-2 items-stretch gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
             <!-- Card -->
             <div
-                class="flex h-full items-center gap-4 rounded-xl bg-gradient-to-r from-teal-400 to-teal-600 p-5 text-white shadow"
-            >
+                class="flex h-full items-center gap-4 rounded-xl bg-gradient-to-r from-teal-400 to-teal-600 p-5 text-white shadow">
                 <i class="fas fa-wallet text-3xl opacity-80"></i>
                 <div>
                     <div class="text-2xl font-bold">
@@ -43,8 +36,7 @@
             </div>
 
             <div
-                class="flex h-full items-center gap-4 rounded-xl bg-gradient-to-r from-blue-400 to-blue-600 p-5 text-white shadow"
-            >
+                class="flex h-full items-center gap-4 rounded-xl bg-gradient-to-r from-blue-400 to-blue-600 p-5 text-white shadow">
                 <i class="fas fa-boxes text-3xl opacity-80"></i>
                 <div>
                     <div class="text-2xl font-bold">{{ $totalProduk }}</div>
@@ -53,8 +45,7 @@
             </div>
 
             <div
-                class="flex h-full items-center gap-4 rounded-xl bg-gradient-to-r from-emerald-400 to-emerald-600 p-5 text-white shadow"
-            >
+                class="flex h-full items-center gap-4 rounded-xl bg-gradient-to-r from-emerald-400 to-emerald-600 p-5 text-white shadow">
                 <i class="fas fa-truck-loading text-3xl opacity-80"></i>
                 <div>
                     <div class="text-2xl font-bold">{{ $produkMasuk }}</div>
@@ -63,8 +54,7 @@
             </div>
 
             <div
-                class="flex h-full items-center gap-4 rounded-xl bg-gradient-to-r from-rose-400 to-rose-600 p-5 text-white shadow"
-            >
+                class="flex h-full items-center gap-4 rounded-xl bg-gradient-to-r from-rose-400 to-rose-600 p-5 text-white shadow">
                 <i class="fas fa-dolly text-3xl opacity-80"></i>
                 <div>
                     <div class="text-2xl font-bold">{{ $produkKeluar }}</div>
@@ -73,8 +63,7 @@
             </div>
 
             <div
-                class="flex h-full items-center gap-4 rounded-xl bg-gradient-to-r from-green-400 to-green-600 p-5 text-white shadow"
-            >
+                class="flex h-full items-center gap-4 rounded-xl bg-gradient-to-r from-green-400 to-green-600 p-5 text-white shadow">
                 <i class="fas fa-users text-3xl opacity-80"></i>
                 <div>
                     <div class="text-2xl font-bold">{{ $totalUser }}</div>
@@ -83,8 +72,7 @@
             </div>
 
             <div
-                class="flex h-full items-center gap-4 rounded-xl bg-gradient-to-r from-indigo-400 to-indigo-600 p-5 text-white shadow"
-            >
+                class="flex h-full items-center gap-4 rounded-xl bg-gradient-to-r from-indigo-400 to-indigo-600 p-5 text-white shadow">
                 <i class="fas fa-cash-register text-3xl opacity-80"></i>
                 <div>
                     <div class="text-2xl font-bold">
@@ -95,8 +83,7 @@
             </div>
 
             <div
-                class="flex h-full items-center gap-4 rounded-xl bg-gradient-to-r from-emerald-400 to-emerald-600 p-5 text-white shadow"
-            >
+                class="flex h-full items-center gap-4 rounded-xl bg-gradient-to-r from-emerald-400 to-emerald-600 p-5 text-white shadow">
                 <i class="fas fa-coins text-3xl opacity-80"></i>
                 <div>
                     <div class="text-2xl font-bold">
@@ -107,8 +94,7 @@
             </div>
 
             <div
-                class="flex h-full items-center gap-4 rounded-xl bg-gradient-to-r from-cyan-400 to-cyan-600 p-5 text-white shadow"
-            >
+                class="flex h-full items-center gap-4 rounded-xl bg-gradient-to-r from-cyan-400 to-cyan-600 p-5 text-white shadow">
                 <i class="fas fa-receipt text-3xl opacity-80"></i>
                 <div>
                     <div class="text-2xl font-bold">{{ $transaksiHariIni }}</div>
@@ -117,8 +103,7 @@
             </div>
 
             <div
-                class="flex h-full items-center gap-4 rounded-xl bg-gradient-to-r from-teal-400 to-teal-600 p-5 text-white shadow"
-            >
+                class="flex h-full items-center gap-4 rounded-xl bg-gradient-to-r from-teal-400 to-teal-600 p-5 text-white shadow">
                 <i class="fas fa-user-check text-3xl opacity-80"></i>
                 <div>
                     <div class="text-2xl font-bold">{{ $pegawaiAktif }}</div>
@@ -127,8 +112,7 @@
             </div>
 
             <div
-                class="flex h-full items-center gap-4 rounded-xl bg-gradient-to-r from-gray-400 to-gray-600 p-5 text-white shadow"
-            >
+                class="flex h-full items-center gap-4 rounded-xl bg-gradient-to-r from-gray-400 to-gray-600 p-5 text-white shadow">
                 <i class="fas fa-user-slash text-3xl opacity-80"></i>
                 <div>
                     <div class="text-2xl font-bold">{{ $pegawaiTidakAktif }}</div>
@@ -138,9 +122,7 @@
         </div>
 
         <!-- Main Dashboard Row -->
-        <div
-            class="mt-6 mb-6 flex flex-col items-start justify-between gap-4 lg:flex-row lg:items-center"
-        >
+        <div class="mt-6 mb-6 flex flex-col items-start justify-between gap-4 lg:flex-row lg:items-center">
             <!-- Judul -->
             <h2 class="text-xl font-semibold text-gray-800 lg:text-2xl dark:text-white">
                 Data Statistik
@@ -153,61 +135,38 @@
                     <div id="date-range-picker" date-rangepicker class="flex items-center gap-2">
                         <!-- Start Date -->
                         <div class="relative">
-                            <div
-                                class="pointer-events-none absolute inset-y-0 start-0 flex items-center ps-3"
-                            >
-                                <svg
-                                    class="h-4 w-4 text-gray-500 dark:text-gray-400"
-                                    fill="currentColor"
-                                    viewBox="0 0 20 20"
-                                >
+                            <div class="pointer-events-none absolute inset-y-0 start-0 flex items-center ps-3">
+                                <svg class="h-4 w-4 text-gray-500 dark:text-gray-400" fill="currentColor"
+                                    viewBox="0 0 20 20">
                                     <path
-                                        d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z"
-                                    />
+                                        d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z" />
                                 </svg>
                             </div>
-                            <input
-                                id="datepicker-range-start"
-                                name="start"
-                                type="text"
+                            <input id="datepicker-range-start" name="start" type="text"
                                 class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 ps-10 text-sm text-gray-900 placeholder-gray-400 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400"
-                                placeholder="Tanggal awal"
-                            />
+                                placeholder="Tanggal awal" />
                         </div>
 
                         <span class="mx-1 font-medium text-gray-500 dark:text-gray-400">-</span>
 
                         <!-- End Date -->
                         <div class="relative">
-                            <div
-                                class="pointer-events-none absolute inset-y-0 start-0 flex items-center ps-3"
-                            >
-                                <svg
-                                    class="h-4 w-4 text-gray-500 dark:text-gray-400"
-                                    fill="currentColor"
-                                    viewBox="0 0 20 20"
-                                >
+                            <div class="pointer-events-none absolute inset-y-0 start-0 flex items-center ps-3">
+                                <svg class="h-4 w-4 text-gray-500 dark:text-gray-400" fill="currentColor"
+                                    viewBox="0 0 20 20">
                                     <path
-                                        d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z"
-                                    />
+                                        d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z" />
                                 </svg>
                             </div>
-                            <input
-                                id="datepicker-range-end"
-                                name="end"
-                                type="text"
+                            <input id="datepicker-range-end" name="end" type="text"
                                 class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 ps-10 text-sm text-gray-900 placeholder-gray-400 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400"
-                                placeholder="Tanggal akhir"
-                            />
+                                placeholder="Tanggal akhir" />
                         </div>
                     </div>
 
                     <!-- Reset Button -->
-                    <button
-                        type="button"
-                        onclick="resetDateRange()"
-                        class="inline-flex items-center rounded-lg bg-gray-500 px-4 py-2 text-sm font-medium text-white transition-colors duration-200 hover:bg-gray-600 focus:ring-2 focus:ring-gray-400 focus:outline-none"
-                    >
+                    <button type="button" onclick="resetDateRange()"
+                        class="inline-flex items-center rounded-lg bg-gray-500 px-4 py-2 text-sm font-medium text-white transition-colors duration-200 hover:bg-gray-600 focus:ring-2 focus:ring-gray-400 focus:outline-none">
                         <i class="fas fa-redo-alt mr-2"></i>
                         Reset
                     </button>
@@ -215,44 +174,23 @@
 
                 <!-- Export Dropdown -->
                 <div class="relative">
-                    <button
-                        id="dropdownButton"
-                        data-dropdown-toggle="dropdownExport"
-                        class="inline-flex items-center rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow transition-colors duration-200 hover:bg-indigo-700 focus:ring-2 focus:ring-blue-300 focus:outline-none"
-                    >
+                    <button id="dropdownButton" data-dropdown-toggle="dropdownExport"
+                        class="inline-flex items-center rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow transition-colors duration-200 hover:bg-indigo-700 focus:ring-2 focus:ring-blue-300 focus:outline-none">
                         <i class="fas fa-file-export mr-2"></i>
                         Export
-                        <svg
-                            class="ml-2 h-4 w-4"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                            xmlns="http://www.w3.org/2000/svg"
-                        >
-                            <path
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                stroke-width="2"
-                                d="M19 9l-7 7-7-7"
-                            ></path>
+                        <svg class="ml-2 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                         </svg>
                     </button>
 
                     <!-- Dropdown menu -->
-                    <div
-                        id="dropdownExport"
-                        class="absolute right-0 z-10 mt-2 hidden w-44 rounded-lg bg-white shadow dark:divide-gray-600 dark:bg-gray-700"
-                    >
-                        <ul
-                            class="py-2 text-sm text-gray-700 dark:text-gray-200"
-                            aria-labelledby="dropdownButton"
-                        >
+                    <div id="dropdownExport"
+                        class="absolute right-0 z-10 mt-2 hidden w-44 rounded-lg bg-white shadow dark:divide-gray-600 dark:bg-gray-700">
+                        <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownButton">
                             <li>
-                                <a
-                                    href="#"
-                                    onclick="exportToPDF(); return false;"
-                                    class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                                >
+                                <a href="#" onclick="exportToPDF(); return false;"
+                                    class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
                                     Export PDF
                                 </a>
                             </li>
@@ -267,76 +205,46 @@
             <!-- KIRI: Grafik Penjualan + Tabel Aktivitas -->
             <div class="flex w-full flex-col gap-6 lg:w-2/3">
                 <!-- TABS PENJUALAN -->
-                <div
-                    class="rounded-xl bg-white p-5 shadow transition-colors duration-200 dark:bg-gray-800"
-                >
+                <div class="rounded-xl bg-white p-5 shadow transition-colors duration-200 dark:bg-gray-800">
                     <h4 class="mb-4 text-lg font-semibold text-gray-800 dark:text-gray-100">
                         Trend Penjualan
                     </h4>
 
                     <!-- Tabs Navigation + Export -->
                     <div
-                        class="mb-4 flex flex-wrap items-center justify-between gap-3 border-b border-gray-200 dark:border-gray-700"
-                    >
+                        class="mb-4 flex flex-wrap items-center justify-between gap-3 border-b border-gray-200 dark:border-gray-700">
                         <!-- Tabs -->
-                        <ul
-                            class="flex flex-wrap gap-2 text-center text-sm font-medium"
-                            id="chartTabs"
-                            role="tablist"
-                        >
+                        <ul class="flex flex-wrap gap-2 text-center text-sm font-medium" id="chartTabs" role="tablist">
                             <li>
                                 <button
                                     class="active inline-block rounded-t-lg border-b-2 border-blue-600 border-transparent p-3 text-blue-600 hover:text-blue-600 dark:hover:text-blue-400"
-                                    id="tab-day"
-                                    data-tab="daily"
-                                    data-tabs-target="#tab-content-day"
-                                    type="button"
-                                    role="tab"
-                                    aria-controls="tab-content-day"
-                                    aria-selected="true"
-                                >
+                                    id="tab-day" data-tab="daily" data-tabs-target="#tab-content-day" type="button"
+                                    role="tab" aria-controls="tab-content-day" aria-selected="true">
                                     Harian
                                 </button>
                             </li>
                             <li>
                                 <button
                                     class="inline-block rounded-t-lg border-b-2 border-transparent p-3 text-gray-700 hover:text-blue-600 dark:text-white dark:hover:text-blue-400"
-                                    id="tab-week"
-                                    data-tab="weekly"
-                                    data-tabs-target="#tab-content-week"
-                                    type="button"
-                                    role="tab"
-                                    aria-controls="tab-content-week"
-                                    aria-selected="false"
-                                >
+                                    id="tab-week" data-tab="weekly" data-tabs-target="#tab-content-week" type="button"
+                                    role="tab" aria-controls="tab-content-week" aria-selected="false">
                                     Mingguan
                                 </button>
                             </li>
                             <li>
                                 <button
                                     class="inline-block rounded-t-lg border-b-2 border-transparent p-3 text-gray-700 hover:text-blue-600 dark:text-white dark:hover:text-blue-400"
-                                    id="tab-month"
-                                    data-tab="monthly"
-                                    data-tabs-target="#tab-content-month"
-                                    type="button"
-                                    role="tab"
-                                    aria-controls="tab-content-month"
-                                    aria-selected="false"
-                                >
+                                    id="tab-month" data-tab="monthly" data-tabs-target="#tab-content-month"
+                                    type="button" role="tab" aria-controls="tab-content-month"
+                                    aria-selected="false">
                                     Bulanan
                                 </button>
                             </li>
                             <li>
                                 <button
                                     class="inline-block rounded-t-lg border-b-2 border-transparent p-3 text-gray-700 hover:text-blue-600 dark:text-white dark:hover:text-blue-400"
-                                    id="tab-year"
-                                    data-tab="yearly"
-                                    data-tabs-target="#tab-content-year"
-                                    type="button"
-                                    role="tab"
-                                    aria-controls="tab-content-year"
-                                    aria-selected="false"
-                                >
+                                    id="tab-year" data-tab="yearly" data-tabs-target="#tab-content-year" type="button"
+                                    role="tab" aria-controls="tab-content-year" aria-selected="false">
                                     Tahunan
                                 </button>
                             </li>
@@ -345,77 +253,52 @@
                         <!-- Export Buttons -->
                         <div class="flex-shrink-0">
                             <!-- Export Dropdown -->
-                            <div
-                                x-data="{ open: false }"
-                                class="relative inline-block text-left"
-                            >
+                            <div x-data="{ open: false }" class="relative inline-block text-left">
                                 <!-- Trigger button -->
-                                <button
-                                    @click="open = !open"
-                                    class="flex items-center gap-2 rounded-md bg-blue-600 px-3 py-1.5 text-xs text-white shadow transition hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600"
-                                >
+                                <button @click="open = !open"
+                                    class="flex items-center gap-2 rounded-md bg-blue-600 px-3 py-1.5 text-xs text-white shadow transition hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600">
                                     <i class="fa-solid fa-download text-sm"></i>
                                     <span>Export</span>
                                     <i class="fa-solid fa-caret-down text-[10px]"></i>
                                 </button>
 
                                 <!-- Dropdown menu -->
-                                <div
-                                    x-show="open"
-                                    @click.outside="open = false"
+                                <div x-show="open" @click.outside="open = false"
                                     class="absolute right-0 z-20 mt-2 w-44 divide-y divide-gray-100 rounded-md bg-white shadow dark:bg-gray-700"
-                                    x-transition
-                                >
+                                    x-transition>
                                     <ul class="py-1 text-sm text-gray-700 dark:text-gray-200">
                                         <!-- Export Harian (Label dinamis) -->
                                         <li>
-                                            <button
-                                                id="export-current"
-                                                class="flex w-full items-center gap-3 px-3 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                                            >
-                                                <i
-                                                    class="fa-solid fa-file-pdf w-5 text-base text-blue-500"
-                                                ></i>
+                                            <button id="export-current"
+                                                class="flex w-full items-center gap-3 px-3 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                                                <i class="fa-solid fa-file-pdf w-5 text-base text-blue-500"></i>
                                                 <span id="export-current-label">Export Harian</span>
                                             </button>
                                         </li>
 
                                         <!-- Export Semua -->
                                         <li>
-                                            <button
-                                                id="export-all"
-                                                class="flex w-full items-center gap-3 px-3 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                                            >
-                                                <i
-                                                    class="fa-solid fa-file-pdf w-5 text-base text-green-600"
-                                                ></i>
+                                            <button id="export-all"
+                                                class="flex w-full items-center gap-3 px-3 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                                                <i class="fa-solid fa-file-pdf w-5 text-base text-green-600"></i>
                                                 <span>Export Semua</span>
                                             </button>
                                         </li>
 
                                         <!-- Export Excel -->
                                         <li>
-                                            <a
-                                                id="export-excel-btn"
-                                                href="#"
-                                                class="flex w-full items-center gap-3 px-3 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                                            >
-                                                <i
-                                                    class="fa-solid fa-file-excel w-5 text-base text-yellow-500"
-                                                ></i>
+                                            <a id="export-excel-btn" href="#"
+                                                class="flex w-full items-center gap-3 px-3 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                                                <i class="fa-solid fa-file-excel w-5 text-base text-yellow-500"></i>
                                                 <span>Export Excel</span>
                                             </a>
                                         </li>
 
                                         <!-- Export CSV -->
                                         <li>
-                                            <button
-                                                onclick="exportToCSV()"
-                                                class="flex w-full items-center gap-3 px-3 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                                            >
-                                                <i
-                                                    class="fa-solid fa-file-csv w-5 text-base text-orange-500"
-                                                ></i>
+                                            <button onclick="exportToCSV()"
+                                                class="flex w-full items-center gap-3 px-3 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                                                <i class="fa-solid fa-file-csv w-5 text-base text-orange-500"></i>
                                                 <span>Export CSV</span>
                                             </button>
                                         </li>
@@ -427,49 +310,33 @@
 
                     <!-- Tabs Content -->
                     <div id="chart-tabs-content">
-                        <div
-                            class="rounded-lg bg-white p-4 shadow-sm dark:bg-gray-800"
-                            id="tab-content-day"
-                        >
+                        <div class="rounded-lg bg-white p-4 shadow-sm dark:bg-gray-800" id="tab-content-day">
                             <canvas id="chart-day" class="h-80 w-full"></canvas>
                         </div>
-                        <div
-                            class="hidden rounded-lg bg-white p-4 shadow-sm dark:bg-gray-800"
-                            id="tab-content-week"
-                        >
+                        <div class="hidden rounded-lg bg-white p-4 shadow-sm dark:bg-gray-800" id="tab-content-week">
                             <canvas id="chart-week" class="h-80 w-full"></canvas>
                         </div>
-                        <div
-                            class="hidden rounded-lg bg-white p-4 shadow-sm dark:bg-gray-800"
-                            id="tab-content-month"
-                        >
+                        <div class="hidden rounded-lg bg-white p-4 shadow-sm dark:bg-gray-800" id="tab-content-month">
                             <canvas id="chart-month" class="h-80 w-full"></canvas>
                         </div>
-                        <div
-                            class="hidden rounded-lg bg-white p-4 shadow-sm dark:bg-gray-800"
-                            id="tab-content-year"
-                        >
+                        <div class="hidden rounded-lg bg-white p-4 shadow-sm dark:bg-gray-800" id="tab-content-year">
                             <canvas id="chart-year" class="h-80 w-full"></canvas>
                         </div>
                     </div>
 
-                    <input type="hidden" id="daily-totals" value="@json($dailyTotals)" />
-                    <input type="hidden" id="weekly-totals" value="@json($weeklyTotals)" />
-                    <input type="hidden" id="monthly-totals" value="@json($monthlyTotals)" />
-                    <input type="hidden" id="yearly-totals" value="@json($yearlyTotals)" />
+                    <input type="hidden" id="daily-totals" value='@json($dailyTotals)' />
+                    <input type="hidden" id="weekly-totals" value='@json($weeklyTotals)' />
+                    <input type="hidden" id="monthly-totals" value='@json($monthlyTotals)' />
+                    <input type="hidden" id="yearly-totals" value='@json($yearlyTotals)' />
                 </div>
 
                 <!-- TABEL AKTIVITAS TRANSAKSI HARI INI -->
-                <div
-                    class="rounded-xl bg-white p-5 shadow transition-colors duration-200 dark:bg-gray-800"
-                >
+                <div class="rounded-xl bg-white p-5 shadow transition-colors duration-200 dark:bg-gray-800">
                     <h4 class="mb-4 text-lg font-semibold text-gray-800 dark:text-gray-100">
                         Aktivitas Transaksi Hari Ini
                     </h4>
                     <div class="overflow-x-auto rounded-lg">
-                        <table
-                            class="min-w-full divide-y divide-gray-200 text-left text-sm dark:divide-gray-700"
-                        >
+                        <table class="min-w-full divide-y divide-gray-200 text-left text-sm dark:divide-gray-700">
                             <thead class="bg-gray-100 dark:bg-gray-700">
                                 <tr>
                                     <th class="px-4 py-2 text-gray-700 dark:text-gray-200">
@@ -482,18 +349,14 @@
                                     <th class="px-4 py-2 text-gray-700 dark:text-gray-200">
                                         Metode Pembayaran
                                     </th>
-                                    <th
-                                        class="px-4 py-2 text-right text-gray-700 dark:text-gray-200"
-                                    >
+                                    <th class="px-4 py-2 text-right text-gray-700 dark:text-gray-200">
                                         Total
                                     </th>
                                 </tr>
                             </thead>
                             <tbody class="divide-y divide-gray-100 dark:divide-gray-700">
                                 @forelse ($aktivitasHariIni as $item)
-                                    <tr
-                                        class="transition hover:bg-gray-50 dark:hover:bg-gray-700/50"
-                                    >
+                                    <tr class="transition hover:bg-gray-50 dark:hover:bg-gray-700/50">
                                         <td class="px-4 py-2">
                                             {{ \Carbon\Carbon::parse($item->created_at)->format('H:i') }}
                                         </td>
@@ -504,9 +367,7 @@
                                             Rp {{ number_format($item->total, 0, ',', '.') }}
                                             @if ($item->discount > 0)
                                                 <br />
-                                                <span
-                                                    class="text-xs text-green-600 dark:text-green-400"
-                                                >
+                                                <span class="text-xs text-green-600 dark:text-green-400">
                                                     (-{{ $item->discount }}%)
                                                 </span>
                                             @endif
@@ -514,10 +375,7 @@
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td
-                                            colspan="5"
-                                            class="py-4 text-center text-gray-500 dark:text-gray-400"
-                                        >
+                                        <td colspan="5" class="py-4 text-center text-gray-500 dark:text-gray-400">
                                             Belum ada transaksi hari ini.
                                         </td>
                                     </tr>
@@ -532,16 +390,12 @@
                 </div>
 
                 <!-- Performa Kasir Hari Ini -->
-                <div
-                    class="rounded-xl bg-white p-5 shadow transition-colors duration-200 dark:bg-gray-800"
-                >
+                <div class="rounded-xl bg-white p-5 shadow transition-colors duration-200 dark:bg-gray-800">
                     <h4 class="mb-4 text-lg font-semibold text-gray-800 dark:text-gray-100">
                         Performa Kasir Hari Ini
                     </h4>
                     <div class="overflow-x-auto rounded-lg">
-                        <table
-                            class="min-w-full divide-y divide-gray-200 text-left text-sm dark:divide-gray-700"
-                        >
+                        <table class="min-w-full divide-y divide-gray-200 text-left text-sm dark:divide-gray-700">
                             <thead class="bg-gray-100 dark:bg-gray-700">
                                 <tr>
                                     <th class="px-6 py-3 font-bold">Kasir</th>
@@ -565,10 +419,7 @@
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td
-                                            colspan="3"
-                                            class="py-4 text-center text-gray-500 dark:text-gray-400"
-                                        >
+                                        <td colspan="3" class="py-4 text-center text-gray-500 dark:text-gray-400">
                                             Belum ada transaksi dari kasir hari ini
                                         </td>
                                     </tr>
@@ -582,24 +433,16 @@
             <!-- KANAN: Donut Chart -->
             <div class="flex w-full flex-col gap-6 lg:w-1/3">
                 <!-- Produk Terjual -->
-                <div
-                    class="rounded-xl bg-white p-4 shadow transition-colors duration-200 dark:bg-gray-800"
-                >
-                    <h4
-                        class="mb-2 text-center text-sm font-semibold text-gray-800 dark:text-gray-100"
-                    >
+                <div class="rounded-xl bg-white p-4 shadow transition-colors duration-200 dark:bg-gray-800">
+                    <h4 class="mb-2 text-center text-sm font-semibold text-gray-800 dark:text-gray-100">
                         Produk Terjual
                     </h4>
                     <canvas id="donut-product-sold" class="h-60 w-full"></canvas>
                 </div>
 
                 <!-- Produk Masuk -->
-                <div
-                    class="rounded-xl bg-white p-4 shadow transition-colors duration-200 dark:bg-gray-800"
-                >
-                    <h4
-                        class="mb-2 text-center text-sm font-semibold text-gray-800 dark:text-gray-100"
-                    >
+                <div class="rounded-xl bg-white p-4 shadow transition-colors duration-200 dark:bg-gray-800">
+                    <h4 class="mb-2 text-center text-sm font-semibold text-gray-800 dark:text-gray-100">
                         Produk Masuk
                     </h4>
                     <canvas id="donut-product-in" class="h-60 w-full"></canvas>
@@ -611,10 +454,25 @@
 
 @push('scripts')
     <script>
-        // ===================== Charts =====================
         let chartDay, chartWeek, chartMonth, chartYear;
         let donutSold, donutIn;
 
+        // ===================== Utility Re-init dengan Delay =====================
+        function reRenderChart(initFn, ctxId) {
+            const canvas = document.getElementById(ctxId);
+
+            // Buat efek fade-out dulu
+            canvas.parentElement.classList.add('opacity-0', 'scale-95', 'transition-all', 'duration-300');
+
+            // Destroy dan tunggu frame baru biar animasi Chart.js aktif ulang
+            setTimeout(() => {
+                initFn(); // render ulang grafik
+                canvas.parentElement.classList.remove('opacity-0', 'scale-95');
+                canvas.parentElement.classList.add('opacity-100', 'scale-100', 'transition-all', 'duration-700');
+            }, 300);
+        }
+
+        // ===================== CHART FUNCTIONS =====================
         function initChartDay() {
             const ctx = document.getElementById("chart-day").getContext("2d");
             if (chartDay) chartDay.destroy();
@@ -631,6 +489,10 @@
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
+                    animation: {
+                        duration: 1200,
+                        easing: 'easeOutBounce'
+                    },
                     plugins: {
                         legend: {
                             position: 'top'
@@ -661,6 +523,10 @@
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
+                    animation: {
+                        duration: 1200,
+                        easing: 'easeOutElastic'
+                    },
                     plugins: {
                         legend: {
                             position: 'top'
@@ -690,7 +556,11 @@
                 },
                 options: {
                     responsive: true,
-                    maintainAspectRatio: false
+                    maintainAspectRatio: false,
+                    animation: {
+                        duration: 1000,
+                        easing: 'easeOutQuart'
+                    }
                 }
             });
         }
@@ -711,6 +581,10 @@
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
+                    animation: {
+                        duration: 1500,
+                        easing: 'easeOutCubic'
+                    },
                     plugins: {
                         legend: {
                             position: 'top'
@@ -734,32 +608,31 @@
                 const targetId = button.getAttribute('data-tabs-target');
 
                 tabButtons.forEach(btn => {
-                    // Reset semua tombol → non-aktif
                     btn.classList.remove("text-blue-600", "border-blue-600", "active");
                     btn.classList.add("text-gray-700", "dark:text-white");
                 });
 
-                // Tombol yang diklik → aktif
                 button.classList.add("text-blue-600", "border-blue-600", "active");
                 button.classList.remove("text-gray-700", "dark:text-white");
 
-                // Konten tab
                 tabContents.forEach(content => {
                     content.classList.add('hidden');
                     if ("#" + content.id === targetId) {
                         content.classList.remove('hidden');
+
+                        // animasi masuk tab + render ulang chart dengan delay
                         switch (targetId) {
                             case '#tab-content-day':
-                                initChartDay();
+                                reRenderChart(initChartDay, 'chart-day');
                                 break;
                             case '#tab-content-week':
-                                initChartWeek();
+                                reRenderChart(initChartWeek, 'chart-week');
                                 break;
                             case '#tab-content-month':
-                                initChartMonth();
+                                reRenderChart(initChartMonth, 'chart-month');
                                 break;
                             case '#tab-content-year':
-                                initChartYear();
+                                reRenderChart(initChartYear, 'chart-year');
                                 break;
                         }
                     }
@@ -767,13 +640,12 @@
             });
         });
 
-
-        // Render default → aktif tab "Harian"
+        // ===================== Default Load =====================
         window.addEventListener('DOMContentLoaded', () => {
-            initChartDay();
+            reRenderChart(initChartDay, 'chart-day');
         });
 
-
+        // ===================== Resize =====================
         window.addEventListener('resize', () => {
             chartDay?.resize();
             chartWeek?.resize();
@@ -874,7 +746,9 @@
     </script>
 
     <script>
-        const { jsPDF } = window.jspdf
+        const {
+            jsPDF
+        } = window.jspdf
         const exportCurrentBtn = document.getElementById('export-current')
         const exportAllBtn = document.getElementById('export-all')
 
@@ -1019,8 +893,7 @@
             const monthData = JSON.parse(document.getElementById('monthly-totals').value)
             const yearData = JSON.parse(document.getElementById('yearly-totals').value)
 
-            const charts = [
-                {
+            const charts = [{
                     id: 'chart-day',
                     title: 'Laporan Harian',
                     data: {
