@@ -240,7 +240,7 @@
         {{-- PEGAWAI --}}
         @if (in_array(Auth::user()->role, ['superadmin', 'manager']))
             <li
-                class="{{ Request::is('employees*') || Request::is('employee-attendance*') || Request::is('employment_status*') || Request::is('department*') || Request::is('position*') ? 'menu-open-tailwind' : '' }} group">
+                class="{{ Request::is('employees*') || Request::is('employee-attendance*') || Request::is('employment_status*') || Request::is('department*') || Request::is('position*') || Request::is('education*') ? 'menu-open-tailwind' : '' }} group">
 
                 {{-- Parent --}}
                 <a href="#"
@@ -250,7 +250,8 @@
                 Request::is('employee-attendance*') ||
                 Request::is('employment_status*') ||
                 Request::is('department*') ||
-                Request::is('position*')
+                Request::is('position*') ||
+                Request::is('education')
                     ? 'bg-blue-50 dark:bg-gray-700 text-blue-600 dark:text-blue-400 shadow-sm'
                     : 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 hover:dark:bg-gray-700 hover:text-gray-900 hover:dark:text-gray-100' }}">
                     <span class="flex items-center gap-2">
@@ -313,6 +314,16 @@
                             : 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 hover:dark:bg-gray-700 hover:text-gray-900 hover:dark:text-gray-100' }}">
                             <i class="fa fa-circle text-[6px]"></i>
                             Posisi Pegawai
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ route('education.index') }}"
+                            class="flex items-center gap-2 rounded-lg p-2 text-sm transition-colors duration-200
+                        {{ Request::is('education')
+                            ? 'bg-blue-50 dark:bg-gray-700 text-blue-600 dark:text-blue-400 font-medium'
+                            : 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 hover:dark:bg-gray-700 hover:text-gray-900 hover:dark:text-gray-100' }}">
+                            <i class="fa fa-circle text-[6px]"></i>
+                            Pendidikan
                         </a>
                     </li>
                 </ul>

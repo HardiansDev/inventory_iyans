@@ -15,7 +15,7 @@
         </div>
     </section>
 
-    <!-- Form -->
+    <!-- Form edit -->
     <div class="rounded-lg bg-white p-6 shadow-sm dark:bg-gray-900 dark:text-gray-100">
         <form action="{{ route('employees.update', $employee->id) }}" method="POST" enctype="multipart/form-data"
             class="space-y-6">

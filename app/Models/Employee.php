@@ -12,11 +12,20 @@ class Employee extends Model
     protected $fillable = [
         'employee_number',
         'name',
+        'age',
         'email',
         'phone',
         'gender',
+        'birth_place',
         'birth_date',
         'address',
+        'address_ktp',
+        'religion',
+        'marital_status',
+        'nationals',
+        'emergency_contact_name',
+        'emergency_contact_relation',
+        'emergency_contact_phone',
         'photo',
         'department_id',
         'position_id',
@@ -48,5 +57,10 @@ class Employee extends Model
     public function salaries()
     {
         return $this->hasMany(Salary::class);
+    }
+
+    public function educations()
+    {
+        return $this->hasMany(Education::class);
     }
 }

@@ -25,6 +25,7 @@ use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\TrackingTreeController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\WorkScheduleController;
+use App\Http\Controllers\EducationController;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -41,6 +42,7 @@ Route::middleware(['auth', 'role:superadmin,manager'])->group(function () {
     Route::resource('employment_status', EmploymentStatusController::class);
     Route::resource('department', DepartmentController::class);
     Route::resource('position', PositionController::class);
+    Route::resource('education', EducationController::class);
     Route::get('report/penjualan', [ReportController::class, 'penjualan'])->name('report.penjualan');
     Route::get('report/penjualan/pdf', [ReportController::class, 'penjualanPdf'])->name('report.penjualan.pdf');
     Route::get('/report/export-excel', [DashboardController::class, 'exportExcel'])->name('report.export.excel');

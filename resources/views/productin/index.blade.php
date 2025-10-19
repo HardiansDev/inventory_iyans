@@ -400,7 +400,7 @@
             <div class="bg-gray-800 text-gray-200 rounded-2xl shadow-xl w-full max-w-md p-6">
                 <!-- Header -->
                 <div class="flex justify-between items-center border-b border-gray-700 pb-3 mb-4">
-                    <h2 class="text-lg font-semibold">🏪 Jual di Toko</h2>
+                    <h2 class="text-lg font-semibold">Jual di Toko</h2>
                     <button @click="closeModal()" class="text-gray-400 hover:text-white text-xl">&times;</button>
                 </div>
                 <!-- Body -->
@@ -419,7 +419,7 @@
                     <div class="flex justify-end space-x-2 pt-3">
                         <button type="button" @click="closeModal()"
                             class="px-4 py-2 rounded-md bg-gray-600 hover:bg-gray-500">Batal</button>
-                        <button type="submit" class="px-4 py-2 rounded-md bg-blue-600 hover:bg-blue-700">Simpan</button>
+                        <button type="submit" class="px-4 py-2 rounded-md bg-blue-600 hover:bg-blue-700">Jual</button>
                     </div>
                 </form>
             </div>

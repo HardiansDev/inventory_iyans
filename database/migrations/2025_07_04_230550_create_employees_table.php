@@ -17,11 +17,20 @@ class CreateEmployeesTable extends Migration
             $table->id();
             $table->string('employee_number')->unique();
             $table->string('name');
+            $table->integer('age')->nullable();
             $table->string('email')->unique()->nullable();
             $table->string('phone')->nullable();
             $table->enum('gender', ['L', 'P']);
+            $table->string('birth_place')->nullable();
             $table->date('birth_date')->nullable();
             $table->text('address')->nullable();
+            $table->text('address_ktp')->nullable();
+            $table->enum('religion', ['Islam', 'Kristen', 'Katolik', 'Hindu', 'Buddha', 'Konghucu', 'Lainnya'])->nullable();
+            $table->enum('marital_status', ['Belum Menikah', 'Menikah', 'Cerai'])->nullable();
+            $table->enum('nationals', ['WNI', 'WNA'])->nullable();
+            $table->string('emergency_contact_name')->nullable();
+            $table->string('emergency_contact_relation')->nullable(); // misal: Ayah, Ibu, Suami, Istri, Saudara
+            $table->string('emergency_contact_phone', 20)->nullable();
             $table->string('photo')->nullable();
             $table->foreignId('department_id')->constrained()->onDelete('cascade');
             $table->foreignId('position_id')->constrained()->onDelete('cascade');
