@@ -6,11 +6,11 @@
 
 @section('content')
     <!-- Content Header (Page header) -->
-    <section class="mb-6 rounded-xl bg-white p-6 shadow-md transition-colors duration-300 dark:bg-gray-900">
-        <div class="mx-auto flex max-w-7xl flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
+    <section class="p-6 mb-6 transition-colors duration-300 bg-white shadow-md rounded-xl dark:bg-gray-900">
+        <div class="flex flex-col items-start justify-between gap-4 mx-auto max-w-7xl sm:flex-row sm:items-center">
             <!-- Title -->
             <div class="flex flex-col gap-1">
-                <h1 class="text-3xl leading-tight font-extrabold text-gray-900 dark:text-white">
+                <h1 class="text-3xl font-extrabold leading-tight text-gray-900 dark:text-white">
                     Dashboard
                 </h1>
                 <p class="text-sm text-gray-500 dark:text-gray-400">
@@ -22,11 +22,11 @@
 
     <!-- Main content -->
     <section class="content">
-        <div class="mt-6 grid grid-cols-2 items-stretch gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+        <div class="grid items-stretch grid-cols-2 gap-6 mt-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
             <!-- Card -->
             <div
-                class="flex h-full items-center gap-4 rounded-xl bg-gradient-to-r from-teal-400 to-teal-600 p-5 text-white shadow">
-                <i class="fas fa-wallet text-3xl opacity-80"></i>
+                class="flex items-center h-full gap-4 p-5 text-white shadow rounded-xl bg-gradient-to-r from-teal-400 to-teal-600">
+                <i class="text-3xl fas fa-wallet opacity-80"></i>
                 <div>
                     <div class="text-2xl font-bold">
                         Rp {{ number_format($totalModal, 0, ',', '.') }}
@@ -36,8 +36,8 @@
             </div>
 
             <div
-                class="flex h-full items-center gap-4 rounded-xl bg-gradient-to-r from-blue-400 to-blue-600 p-5 text-white shadow">
-                <i class="fas fa-boxes text-3xl opacity-80"></i>
+                class="flex items-center h-full gap-4 p-5 text-white shadow rounded-xl bg-gradient-to-r from-blue-400 to-blue-600">
+                <i class="text-3xl fas fa-boxes opacity-80"></i>
                 <div>
                     <div class="text-2xl font-bold">{{ $totalProduk }}</div>
                     <div class="mt-1 text-sm">Data Produk</div>
@@ -45,8 +45,8 @@
             </div>
 
             <div
-                class="flex h-full items-center gap-4 rounded-xl bg-gradient-to-r from-emerald-400 to-emerald-600 p-5 text-white shadow">
-                <i class="fas fa-truck-loading text-3xl opacity-80"></i>
+                class="flex items-center h-full gap-4 p-5 text-white shadow rounded-xl bg-gradient-to-r from-emerald-400 to-emerald-600">
+                <i class="text-3xl fas fa-truck-loading opacity-80"></i>
                 <div>
                     <div class="text-2xl font-bold">{{ $produkMasuk }}</div>
                     <div class="mt-1 text-sm">Total Produk Masuk</div>
@@ -54,8 +54,8 @@
             </div>
 
             <div
-                class="flex h-full items-center gap-4 rounded-xl bg-gradient-to-r from-rose-400 to-rose-600 p-5 text-white shadow">
-                <i class="fas fa-dolly text-3xl opacity-80"></i>
+                class="flex items-center h-full gap-4 p-5 text-white shadow rounded-xl bg-gradient-to-r from-rose-400 to-rose-600">
+                <i class="text-3xl fas fa-dolly opacity-80"></i>
                 <div>
                     <div class="text-2xl font-bold">{{ $produkKeluar }}</div>
                     <div class="mt-1 text-sm">Total Produk Keluar</div>
@@ -63,8 +63,8 @@
             </div>
 
             <div
-                class="flex h-full items-center gap-4 rounded-xl bg-gradient-to-r from-green-400 to-green-600 p-5 text-white shadow">
-                <i class="fas fa-users text-3xl opacity-80"></i>
+                class="flex items-center h-full gap-4 p-5 text-white shadow rounded-xl bg-gradient-to-r from-green-400 to-green-600">
+                <i class="text-3xl fas fa-users opacity-80"></i>
                 <div>
                     <div class="text-2xl font-bold">{{ $totalUser }}</div>
                     <div class="mt-1 text-sm">Pengguna</div>
@@ -72,8 +72,8 @@
             </div>
 
             <div
-                class="flex h-full items-center gap-4 rounded-xl bg-gradient-to-r from-indigo-400 to-indigo-600 p-5 text-white shadow">
-                <i class="fas fa-cash-register text-3xl opacity-80"></i>
+                class="flex items-center h-full gap-4 p-5 text-white shadow rounded-xl bg-gradient-to-r from-indigo-400 to-indigo-600">
+                <i class="text-3xl fas fa-cash-register opacity-80"></i>
                 <div>
                     <div class="text-2xl font-bold">
                         Rp {{ number_format($penjualanHariIni, 0, ',', '.') }}
@@ -83,8 +83,8 @@
             </div>
 
             <div
-                class="flex h-full items-center gap-4 rounded-xl bg-gradient-to-r from-emerald-400 to-emerald-600 p-5 text-white shadow">
-                <i class="fas fa-coins text-3xl opacity-80"></i>
+                class="flex items-center h-full gap-4 p-5 text-white shadow rounded-xl bg-gradient-to-r from-emerald-400 to-emerald-600">
+                <i class="text-3xl fas fa-coins opacity-80"></i>
                 <div>
                     <div class="text-2xl font-bold">
                         Rp {{ number_format($keuntunganHariIni, 0, ',', '.') }}
@@ -94,8 +94,8 @@
             </div>
 
             <div
-                class="flex h-full items-center gap-4 rounded-xl bg-gradient-to-r from-cyan-400 to-cyan-600 p-5 text-white shadow">
-                <i class="fas fa-receipt text-3xl opacity-80"></i>
+                class="flex items-center h-full gap-4 p-5 text-white shadow rounded-xl bg-gradient-to-r from-cyan-400 to-cyan-600">
+                <i class="text-3xl fas fa-receipt opacity-80"></i>
                 <div>
                     <div class="text-2xl font-bold">{{ $transaksiHariIni }}</div>
                     <div class="mt-1 text-sm">Transaksi Hari Ini</div>
@@ -103,8 +103,8 @@
             </div>
 
             <div
-                class="flex h-full items-center gap-4 rounded-xl bg-gradient-to-r from-teal-400 to-teal-600 p-5 text-white shadow">
-                <i class="fas fa-user-check text-3xl opacity-80"></i>
+                class="flex items-center h-full gap-4 p-5 text-white shadow rounded-xl bg-gradient-to-r from-teal-400 to-teal-600">
+                <i class="text-3xl fas fa-user-check opacity-80"></i>
                 <div>
                     <div class="text-2xl font-bold">{{ $pegawaiAktif }}</div>
                     <div class="mt-1 text-sm">Pegawai Aktif</div>
@@ -112,8 +112,8 @@
             </div>
 
             <div
-                class="flex h-full items-center gap-4 rounded-xl bg-gradient-to-r from-gray-400 to-gray-600 p-5 text-white shadow">
-                <i class="fas fa-user-slash text-3xl opacity-80"></i>
+                class="flex items-center h-full gap-4 p-5 text-white shadow rounded-xl bg-gradient-to-r from-gray-400 to-gray-600">
+                <i class="text-3xl fas fa-user-slash opacity-80"></i>
                 <div>
                     <div class="text-2xl font-bold">{{ $pegawaiTidakAktif }}</div>
                     <div class="mt-1 text-sm">Pegawai Tidak Aktif</div>
@@ -122,7 +122,7 @@
         </div>
 
         <!-- Main Dashboard Row -->
-        <div class="mt-6 mb-6 flex flex-col items-start justify-between gap-4 lg:flex-row lg:items-center">
+        <div class="flex flex-col items-start justify-between gap-4 mt-6 mb-6 lg:flex-row lg:items-center">
             <!-- Judul -->
             <h2 class="text-xl font-semibold text-gray-800 lg:text-2xl dark:text-white">
                 Data Statistik
@@ -135,8 +135,8 @@
                     <div id="date-range-picker" date-rangepicker class="flex items-center gap-2">
                         <!-- Start Date -->
                         <div class="relative">
-                            <div class="pointer-events-none absolute inset-y-0 start-0 flex items-center ps-3">
-                                <svg class="h-4 w-4 text-gray-500 dark:text-gray-400" fill="currentColor"
+                            <div class="absolute inset-y-0 flex items-center pointer-events-none start-0 ps-3">
+                                <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" fill="currentColor"
                                     viewBox="0 0 20 20">
                                     <path
                                         d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z" />
@@ -151,8 +151,8 @@
 
                         <!-- End Date -->
                         <div class="relative">
-                            <div class="pointer-events-none absolute inset-y-0 start-0 flex items-center ps-3">
-                                <svg class="h-4 w-4 text-gray-500 dark:text-gray-400" fill="currentColor"
+                            <div class="absolute inset-y-0 flex items-center pointer-events-none start-0 ps-3">
+                                <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" fill="currentColor"
                                     viewBox="0 0 20 20">
                                     <path
                                         d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z" />
@@ -166,8 +166,8 @@
 
                     <!-- Reset Button -->
                     <button type="button" onclick="resetDateRange()"
-                        class="inline-flex items-center rounded-lg bg-gray-500 px-4 py-2 text-sm font-medium text-white transition-colors duration-200 hover:bg-gray-600 focus:ring-2 focus:ring-gray-400 focus:outline-none">
-                        <i class="fas fa-redo-alt mr-2"></i>
+                        class="inline-flex items-center px-4 py-2 text-sm font-medium text-white transition-colors duration-200 bg-gray-500 rounded-lg hover:bg-gray-600 focus:ring-2 focus:ring-gray-400 focus:outline-none">
+                        <i class="mr-2 fas fa-redo-alt"></i>
                         Reset
                     </button>
                 </div>
@@ -175,10 +175,10 @@
                 <!-- Export Dropdown -->
                 <div class="relative">
                     <button id="dropdownButton" data-dropdown-toggle="dropdownExport"
-                        class="inline-flex items-center rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow transition-colors duration-200 hover:bg-indigo-700 focus:ring-2 focus:ring-blue-300 focus:outline-none">
-                        <i class="fas fa-file-export mr-2"></i>
+                        class="inline-flex items-center px-4 py-2 text-sm font-medium text-white transition-colors duration-200 bg-indigo-600 rounded-lg shadow hover:bg-indigo-700 focus:ring-2 focus:ring-blue-300 focus:outline-none">
+                        <i class="mr-2 fas fa-file-export"></i>
                         Export
-                        <svg class="ml-2 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                        <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"
                             xmlns="http://www.w3.org/2000/svg">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                         </svg>
@@ -186,7 +186,7 @@
 
                     <!-- Dropdown menu -->
                     <div id="dropdownExport"
-                        class="absolute right-0 z-10 mt-2 hidden w-44 rounded-lg bg-white shadow dark:divide-gray-600 dark:bg-gray-700">
+                        class="absolute right-0 z-10 hidden mt-2 bg-white rounded-lg shadow w-44 dark:divide-gray-600 dark:bg-gray-700">
                         <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownButton">
                             <li>
                                 <a href="#" onclick="exportToPDF(); return false;"
@@ -201,23 +201,23 @@
         </div>
 
         <!-- GRAFIK TREN PENJUALAN & DONAT + TABEL TRANSAKSI HARI INI -->
-        <div class="mt-6 flex w-full flex-col gap-6 lg:flex-row">
+        <div class="flex flex-col w-full gap-6 mt-6 lg:flex-row">
             <!-- KIRI: Grafik Penjualan + Tabel Aktivitas -->
-            <div class="flex w-full flex-col gap-6 lg:w-2/3">
+            <div class="flex flex-col w-full gap-6 lg:w-2/3">
                 <!-- TABS PENJUALAN -->
-                <div class="rounded-xl bg-white p-5 shadow transition-colors duration-200 dark:bg-gray-800">
+                <div class="p-5 transition-colors duration-200 bg-white shadow rounded-xl dark:bg-gray-800">
                     <h4 class="mb-4 text-lg font-semibold text-gray-800 dark:text-gray-100">
                         Trend Penjualan
                     </h4>
 
                     <!-- Tabs Navigation + Export -->
                     <div
-                        class="mb-4 flex flex-wrap items-center justify-between gap-3 border-b border-gray-200 dark:border-gray-700">
+                        class="flex flex-wrap items-center justify-between gap-3 mb-4 border-b border-gray-200 dark:border-gray-700">
                         <!-- Tabs -->
-                        <ul class="flex flex-wrap gap-2 text-center text-sm font-medium" id="chartTabs" role="tablist">
+                        <ul class="flex flex-wrap gap-2 text-sm font-medium text-center" id="chartTabs" role="tablist">
                             <li>
                                 <button
-                                    class="active inline-block rounded-t-lg border-b-2 border-blue-600 border-transparent p-3 text-blue-600 hover:text-blue-600 dark:hover:text-blue-400"
+                                    class="inline-block p-3 text-blue-600 border-b-2 border-transparent border-blue-600 rounded-t-lg active hover:text-blue-600 dark:hover:text-blue-400"
                                     id="tab-day" data-tab="daily" data-tabs-target="#tab-content-day" type="button"
                                     role="tab" aria-controls="tab-content-day" aria-selected="true">
                                     Harian
@@ -225,7 +225,7 @@
                             </li>
                             <li>
                                 <button
-                                    class="inline-block rounded-t-lg border-b-2 border-transparent p-3 text-gray-700 hover:text-blue-600 dark:text-white dark:hover:text-blue-400"
+                                    class="inline-block p-3 text-gray-700 border-b-2 border-transparent rounded-t-lg hover:text-blue-600 dark:text-white dark:hover:text-blue-400"
                                     id="tab-week" data-tab="weekly" data-tabs-target="#tab-content-week" type="button"
                                     role="tab" aria-controls="tab-content-week" aria-selected="false">
                                     Mingguan
@@ -233,7 +233,7 @@
                             </li>
                             <li>
                                 <button
-                                    class="inline-block rounded-t-lg border-b-2 border-transparent p-3 text-gray-700 hover:text-blue-600 dark:text-white dark:hover:text-blue-400"
+                                    class="inline-block p-3 text-gray-700 border-b-2 border-transparent rounded-t-lg hover:text-blue-600 dark:text-white dark:hover:text-blue-400"
                                     id="tab-month" data-tab="monthly" data-tabs-target="#tab-content-month"
                                     type="button" role="tab" aria-controls="tab-content-month"
                                     aria-selected="false">
@@ -242,7 +242,7 @@
                             </li>
                             <li>
                                 <button
-                                    class="inline-block rounded-t-lg border-b-2 border-transparent p-3 text-gray-700 hover:text-blue-600 dark:text-white dark:hover:text-blue-400"
+                                    class="inline-block p-3 text-gray-700 border-b-2 border-transparent rounded-t-lg hover:text-blue-600 dark:text-white dark:hover:text-blue-400"
                                     id="tab-year" data-tab="yearly" data-tabs-target="#tab-content-year" type="button"
                                     role="tab" aria-controls="tab-content-year" aria-selected="false">
                                     Tahunan
@@ -257,21 +257,21 @@
                                 <!-- Trigger button -->
                                 <button @click="open = !open"
                                     class="flex items-center gap-2 rounded-md bg-blue-600 px-3 py-1.5 text-xs text-white shadow transition hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600">
-                                    <i class="fa-solid fa-download text-sm"></i>
+                                    <i class="text-sm fa-solid fa-download"></i>
                                     <span>Export</span>
                                     <i class="fa-solid fa-caret-down text-[10px]"></i>
                                 </button>
 
                                 <!-- Dropdown menu -->
                                 <div x-show="open" @click.outside="open = false"
-                                    class="absolute right-0 z-20 mt-2 w-44 divide-y divide-gray-100 rounded-md bg-white shadow dark:bg-gray-700"
+                                    class="absolute right-0 z-20 mt-2 bg-white divide-y divide-gray-100 rounded-md shadow w-44 dark:bg-gray-700"
                                     x-transition>
                                     <ul class="py-1 text-sm text-gray-700 dark:text-gray-200">
                                         <!-- Export Harian (Label dinamis) -->
                                         <li>
                                             <button id="export-current"
-                                                class="flex w-full items-center gap-3 px-3 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
-                                                <i class="fa-solid fa-file-pdf w-5 text-base text-blue-500"></i>
+                                                class="flex items-center w-full gap-3 px-3 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                                                <i class="w-5 text-base text-blue-500 fa-solid fa-file-pdf"></i>
                                                 <span id="export-current-label">Export Harian</span>
                                             </button>
                                         </li>
@@ -279,8 +279,8 @@
                                         <!-- Export Semua -->
                                         <li>
                                             <button id="export-all"
-                                                class="flex w-full items-center gap-3 px-3 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
-                                                <i class="fa-solid fa-file-pdf w-5 text-base text-green-600"></i>
+                                                class="flex items-center w-full gap-3 px-3 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                                                <i class="w-5 text-base text-green-600 fa-solid fa-file-pdf"></i>
                                                 <span>Export Semua</span>
                                             </button>
                                         </li>
@@ -288,8 +288,8 @@
                                         <!-- Export Excel -->
                                         <li>
                                             <a id="export-excel-btn" href="#"
-                                                class="flex w-full items-center gap-3 px-3 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
-                                                <i class="fa-solid fa-file-excel w-5 text-base text-yellow-500"></i>
+                                                class="flex items-center w-full gap-3 px-3 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                                                <i class="w-5 text-base text-yellow-500 fa-solid fa-file-excel"></i>
                                                 <span>Export Excel</span>
                                             </a>
                                         </li>
@@ -297,8 +297,8 @@
                                         <!-- Export CSV -->
                                         <li>
                                             <button onclick="exportToCSV()"
-                                                class="flex w-full items-center gap-3 px-3 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
-                                                <i class="fa-solid fa-file-csv w-5 text-base text-orange-500"></i>
+                                                class="flex items-center w-full gap-3 px-3 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                                                <i class="w-5 text-base text-orange-500 fa-solid fa-file-csv"></i>
                                                 <span>Export CSV</span>
                                             </button>
                                         </li>
@@ -310,17 +310,17 @@
 
                     <!-- Tabs Content -->
                     <div id="chart-tabs-content">
-                        <div class="rounded-lg bg-white p-4 shadow-sm dark:bg-gray-800" id="tab-content-day">
-                            <canvas id="chart-day" class="h-80 w-full"></canvas>
+                        <div class="p-4 bg-white rounded-lg shadow-sm dark:bg-gray-800" id="tab-content-day">
+                            <div id="chart-day" class="w-full h-80"></div>
                         </div>
-                        <div class="hidden rounded-lg bg-white p-4 shadow-sm dark:bg-gray-800" id="tab-content-week">
-                            <canvas id="chart-week" class="h-80 w-full"></canvas>
+                        <div class="hidden p-4 bg-white rounded-lg shadow-sm dark:bg-gray-800" id="tab-content-week">
+                            <div id="chart-week" class="w-full h-80"></div>
                         </div>
-                        <div class="hidden rounded-lg bg-white p-4 shadow-sm dark:bg-gray-800" id="tab-content-month">
-                            <canvas id="chart-month" class="h-80 w-full"></canvas>
+                        <div class="hidden p-4 bg-white rounded-lg shadow-sm dark:bg-gray-800" id="tab-content-month">
+                            <div id="chart-month" class="w-full h-80"></div>
                         </div>
-                        <div class="hidden rounded-lg bg-white p-4 shadow-sm dark:bg-gray-800" id="tab-content-year">
-                            <canvas id="chart-year" class="h-80 w-full"></canvas>
+                        <div class="hidden p-4 bg-white rounded-lg shadow-sm dark:bg-gray-800" id="tab-content-year">
+                            <div id="chart-year" class="w-full h-80"></div>
                         </div>
                     </div>
 
@@ -331,12 +331,12 @@
                 </div>
 
                 <!-- TABEL AKTIVITAS TRANSAKSI HARI INI -->
-                <div class="rounded-xl bg-white p-5 shadow transition-colors duration-200 dark:bg-gray-800">
+                <div class="p-5 transition-colors duration-200 bg-white shadow rounded-xl dark:bg-gray-800">
                     <h4 class="mb-4 text-lg font-semibold text-gray-800 dark:text-gray-100">
                         Aktivitas Transaksi Hari Ini
                     </h4>
                     <div class="overflow-x-auto rounded-lg">
-                        <table class="min-w-full divide-y divide-gray-200 text-left text-sm dark:divide-gray-700">
+                        <table class="min-w-full text-sm text-left divide-y divide-gray-200 dark:divide-gray-700">
                             <thead class="bg-gray-100 dark:bg-gray-700">
                                 <tr>
                                     <th class="px-4 py-2 text-gray-700 dark:text-gray-200">
@@ -390,19 +390,19 @@
                 </div>
 
                 <!-- Performa Kasir Hari Ini -->
-                <div class="rounded-xl bg-white p-5 shadow transition-colors duration-200 dark:bg-gray-800">
+                <div class="p-5 transition-colors duration-200 bg-white shadow rounded-xl dark:bg-gray-800">
                     <h4 class="mb-4 text-lg font-semibold text-gray-800 dark:text-gray-100">
                         Performa Kasir Hari Ini
                     </h4>
                     <div class="overflow-x-auto rounded-lg">
-                        <table class="min-w-full divide-y divide-gray-200 text-left text-sm dark:divide-gray-700">
+                        <table class="min-w-full text-sm text-left divide-y divide-gray-200 dark:divide-gray-700">
                             <thead class="bg-gray-100 dark:bg-gray-700">
                                 <tr>
                                     <th class="px-6 py-3 font-bold">Kasir</th>
-                                    <th class="px-6 py-3 text-center font-bold">
+                                    <th class="px-6 py-3 font-bold text-center">
                                         Melakukan Transaksi
                                     </th>
-                                    <th class="px-6 py-3 text-right font-bold">Total Penjualan</th>
+                                    <th class="px-6 py-3 font-bold text-right">Total Penjualan</th>
                                 </tr>
                             </thead>
                             <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
@@ -431,21 +431,21 @@
             </div>
 
             <!-- KANAN: Donut Chart -->
-            <div class="flex w-full flex-col gap-6 lg:w-1/3">
+            <div class="flex flex-col w-full gap-6 lg:w-1/3">
                 <!-- Produk Terjual -->
-                <div class="rounded-xl bg-white p-4 shadow transition-colors duration-200 dark:bg-gray-800">
-                    <h4 class="mb-2 text-center text-sm font-semibold text-gray-800 dark:text-gray-100">
+                <div class="p-4 transition-colors duration-200 bg-white shadow rounded-xl dark:bg-gray-800">
+                    <h4 class="mb-2 text-sm font-semibold text-center text-gray-800 dark:text-gray-100">
                         Produk Terjual
                     </h4>
-                    <canvas id="donut-product-sold" class="h-60 w-full"></canvas>
+                    <canvas id="donut-product-sold" class="w-full h-60"></canvas>
                 </div>
 
                 <!-- Produk Masuk -->
-                <div class="rounded-xl bg-white p-4 shadow transition-colors duration-200 dark:bg-gray-800">
-                    <h4 class="mb-2 text-center text-sm font-semibold text-gray-800 dark:text-gray-100">
+                <div class="p-4 transition-colors duration-200 bg-white shadow rounded-xl dark:bg-gray-800">
+                    <h4 class="mb-2 text-sm font-semibold text-center text-gray-800 dark:text-gray-100">
                         Produk Masuk
                     </h4>
-                    <canvas id="donut-product-in" class="h-60 w-full"></canvas>
+                    <canvas id="donut-product-in" class="w-full h-60"></canvas>
                 </div>
             </div>
         </div>
@@ -457,147 +457,573 @@
         let chartDay, chartWeek, chartMonth, chartYear;
         let donutSold, donutIn;
 
-        // ===================== Utility Re-init dengan Delay =====================
-        function reRenderChart(initFn, ctxId) {
-            const canvas = document.getElementById(ctxId);
+        function reRenderChart(updateFn, containerId) {
+            const container = document.getElementById(containerId);
 
-            // Buat efek fade-out dulu
-            canvas.parentElement.classList.add('opacity-0', 'scale-95', 'transition-all', 'duration-300');
+            if (!container) {
+                return;
+            }
 
-            // Destroy dan tunggu frame baru biar animasi Chart.js aktif ulang
             setTimeout(() => {
-                initFn(); // render ulang grafik
-                canvas.parentElement.classList.remove('opacity-0', 'scale-95');
-                canvas.parentElement.classList.add('opacity-100', 'scale-100', 'transition-all', 'duration-700');
-            }, 300);
+                updateFn();
+            }, 500);
         }
 
-        // ===================== CHART FUNCTIONS =====================
+        function getThemeColor(lightColor, darkColor) {
+            const isDarkMode = document.documentElement.classList.contains('dark');
+            return isDarkMode ? darkColor : lightColor;
+        }
+
         function initChartDay() {
-            const ctx = document.getElementById("chart-day").getContext("2d");
-            if (chartDay) chartDay.destroy();
-            chartDay = new Chart(ctx, {
-                type: "line",
-                data: {
-                    labels: @json($dailyLabels),
-                    datasets: [
-                        @foreach ($dailyByProduct as $dataset)
-                            {!! json_encode($dataset) !!},
-                        @endforeach
-                    ]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    animation: {
-                        duration: 1200,
-                        easing: 'easeOutBounce'
+            const dailyLabels = @json($dailyLabels);
+            const dailyByProductData = [
+                @foreach ($dailyByProduct as $dataset)
+                    {
+                        name: {!! json_encode($dataset['label']) !!},
+                        data: {!! json_encode($dataset['data']) !!}
                     },
-                    plugins: {
-                        legend: {
-                            position: 'top'
-                        }
+                @endforeach
+            ];
+
+            if (chartDay) {
+                chartDay.destroy();
+            }
+
+            // Warna yang konsisten
+            const labelColorLight = '#374151'; // Warna gelap untuk Light Mode
+            const labelColorDark = '#E5E7EB'; // Warna terang untuk Dark Mode
+            const axisColorLight = '#D1D5DB';
+            const axisColorDark = '#4B5563';
+
+            const options = {
+                series: dailyByProductData,
+                chart: {
+                    // ... (Konfigurasi chart lainnya) ...
+                    id: 'chart-day',
+                    type: 'line',
+                    height: 350,
+                    animations: {
+
                     },
-                    scales: {
-                        y: {
-                            beginAtZero: true
+                    toolbar: {
+                        show: true,
+                        tools: {
+                            download: true,
+                            selection: false,
+                            zoom: false,
+                            zoomin: false,
+                            zoomout: false,
+                            pan: false,
+                            reset: false,
                         }
                     }
+                },
+                dataLabels: {
+                    enabled: false
+                },
+                stroke: {
+                    curve: 'smooth'
+                },
+                title: {
+                    text: '',
+                    align: 'left'
+                },
+                tooltip: {
+                    // Menggunakan theme 'light' akan membuat teks di tooltip berwarna gelap.
+                    theme: getThemeColor('light', 'dark'),
+                    // Jika Anda ingin mengontrol font tooltip:
+                    style: {
+                        fontSize: '13px',
+                        fontFamily: 'inherit',
+                    }
+                },
+
+                grid: {
+                    borderColor: getThemeColor(axisColorLight, axisColorDark),
+                    // row: {
+                    //     colors: 'transparent',
+                    //     opacity: 0.5
+                    // }
+                },
+                xaxis: {
+                    // ... (Konfigurasi xaxis) ...
+                    categories: dailyLabels,
+                    labels: {
+                        style: {
+                            colors: getThemeColor(labelColorLight, labelColorDark),
+                            fontSize: '12px',
+                            fontFamily: 'inherit',
+                            fontWeight: 400,
+                        }
+                    },
+                    axisBorder: {
+                        show: true,
+                        color: getThemeColor(axisColorLight, axisColorDark),
+                    },
+                    axisTicks: {
+                        show: true,
+                        color: getThemeColor(axisColorLight, axisColorDark),
+                    }
+                },
+                yaxis: {
+                    // ... (Konfigurasi yaxis) ...
+                    min: 0,
+                    labels: {
+                        formatter: function(val) {
+                            return val.toFixed(0);
+                        },
+                        style: {
+                            colors: getThemeColor(labelColorLight, labelColorDark),
+                            fontSize: '12px',
+                            fontFamily: 'inherit',
+                            fontWeight: 400
+                        }
+                    }
+                },
+                legend: {
+                    // ... (Konfigurasi legend) ...
+                    position: 'top',
+                    horizontalAlign: 'center',
+                    labels: {
+                        colors: getThemeColor(labelColorLight, labelColorDark),
+                    }
                 }
-            });
+            };
+
+            chartDay = new ApexCharts(document.querySelector("#chart-day"), options);
+            chartDay.render();
         }
 
         function initChartWeek() {
-            const ctx = document.getElementById("chart-week").getContext("2d");
-            if (chartWeek) chartWeek.destroy();
-            chartWeek = new Chart(ctx, {
-                type: "bar",
-                data: {
-                    labels: @json($weekLabels),
-                    datasets: [
-                        @foreach ($weeklyByProduct as $dataset)
-                            {!! json_encode($dataset) !!},
-                        @endforeach
-                    ]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    animation: {
-                        duration: 1200,
-                        easing: 'easeOutElastic'
+            // 1. Perbaikan: Menggunakan variabel yang sesuai untuk label data mingguan
+            const weekLabels = @json($weekLabels); // Seharusnya $weeklyLabels, bukan $dailyLabels
+
+            const weeklyByProductData = [
+                @foreach ($weeklyByProduct as $dataset)
+                    {
+                        name: {!! json_encode($dataset['label']) !!},
+                        data: {!! json_encode($dataset['data']) !!}
                     },
-                    plugins: {
-                        legend: {
-                            position: 'top'
-                        }
+                @endforeach
+            ];
+
+            if (chartWeek) {
+                chartWeek.destroy();
+            }
+
+            // Warna yang konsisten
+            const labelColorLight = '#374151'; // Warna gelap untuk Light Mode
+            const labelColorDark = '#E5E7EB'; // Warna terang untuk Dark Mode
+            const axisColorLight = '#D1D5DB';
+            const axisColorDark = '#4B5563';
+
+            const options = {
+
+                series: weeklyByProductData,
+                chart: {
+
+                    id: 'chart-week',
+                    type: 'bar',
+                    height: 350,
+
+                    animations: {
+                        enabled: false
                     },
-                    scales: {
-                        y: {
-                            beginAtZero: true
+
+                    toolbar: {
+                        show: true,
+                        tools: {
+                            download: true,
+                            selection: false,
+                            zoom: false,
+                            zoomin: false,
+                            zoomout: false,
+                            pan: false,
+                            reset: false,
                         }
                     }
+                },
+
+
+                plotOptions: {
+                    bar: {
+                        horizontal: false,
+                        columnWidth: '55%',
+                        endingShape: 'rounded'
+                    },
+                },
+
+
+                dataLabels: {
+                    enabled: false
+                },
+
+
+                stroke: {
+                    show: true,
+                    width: 2,
+                    colors: ['transparent']
+                },
+
+
+                title: {
+                    text: '',
+                    align: 'left'
+                },
+
+                // Tambahkan konfigurasi theme global
+                theme: {
+                    mode: getThemeColor('light', 'dark'),
+                },
+
+                tooltip: {
+                    theme: getThemeColor('light', 'dark'),
+                    style: {
+                        fontSize: '13px',
+                        fontFamily: 'inherit',
+                    },
+                    y: {
+                        formatter: function(val) {
+                            return val.toFixed(0) // Hanya menampilkan angka tanpa desimal
+                        }
+                    }
+                },
+
+                grid: {
+                    borderColor: getThemeColor(axisColorLight, axisColorDark),
+                },
+                xaxis: {
+                    // Menggunakan weekLabels
+                    categories: weekLabels,
+                    labels: {
+                        style: {
+                            colors: getThemeColor(labelColorLight, labelColorDark),
+                            fontSize: '12px',
+                            fontFamily: 'inherit',
+                            fontWeight: 400,
+                        }
+                    },
+                    axisBorder: {
+                        show: true,
+                        color: getThemeColor(axisColorLight, axisColorDark),
+                    },
+                    axisTicks: {
+                        show: true,
+                        color: getThemeColor(axisColorLight, axisColorDark),
+                    }
+                },
+                yaxis: {
+                    min: 0,
+                    labels: {
+                        formatter: function(val) {
+                            return val.toFixed(0);
+                        },
+                        style: {
+                            colors: getThemeColor(labelColorLight, labelColorDark),
+                            fontSize: '12px',
+                            fontFamily: 'inherit',
+                            fontWeight: 400
+                        }
+                    }
+                },
+                legend: {
+                    position: 'top',
+                    horizontalAlign: 'center',
+                    labels: {
+                        colors: getThemeColor(labelColorLight, labelColorDark),
+                    }
                 }
-            });
+            };
+
+            // PERBAIKAN: Menggunakan #chart-week sebagai selector DOM
+            chartWeek = new ApexCharts(document.querySelector("#chart-week"), options);
+            chartWeek.render();
         }
 
         function initChartMonth() {
-            const ctx = document.getElementById("chart-month").getContext("2d");
-            if (chartMonth) chartMonth.destroy();
-            chartMonth = new Chart(ctx, {
-                type: "bar",
-                data: {
-                    labels: @json($monthLabels),
-                    datasets: [
-                        @foreach ($monthlyByProduct as $dataset)
-                            {!! json_encode($dataset) !!},
-                        @endforeach
-                    ]
+            // 1. Variabel Data Bulanan
+            const monthLabels = @json($monthLabels);
+            const monthlyByProductData = [
+                @foreach ($monthlyByProduct as $dataset)
+                    {
+                        name: {!! json_encode($dataset['label']) !!},
+                        data: {!! json_encode($dataset['data']) !!}
+                    },
+                @endforeach
+            ];
+
+            if (chartMonth) {
+                chartMonth.destroy();
+            }
+
+            // Warna yang konsisten
+            const labelColorLight = '#374151'; // Warna gelap untuk Light Mode
+            const labelColorDark = '#E5E7EB'; // Warna terang untuk Dark Mode
+            const axisColorLight = '#D1D5DB';
+            const axisColorDark = '#4B5563';
+
+            const options = {
+                series: monthlyByProductData,
+                chart: {
+                    // Menggunakan ID unik untuk chart bulanan
+                    id: 'chart-month',
+                    // Tipe Bar Chart
+                    type: 'bar',
+                    height: 350,
+                    toolbar: {
+                        show: true,
+                        tools: {
+                            download: true,
+                            selection: false,
+                            zoom: false,
+                            zoomin: false,
+                            zoomout: false,
+                            pan: false,
+                            reset: false,
+                        }
+                    }
                 },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    animation: {
-                        duration: 1000,
-                        easing: 'easeOutQuart'
+                plotOptions: {
+                    bar: {
+                        horizontal: false,
+                        columnWidth: '55%',
+                        endingShape: 'rounded'
+                    },
+                },
+                dataLabels: {
+                    enabled: false
+                },
+                stroke: {
+                    show: true,
+                    width: 2,
+                    colors: ['transparent']
+                },
+                title: {
+                    text: '',
+                    align: 'left'
+                },
+
+                // Konfigurasi tema global
+                theme: {
+                    mode: getThemeColor('light', 'dark'),
+                },
+
+                // Konfigurasi Tooltip (agar teks terlihat)
+                tooltip: {
+                    theme: getThemeColor('light', 'dark'), // Teks gelap di Light Mode
+                    style: {
+                        fontSize: '13px',
+                        fontFamily: 'inherit',
+                    },
+                    y: {
+                        formatter: function(val) {
+                            return val.toFixed(0) // Hanya menampilkan angka tanpa desimal
+                        }
+                    }
+                },
+
+                grid: {
+                    borderColor: getThemeColor(axisColorLight, axisColorDark),
+
+                },
+                xaxis: {
+                    // Menggunakan monthLabels
+                    categories: monthLabels,
+                    labels: {
+                        style: {
+                            colors: getThemeColor(labelColorLight, labelColorDark),
+                            fontSize: '12px',
+                            fontFamily: 'inherit',
+                            fontWeight: 400,
+                        }
+                    },
+                    axisBorder: {
+                        show: true,
+                        color: getThemeColor(axisColorLight, axisColorDark),
+                    },
+                    axisTicks: {
+                        show: true,
+                        color: getThemeColor(axisColorLight, axisColorDark),
+                    }
+                },
+                yaxis: {
+                    min: 0,
+                    labels: {
+                        formatter: function(val) {
+                            return val.toFixed(0);
+                        },
+                        style: {
+                            colors: getThemeColor(labelColorLight, labelColorDark),
+                            fontSize: '12px',
+                            fontFamily: 'inherit',
+                            fontWeight: 400
+                        }
+                    }
+                },
+                legend: {
+                    position: 'top',
+                    horizontalAlign: 'center',
+                    labels: {
+                        colors: getThemeColor(labelColorLight, labelColorDark),
                     }
                 }
-            });
+            };
+
+            // Buat instance baru chartMonth dan render
+            chartMonth = new ApexCharts(document.querySelector("#chart-month"), options);
+            chartMonth.render();
         }
 
         function initChartYear() {
-            const ctx = document.getElementById("chart-year").getContext("2d");
-            if (chartYear) chartYear.destroy();
-            chartYear = new Chart(ctx, {
-                type: "line",
-                data: {
-                    labels: @json($yearLabels),
-                    datasets: [
-                        @foreach ($yearlyByProduct as $dataset)
-                            {!! json_encode($dataset) !!},
-                        @endforeach
-                    ]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    animation: {
-                        duration: 1500,
-                        easing: 'easeOutCubic'
+            // 1. Variabel Data Tahunan
+            const yearLabels = @json($yearLabels);
+
+            // Mengubah data menjadi format ApexCharts series
+            const yearlyByProductData = [
+                @foreach ($yearlyByProduct as $dataset)
+                    {
+                        name: {!! json_encode($dataset['label']) !!},
+                        data: {!! json_encode($dataset['data']) !!}
                     },
-                    plugins: {
-                        legend: {
-                            position: 'top'
-                        }
+                @endforeach
+            ];
+
+            if (chartYear) {
+                chartYear.destroy();
+            }
+
+            // Warna yang konsisten
+            const labelColorLight = '#374151'; // Warna gelap untuk Light Mode
+            const labelColorDark = '#E5E7EB'; // Warna terang untuk Dark Mode
+            const axisColorLight = '#D1D5DB';
+            const axisColorDark = '#4B5563';
+
+            const options = {
+                series: yearlyByProductData,
+                chart: {
+                    // Menggunakan ID unik untuk chart tahunan
+                    id: 'chart-year',
+                    type: 'bar',
+                    height: 350,
+
+                    animations: {
+                        enabled: false // Menonaktifkan semua animasi
                     },
-                    scales: {
-                        y: {
-                            beginAtZero: true
+
+                    toolbar: {
+                        show: true,
+                        tools: {
+                            download: true,
+                            selection: false,
+                            zoom: false,
+                            zoomin: false,
+                            zoomout: false,
+                            pan: false,
+                            reset: false,
                         }
                     }
+                },
+
+                // ===================================
+                // PERBAIKAN BAR CHART: Tambahkan plotOptions untuk Bar Chart
+                plotOptions: {
+                    bar: {
+                        horizontal: false,
+                        columnWidth: '55%',
+                        endingShape: 'rounded'
+                    },
+                },
+                // ===================================
+
+                dataLabels: {
+                    enabled: false
+                },
+
+                // ===================================
+                // PERBAIKAN BAR CHART: Konfigurasi stroke yang sesuai untuk Bar Chart (transparan)
+                stroke: {
+                    show: true,
+                    width: 2,
+                    colors: ['transparent']
+                },
+                // ===================================
+
+                title: {
+                    text: '',
+                    align: 'left'
+                },
+
+                // Konfigurasi tema global
+                theme: {
+                    mode: getThemeColor('light', 'dark'),
+                },
+
+                // Konfigurasi Tooltip (agar teks terlihat)
+                tooltip: {
+                    theme: getThemeColor('light', 'dark'), // Teks gelap di Light Mode
+                    style: {
+                        fontSize: '13px',
+                        fontFamily: 'inherit',
+                    },
+                    y: {
+                        formatter: function(val) {
+                            return val.toFixed(0) // Hanya menampilkan angka tanpa desimal
+                        }
+                    }
+                },
+
+                grid: {
+                    borderColor: getThemeColor(axisColorLight, axisColorDark),
+                },
+                xaxis: {
+                    // Menggunakan yearLabels
+                    categories: yearLabels,
+                    labels: {
+                        style: {
+                            colors: getThemeColor(labelColorLight, labelColorDark),
+                            fontSize: '12px',
+                            fontFamily: 'inherit',
+                            fontWeight: 400,
+                        }
+                    },
+                    axisBorder: {
+                        show: true,
+                        color: getThemeColor(axisColorLight, axisColorDark),
+                    },
+                    axisTicks: {
+                        show: true,
+                        color: getThemeColor(axisColorLight, axisColorDark),
+                    }
+                },
+                yaxis: {
+                    min: 0,
+                    labels: {
+                        formatter: function(val) {
+                            return val.toFixed(0);
+                        },
+                        style: {
+                            colors: getThemeColor(labelColorLight, labelColorDark),
+                            fontSize: '12px',
+                            fontFamily: 'inherit',
+                            fontWeight: 400
+                        }
+                    }
+                },
+                legend: {
+                    position: 'top',
+                    horizontalAlign: 'center',
+                    labels: {
+                        colors: getThemeColor(labelColorLight, labelColorDark),
+                    }
                 }
-            });
+            };
+
+            // Buat instance baru chartYear dan render
+            chartYear = new ApexCharts(document.querySelector("#chart-year"), options);
+            chartYear.render();
         }
+
+
 
         // ===================== Tabs Handling =====================
         const tabButtons = document.querySelectorAll('[data-tabs-target]');
@@ -643,16 +1069,6 @@
         // ===================== Default Load =====================
         window.addEventListener('DOMContentLoaded', () => {
             reRenderChart(initChartDay, 'chart-day');
-        });
-
-        // ===================== Resize =====================
-        window.addEventListener('resize', () => {
-            chartDay?.resize();
-            chartWeek?.resize();
-            chartMonth?.resize();
-            chartYear?.resize();
-            donutSold?.resize();
-            donutIn?.resize();
         });
 
         // ===================== Donut Charts =====================
@@ -752,100 +1168,171 @@
         const exportCurrentBtn = document.getElementById('export-current')
         const exportAllBtn = document.getElementById('export-all')
 
-        function renderChartToPDF(pdf, canvasId, title, tableData = null, addNewPage = false) {
-            const canvas = document.getElementById(canvasId)
-            if (!canvas) return
+        async function renderChartToPDF(pdf, chartInstance, title, tableData = null, addNewPage = false) {
+            if (!chartInstance) return
+
             if (addNewPage) pdf.addPage()
 
-            const imgData = canvas.toDataURL('image/png', 1.0)
+            const imgObj = await chartInstance.dataURI({
+                width: 1000,
+                type: 'image/png',
+                quality: 1
+            })
+
+            if (!imgObj || !imgObj.imgURI) {
+                console.error("Gagal mendapatkan Data URI dari grafik.")
+                return
+            }
+
+            const imgData = imgObj.imgURI
+
             const pdfWidth = pdf.internal.pageSize.getWidth() - 20
-            const pdfHeight = (canvas.height * pdfWidth) / canvas.width
+            const originalChartWidth = 1000
+            const fallbackHeight = 350 // Tinggi default yang aman
+
+            // Ambil tinggi chart, gunakan fallback jika nilainya 0 atau undefined
+            const chartGlobals = chartInstance.w.globals
+            const originalChartHeight = chartGlobals.chartHeight > 0 ? chartGlobals.chartHeight : fallbackHeight
+
+            // Pastikan pdfHeight selalu lebih besar dari 0
+            let pdfHeight = (originalChartHeight * pdfWidth) / originalChartWidth
+            if (pdfHeight <= 0) {
+                pdfHeight = (fallbackHeight * pdfWidth) / originalChartWidth
+            }
 
             pdf.setFontSize(14)
             pdf.text(title, 14, 20)
             pdf.addImage(imgData, 'PNG', 10, 30, pdfWidth, pdfHeight)
 
             if (tableData && tableData.rows.length > 0) {
-                pdf.autoTable({
-                    head: [tableData.headers],
-                    body: tableData.rows,
-                    startY: pdfHeight + 50,
-                    styles: {
-                        fontSize: 10,
-                    },
-                    headStyles: {
-                        fillColor: [41, 128, 185],
-                    },
-                })
+                const tableStart = pdfHeight + 50
+
+                if (tableStart > pdf.internal.pageSize.getHeight() - 50) {
+                    pdf.addPage()
+                    pdf.autoTable({
+                        head: [tableData.headers],
+                        body: tableData.rows,
+                        startY: 20,
+                        styles: {
+                            fontSize: 10
+                        },
+                        headStyles: {
+                            fillColor: [41, 128, 185]
+                        },
+                    })
+                } else {
+                    pdf.autoTable({
+                        head: [tableData.headers],
+                        body: tableData.rows,
+                        startY: tableStart,
+                        styles: {
+                            fontSize: 10
+                        },
+                        headStyles: {
+                            fillColor: [41, 128, 185]
+                        },
+                    })
+                }
             }
         }
 
-        // Export sesuai tab aktif
-        exportCurrentBtn.addEventListener('click', () => {
+
+
+        exportCurrentBtn.addEventListener('click', async () => {
             const activeTab = document.querySelector('#chart-tabs-content > div:not(.hidden)')
             if (!activeTab) return alert('Tidak ada tab aktif')
-            const canvas = activeTab.querySelector('canvas')
-            if (!canvas) return alert('Tidak ada grafik di tab ini')
 
-            const pdf = new jsPDF('p', 'mm', 'a4')
             const tabName = activeTab.id.replace('tab-content-', '')
+
+            let initFn
             let title = 'Laporan '
             let tableData = null
 
             switch (tabName) {
                 case 'day':
+                    initFn = initChartDay
                     title += 'Harian'
                     const dailyTotals = JSON.parse(document.getElementById('daily-totals').value)
                     tableData = {
                         headers: ['Tanggal', 'Produk', 'Total'],
-                        rows: dailyTotals.map((d) => [
-                            d.tanggal,
-                            d.product,
-                            Number(d.total).toLocaleString('id-ID'),
-                        ]),
+                        rows: dailyTotals.map((d) => [d.tanggal, d.product, Number(d.total).toLocaleString(
+                            'id-ID')])
                     }
                     break
                 case 'week':
-                    title += 'Mingguan'
+                    initFn = initChartWeek
+                    title += 'Mingguan' // Typo 'Minguan' diperbaiki
                     const weeklyTotals = JSON.parse(document.getElementById('weekly-totals').value)
                     tableData = {
-                        headers: ['Periode', 'Produk', 'Total'],
-                        rows: weeklyTotals.map((d) => [
-                            d.week,
-                            d.product,
-                            Number(d.total).toLocaleString('id-ID'),
-                        ]),
+                        headers: ['Minggu', 'Produk', 'Total'],
+                        rows: weeklyTotals.map((d) => [d.week, d.product, Number(d.total).toLocaleString(
+                            'id-ID')])
                     }
                     break
                 case 'month':
+                    initFn = initChartMonth
                     title += 'Bulanan'
-                    const monthlyTotals = JSON.parse(
-                        document.getElementById('monthly-totals').value,
-                    )
+                    const monthlyTotals = JSON.parse(document.getElementById('monthly-totals').value)
                     tableData = {
                         headers: ['Bulan', 'Produk', 'Total'],
-                        rows: monthlyTotals.map((d) => [
-                            d.month,
-                            d.product,
-                            Number(d.total).toLocaleString('id-ID'),
-                        ]),
+                        rows: monthlyTotals.map((d) => [d.month, d.product, Number(d.total).toLocaleString(
+                            'id-ID')])
                     }
                     break
                 case 'year':
+                    initFn = initChartYear
                     title += 'Tahunan'
                     const yearlyTotals = JSON.parse(document.getElementById('yearly-totals').value)
                     tableData = {
                         headers: ['Tahun', 'Produk', 'Total'],
-                        rows: yearlyTotals.map((d) => [
-                            d.year,
-                            d.product,
-                            Number(d.total).toLocaleString('id-ID'),
-                        ]),
+                        rows: yearlyTotals.map((d) => [d.year, d.product, Number(d.total).toLocaleString(
+                            'id-ID')])
                     }
                     break
+                default:
+                    return alert('Tab tidak dikenali.')
             }
 
-            renderChartToPDF(pdf, canvas.id, title, tableData)
+            // Panggil fungsi inisialisasi untuk memastikan chart di-render ulang
+            initFn()
+
+            // Tunggu waktu yang aman (BISA DITINGKATKAN JIKA MASALAH PERSISTEN)
+            await new Promise(resolve => setTimeout(resolve, 700))
+
+            // Setelah initFn() dipanggil, kita ambil instance chart yang terbaru dari variabel global
+            let currentChartInstance
+
+            // ======================================================================
+            // PERBAIKAN UTAMA: LOGIKA PENGAMBILAN INSTANCE CHART UNTUK SEMUA TAB
+            // ======================================================================
+            switch (tabName) {
+                case 'day':
+                    currentChartInstance = chartDay
+                    break
+                case 'week':
+                    currentChartInstance = chartWeek
+                    break
+                case 'month':
+                    currentChartInstance = chartMonth
+                    break
+                case 'year':
+                    currentChartInstance = chartYear
+                    break
+            }
+            // ======================================================================
+
+            if (!currentChartInstance) {
+                // TINGKATKAN DELAY DI ATAS JIKA ERROR INI TERUS MUNCUL
+                return alert(
+                    'Instance chart gagal diinisialisasi setelah render ulang. Coba muat ulang halaman atau tingkatkan delay.'
+                )
+            }
+
+            const pdf = new jsPDF('p', 'mm', 'a4')
+
+            // renderChartToPDF Anda yang sudah ada
+            await renderChartToPDF(pdf, currentChartInstance, title, tableData)
+
             pdf.save('laporan-' + tabName + '.pdf')
         })
 
@@ -885,70 +1372,131 @@
         })
 
         // Export semua
-        exportAllBtn.addEventListener('click', () => {
-            const pdf = new jsPDF('p', 'mm', 'a4')
+        exportAllBtn.addEventListener('click', async () => {
+            const pdf = new jsPDF('p', 'mm', 'a4');
 
-            const dailyData = JSON.parse(document.getElementById('daily-totals').value)
-            const weekData = JSON.parse(document.getElementById('weekly-totals').value)
-            const monthData = JSON.parse(document.getElementById('monthly-totals').value)
-            const yearData = JSON.parse(document.getElementById('yearly-totals').value)
+            // 1. Dapatkan semua kontainer chart
+            const chartContainers = document.querySelectorAll('#chart-tabs-content > div');
 
-            const charts = [{
-                    id: 'chart-day',
-                    title: 'Laporan Harian',
-                    data: {
-                        headers: ['Tanggal', 'Produk', 'Total'],
-                        rows: dailyData.map((d) => [
-                            d.tanggal,
-                            d.product,
-                            Number(d.total).toLocaleString('id-ID'),
-                        ]),
-                    },
-                },
-                {
-                    id: 'chart-week',
-                    title: 'Laporan Mingguan',
-                    data: {
-                        headers: ['Minggu', 'Produk', 'Total'],
-                        rows: weekData.map((d) => [
-                            d.week,
-                            d.product,
-                            Number(d.total).toLocaleString('id-ID'),
-                        ]),
-                    },
-                },
-                {
-                    id: 'chart-month',
-                    title: 'Laporan Bulanan',
-                    data: {
-                        headers: ['Bulan', 'Produk', 'Total'],
-                        rows: monthData.map((d) => [
-                            d.month,
-                            d.product,
-                            Number(d.total).toLocaleString('id-ID'),
-                        ]),
-                    },
-                },
-                {
-                    id: 'chart-year',
-                    title: 'Laporan Tahunan',
-                    data: {
-                        headers: ['Tahun', 'Produk', 'Total'],
-                        rows: yearData.map((d) => [
-                            d.year,
-                            d.product,
-                            Number(d.total).toLocaleString('id-ID'),
-                        ]),
-                    },
-                },
-            ]
+            // 2. Simpan status visibility dan paksa terlihat
+            const containersToRestore = [];
+            chartContainers.forEach(container => {
+                // Cek jika kontainer memiliki class 'hidden' (yang menyebabkannya display: none;)
+                if (container.classList.contains('hidden')) {
+                    containersToRestore.push(container);
+                    container.classList.remove('hidden'); // Paksa terlihat
 
-            charts.forEach((chart, index) => {
-                renderChartToPDF(pdf, chart.id, chart.title, chart.data, index > 0)
-            })
+                    // PENTING: Panggil .update() atau .render() untuk memastikan ApexCharts menghitung ulang dimensi
+                    const chartId = container.id.replace('tab-content-', 'chart-');
+                    let currentChart;
 
-            pdf.save('laporan-semua.pdf')
-        })
+                    if (chartId === 'chart-day' && chartDay) currentChart = chartDay;
+                    else if (chartId === 'chart-week' && chartWeek) currentChart = chartWeek;
+                    else if (chartId === 'chart-month' && chartMonth) currentChart = chartMonth;
+                    else if (chartId === 'chart-year' && chartYear) currentChart = chartYear;
+
+                    if (currentChart) {
+                        // Perbarui dimensi/render ulang chart saat container terlihat
+                        currentChart.update();
+                    }
+                }
+            });
+
+            // 3. Inisialisasi/render ulang semua chart saat container terlihat
+            // Ini penting untuk memastikan semua instance terisi dan terupdate dimensinya
+            initChartDay();
+            initChartWeek();
+            initChartMonth();
+            initChartYear();
+
+            // 4. Tunggu rendering selesai
+            await new Promise(resolve => setTimeout(resolve, 1500)); // Ditingkatkan ke 1.5s untuk keamanan
+
+            // Fungsi Pembantu untuk Mengambil Data dengan Aman (Sudah ada, disalin untuk konteks)
+            const getChartData = (id, defaultKey) => {
+                const el = document.getElementById(id);
+                const dataValue = el ? el.value : '[]';
+
+                try {
+                    const data = JSON.parse(dataValue);
+                    return data.map(d => ({
+                        key: d[defaultKey] || '',
+                        product: d.product || '',
+                        total: Number(d.total || 0).toLocaleString('id-ID')
+                    }));
+                } catch (e) {
+                    console.error(`Gagal parsing data untuk ID: ${id}. Error: ${e}`);
+                    return [];
+                }
+            };
+
+            // Ambil data dengan fungsi aman
+            const dailyData = getChartData('daily-totals', 'tanggal');
+            const weekData = getChartData('weekly-totals', 'week');
+            const monthData = getChartData('monthly-totals', 'month');
+            const yearData = getChartData('yearly-totals', 'year');
+
+
+            try {
+                const chartsToExport = [{
+                        instance: chartDay,
+                        title: 'Laporan Harian',
+                        data: {
+                            headers: ['Tanggal', 'Produk', 'Total'],
+                            rows: dailyData.map((d) => [d.key, d.product, d.total]),
+                        }
+                    },
+                    {
+                        instance: chartWeek,
+                        title: 'Laporan Mingguan',
+                        data: {
+                            headers: ['Minggu', 'Produk', 'Total'],
+                            rows: weekData.map((d) => [d.key, d.product, d.total]),
+                        }
+                    },
+                    {
+                        instance: chartMonth,
+                        title: 'Laporan Bulanan',
+                        data: {
+                            headers: ['Bulan', 'Produk', 'Total'],
+                            rows: monthData.map((d) => [d.key, d.product, d.total]),
+                        }
+                    },
+                    {
+                        instance: chartYear,
+                        title: 'Laporan Tahunan',
+                        data: {
+                            headers: ['Tahun', 'Produk', 'Total'],
+                            rows: yearData.map((d) => [d.key, d.product, d.total]),
+                        }
+                    },
+                ];
+
+                // Looping dan ekspor secara berurutan
+                for (let i = 0; i < chartsToExport.length; i++) {
+                    const chart = chartsToExport[i];
+
+                    if (!chart.instance) {
+                        console.warn(`Melewati ${chart.title}: Instance chart belum dibuat.`);
+                        continue;
+                    }
+
+                    // Panggil renderChartToPDF
+                    await renderChartToPDF(pdf, chart.instance, chart.title, chart.data, i > 0);
+                }
+
+                pdf.save('laporan-semua.pdf');
+
+            } catch (e) {
+                console.error("Gagal melakukan ekspor PDF saat rendering chart atau tabel:", e);
+                alert("Gagal melakukan ekspor semua laporan. Periksa log konsol.");
+            } finally {
+                // 5. Sembunyikan kembali kontainer yang tadinya disembunyikan
+                containersToRestore.forEach(container => {
+                    container.classList.add('hidden');
+                });
+            }
+        });
     </script>
 
     <script>

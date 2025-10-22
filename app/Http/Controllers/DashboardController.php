@@ -54,8 +54,8 @@ class DashboardController extends Controller
 
         // Data Produk (stok per produk)
         $products = Product::select('name', 'stock')->get();
-        $productNames = $products->pluck('name');
-        $productStocks = $products->pluck('stock');
+        $productNames = $products->pluck('name')->toArray();
+        $productStocks = $products->pluck('stock')->toArray();
 
         // Produk Masuk (group by product name)
         $inData = ProductIn::with('product')
@@ -63,8 +63,8 @@ class DashboardController extends Controller
             ->groupBy('product_id')
             ->get();
 
-        $inLabels = $inData->map(fn ($item) => $item->product->name ?? 'Produk Tidak Ditemukan');
-        $inQtys = $inData->pluck('total_qty');
+        $inLabels = $inData->map(fn ($item) => $item->product->name ?? 'Produk Tidak Ditemukan')->toArray();
+        $inQtys = $inData->pluck('total_qty')->toArray();
 
         // Produk Keluar (group by sales -> productIn -> product)
         $outData = SalesDetail::with('sales.productIn.product')
@@ -72,10 +72,8 @@ class DashboardController extends Controller
             ->groupBy('sales_id')
             ->get();
 
-        $outLabels = $outData->map(
-            fn ($item) => $item->sales->productIn->product->name ?? 'Produk Tidak Ditemukan'
-        );
-        $outQtys = $outData->pluck('total_qty');
+        $outLabels = $outData->map(fn ($item) => $item->sales->productIn->product->name ?? 'Produk Tidak Ditemukan')->toArray();
+        $outQtys = $outData->pluck('total_qty')->toArray();
 
         $startOfDay = Carbon::now()->startOfDay();
         $endOfDay = Carbon::now()->endOfDay();
@@ -163,7 +161,7 @@ class DashboardController extends Controller
             $groupedWeekly[$sale->product_name][$sale->week] = $sale->total;
         }
         $allWeeks = $weeklySales->pluck('week')->unique()->sort()->values();
-        $weekLabels = $allWeeks->map(fn ($w) => 'Minggu ke-'.intval(substr($w, -2)).' - '.Carbon::now()->year);
+        $weekLabels = $allWeeks->map(fn ($w) => 'Minggu ke-'.intval(substr($w, -2)));
         $weeklyByProduct = [];
         foreach ($groupedWeekly as $product => $data) {
             $values = [];

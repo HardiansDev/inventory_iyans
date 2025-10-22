@@ -8,7 +8,6 @@
 
     @yield('title')
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
     <script>
         // Tailwind dark mode pakai class
         tailwind.config = {
@@ -50,6 +49,7 @@
 
     {{-- Chart.js (hanya sekali) --}}
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 
     {{-- Flowbite (cukup satu versi stabil terbaru) --}}
     <script src="https://unpkg.com/flowbite@latest/dist/flowbite.min.js"></script>
@@ -141,38 +141,27 @@
             scrollbar-width: none;
             /* Firefox */
         }
-
-
-        .opacity-0 {
-            opacity: 0;
-            transform: scale(0.95);
-        }
-
-        .opacity-100 {
-            opacity: 1;
-            transform: scale(1);
-        }
     </style>
 
 </head>
 
-<body x-data class="bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-200 min-h-screen"
+<body x-data class="min-h-screen text-gray-800 bg-gray-100 dark:bg-gray-900 dark:text-gray-200"
     style="font-family: 'Poppins', sans-serif;">
     <nav id="navbar"
-        class="fixed top-0 z-50 h-16 flex items-center justify-between bg-white dark:bg-gray-900 px-6 shadow-md transition-all duration-300"
+        class="fixed top-0 z-50 flex items-center justify-between h-16 px-6 transition-all duration-300 bg-white shadow-md dark:bg-gray-900"
         style="left: 15rem; right: 0;">
 
         <!-- Sidebar Toggle -->
         <button id="sidebar-toggle"
-            class="p-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-md transition-colors duration-200 focus:outline-none">
-            <i id="sidebar-icon" class="fas fa-bars-staggered text-lg transition-all duration-300"></i>
+            class="p-2 text-gray-700 transition-colors duration-200 rounded-md dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 focus:outline-none">
+            <i id="sidebar-icon" class="text-lg transition-all duration-300 fas fa-bars-staggered"></i>
         </button>
 
         <!-- Right Section -->
-        <div class="flex items-center space-x-4 ml-auto">
-            <div class="p-4 flex justify-center">
+        <div class="flex items-center ml-auto space-x-4">
+            <div class="flex justify-center p-4">
                 <button id="theme-toggle" class="focus:outline-none">
-                    <i id="theme-icon" class="fas fa-moon text-lg transition-transform duration-500"></i>
+                    <i id="theme-icon" class="text-lg transition-transform duration-500 fas fa-moon"></i>
                 </button>
             </div>
 
@@ -182,8 +171,8 @@
                 <div x-data="{ open: false }" class="relative">
                     <!-- Tombol Bell -->
                     <button @click="open = !open"
-                        class="relative p-2 rounded-full text-gray-800 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors duration-200 focus:outline-none">
-                        <i class="fas fa-bell text-lg"></i>
+                        class="relative p-2 text-gray-800 transition-colors duration-200 rounded-full dark:text-white hover:bg-gray-100 dark:hover:bg-gray-800 focus:outline-none">
+                        <i class="text-lg fas fa-bell"></i>
 
                         @php
                             $notifCount = 0;
@@ -201,7 +190,7 @@
 
                         @if ($notifCount > 0)
                             <span
-                                class="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-xs font-semibold text-white">
+                                class="absolute flex items-center justify-center w-4 h-4 text-xs font-semibold text-white bg-red-500 rounded-full -top-1 -right-1">
                                 {{ $notifCount }}
                             </span>
                         @endif
@@ -209,9 +198,9 @@
 
                     <!-- Dropdown Notifikasi -->
                     <div x-show="open" @click.away="open = false" x-transition
-                        class="absolute right-0 mt-2 w-80 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 shadow-xl z-50 overflow-hidden">
+                        class="absolute right-0 z-50 mt-2 overflow-hidden bg-white border border-gray-200 shadow-xl w-80 rounded-xl dark:border-gray-700 dark:bg-gray-900">
                         <div
-                            class="py-2 text-sm max-h-72 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-700">
+                            class="py-2 overflow-y-auto text-sm max-h-72 scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-700">
 
                             @php
                                 if (Auth::user()->role === 'superadmin') {
@@ -231,8 +220,8 @@
                             @forelse ($notifs as $notif)
                                 @if (Auth::user()->role === 'superadmin')
                                     <a href="{{ route('product.confirmation', $notif->id) }}"
-                                        class="block border-b border-gray-100 dark:border-gray-800 px-4 py-3 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors duration-200">
-                                        <p class="text-gray-800 dark:text-gray-100 font-medium">
+                                        class="block px-4 py-3 transition-colors duration-200 border-b border-gray-100 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-gray-800">
+                                        <p class="font-medium text-gray-800 dark:text-gray-100">
                                             Permintaan: <strong>{{ $notif->requester_name }}</strong>
                                         </p>
                                         <p class="text-gray-600 dark:text-gray-300">
@@ -265,7 +254,7 @@
 
                             @if ($notifCount > 3)
                                 <a href="{{ Auth::user()->role === 'superadmin' ? route('notifications.superadmin') : route('notifications.admin_gudang') }}"
-                                    class="block text-center text-blue-600 dark:text-blue-400 font-semibold py-2 hover:underline transition-colors duration-200">
+                                    class="block py-2 font-semibold text-center text-blue-600 transition-colors duration-200 dark:text-blue-400 hover:underline">
                                     Lihat semua notifikasi
                                 </a>
                             @endif
@@ -280,10 +269,10 @@
             <div x-data="{ open: false }" class="relative inline-block text-left">
                 <!-- Trigger -->
                 <button @click="open = !open"
-                    class="flex items-center text-sm focus:outline-none px-3 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors duration-200">
-                    <i class="fas fa-user-circle text-2xl text-gray-600 dark:text-gray-300"></i>
+                    class="flex items-center px-3 py-2 text-sm transition-colors duration-200 rounded-md focus:outline-none hover:bg-gray-100 dark:hover:bg-gray-700">
+                    <i class="text-2xl text-gray-600 fas fa-user-circle dark:text-gray-300"></i>
                     <span class="ml-2 text-gray-800 dark:text-gray-200">{{ Auth::user()->name }}</span>
-                    <i class="fas fa-chevron-down ml-2 text-gray-500 dark:text-gray-400 text-xs"></i>
+                    <i class="ml-2 text-xs text-gray-500 fas fa-chevron-down dark:text-gray-400"></i>
                 </button>
 
                 <!-- Dropdown Menu -->
@@ -293,23 +282,23 @@
                     x-transition:leave="transition ease-in duration-150"
                     x-transition:leave-start="opacity-100 transform scale-100"
                     x-transition:leave-end="opacity-0 transform scale-95"
-                    class="absolute right-0 mt-2 w-52 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 shadow-lg z-50 overflow-hidden">
+                    class="absolute right-0 z-50 mt-2 overflow-hidden bg-white border border-gray-200 rounded-lg shadow-lg w-52 dark:border-gray-700 dark:bg-gray-800">
 
                     <a href="{{ route('profile.edit') }}"
-                        class="flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors duration-200">
-                        <i class="fas fa-cog mr-2 text-gray-500 dark:text-gray-400"></i>
+                        class="flex items-center px-4 py-2 text-sm text-gray-700 transition-colors duration-200 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">
+                        <i class="mr-2 text-gray-500 fas fa-cog dark:text-gray-400"></i>
                         Pengaturan Profil
                     </a>
 
                     <a href="{{ route('activity.log') }}"
-                        class="flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors duration-200">
-                        <i class="fas fa-history mr-2 text-gray-500 dark:text-gray-400"></i>
+                        class="flex items-center px-4 py-2 text-sm text-gray-700 transition-colors duration-200 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">
+                        <i class="mr-2 text-gray-500 fas fa-history dark:text-gray-400"></i>
                         Log Aktivitas
                     </a>
 
                     <a href="#" @click.prevent="$dispatch('open-logout-modal')"
-                        class="flex items-center px-4 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors duration-200">
-                        <i class="fas fa-power-off mr-2"></i>
+                        class="flex items-center px-4 py-2 text-sm text-red-600 transition-colors duration-200 dark:text-red-400 hover:bg-gray-100 dark:hover:bg-gray-700">
+                        <i class="mr-2 fas fa-power-off"></i>
                         Keluar
                     </a>
                 </div>
@@ -328,21 +317,20 @@
         class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
 
         <div @click.away="show = false"
-            class="w-full max-w-md rounded-xl bg-white dark:bg-gray-800 p-6 shadow-lg transform transition-all duration-300">
+            class="w-full max-w-md p-6 transition-all duration-300 transform bg-white shadow-lg rounded-xl dark:bg-gray-800">
 
             <h2 class="mb-3 text-xl font-semibold text-gray-900 dark:text-gray-100">Konfirmasi Logout</h2>
             <p class="mb-6 text-gray-700 dark:text-gray-300">Apakah Anda yakin ingin keluar dari akun?</p>
 
             <div class="flex justify-end space-x-4">
                 <button @click="show = false"
-                    class="px-4 py-2 rounded-lg bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200
-                           hover:bg-gray-300 dark:hover:bg-gray-600 transition">
+                    class="px-4 py-2 text-gray-800 transition bg-gray-200 rounded-lg dark:bg-gray-700 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-600">
                     Batal
                 </button>
                 <form method="POST" action="{{ route('logout') }}">
                     @csrf
                     <button type="submit"
-                        class="px-4 py-2 rounded-lg bg-red-600 text-white hover:bg-red-700 transition">
+                        class="px-4 py-2 text-white transition bg-red-600 rounded-lg hover:bg-red-700">
                         Ya, Keluar
                     </button>
                 </form>
