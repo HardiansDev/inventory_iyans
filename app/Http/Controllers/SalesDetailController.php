@@ -13,6 +13,16 @@ use Midtrans\Snap;
 
 class SalesDetailController extends Controller
 {
+    public function index()
+    {
+        // Ambil semua data sales_detail dengan relasi lengkap
+        $salesDetails = SalesDetail::with(['sales.productIn.product', 'discount'])
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        return view('transaksi.index', compact('salesDetails'));
+    }
+
     public function processPayment(Request $request)
     {
         $validated = $request->validate([
@@ -186,9 +196,6 @@ class SalesDetailController extends Controller
         ));
     }
 
-    /**
-     * Fungsi ini digunakan untuk menyimpan data detail penjualan secara manual jika dibutuhkan.
-     */
     public function storeSalesDetail(Request $request)
     {
         $validated = $request->validate([

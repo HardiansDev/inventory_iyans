@@ -196,13 +196,14 @@
 
         {{-- POS --}}
         @if (in_array(Auth::user()->role, ['superadmin', 'kasir']))
-            <li class="{{ Request::is('sales') || Request::is('discounts') ? 'menu-open-tailwind' : '' }} group">
+            <li
+                class="{{ Request::is('sales') || Request::is('discounts') || Request::is('transaksi') ? 'menu-open-tailwind' : '' }} group">
                 <a href="#"
                     onclick="event.preventDefault(); this.closest('li').classList.toggle('menu-open-tailwind');"
                     class="flex items-center justify-between rounded-xl p-2.5 text-sm font-medium transition-all duration-200
-                {{ Request::is('sales') || Request::is('discounts')
-                    ? 'bg-blue-50 dark:bg-gray-700 text-blue-600 dark:text-blue-400 shadow-sm'
-                    : 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 hover:dark:bg-gray-700 hover:text-gray-900 hover:dark:text-gray-100' }}">
+                    {{ Request::is('sales') || Request::is('discounts') || Request::is('transaksi')
+                        ? 'bg-blue-50 dark:bg-gray-700 text-blue-600 dark:text-blue-400 shadow-sm'
+                        : 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 hover:dark:bg-gray-700 hover:text-gray-900 hover:dark:text-gray-100' }}">
                     <span class="flex items-center gap-2">
                         <i class="fas fa-store text-base"></i>
                         Point Of Sales
@@ -231,6 +232,16 @@
                             : 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 hover:dark:bg-gray-700 hover:text-gray-900 hover:dark:text-gray-100' }}">
                             <i class="fa fa-circle text-[6px]"></i>
                             Manajemen Diskon
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ route('transaksi.index') }}"
+                            class="flex items-center gap-2 rounded-lg p-2 text-sm transition-colors duration-200
+                        {{ Request::is('transaksi')
+                            ? 'bg-blue-50 dark:bg-gray-700 text-blue-600 dark:text-blue-400 font-medium'
+                            : 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 hover:dark:bg-gray-700 hover:text-gray-900 hover:dark:text-gray-100' }}">
+                            <i class="fa fa-circle text-[6px]"></i>
+                            Riwayat Transaksi
                         </a>
                     </li>
                 </ul>

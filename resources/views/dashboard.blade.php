@@ -489,16 +489,16 @@
                 chartDay.destroy();
             }
 
-            // Warna yang konsisten
-            const labelColorLight = '#374151'; // Warna gelap untuk Light Mode
-            const labelColorDark = '#E5E7EB'; // Warna terang untuk Dark Mode
+
+            const labelColorLight = '#374151';
+            const labelColorDark = '#E5E7EB';
             const axisColorLight = '#D1D5DB';
             const axisColorDark = '#4B5563';
 
             const options = {
                 series: dailyByProductData,
                 chart: {
-                    // ... (Konfigurasi chart lainnya) ...
+
                     id: 'chart-day',
                     type: 'line',
                     height: 350,
@@ -529,9 +529,9 @@
                     align: 'left'
                 },
                 tooltip: {
-                    // Menggunakan theme 'light' akan membuat teks di tooltip berwarna gelap.
+
                     theme: getThemeColor('light', 'dark'),
-                    // Jika Anda ingin mengontrol font tooltip:
+
                     style: {
                         fontSize: '13px',
                         fontFamily: 'inherit',
@@ -540,13 +540,10 @@
 
                 grid: {
                     borderColor: getThemeColor(axisColorLight, axisColorDark),
-                    // row: {
-                    //     colors: 'transparent',
-                    //     opacity: 0.5
-                    // }
+
                 },
                 xaxis: {
-                    // ... (Konfigurasi xaxis) ...
+
                     categories: dailyLabels,
                     labels: {
                         style: {
@@ -566,7 +563,7 @@
                     }
                 },
                 yaxis: {
-                    // ... (Konfigurasi yaxis) ...
+
                     min: 0,
                     labels: {
                         formatter: function(val) {
@@ -581,7 +578,7 @@
                     }
                 },
                 legend: {
-                    // ... (Konfigurasi legend) ...
+
                     position: 'top',
                     horizontalAlign: 'center',
                     labels: {
@@ -595,8 +592,8 @@
         }
 
         function initChartWeek() {
-            // 1. Perbaikan: Menggunakan variabel yang sesuai untuk label data mingguan
-            const weekLabels = @json($weekLabels); // Seharusnya $weeklyLabels, bukan $dailyLabels
+
+            const weekLabels = @json($weekLabels);
 
             const weeklyByProductData = [
                 @foreach ($weeklyByProduct as $dataset)
@@ -611,9 +608,9 @@
                 chartWeek.destroy();
             }
 
-            // Warna yang konsisten
-            const labelColorLight = '#374151'; // Warna gelap untuk Light Mode
-            const labelColorDark = '#E5E7EB'; // Warna terang untuk Dark Mode
+
+            const labelColorLight = '#374151';
+            const labelColorDark = '#E5E7EB';
             const axisColorLight = '#D1D5DB';
             const axisColorDark = '#4B5563';
 
@@ -671,7 +668,7 @@
                     align: 'left'
                 },
 
-                // Tambahkan konfigurasi theme global
+
                 theme: {
                     mode: getThemeColor('light', 'dark'),
                 },
@@ -684,7 +681,7 @@
                     },
                     y: {
                         formatter: function(val) {
-                            return val.toFixed(0) // Hanya menampilkan angka tanpa desimal
+                            return val.toFixed(0)
                         }
                     }
                 },
@@ -693,7 +690,7 @@
                     borderColor: getThemeColor(axisColorLight, axisColorDark),
                 },
                 xaxis: {
-                    // Menggunakan weekLabels
+
                     categories: weekLabels,
                     labels: {
                         style: {
@@ -735,13 +732,11 @@
                 }
             };
 
-            // PERBAIKAN: Menggunakan #chart-week sebagai selector DOM
             chartWeek = new ApexCharts(document.querySelector("#chart-week"), options);
             chartWeek.render();
         }
 
         function initChartMonth() {
-            // 1. Variabel Data Bulanan
             const monthLabels = @json($monthLabels);
             const monthlyByProductData = [
                 @foreach ($monthlyByProduct as $dataset)
@@ -756,18 +751,15 @@
                 chartMonth.destroy();
             }
 
-            // Warna yang konsisten
-            const labelColorLight = '#374151'; // Warna gelap untuk Light Mode
-            const labelColorDark = '#E5E7EB'; // Warna terang untuk Dark Mode
+            const labelColorLight = '#374151';
+            const labelColorDark = '#E5E7EB';
             const axisColorLight = '#D1D5DB';
             const axisColorDark = '#4B5563';
 
             const options = {
                 series: monthlyByProductData,
                 chart: {
-                    // Menggunakan ID unik untuk chart bulanan
                     id: 'chart-month',
-                    // Tipe Bar Chart
                     type: 'bar',
                     height: 350,
                     toolbar: {
@@ -803,21 +795,21 @@
                     align: 'left'
                 },
 
-                // Konfigurasi tema global
+
                 theme: {
                     mode: getThemeColor('light', 'dark'),
                 },
 
-                // Konfigurasi Tooltip (agar teks terlihat)
+
                 tooltip: {
-                    theme: getThemeColor('light', 'dark'), // Teks gelap di Light Mode
+                    theme: getThemeColor('light', 'dark'),
                     style: {
                         fontSize: '13px',
                         fontFamily: 'inherit',
                     },
                     y: {
                         formatter: function(val) {
-                            return val.toFixed(0) // Hanya menampilkan angka tanpa desimal
+                            return val.toFixed(0)
                         }
                     }
                 },
@@ -827,7 +819,7 @@
 
                 },
                 xaxis: {
-                    // Menggunakan monthLabels
+
                     categories: monthLabels,
                     labels: {
                         style: {
@@ -869,16 +861,16 @@
                 }
             };
 
-            // Buat instance baru chartMonth dan render
+
             chartMonth = new ApexCharts(document.querySelector("#chart-month"), options);
             chartMonth.render();
         }
 
         function initChartYear() {
-            // 1. Variabel Data Tahunan
+
             const yearLabels = @json($yearLabels);
 
-            // Mengubah data menjadi format ApexCharts series
+
             const yearlyByProductData = [
                 @foreach ($yearlyByProduct as $dataset)
                     {
@@ -892,22 +884,21 @@
                 chartYear.destroy();
             }
 
-            // Warna yang konsisten
-            const labelColorLight = '#374151'; // Warna gelap untuk Light Mode
-            const labelColorDark = '#E5E7EB'; // Warna terang untuk Dark Mode
+
+            const labelColorLight = '#374151';
+            const labelColorDark = '#E5E7EB';
             const axisColorLight = '#D1D5DB';
             const axisColorDark = '#4B5563';
 
             const options = {
                 series: yearlyByProductData,
                 chart: {
-                    // Menggunakan ID unik untuk chart tahunan
                     id: 'chart-year',
                     type: 'bar',
                     height: 350,
 
                     animations: {
-                        enabled: false // Menonaktifkan semua animasi
+                        enabled: false
                     },
 
                     toolbar: {
@@ -924,8 +915,7 @@
                     }
                 },
 
-                // ===================================
-                // PERBAIKAN BAR CHART: Tambahkan plotOptions untuk Bar Chart
+
                 plotOptions: {
                     bar: {
                         horizontal: false,
@@ -933,41 +923,36 @@
                         endingShape: 'rounded'
                     },
                 },
-                // ===================================
 
                 dataLabels: {
                     enabled: false
                 },
 
-                // ===================================
-                // PERBAIKAN BAR CHART: Konfigurasi stroke yang sesuai untuk Bar Chart (transparan)
+
                 stroke: {
                     show: true,
                     width: 2,
                     colors: ['transparent']
                 },
-                // ===================================
 
                 title: {
                     text: '',
                     align: 'left'
                 },
 
-                // Konfigurasi tema global
                 theme: {
                     mode: getThemeColor('light', 'dark'),
                 },
 
-                // Konfigurasi Tooltip (agar teks terlihat)
                 tooltip: {
-                    theme: getThemeColor('light', 'dark'), // Teks gelap di Light Mode
+                    theme: getThemeColor('light', 'dark'),
                     style: {
                         fontSize: '13px',
                         fontFamily: 'inherit',
                     },
                     y: {
                         formatter: function(val) {
-                            return val.toFixed(0) // Hanya menampilkan angka tanpa desimal
+                            return val.toFixed(0)
                         }
                     }
                 },
@@ -976,7 +961,6 @@
                     borderColor: getThemeColor(axisColorLight, axisColorDark),
                 },
                 xaxis: {
-                    // Menggunakan yearLabels
                     categories: yearLabels,
                     labels: {
                         style: {
@@ -1018,7 +1002,6 @@
                 }
             };
 
-            // Buat instance baru chartYear dan render
             chartYear = new ApexCharts(document.querySelector("#chart-year"), options);
             chartYear.render();
         }
@@ -1046,7 +1029,6 @@
                     if ("#" + content.id === targetId) {
                         content.classList.remove('hidden');
 
-                        // animasi masuk tab + render ulang chart dengan delay
                         switch (targetId) {
                             case '#tab-content-day':
                                 reRenderChart(initChartDay, 'chart-day');
@@ -1075,7 +1057,7 @@
         const ctxSold = document.getElementById('donut-product-sold');
         if (donutSold) donutSold.destroy();
         donutSold = new Chart(ctxSold, {
-            type: 'doughnut',
+            type: 'pie',
             data: {
                 labels: @json($outLabels),
                 datasets: [{
@@ -1136,13 +1118,11 @@
             if (startInput) startInput.value = '';
             if (endInput) endInput.value = '';
 
-            // Kalau pakai Flowbite datepicker, perlu trigger event manual biar efek visualnya ikut ke-reset
             startInput.dispatchEvent(new Event('change'));
             endInput.dispatchEvent(new Event('change'));
         }
 
         function exportToPDF() {
-            // Ambil nilai tanggal dari input datepicker
             const start = document.getElementById('datepicker-range-start').value;
             const end = document.getElementById('datepicker-range-end').value;
 
@@ -1151,12 +1131,10 @@
                 return;
             }
 
-            // Buat URL dengan query param untuk route PDF kamu
             const url = new URL('{{ route('report.penjualan.pdf') }}', window.location.origin);
             url.searchParams.append('start', start);
             url.searchParams.append('end', end);
 
-            // Buka URL di tab baru supaya user bisa download atau lihat PDF
             window.open(url.toString(), '_blank');
         }
     </script>
@@ -1188,13 +1166,11 @@
 
             const pdfWidth = pdf.internal.pageSize.getWidth() - 20
             const originalChartWidth = 1000
-            const fallbackHeight = 350 // Tinggi default yang aman
+            const fallbackHeight = 350
 
-            // Ambil tinggi chart, gunakan fallback jika nilainya 0 atau undefined
             const chartGlobals = chartInstance.w.globals
             const originalChartHeight = chartGlobals.chartHeight > 0 ? chartGlobals.chartHeight : fallbackHeight
 
-            // Pastikan pdfHeight selalu lebih besar dari 0
             let pdfHeight = (originalChartHeight * pdfWidth) / originalChartWidth
             if (pdfHeight <= 0) {
                 pdfHeight = (fallbackHeight * pdfWidth) / originalChartWidth
@@ -1261,7 +1237,7 @@
                     break
                 case 'week':
                     initFn = initChartWeek
-                    title += 'Mingguan' // Typo 'Minguan' diperbaiki
+                    title += 'Mingguan'
                     const weeklyTotals = JSON.parse(document.getElementById('weekly-totals').value)
                     tableData = {
                         headers: ['Minggu', 'Produk', 'Total'],
@@ -1293,18 +1269,13 @@
                     return alert('Tab tidak dikenali.')
             }
 
-            // Panggil fungsi inisialisasi untuk memastikan chart di-render ulang
             initFn()
 
-            // Tunggu waktu yang aman (BISA DITINGKATKAN JIKA MASALAH PERSISTEN)
             await new Promise(resolve => setTimeout(resolve, 700))
 
-            // Setelah initFn() dipanggil, kita ambil instance chart yang terbaru dari variabel global
             let currentChartInstance
 
-            // ======================================================================
-            // PERBAIKAN UTAMA: LOGIKA PENGAMBILAN INSTANCE CHART UNTUK SEMUA TAB
-            // ======================================================================
+
             switch (tabName) {
                 case 'day':
                     currentChartInstance = chartDay
@@ -1319,10 +1290,8 @@
                     currentChartInstance = chartYear
                     break
             }
-            // ======================================================================
 
             if (!currentChartInstance) {
-                // TINGKATKAN DELAY DI ATAS JIKA ERROR INI TERUS MUNCUL
                 return alert(
                     'Instance chart gagal diinisialisasi setelah render ulang. Coba muat ulang halaman atau tingkatkan delay.'
                 )
@@ -1330,7 +1299,6 @@
 
             const pdf = new jsPDF('p', 'mm', 'a4')
 
-            // renderChartToPDF Anda yang sudah ada
             await renderChartToPDF(pdf, currentChartInstance, title, tableData)
 
             pdf.save('laporan-' + tabName + '.pdf')
@@ -1341,7 +1309,7 @@
             if (!activeTab) return
 
             const tabName = activeTab.id.replace('tab-content-', '')
-            let label = 'Export Harian' // default
+            let label = 'Export Harian'
 
             switch (tabName) {
                 case 'day':
@@ -1361,32 +1329,26 @@
             document.getElementById('export-current-label').textContent = label
         }
 
-        // pertama kali load
         updateExportButtonLabel()
 
-        // setiap kali ganti tab
         document.querySelectorAll('#chartTabs button').forEach((tab) => {
             tab.addEventListener('click', () => {
                 setTimeout(updateExportButtonLabel, 50)
             })
         })
 
-        // Export semua
         exportAllBtn.addEventListener('click', async () => {
             const pdf = new jsPDF('p', 'mm', 'a4');
 
-            // 1. Dapatkan semua kontainer chart
+
             const chartContainers = document.querySelectorAll('#chart-tabs-content > div');
 
-            // 2. Simpan status visibility dan paksa terlihat
             const containersToRestore = [];
             chartContainers.forEach(container => {
-                // Cek jika kontainer memiliki class 'hidden' (yang menyebabkannya display: none;)
                 if (container.classList.contains('hidden')) {
                     containersToRestore.push(container);
-                    container.classList.remove('hidden'); // Paksa terlihat
+                    container.classList.remove('hidden');
 
-                    // PENTING: Panggil .update() atau .render() untuk memastikan ApexCharts menghitung ulang dimensi
                     const chartId = container.id.replace('tab-content-', 'chart-');
                     let currentChart;
 
@@ -1396,23 +1358,18 @@
                     else if (chartId === 'chart-year' && chartYear) currentChart = chartYear;
 
                     if (currentChart) {
-                        // Perbarui dimensi/render ulang chart saat container terlihat
                         currentChart.update();
                     }
                 }
             });
 
-            // 3. Inisialisasi/render ulang semua chart saat container terlihat
-            // Ini penting untuk memastikan semua instance terisi dan terupdate dimensinya
             initChartDay();
             initChartWeek();
             initChartMonth();
             initChartYear();
 
-            // 4. Tunggu rendering selesai
-            await new Promise(resolve => setTimeout(resolve, 1500)); // Ditingkatkan ke 1.5s untuk keamanan
+            await new Promise(resolve => setTimeout(resolve, 1500));
 
-            // Fungsi Pembantu untuk Mengambil Data dengan Aman (Sudah ada, disalin untuk konteks)
             const getChartData = (id, defaultKey) => {
                 const el = document.getElementById(id);
                 const dataValue = el ? el.value : '[]';
@@ -1430,7 +1387,6 @@
                 }
             };
 
-            // Ambil data dengan fungsi aman
             const dailyData = getChartData('daily-totals', 'tanggal');
             const weekData = getChartData('weekly-totals', 'week');
             const monthData = getChartData('monthly-totals', 'month');
@@ -1472,7 +1428,6 @@
                     },
                 ];
 
-                // Looping dan ekspor secara berurutan
                 for (let i = 0; i < chartsToExport.length; i++) {
                     const chart = chartsToExport[i];
 
@@ -1481,7 +1436,6 @@
                         continue;
                     }
 
-                    // Panggil renderChartToPDF
                     await renderChartToPDF(pdf, chart.instance, chart.title, chart.data, i > 0);
                 }
 
@@ -1491,7 +1445,6 @@
                 console.error("Gagal melakukan ekspor PDF saat rendering chart atau tabel:", e);
                 alert("Gagal melakukan ekspor semua laporan. Periksa log konsol.");
             } finally {
-                // 5. Sembunyikan kembali kontainer yang tadinya disembunyikan
                 containersToRestore.forEach(container => {
                     container.classList.add('hidden');
                 });
@@ -1500,7 +1453,6 @@
     </script>
 
     <script>
-        // Dataset dari controller
         window.exportDataSets = {
             daily: @json($dailyTotals),
             weekly: @json($weeklyTotals),
@@ -1514,7 +1466,6 @@
             return window.exportDataSets[active] || []
         }
 
-        // Export ke Excel (JS / XLSX, hanya data)
         function exportToExcel() {
             const data = getActiveDataset()
             if (!data || data.length === 0) {
@@ -1566,9 +1517,7 @@
             document.body.removeChild(link)
         }
 
-        // ===============================
-        // Update tombol Export Excel + Chart
-        // ===============================
+
         function updateExcelExportLink() {
             const activeTab = document.querySelector('button[data-tab].active')
             const type = activeTab ? activeTab.dataset.tab : 'daily'
@@ -1576,13 +1525,11 @@
             btn.setAttribute('href', `/report/export-excel?type=${type}`)
         }
 
-        // Panggil saat pertama kali halaman load
         updateExcelExportLink()
 
-        // Update setiap kali tab berganti
         document.querySelectorAll('button[data-tab]').forEach((tab) => {
             tab.addEventListener('click', () => {
-                setTimeout(updateExcelExportLink, 100) // delay kecil supaya class 'active' sudah berubah
+                setTimeout(updateExcelExportLink, 100)
             })
         })
     </script>

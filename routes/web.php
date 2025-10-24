@@ -66,6 +66,14 @@ Route::middleware(['auth', 'role:superadmin'])->group(function () {
     Route::post('/product/export', [ProductController::class, 'export'])->name('product.export');
     Route::delete('/products/bulk-delete', [ProductController::class, 'bulkDelete'])->name('product.bulkDelete');
     Route::get('/get-product-details/{productId}', [ProductController::class, 'getProductDetails']);
+
+    // Notifikasi Superadmin
+    Route::get('/notifications/superadmin', [NotificationController::class, 'superadminIndex'])
+        ->name('notifications.superadmin');
+
+    Route::get('/product-in/{id}/confirm', [ProductInController::class, 'showConfirmation'])->name('product.confirmation');
+    Route::post('/product-in/{id}/approve', [ProductInController::class, 'approve'])->name('product.approve');
+    Route::post('/product-in/{id}/reject', [ProductInController::class, 'reject'])->name('product.reject');
 });
 
 Route::middleware(['auth', 'role:admin_gudang'])->group(function () {
@@ -80,17 +88,13 @@ Route::middleware(['auth', 'role:admin_gudang'])->group(function () {
     Route::resource('trackingtree', TrackingTreeController::class)->only(['index', 'show']);
 });
 
-Route::middleware(['auth', 'role:superadmin,admin_gudang'])->group(function () {
-    Route::get('/product-in/{id}/confirm', [ProductInController::class, 'showConfirmation'])->name('product.confirmation');
-    Route::post('/product-in/{id}/approve', [ProductInController::class, 'approve'])->name('product.approve');
-    Route::post('/product-in/{id}/reject', [ProductInController::class, 'reject'])->name('product.reject');
-    // Notifikasi Superadmin
-    Route::get('/notifications/superadmin', [NotificationController::class, 'superadminIndex'])
-        ->name('notifications.superadmin');
+Route::middleware(['auth', 'role:admin_gudang'])->group(function () {
+    
+    
 
     Route::get('/notifications/admin-gudang', [NotificationController::class, 'adminGudangIndex'])->name('notifications.admin_gudang');
     Route::get('/notifications/admin-gudang/{id}', [NotificationController::class, 'showAdminGudang'])->name('notifications.admin_gudang.show');
-    Route::resource('satuan', SatuanController::class);
+    
 });
 
 // Kategori & Supplier
@@ -99,10 +103,11 @@ Route::middleware(['auth', 'role:superadmin'])->group(function () {
     Route::resource('supplier', SupplierController::class);
     Route::resource('bahan_baku', BahanBakuController::class);
     Route::get('/bahan-baku/report/pdf', [BahanBakuController::class, 'reportPdf'])->name('bahan_baku.reportPdf');
+    Route::resource('satuan', SatuanController::class);
 });
 
 // Penjualan & Diskon (Kasir & Superadmin)
-Route::middleware(['auth', 'role:kasir,superadmin,admin_gudang'])->group(function () {
+Route::middleware(['auth', 'role:kasir,superadmin'])->group(function () {
     Route::resource('sales', SalesController::class);
     Route::post('/set-wishlist', [CheckoutController::class, 'setWishlist'])->name('set.wishlist');
     Route::get('/detail-cekout', [CheckoutController::class, 'showCheckout'])->name('detail-cekout');
@@ -125,6 +130,8 @@ Route::middleware(['auth', 'role:superadmin'])->group(function () {
     Route::get('/employee-attendance/export-pdf', [EmployeeAttendanceController::class, 'exportPdf'])->name('employee-attendance.export-pdf');
 
     Route::resource('work-schedules', WorkScheduleController::class);
+    Route::get('/transaksi', [App\Http\Controllers\SalesDetailController::class, 'index'])->name('transaksi.index');
+
 });
 
 // ==========================
