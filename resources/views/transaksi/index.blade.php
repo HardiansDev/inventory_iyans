@@ -40,14 +40,22 @@
                                         {{ $item->date_order ? \Carbon\Carbon::parse($item->date_order)->format('d/m/Y H:i') : '-' }}
                                     </td>
                                     <td class="px-4 py-3 text-sm text-gray-600 dark:text-gray-300">
-                                        {{ optional(optional($item->sales->productIn)->product)->name ?? '-' }}
+                                        <ul class="list-disc list-inside space-y-1">
+                                            @foreach (explode(', ', str_replace(' ...', '', $item->product_names)) as $product)
+                                                <li>{{ $product }}</li>
+                                            @endforeach
+                                            @if (str_contains($item->product_names, '...'))
+                                                <li class="text-gray-400 italic">dan produk lainnya...</li>
+                                            @endif
+                                        </ul>
                                     </td>
+
                                     <td class="px-4 py-3">
                                         <span
                                             class="inline-flex items-center px-2 py-1 text-xs font-semibold rounded-full
-                                        {{ $item->metode_pembayaran === 'cash'
-                                            ? 'bg-green-100 text-green-800 dark:bg-green-800 dark:text-green-100'
-                                            : 'bg-blue-100 text-blue-800 dark:bg-blue-800 dark:text-blue-100' }}">
+                                            {{ $item->metode_pembayaran === 'cash'
+                                                ? 'bg-green-100 text-green-800 dark:bg-green-800 dark:text-green-100'
+                                                : 'bg-blue-100 text-blue-800 dark:bg-blue-800 dark:text-blue-100' }}">
                                             {{ strtoupper($item->metode_pembayaran) }}
                                         </span>
                                     </td>
@@ -58,7 +66,7 @@
                                         <a href="{{ route('print.receipt', ['transaction_number' => $item->transaction_number]) }}"
                                             class="inline-flex items-center px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-md shadow-sm transition"
                                             target="_blank">
-                                            <i class="fa fa-eye mr-1"></i> Lihat Struk
+                                            <i class="fa fa-eye mr-2"></i> Lihat
                                         </a>
                                     </td>
                                 </tr>
@@ -70,34 +78,19 @@
                                 </tr>
                             @endforelse
                         </tbody>
+
+
                     </table>
                 </div>
 
-                {{-- Pagination placeholder (jika ingin ditambah nanti) --}}
+                {{-- Pagination --}}
+                @if ($pagination->hasPages())
+                    <div class="px-6 py-4 border-t bg-white dark:bg-gray-800 flex justify-center">
+                        {{ $pagination->links('pagination::tailwind') }}
+                    </div>
+                @endif
+
             </div>
         </div>
     </div>
 @endsection
-
-@push('scripts')
-    <script>
-        $(function() {
-            $('#transaksiTable').DataTable({
-                responsive: true,
-                pageLength: 10,
-                order: [
-                    [1, 'desc']
-                ],
-                language: {
-                    search: "🔍 Cari:",
-                    lengthMenu: "Tampilkan _MENU_ data per halaman",
-                    zeroRecords: "Tidak ditemukan data yang sesuai",
-                    info: "Menampilkan _PAGE_ dari _PAGES_ halaman",
-                    infoEmpty: "Tidak ada data tersedia",
-                    infoFiltered: "(difilter dari total _MAX_ data)"
-                },
-                dom: '<"flex justify-between items-center mb-4"lf>t<"flex justify-between items-center mt-4"ip>',
-            });
-        });
-    </script>
-@endpush

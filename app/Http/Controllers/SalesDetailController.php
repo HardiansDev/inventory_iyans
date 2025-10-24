@@ -15,13 +15,57 @@ class SalesDetailController extends Controller
 {
     public function index()
     {
-        // Ambil semua data sales_detail dengan relasi lengkap
-        $salesDetails = SalesDetail::with(['sales.productIn.product', 'discount'])
-            ->orderBy('created_at', 'desc')
-            ->get();
+        // Ambil semua transaksi unik berdasarkan transaction_number
+        $transactionNumbers = SalesDetail::select('transaction_number')
+            ->distinct()
+            ->orderByDesc('date_order')
+            ->paginate(10); // <-- Pagination di sini
 
-        return view('transaksi.index', compact('salesDetails'));
+        // Ambil data lengkap untuk tiap transaksi
+        $salesDetails = $transactionNumbers->map(function ($item) {
+            $group = SalesDetail::with(['sales.productIn.product', 'discount'])
+                ->where('transaction_number', $item->transaction_number)
+                ->get();
+
+            $first = $group->first();
+
+            // Hitung subtotal semua item (price × qty)
+            $subtotal = $group->sum(fn($i) => $i->price * $i->qty);
+
+            // Ambil diskon jika ada
+            $discountPercentage = optional($first->discount)->nilai ?? 0;
+            $discountAmount = ($subtotal * $discountPercentage) / 100;
+
+            // Total akhir setelah diskon
+            $finalTotal = $subtotal - $discountAmount;
+
+            // Gabung semua nama produk dalam transaksi
+            $productNames = $group->map(fn($i) => optional(optional($i->sales->productIn)->product)->name)
+                ->filter()
+                ->unique()
+                ->take(3)
+                ->implode(', ');
+            if ($group->count() > 3) $productNames .= ' ...';
+
+            return (object) [
+                'transaction_number' => $first->transaction_number,
+                'invoice_number' => $first->invoice_number,
+                'date_order' => $first->date_order,
+                'metode_pembayaran' => $first->metode_pembayaran,
+                'product_names' => $productNames,
+                'discount' => $discountAmount,
+                'total' => $finalTotal,
+            ];
+        });
+
+        return view('transaksi.index', [
+            'salesDetails' => $salesDetails,
+            'pagination' => $transactionNumbers, // kirim pagination info
+        ]);
     }
+
+
+
 
     public function processPayment(Request $request)
     {
